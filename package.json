@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "build": "npm run build -w @sweethomejs/core && npm run build -ws",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "npm run typecheck -ws --if-present",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint .",

@@ -55,7 +55,7 @@
 
 [ ] 2  P1 Model layer: port all 64 model classes to TS (04-model-layer.md)
 [x] 2.1  Event system: PropertyChangeSupport, CollectionChangeSupport/Event/Listener (synchronous, JavaBeans semantics)
-[ ] 2.2  Port Home.java (document root, CURRENT_VERSION=7400, collections, selection, clone, ids, level ordering)
+[x] 2.2  Port Home.java (document root, CURRENT_VERSION=7400, collections, selection, clone, ids, level ordering)
 [ ] 2.3  Port Wall.java (points/arcs, wall-at-start/end topology, baseboards) and Room.java (area, point-in-polygon)
 [ ] 2.4  Port HomePieceOfFurniture.java + HomeDoorOrWindow/HomeLight/HomeShelfUnit/HomeFurnitureGroup
 [ ] 2.5  Port HomeEnvironment, Camera/ObserverCamera/TopCamera, Compass (sun position math), HomePrint, HomeTexture/HomeMaterial

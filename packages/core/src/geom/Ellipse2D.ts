@@ -129,8 +129,8 @@ class EllipseIterator implements PathIterator {
 
   currentSegment(out: number[]): number {
     if (this.index === 0) {
-      out[0] = this.segments[0]![0];
-      out[1] = this.segments[0]![1];
+      out[0] = this.segments[0]![0]!;
+      out[1] = this.segments[0]![1]!;
       return SEG_MOVETO;
     }
     if (this.index <= 4) {

@@ -193,8 +193,8 @@ class LineIterator implements PathIterator {
     if (this.transform !== null) {
       this.transform.transformCoords(coords, 1);
     }
-    out[0] = coords[0];
-    out[1] = coords[1];
+    out[0] = coords[0]!;
+    out[1] = coords[1]!;
     return this.index === 0 ? SEG_MOVETO : SEG_LINETO;
   }
 

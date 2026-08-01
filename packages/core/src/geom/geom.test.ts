@@ -15,6 +15,7 @@ import {
   SEG_CLOSE,
   SEG_LINETO,
   SEG_MOVETO,
+  type PathIterator,
 } from "./index.js";
 
 describe("Point2D", () => {
@@ -112,7 +113,8 @@ describe("AffineTransform", () => {
     const t = AffineTransform.getScaleInstance(2, 3);
     t.translate(5, 7);
     const inv = t.createInverse();
-    const p = inv.transformPoint(...Object.values(t.transformPoint(3, 4)));
+    const tp = t.transformPoint(3, 4);
+    const p = inv.transformPoint(tp.x, tp.y);
     expect(f32(p.x)).toBe(f32(3));
     expect(f32(p.y)).toBe(f32(4));
   });
@@ -131,7 +133,7 @@ describe("AffineTransform", () => {
     while (!it.isDone()) {
       const seg = it.currentSegment(coords);
       if (seg === SEG_MOVETO || seg === SEG_LINETO) {
-        points.push([coords[0], coords[1]]);
+        points.push([coords[0]!, coords[1]!]);
       }
       it.next();
     }

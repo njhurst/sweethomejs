@@ -30,7 +30,7 @@ type Pt = [number, number];
 export type Polygon = Pt[][];
 
 export class Area {
-  private polygons: Polygon = [];
+  private polygons: Polygon[] = [];
 
   constructor(shape: { getPathIterator(t: AffineTransform | null): PathIterator } | null = null) {
     if (shape !== null) {
@@ -59,7 +59,7 @@ export class Area {
       return [];
     }
     if (simple.length === 1) {
-      return [[simple[0]!]];
+      return [simple];
     }
     let polygons: Polygon[];
     if (windingRule === WIND_NON_ZERO) {
@@ -71,7 +71,7 @@ export class Area {
       polygons = groupRingsByContainment(simple);
     }
     try {
-      const union = polygonClipping.union(polygons[0]!, ...polygons.slice(1)) as Polygon[];
+      const union = polygonClipping.union(polygons[0]!, ...polygons.slice(1)) as unknown as Polygon[];
       return union.length > 0 ? union : polygons;
     } catch {
       // Fall back to the un-merged rings (best effort for degenerate input).
@@ -139,7 +139,9 @@ export class Area {
     let first = true;
     for (const polygon of this.polygons) {
       for (const ring of polygon) {
-        for (const [x, y] of ring) {
+        for (const p of ring) {
+          const x = p[0]!;
+          const y = p[1]!;
           if (first) {
             bounds.setRect(x, y, 0, 0);
             first = false;
@@ -172,10 +174,10 @@ function extractRings(shape: { getPathIterator(t: AffineTransform | null): PathI
   while (!iterator.isDone()) {
     switch (iterator.currentSegment(coords)) {
       case SEG_MOVETO:
-        current = [[coords[0], coords[1]]];
+        current = [[coords[0]!, coords[1]!]];
         break;
       case SEG_LINETO:
-        current.push([coords[0], coords[1]]);
+        current.push([coords[0]!, coords[1]!]);
         break;
       case SEG_CLOSE:
         if (current.length >= 3) {
@@ -186,7 +188,7 @@ function extractRings(shape: { getPathIterator(t: AffineTransform | null): PathI
       default:
         // Curves: flatten via the current point. Rooms/walls are line-only;
         // a curve here is approximated by its endpoints.
-        current.push([coords[2], coords[3]]);
+        current.push([coords[2]!, coords[3]!]);
     }
     iterator.next();
   }

@@ -167,8 +167,8 @@ class Rect2DIterator implements PathIterator {
     if (this.transform !== null) {
       this.transform.transformCoords(this.coords, 1);
     }
-    out[0] = this.coords[0];
-    out[1] = this.coords[1];
+    out[0] = this.coords[0]!;
+    out[1] = this.coords[1]!;
     return type;
   }
 

@@ -1,11 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
 import { CollectionChangeSupport, CollectionEvent, PropertyChangeSupport } from "./index.js";
+import type { CollectionEventType } from "./index.js";
 
 describe("CollectionChangeSupport", () => {
   it("fires ADD and DELETE with index, synchronously and in order", () => {
     const source = { name: "home" };
     const support = new CollectionChangeSupport<number>(source);
-    const events: Array<{ index: number; type: CollectionEvent.Type; item: number }> = [];
+    const events: Array<{ index: number; type: CollectionEventType; item: number }> = [];
     support.addCollectionListener({
       collectionChanged: (event) => {
         events.push({ index: event.index, type: event.type, item: event.item });
@@ -23,7 +24,7 @@ describe("CollectionChangeSupport", () => {
   it("listeners may add listeners during notification (copy-on-fire)", () => {
     const support = new CollectionChangeSupport<string>({});
     const log: string[] = [];
-    const second = { collectionChanged: (): void => log.push("second") };
+    const second = { collectionChanged: (): void => { log.push("second"); } };
     const first = {
       collectionChanged: (): void => {
         log.push("first");

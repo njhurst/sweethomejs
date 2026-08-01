@@ -109,21 +109,21 @@ export class GeneralPath {
             // Java converts the first MOVETO of the appended shape to a LINETO
             // only when its point differs from the current point.
             if (this.currentX !== coords[0] || this.currentY !== coords[1]) {
-              this.lineTo(coords[0], coords[1]);
+              this.lineTo(coords[0]!, coords[1]!);
             }
           } else {
-            this.moveTo(coords[0], coords[1]);
+            this.moveTo(coords[0]!, coords[1]!);
           }
           moveIndex = this.segments.length;
           break;
         case SEG_LINETO:
-          this.lineTo(coords[0], coords[1]);
+          this.lineTo(coords[0]!, coords[1]!);
           break;
         case SEG_QUADTO:
-          this.quadTo(coords[0], coords[1], coords[2], coords[3]);
+          this.quadTo(coords[0]!, coords[1]!, coords[2]!, coords[3]!);
           break;
         case SEG_CUBICTO:
-          this.curveTo(coords[0], coords[1], coords[2], coords[3], coords[4], coords[5]);
+          this.curveTo(coords[0]!, coords[1]!, coords[2]!, coords[3]!, coords[4]!, coords[5]!);
           break;
         case SEG_CLOSE:
           this.closePath();
@@ -275,7 +275,7 @@ class GeneralPathIterator implements PathIterator {
       case SEG_CLOSE:
         return SEG_CLOSE;
     }
-    if (this.transform !== null && segment.type !== SEG_CLOSE) {
+    if (this.transform !== null) {
       const count = segment.type === SEG_QUADTO ? 2 : segment.type === SEG_CUBICTO ? 3 : 1;
       this.transform.transformCoords(out, count);
     }

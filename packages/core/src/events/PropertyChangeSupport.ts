@@ -42,18 +42,17 @@ export class PropertyChangeSupport {
     }
   }
 
-  removePropertyChangeListener(listener: PropertyChangeListener): void {
-    for (let i = this.listeners.length - 1; i >= 0; i--) {
-      if (this.listeners[i]!.listener === listener) {
-        this.listeners.splice(i, 1);
-      }
-    }
-  }
-
-  removePropertyChangeListener(propertyName: string, listener: PropertyChangeListener): void {
+  removePropertyChangeListener(listener: PropertyChangeListener): void;
+  removePropertyChangeListener(propertyName: string, listener: PropertyChangeListener): void;
+  removePropertyChangeListener(propertyNameOrListener: string | PropertyChangeListener, listener?: PropertyChangeListener): void {
     for (let i = this.listeners.length - 1; i >= 0; i--) {
       const record = this.listeners[i]!;
-      if (record.listener === listener && record.propertyName === propertyName) {
+      if (typeof propertyNameOrListener === "string") {
+        if (record.listener === listener && record.propertyName === propertyNameOrListener) {
+          this.listeners.splice(i, 1);
+        }
+      } else if (record.listener === propertyNameOrListener) {
+        // Removing a listener removes every registration of it (like the JDK).
         this.listeners.splice(i, 1);
       }
     }
@@ -82,5 +81,3 @@ export class PropertyChangeSupport {
   }
 }
 
-/** Narrow helper re-exported so model files can narrow float fields in one import. */
-export { f32 };

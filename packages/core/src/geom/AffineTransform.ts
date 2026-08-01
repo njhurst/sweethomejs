@@ -146,8 +146,8 @@ export class AffineTransform {
   /** Transforms an array of [x0, y0, x1, y1, ...] in place (like JDK transform(double[],int,double[],int,int)). */
   transformCoords(src: number[], count: number, dst: number[] = src): void {
     for (let i = 0; i < count; i++) {
-      const x = src[i * 2];
-      const y = src[i * 2 + 1];
+      const x = src[i * 2]!;
+      const y = src[i * 2 + 1]!;
       dst[i * 2] = this.m00 * x + this.m01 * y + this.m02;
       dst[i * 2 + 1] = this.m10 * x + this.m11 * y + this.m12;
     }
@@ -186,16 +186,16 @@ export class AffineTransform {
     while (!iterator.isDone()) {
       switch (iterator.currentSegment(coords)) {
         case 0: // SEG_MOVETO
-          path.moveTo(coords[0], coords[1]);
+          path.moveTo(coords[0]!, coords[1]!);
           break;
         case 1: // SEG_LINETO
-          path.lineTo(coords[0], coords[1]);
+          path.lineTo(coords[0]!, coords[1]!);
           break;
         case 2: // SEG_QUADTO
-          path.quadTo(coords[0], coords[1], coords[2], coords[3]);
+          path.quadTo(coords[0]!, coords[1]!, coords[2]!, coords[3]!);
           break;
         case 3: // SEG_CUBICTO
-          path.curveTo(coords[0], coords[1], coords[2], coords[3], coords[4], coords[5]);
+          path.curveTo(coords[0]!, coords[1]!, coords[2]!, coords[3]!, coords[4]!, coords[5]!);
           break;
         case 4: // SEG_CLOSE
           path.closePath();

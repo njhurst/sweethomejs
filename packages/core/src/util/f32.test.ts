@@ -38,9 +38,9 @@ describe("formatFloat", () => {
     let checked = 0;
     for (const line of corpus.split("\n")) {
       if (line.length === 0) continue;
-      const [bitsHex] = line.split(" ");
+      const bitsHex = line.split(" ")[0]!;
       const bits = Number.parseInt(bitsHex, 16);
-      const value = new Float32Array(new Uint32Array([bits]).buffer)[0];
+      const value = new Float32Array(new Uint32Array([bits]).buffer)[0]!;
       expect(f32(Number.parseFloat(formatFloat(value)))).toBe(value);
       checked++;
     }
@@ -58,9 +58,9 @@ describe("formatFloat", () => {
     let checked = 0;
     for (const line of corpus.split("\n")) {
       if (line.length === 0) continue;
-      const [bitsHex] = line.split(" ");
+      const bitsHex = line.split(" ")[0]!;
       const bits = Number.parseInt(bitsHex, 16);
-      const value = new Float32Array(new Uint32Array([bits]).buffer)[0];
+      const value = new Float32Array(new Uint32Array([bits]).buffer)[0]!;
       expect(f32(Number.parseFloat(formatFloat(value)))).toBe(value);
       checked++;
     }

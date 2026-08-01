@@ -116,7 +116,7 @@ export class JavaSerializationReader {
       }
       this.readContent();
     }
-    return { classes: this.classes, nodeCount: this.nodeCount };
+    return { classes: this.classes, nodeCount: this.wireHandleCounter };
   }
 
   /** content := object | blockData */
@@ -431,7 +431,7 @@ export class JavaSerializationReader {
   }
 
   private u16(): number {
-    const v = (this.bytes[this.pos] << 8) | (this.bytes[this.pos + 1] ?? 0);
+    const v = ((this.bytes[this.pos] ?? 0) << 8) | (this.bytes[this.pos + 1] ?? 0);
     this.pos += 2;
     return v;
   }
