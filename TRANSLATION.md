@@ -53,4 +53,9 @@ file gets a row here. Status values: `ported` (complete), `partial`, `planned`.
 *Append here any intentional behavioral divergence (see KNOWN_DIFFS.md for
 visual differences).*
 
-- (none yet)
+- **Area with self-intersecting rings**: `resolveSelfIntersecting` splits at
+  crossings and face-traces; verified against the JDK for the bowtie case.
+  Multi-ring non-zero paths with *reversed* inner rings (creating holes) are
+  not yet distinguished from same-direction rings (a JDK divergence; the
+  model only uses single-ring areas, so it is unreachable in practice).
+- **(none yet)**
