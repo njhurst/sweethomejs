@@ -44,7 +44,7 @@ export class Compass extends HomeObject implements Selectable {
       this.y = f32(yOrDiameter);
       this.diameter = f32(diameter);
     } else {
-      super();
+      super(HomeObject.createId("compass"));
       this.x = f32(idOrX);
       this.y = f32(xOrY);
       this.diameter = f32(yOrDiameter);

@@ -42,7 +42,7 @@ export class Level extends HomeObject {
       this.floorThickness = f32(floorThicknessOrHeight);
       this.height = f32(height);
     } else {
-      super();
+      super(HomeObject.createId("level"));
       this.name = nameOrId;
       this.elevation = f32(nameOrElevation);
       this.floorThickness = f32(elevationOrThickness);

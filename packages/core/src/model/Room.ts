@@ -75,7 +75,7 @@ export class Room extends HomeObject implements Selectable {
       super(idOrPoints);
       this.pointsValue = deepCopy(points!);
     } else {
-      super();
+      super(HomeObject.createId("room"));
       this.pointsValue = deepCopy(idOrPoints);
     }
   }

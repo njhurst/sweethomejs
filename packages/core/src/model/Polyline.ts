@@ -120,7 +120,7 @@ export class Polyline extends HomeObject implements Selectable {
         points = (args[0] as number[][]) ?? [];
       }
     }
-    super(id ?? undefined);
+    super(id ?? HomeObject.createId("polyline"));
     this.pointsValue = deepCopy(points);
     this.thickness = f32(thickness);
     this.capStyle = capStyle;

@@ -41,7 +41,7 @@ export class Label extends HomeObject implements Selectable {
       this.x = f32(xOrY);
       this.y = f32(y);
     } else {
-      super();
+      super(HomeObject.createId("label"));
       this.text = idOrText;
       this.x = f32(textOrX);
       this.y = f32(xOrY);

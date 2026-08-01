@@ -85,7 +85,7 @@ export class DimensionLine extends HomeObject implements Selectable {
         offsetValue = args[6] as number;
       }
     }
-    super(id ?? undefined);
+    super(id ?? HomeObject.createId("dimensionLine"));
     this.xStart = f32(xStart);
     this.yStart = f32(yStart);
     this.elevationStart = f32(elevationStart);

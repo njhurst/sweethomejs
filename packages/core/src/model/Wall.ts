@@ -97,7 +97,7 @@ export class Wall extends HomeObject implements Selectable {
       this.height = typeof heightOrPattern === "number" ? f32(heightOrPattern) : null;
       this.pattern = typeof heightOrPattern === "object" ? heightOrPattern : (pattern ?? null);
     } else {
-      super();
+      super(HomeObject.createId("wall"));
       this.xStart = f32(xStartOrId);
       this.yStart = f32(yStartOrXStart);
       this.xEnd = f32(xEndOrYStart);
