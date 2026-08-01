@@ -24,21 +24,9 @@ export interface Elevatable {
 export { Room } from "./Room.js";
 export { Wall } from "./Wall.js";
 
-export class HomePieceOfFurniture {
-  getLevel(): Level | null {
-    return null;
-  }
-
-  isVisible(): boolean {
-    return false;
-  }
-}
-
-export class HomeFurnitureGroup extends HomePieceOfFurniture {
-  getAllFurniture(): HomePieceOfFurniture[] {
-    return [];
-  }
-}
+// Real ports replace the remaining stubs as their tasks land (2.5–2.9).
+export { HomeFurnitureGroup } from "./HomeFurnitureGroup.js";
+export { HomePieceOfFurniture } from "./HomePieceOfFurniture.js";
 
 export class Polyline implements Elevatable {
   getLevel(): Level | null {

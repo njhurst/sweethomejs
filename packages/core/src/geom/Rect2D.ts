@@ -102,6 +102,22 @@ export class Rect2D {
     return this.y + this.height;
   }
 
+  getCenterX(): number {
+    return this.x + this.width / 2;
+  }
+
+  getCenterY(): number {
+    return this.y + this.height / 2;
+  }
+
+  getWidth(): number {
+    return this.width;
+  }
+
+  getHeight(): number {
+    return this.height;
+  }
+
   getMinX(): number {
     return this.x;
   }
@@ -142,18 +158,19 @@ class Rect2DIterator implements PathIterator {
         return this.emit(SEG_MOVETO, out);
       }
       case 1: {
-        this.coords[0] = this.rect.x + this.rect.width;
+        // Java computes float sums here (float fields).
+        this.coords[0] = f32(this.rect.x + this.rect.width);
         this.coords[1] = this.rect.y;
         return this.emit(SEG_LINETO, out);
       }
       case 2: {
-        this.coords[0] = this.rect.x + this.rect.width;
-        this.coords[1] = this.rect.y + this.rect.height;
+        this.coords[0] = f32(this.rect.x + this.rect.width);
+        this.coords[1] = f32(this.rect.y + this.rect.height);
         return this.emit(SEG_LINETO, out);
       }
       case 3: {
         this.coords[0] = this.rect.x;
-        this.coords[1] = this.rect.y + this.rect.height;
+        this.coords[1] = f32(this.rect.y + this.rect.height);
         return this.emit(SEG_LINETO, out);
       }
       case 4:

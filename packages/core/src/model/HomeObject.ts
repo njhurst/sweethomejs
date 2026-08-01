@@ -96,6 +96,7 @@ export abstract class HomeObject {
 
   setProperty(name: string, value: string): void;
   setProperty(name: string, value: Content): void;
+  setProperty(name: string, value: string | Content | null): void;
   setProperty(name: string, value: string | Content | null): void {
     if (value !== null && typeof value !== "string" && typeof value !== "object") {
       throw new Error(`Property value can be only a string or a content, not a ${typeof value}`);
