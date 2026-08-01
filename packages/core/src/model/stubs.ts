@@ -20,6 +20,10 @@ export interface Elevatable {
   getLevel(): Level | null;
 }
 
+// Real ports replace the remaining stubs as their tasks land (2.4–2.9).
+export { Room } from "./Room.js";
+export { Wall } from "./Wall.js";
+
 export class HomePieceOfFurniture {
   getLevel(): Level | null {
     return null;
@@ -33,18 +37,6 @@ export class HomePieceOfFurniture {
 export class HomeFurnitureGroup extends HomePieceOfFurniture {
   getAllFurniture(): HomePieceOfFurniture[] {
     return [];
-  }
-}
-
-export class Wall implements Elevatable {
-  getLevel(): Level | null {
-    return null;
-  }
-}
-
-export class Room implements Elevatable {
-  getLevel(): Level | null {
-    return null;
   }
 }
 
@@ -84,7 +76,11 @@ export class HomeMaterial {}
 export class TextStyle {}
 export class TextureImage {}
 export class LightSource {}
-export class Baseboard {}
+export class Baseboard {
+  getThickness(): number {
+    return 0;
+  }
+}
 export class Sash {}
 export class AspectRatio {}
 export class Library {}

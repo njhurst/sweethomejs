@@ -200,6 +200,49 @@ export class GeneralPath {
     return winding !== 0;
   }
 
+  /**
+   * True if any segment of this path intersects the given rectangle, or a
+   * rectangle corner lies inside the path (pragmatic port of
+   * GeneralPath.intersects(Rectangle2D) for polygonal paths).
+   */
+  intersects(x: number, y: number, width: number, height: number): boolean {
+    const bounds = this.getBounds2D();
+    if (!bounds.intersectsBounds(x, y, width, height)) {
+      return false;
+    }
+    const corners: Array<[number, number]> = [
+      [x, y],
+      [x + width, y],
+      [x, y + height],
+      [x + width, y + height],
+    ];
+    for (const [cx, cy] of corners) {
+      if (this.contains(cx, cy)) {
+        return true;
+      }
+    }
+    // Segment vs rectangle edges
+    let start: { x: number; y: number } | null = null;
+    let move: { x: number; y: number } | null = null;
+    for (const segment of this.segments) {
+      if (segment.type === SEG_MOVETO) {
+        start = { x: segment.x, y: segment.y };
+        move = start;
+      } else if (segment.type === SEG_LINETO && start !== null) {
+        if (segmentIntersectsRect(start.x, start.y, segment.x, segment.y, x, y, width, height)) {
+          return true;
+        }
+        start = { x: segment.x, y: segment.y };
+      } else if (segment.type === SEG_CLOSE && start !== null && move !== null) {
+        if (segmentIntersectsRect(start.x, start.y, move.x, move.y, x, y, width, height)) {
+          return true;
+        }
+        start = null;
+      }
+    }
+    return false;
+  }
+
   clone(): GeneralPath {
     const copy = new GeneralPath();
     for (const segment of this.segments) {
@@ -293,4 +336,31 @@ class GeneralPathIterator implements PathIterator {
   getWindingRule(): number {
     return WIND_NON_ZERO;
   }
+}
+
+/** True if the segment (x1,y1)-(x2,y2) intersects the rectangle. */
+function segmentIntersectsRect(x1: number, y1: number, x2: number, y2: number, rx: number, ry: number, rw: number, rh: number): boolean {
+  if (Math.min(x1, x2) > rx + rw || Math.max(x1, x2) < rx || Math.min(y1, y2) > ry + rh || Math.max(y1, y2) < ry) {
+    return false;
+  }
+  const edges: Array<[[number, number], [number, number]]> = [
+    [[rx, ry], [rx + rw, ry]],
+    [[rx + rw, ry], [rx + rw, ry + rh]],
+    [[rx + rw, ry + rh], [rx, ry + rh]],
+    [[rx, ry + rh], [rx, ry]],
+  ];
+  for (const [[ax, ay], [bx, by]] of edges) {
+    if (segmentsCross(x1, y1, x2, y2, ax, ay, bx, by)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function segmentsCross(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, x4: number, y4: number): boolean {
+  const d1 = (x3 - x1) * (y2 - y1) - (y3 - y1) * (x2 - x1);
+  const d2 = (x4 - x1) * (y2 - y1) - (y4 - y1) * (x2 - x1);
+  const d3 = (x1 - x3) * (y4 - y3) - (y1 - y3) * (x4 - x3);
+  const d4 = (x2 - x3) * (y4 - y3) - (y2 - y3) * (x4 - x3);
+  return d1 * d2 < 0 && d3 * d4 < 0;
 }
