@@ -70,7 +70,7 @@
 ## P2 — File format codecs
 
 [ ] 3  P2 File format: .sh3d read/write with round-trip parity (05-file-format.md)
-[ ] 3.1  Zip layer with fflate: read/write Home.xml + content entries; lazy content resolution by entry name
+[x] 3.1  Zip layer with fflate: read/write Home.xml + content entries; lazy content resolution by entry name
 [ ] 3.2  HomeXMLHandler port (reader): all elements/attributes per 05-file-format.md §1.1, tolerant of unknown attrs
 [ ] 3.3  XMLWriter + HomeXMLExporter port (writer): canonical ordering, escaping, float formatting, content-name traversal order
 [ ] 3.4  Legacy Java-serialized Home deserializer (TC_* tags, class descriptors, back-references; typed per serialized class)
