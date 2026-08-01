@@ -41,8 +41,8 @@
 [x] 1.1  Scaffold monorepo: Vite, tsup, Vitest, Playwright, ESLint/Prettier, strict TS, CI jobs
 [x] 1.2  Set up package layout (core/render2d/render3d/ui/photo/codecs/apps per 03-porting-strategy.md)
 [x] 1.3  Add license/attribution header template for every translated file (GPL v2+, translator note)
-[ ] 1.4  Golden corpus: write Java harness to dump Home field-JSON, plan/3D/photo PNGs, Home.xml bytes, PDF/SVG from fixtures
-[ ] 1.5  Golden corpus: add examples/ls_2819.sh3d (+ its SVG/CSV/OBJ) as first fixture; capture its dumps and reference renders
+[x] 1.4  Golden corpus: write Java harness to dump Home field-JSON, plan/3D/photo PNGs, Home.xml bytes, PDF/SVG from fixtures
+[x] 1.5  Golden corpus: add examples/ls_2819.sh3d (+ its SVG/CSV/OBJ) as first fixture; capture its dumps and reference renders
 [ ] 1.6  Golden corpus: build feature-covering fixture homes (walls, rooms, furniture, levels, dims/labels, cameras, environment, damaged, big)
 [ ] 1.7  Spike: run real Java app in-browser (CheerpJ) as test oracle + demo; decide if viable for golden-image capture in CI
 [ ] 1.8  Spike: float32 formatFloat() helper matching Java Float.toString across a large float corpus (drives 05-file-format.md policy)
