@@ -49,7 +49,7 @@
 [x] 1.9  Spike: read a legacy serialized-Home entry with a TS Java-serialization reader on 3 old .sh3d files
 [x] 1.10  Port awt.geom shim: Point2D, GeneralPath/PathIterator, Area (boolean ops), Line2D/Ellipse2D/CubicCurve2D/Rectangle2D, AffineTransform
 [x] 1.11  geom shim tests: PathIterator segment outputs, Area ops on known polygons, transform math vs Java
-[ ] 1.12  Install f32() lint rule / codegen marker for float32 narrowing (model + io)
+[x] 1.12  Install f32() lint rule / codegen marker for float32 narrowing (model + io)
 
 ## P1 — Model layer
 
