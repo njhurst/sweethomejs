@@ -49,8 +49,7 @@ export class Baseboard {
   }
 }
 export { Sash } from "./ValueClasses.js";
-export class AspectRatio {}
-export class HomeDescriptor {}
+export { AspectRatio, HomeDescriptor, Library, Transformation } from "./ModelInterfaces.js";
 export class CatalogPieceOfFurniture {
   getId(): string {
     return "";
@@ -61,6 +60,5 @@ export class CatalogTexture {
     return "";
   }
 }
-export class Library {}
 export class PieceOfFurniture {}
-export class Transformation {}
+
