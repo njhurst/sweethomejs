@@ -61,7 +61,7 @@
 [x] 2.5  Port HomeEnvironment, Camera/ObserverCamera/TopCamera, Compass (sun position math), HomePrint, HomeTexture/HomeMaterial
 [x] 2.6  Port Polyline, DimensionLine, Label, Level, BackgroundImage, TextStyle, ObjectProperty, Sash, LightSource, Baseboard
 [x] 2.7  Port LengthUnit.java + formatting parity tests vs Java (all units, edge values)
-[ ] 2.8  Port catalogs (FurnitureCatalog/Category, TexturesCatalog/Category, PatternsCatalog) + UserPreferences.java
+[x] 2.8  Port catalogs (FurnitureCatalog/Category, TexturesCatalog/Category, PatternsCatalog) + UserPreferences.java
 [ ] 2.9  Port model interfaces (Selectable, Content, PieceOfFurniture, Elevatable, Transformation) + exception hierarchy
 [ ] 2.10  Model replay harness: deserialize fixture homes, dump all fields as JSON, compare to Java field-dumps (fround tolerance)
 [ ] 2.11  Verify clone deep-copy semantics and id-generation parity vs Java

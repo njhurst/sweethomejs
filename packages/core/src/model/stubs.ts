@@ -33,6 +33,8 @@ export { Label } from "./Label.js";
 export { Polyline } from "./Polyline.js";
 
 export { Compass } from "./Compass.js";
+export { FurnitureCatalog, FurnitureCategory, PatternsCatalog, TexturesCatalog, TexturesCategory } from "./Catalogs.js";
+
 export { HomeEnvironment } from "./HomeEnvironment.js";
 
 export { ObjectProperty } from "./ValueClasses.js";
@@ -48,6 +50,17 @@ export class Baseboard {
 }
 export { Sash } from "./ValueClasses.js";
 export class AspectRatio {}
+export class HomeDescriptor {}
+export class CatalogPieceOfFurniture {
+  getId(): string {
+    return "";
+  }
+}
+export class CatalogTexture {
+  getId(): string {
+    return "";
+  }
+}
 export class Library {}
 export class PieceOfFurniture {}
 export class Transformation {}
