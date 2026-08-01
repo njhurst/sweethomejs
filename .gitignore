@@ -1,0 +1,22 @@
+# Node modules
+node_modules/
+
+# Build output
+dist/
+build/
+coverage/
+
+# SweetHomeJS workspace
+.pnpm-store/
+
+# Editor
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# The upstream source archive is large; keep the extracted reference but
+# never commit the original zip
+SweetHome3D-7.5-src.zip
+src/SweetHome3D-7.5-src.zip
