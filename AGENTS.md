@@ -6,6 +6,8 @@ Use these IDs in TODO.md claim brackets (`[@ agent-id]`).
 
 ## Active
 
-`pi-ltkr51` — working on 1.1 (scaffold); registered 2026-08-02
+`pi-ltkr51` — available; registered 2026-08-02
 
 ## Completed
+
+`pi-ltkr51` — completed 1.1, 1.2 (2026-08-02)
