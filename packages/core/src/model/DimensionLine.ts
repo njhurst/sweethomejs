@@ -93,7 +93,7 @@ export class DimensionLine extends HomeObject implements Selectable {
     this.yEnd = f32(yEnd);
     this.elevationEnd = f32(elevationEnd);
     this.offset = f32(offsetValue);
-    this.endMarkSize = 0.2;
+    this.endMarkSize = 10;
     this.pitch = 0;
     this.lengthStyle = null;
     this.color = null;

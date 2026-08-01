@@ -55,8 +55,17 @@ export class XMLWriter {
     }
   }
 
-  writeAttribute(name: string, value: string): void {
-    this.out += ` ${name}='${replaceByEntities(value)}'`;
+  writeAttribute(name: string, value: string | null): void;
+  writeAttribute(name: string, value: string | null, defaultValue: string | null): void;
+  writeAttribute(name: string, value: string | null, defaultValue?: string | null): void {
+    if (value === null) {
+      return;
+    }
+    if (defaultValue === undefined) {
+      this.out += ` ${name}='${replaceByEntities(value)}'`;
+    } else if (value !== defaultValue) {
+      this.out += ` ${name}='${replaceByEntities(value)}'`;
+    }
   }
 
   writeAttributeDefault(name: string, value: string, defaultValue: string): void {
@@ -65,8 +74,12 @@ export class XMLWriter {
     }
   }
 
-  writeIntegerAttribute(name: string, value: number): void {
-    this.writeAttribute(name, String(value));
+  writeIntegerAttribute(name: string, value: number): void;
+  writeIntegerAttribute(name: string, value: number, defaultValue: number): void;
+  writeIntegerAttribute(name: string, value: number, defaultValue?: number): void {
+    if (defaultValue === undefined || value !== defaultValue) {
+      this.writeAttribute(name, String(value));
+    }
   }
 
   writeIntegerAttributeDefault(name: string, value: number, defaultValue: number): void {
@@ -75,8 +88,12 @@ export class XMLWriter {
     }
   }
 
-  writeLongAttribute(name: string, value: number): void {
-    this.writeAttribute(name, String(value));
+  writeLongAttribute(name: string, value: number): void;
+  writeLongAttribute(name: string, value: number, defaultValue: number): void;
+  writeLongAttribute(name: string, value: number, defaultValue?: number): void {
+    if (defaultValue === undefined || value !== defaultValue) {
+      this.writeAttribute(name, String(value));
+    }
   }
 
   writeLongAttributeNullable(name: string, value: number | null): void {
@@ -85,8 +102,15 @@ export class XMLWriter {
     }
   }
 
-  writeFloatAttribute(name: string, value: number): void {
-    this.writeAttribute(name, formatFloat(value));
+  writeFloatAttribute(name: string, value: number | null): void;
+  writeFloatAttribute(name: string, value: number | null, defaultValue: number): void;
+  writeFloatAttribute(name: string, value: number | null, defaultValue?: number): void {
+    if (value === null) {
+      return;
+    }
+    if (defaultValue === undefined || value !== defaultValue) {
+      this.writeAttribute(name, formatFloat(value));
+    }
   }
 
   writeFloatAttributeDefault(name: string, value: number, defaultValue: number): void {
@@ -101,8 +125,10 @@ export class XMLWriter {
     }
   }
 
-  writeBigDecimalAttribute(name: string, value: number | null): void {
-    if (value !== null) {
+  writeBigDecimalAttribute(name: string, value: number | null): void;
+  writeBigDecimalAttribute(name: string, value: number | null, defaultValue: number | null): void;
+  writeBigDecimalAttribute(name: string, value: number | null, defaultValue?: number | null): void {
+    if (value !== null && (defaultValue === undefined || value !== defaultValue)) {
       this.writeAttribute(name, String(value));
     }
   }
@@ -114,8 +140,10 @@ export class XMLWriter {
   }
 
   /** Colors are written as 8 uppercase hex digits, like String.format("%08X", color). */
-  writeColorAttribute(name: string, color: number | null): void {
-    if (color !== null) {
+  writeColorAttribute(name: string, color: number | null): void;
+  writeColorAttribute(name: string, color: number | null, defaultValue: number | null): void;
+  writeColorAttribute(name: string, color: number | null, defaultValue?: number | null): void {
+    if (color !== null && (defaultValue === undefined || color !== defaultValue)) {
       this.writeAttribute(name, color.toString(16).toUpperCase().padStart(8, "0"));
     }
   }

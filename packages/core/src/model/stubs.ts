@@ -42,12 +42,7 @@ export { HomeTexture } from "./HomeTexture.js";
 export { HomeMaterial } from "./HomeMaterial.js";
 export { TextStyle } from "./TextStyle.js";
 export class TextureImage {}
-export { LightSource } from "./ValueClasses.js";
-export class Baseboard {
-  getThickness(): number {
-    return 0;
-  }
-}
+export { Baseboard, LightSource } from "./ValueClasses.js";
 export { Sash } from "./ValueClasses.js";
 export { AspectRatio, HomeDescriptor, Library, Transformation } from "./ModelInterfaces.js";
 export class CatalogPieceOfFurniture {

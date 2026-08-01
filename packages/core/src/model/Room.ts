@@ -40,7 +40,7 @@ export class Room extends HomeObject implements Selectable {
 
   private name: string | null = null;
   private nameXOffset = 0;
-  private nameYOffset = 0;
+  private nameYOffset = -40;
   private nameStyle: TextStyle | null = null;
   private nameAngle = 0;
   private nameColor: number | null = null;

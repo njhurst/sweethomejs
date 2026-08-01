@@ -47,19 +47,19 @@ export class HomeEnvironment extends HomeObject {
   private skyTexture: HomeTexture | null = null;
   private lightColor = 0xd0d0d0;
   private ceilingLightColor = 0xd0d0d0;
-  private wallsAlpha = 0.2;
+  private wallsAlpha = 0;
   private drawingMode: string = HomeEnvironment.DrawingMode.FILL;
-  private subpartSizeUnderLight = 0.1;
+  private subpartSizeUnderLight = 0;
   private allLevelsVisible = true;
-  private photoWidth = 800;
-  private photoHeight = 600;
+  private photoWidth = 400;
+  private photoHeight = 300;
   private photoAspectRatioName: string | null = null;
   private photoQuality = 0;
   private videoWidth = 320;
   private videoHeight = 240;
   private videoAspectRatioName: string | null = null;
   private videoQuality = 0;
-  private videoSpeed = 0;
+  private videoSpeed = 2400 / 3600;
   private videoFrameRate = 25;
   private videoCameraPath: Camera[] = [];
 

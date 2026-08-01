@@ -132,7 +132,7 @@ export class Polyline extends HomeObject implements Selectable {
     this.closedPath = closedPath;
     this.color = colorValue;
     this.elevation = 0;
-    this.visibleIn3D = true;
+    this.visibleIn3D = false;
   }
 
   getPoints(): number[][] {

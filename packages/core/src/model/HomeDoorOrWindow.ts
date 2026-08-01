@@ -46,10 +46,11 @@ export class HomeDoorOrWindow extends HomePieceOfFurniture implements DoorOrWind
     const door = typeof idOrDoor === "string" ? (doorOrProps as DoorOrWindow) : idOrDoor;
     this.wallThickness = f32(door.getWallThickness());
     this.wallDistance = f32(door.getWallDistance());
-    this.wallWidth = 0;
+    this.wallWidth = 1;
     this.wallLeft = 0;
-    this.wallHeight = 0;
+    this.wallHeight = 1;
     this.wallTop = 0;
+    this.wallCutOutOnBothSides = door.isWallCutOutOnBothSides();
     this.widthDepthDeformable = door.isWidthDepthDeformable();
     this.sashes = [...door.getSashes()];
     this.cutOutShape = door.getCutOutShape();

@@ -1067,7 +1067,7 @@ export class HomeXMLHandler {
       alignment = alignmentString;
     }
     return new TextStyle(
-      attributes.get("fontName") ?? TextStyle.DEFAULT_FONT_NAME,
+      attributes.get("fontName") ?? null,
       this.parseFloat(attributes, "fontSize"),
       attributes.get("bold") === "true",
       attributes.get("italic") === "true",

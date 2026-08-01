@@ -14,7 +14,7 @@ export class TextStyle {
   static readonly DEFAULT_FONT_SIZE = 12;
   private static readonly DEFAULT_TEXT_STYLE = new TextStyle(TextStyle.DEFAULT_FONT_SIZE, false, false);
 
-  private readonly fontName: string;
+  private readonly fontName: string | null;
   private readonly fontSize: number;
   private readonly bold: boolean;
   private readonly italic: boolean;
@@ -22,17 +22,17 @@ export class TextStyle {
 
   constructor(fontSize: number);
   constructor(fontSize: number, bold: boolean, italic: boolean);
-  constructor(fontName: string, fontSize: number, bold: boolean, italic: boolean);
-  constructor(fontName: string, fontSize: number, bold: boolean, italic: boolean, alignment: string);
-  constructor(...args: Array<number | string | boolean>) {
+  constructor(fontName: string | null, fontSize: number, bold: boolean, italic: boolean);
+  constructor(fontName: string | null, fontSize: number, bold: boolean, italic: boolean, alignment: string);
+  constructor(...args: Array<number | string | boolean | null>) {
     if (typeof args[0] === "number") {
-      this.fontName = TextStyle.DEFAULT_FONT_NAME;
+      this.fontName = null;
       this.fontSize = f32(args[0]);
       this.bold = (args[1] as boolean) ?? false;
       this.italic = (args[2] as boolean) ?? false;
       this.alignment = (args[3] as string | undefined) ?? null;
     } else {
-      this.fontName = args[0] as string;
+      this.fontName = (args[0] as string | undefined) ?? null;
       this.fontSize = f32(args[1] as number);
       this.bold = args[2] as boolean;
       this.italic = args[3] as boolean;
@@ -44,7 +44,7 @@ export class TextStyle {
     return TextStyle.DEFAULT_TEXT_STYLE;
   }
 
-  getFontName(): string {
+  getFontName(): string | null {
     return this.fontName;
   }
 
@@ -66,21 +66,21 @@ export class TextStyle {
 
   deriveStyle(fontNameOrSizeOrAlignment: string | number): TextStyle {
     if (typeof fontNameOrSizeOrAlignment === "number") {
-      return new TextStyle(this.fontName, fontNameOrSizeOrAlignment, this.bold, this.italic, this.alignment ?? TextStyle.Alignment.LEFT);
+      return new TextStyle(this.fontName ?? TextStyle.DEFAULT_FONT_NAME, fontNameOrSizeOrAlignment, this.bold, this.italic, this.alignment ?? TextStyle.Alignment.LEFT);
     }
     return new TextStyle(fontNameOrSizeOrAlignment, this.fontSize, this.bold, this.italic, this.alignment ?? TextStyle.Alignment.LEFT);
   }
 
   deriveAlignmentStyle(alignment: string): TextStyle {
-    return new TextStyle(this.fontName, this.fontSize, this.bold, this.italic, alignment);
+    return new TextStyle(this.fontName ?? TextStyle.DEFAULT_FONT_NAME, this.fontSize, this.bold, this.italic, alignment);
   }
 
   deriveBoldStyle(bold: boolean): TextStyle {
-    return new TextStyle(this.fontName, this.fontSize, bold, this.italic, this.alignment ?? TextStyle.Alignment.LEFT);
+    return new TextStyle(this.fontName ?? TextStyle.DEFAULT_FONT_NAME, this.fontSize, bold, this.italic, this.alignment ?? TextStyle.Alignment.LEFT);
   }
 
   deriveItalicStyle(italic: boolean): TextStyle {
-    return new TextStyle(this.fontName, this.fontSize, this.bold, italic, this.alignment ?? TextStyle.Alignment.LEFT);
+    return new TextStyle(this.fontName ?? TextStyle.DEFAULT_FONT_NAME, this.fontSize, this.bold, italic, this.alignment ?? TextStyle.Alignment.LEFT);
   }
 
   equals(obj: unknown): boolean {
