@@ -100,6 +100,7 @@ export class Home {
   private compass: Compass;
   private furnitureAdditionalPropertiesValue: ObjectProperty[] | null = null;
 
+  constructor();
   constructor(wallHeight: number);
   constructor(furniture: HomePieceOfFurniture[]);
   constructor(wallHeightOrFurniture: number | HomePieceOfFurniture[] = 250) {
