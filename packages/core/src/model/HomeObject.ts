@@ -16,7 +16,7 @@ export abstract class HomeObject {
   private properties: Map<string, string | Content> | null = null;
   private propertyChangeSupportValue: PropertyChangeSupport | null = null;
 
-  constructor(id?: string) {
+  constructor(id?: string | null) {
     if (id === undefined || id === null) {
       this.idValue = HomeObject.createId(ID_DEFAULT_PREFIX);
     } else {

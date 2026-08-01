@@ -59,7 +59,7 @@
 [x] 2.3  Port Wall.java (points/arcs, wall-at-start/end topology, baseboards) and Room.java (area, point-in-polygon)
 [x] 2.4  Port HomePieceOfFurniture.java + HomeDoorOrWindow/HomeLight/HomeShelfUnit/HomeFurnitureGroup
 [x] 2.5  Port HomeEnvironment, Camera/ObserverCamera/TopCamera, Compass (sun position math), HomePrint, HomeTexture/HomeMaterial
-[ ] 2.6  Port Polyline, DimensionLine, Label, Level, BackgroundImage, TextStyle, ObjectProperty, Sash, LightSource, Baseboard
+[x] 2.6  Port Polyline, DimensionLine, Label, Level, BackgroundImage, TextStyle, ObjectProperty, Sash, LightSource, Baseboard
 [ ] 2.7  Port LengthUnit.java + formatting parity tests vs Java (all units, edge values)
 [ ] 2.8  Port catalogs (FurnitureCatalog/Category, TexturesCatalog/Category, PatternsCatalog) + UserPreferences.java
 [ ] 2.9  Port model interfaces (Selectable, Content, PieceOfFurniture, Elevatable, Transformation) + exception hierarchy

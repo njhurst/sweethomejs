@@ -28,39 +28,25 @@ export { Wall } from "./Wall.js";
 export { HomeFurnitureGroup } from "./HomeFurnitureGroup.js";
 export { HomePieceOfFurniture } from "./HomePieceOfFurniture.js";
 
-export class Polyline implements Elevatable {
-  getLevel(): Level | null {
-    return null;
-  }
-}
-
-export class DimensionLine implements Elevatable {
-  getLevel(): Level | null {
-    return null;
-  }
-}
-
-export class Label implements Elevatable {
-  getLevel(): Level | null {
-    return null;
-  }
-}
+export { DimensionLine } from "./DimensionLine.js";
+export { Label } from "./Label.js";
+export { Polyline } from "./Polyline.js";
 
 export { Compass } from "./Compass.js";
 export { HomeEnvironment } from "./HomeEnvironment.js";
 
-export class ObjectProperty {}
+export { ObjectProperty } from "./ValueClasses.js";
 export { HomeTexture } from "./HomeTexture.js";
 export { HomeMaterial } from "./HomeMaterial.js";
-export class TextStyle {}
+export { TextStyle } from "./TextStyle.js";
 export class TextureImage {}
-export class LightSource {}
+export { LightSource } from "./ValueClasses.js";
 export class Baseboard {
   getThickness(): number {
     return 0;
   }
 }
-export class Sash {}
+export { Sash } from "./ValueClasses.js";
 export class AspectRatio {}
 export class Library {}
 export class PieceOfFurniture {}
