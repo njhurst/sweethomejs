@@ -1,5 +1,5 @@
 /*
- * index.ts
+ * <FileName>
  *
  * Original SweetHomeJS code, Copyright (c) 2026 SweetHomeJS contributors
  *
@@ -17,11 +17,3 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
-/**
- * @sweethomejs/render2d
- *
- * Scaffold placeholder. Real implementation lands with the corresponding
- * phase (see docs/13-roadmap.md).
- */
-export {};

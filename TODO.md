@@ -40,7 +40,7 @@
 [ ] 1  P0 Foundations: tooling, corpus, spikes, geometry shim
 [x] 1.1  Scaffold monorepo: Vite, tsup, Vitest, Playwright, ESLint/Prettier, strict TS, CI jobs
 [x] 1.2  Set up package layout (core/render2d/render3d/ui/photo/codecs/apps per 03-porting-strategy.md)
-[ ] 1.3  Add license/attribution header template for every translated file (GPL v2+, translator note)
+[x] 1.3  Add license/attribution header template for every translated file (GPL v2+, translator note)
 [ ] 1.4  Golden corpus: write Java harness to dump Home field-JSON, plan/3D/photo PNGs, Home.xml bytes, PDF/SVG from fixtures
 [ ] 1.5  Golden corpus: add examples/ls_2819.sh3d (+ its SVG/CSV/OBJ) as first fixture; capture its dumps and reference renders
 [ ] 1.6  Golden corpus: build feature-covering fixture homes (walls, rooms, furniture, levels, dims/labels, cameras, environment, damaged, big)
