@@ -45,7 +45,7 @@
 [x] 1.5  Golden corpus: add examples/ls_2819.sh3d (+ its SVG/CSV/OBJ) as first fixture; capture its dumps and reference renders
 [x] 1.6  Golden corpus: build feature-covering fixture homes (walls, rooms, furniture, levels, dims/labels, cameras, environment, damaged, big)
 [-] 1.7  Spike: run real Java app in-browser (CheerpJ) as test oracle + demo; decide if viable for golden-image capture in CI
-[ ] 1.8  Spike: float32 formatFloat() helper matching Java Float.toString across a large float corpus (drives 05-file-format.md policy)
+[x] 1.8  Spike: float32 formatFloat() helper matching Java Float.toString across a large float corpus (drives 05-file-format.md policy)
 [ ] 1.9  Spike: read a legacy serialized-Home entry with a TS Java-serialization reader on 3 old .sh3d files
 [ ] 1.10  Port awt.geom shim: Point2D, GeneralPath/PathIterator, Area (boolean ops), Line2D/Ellipse2D/CubicCurve2D/Rectangle2D, AffineTransform
 [ ] 1.11  geom shim tests: PathIterator segment outputs, Area ops on known polygons, transform math vs Java

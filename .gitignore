@@ -22,3 +22,4 @@ SweetHome3D-7.5-src.zip
 src/SweetHome3D-7.5-src.zip
 __pycache__/
 *.pyc
+test/unit/fixtures/float-corpus.txt
