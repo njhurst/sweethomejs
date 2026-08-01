@@ -60,9 +60,11 @@ describe("HomeXMLHandler parity (task 3.2)", () => {
     expect(first.getAngle()).toBe(f32(Math.PI));
     expect(first.getWidthInPlan()).toBe(f32(91.44));
 
-    // Levels sorted by elevation with indices
-    expect(home.getLevels()[0]!.getElevationIndex()).toBe(0);
-    expect(home.getLevels().map((l) => l.getElevation())).toEqual(home.getLevels().map((l) => l.getElevation()));
+    // Levels sorted by elevation (the XML stores explicit elevationIndex attrs)
+    const elevations = home.getLevels().map((l) => l.getElevation());
+    expect(elevations).toEqual([...elevations].sort((a, b) => a - b));
+    expect(home.getLevels()[0]!.getName()).toBe("basement");
+    expect(home.getLevels()[0]!.getElevationIndex()).toBe(1); // from the XML attribute
 
     // Room area from the dump
     const roomAreas = home.getRooms().map((r) => r.getArea());
