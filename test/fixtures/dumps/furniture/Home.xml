@@ -1,0 +1,50 @@
+<?xml version='1.0'?>
+<home version='7400' name='furniture' camera='topCamera' wallHeight='250.0'>
+  <furnitureVisibleProperty name='NAME'/>
+  <furnitureVisibleProperty name='WIDTH'/>
+  <furnitureVisibleProperty name='DEPTH'/>
+  <furnitureVisibleProperty name='HEIGHT'/>
+  <furnitureVisibleProperty name='VISIBLE'/>
+  <environment groundColor='00A8A8A8' skyColor='00CCE4FC' lightColor='00D0D0D0' ceillingLightColor='00D0D0D0' photoWidth='400' photoHeight='300' photoAspectRatio='VIEW_3D_RATIO' photoQuality='0' videoWidth='320' videoAspectRatio='RATIO_4_3' videoQuality='0' videoFrameRate='25'/>
+  <compass x='-100.0' y='50.0' diameter='100.0' northDirection='0.0' longitude='2.5301454' latitude='-0.6600253' timeZone='Australia/Melbourne'/>
+  <observerCamera attribute='observerCamera' lens='PINHOLE' x='50.0' y='50.0' z='170.0' yaw='5.4977875' pitch='0.19634955' fieldOfView='1.0995575' time='1785585600000'/>
+  <camera attribute='topCamera' lens='PINHOLE' x='50.0' y='1050.0' z='1010.0' yaw='3.1415927' pitch='0.7853982' fieldOfView='1.0995575' time='1785585600000'/>
+  <pieceOfFurniture id='pieceOfFurniture-ff89a277-756e-4fa1-8266-95dfee9abf3b' catalogId='eTeks#bath' name='Bath' creator='eTeks' model='1' icon='0' x='50.0' y='50.0' angle='0.7853982' width='162.56' depth='73.66' height='57.15' modelMirrored='true' modelRotation='0 0 -1 0 1 0 1 0 0' modelSize='139580' license='GNU GPL / CC-BY' movable='false'/>
+  <pieceOfFurniture id='pieceOfFurniture-c4c48412-aa3f-4f9f-8d51-d550a556ee81' catalogId='eTeks#fittedBath' name='Fitted bath' creator='eTeks' model='3' icon='2' x='130.0' y='150.0' width='177.8' depth='76.2' height='71.12' modelRotation='0 0 -1 0 1 0 1 0 0' modelSize='87663' license='GNU GPL / CC-BY' movable='false' dropOnTopElevation='0.87879634'/>
+  <pieceOfFurniture id='pieceOfFurniture-b539404a-011f-40bc-8356-ac2220830a91' catalogId='eTeks#shower' name='Shower' creator='eTeks' model='5' icon='4' x='210.0' y='250.0' angle='0.7853982' width='78.74' depth='78.74' height='210.82' modelSize='21504' license='GNU GPL / CC-BY' movable='false' dropOnTopElevation='0.11858457'/>
+  <pieceOfFurniture id='pieceOfFurniture-9ab34925-155e-4bb3-9555-896fb7a5a427' catalogId='eTeks#toiletUnit' name='Toilet unit' creator='eTeks' model='7' icon='6' x='290.0' y='50.0' width='40.005' depth='80.01' height='62.23' modelSize='125874' license='GNU GPL / CC-BY' movable='false' dropOnTopElevation='0.9802346'/>
+  <pieceOfFurniture id='pieceOfFurniture-d7db0bb1-a7ae-43e5-9223-17066cb2d906' catalogId='eTeks#washbasin' name='Washbasin' creator='eTeks' model='9' icon='8' x='370.0' y='150.0' angle='0.7853982' width='55.88' depth='46.99' height='96.52' modelMirrored='true' modelSize='239991' license='GNU GPL / CC-BY' movable='false' dropOnTopElevation='0.80397844'/>
+  <pieceOfFurniture id='pieceOfFurniture-6f1da9a5-f77d-40a0-9d7b-f29f44562708' catalogId='eTeks#washbasinWithCabinet' name='Washbasin with cabinet' creator='eTeks' model='11' icon='10' x='450.0' y='250.0' width='62.23' depth='57.15' height='96.52' modelSize='66142' license='GNU GPL / CC-BY' movable='false' dropOnTopElevation='0.7801492'/>
+  <pieceOfFurniture id='pieceOfFurniture-11c5d73c-cd27-467c-b03e-ef492fbaa794' catalogId='eTeks#bed' name='Bed' creator='eTeks' model='13' icon='12' x='530.0' y='50.0' angle='0.7853982' width='144.6' depth='193.1' height='52.8' modelSize='24868' license='GNU GPL / CC-BY' dropOnTopElevation='0.8390151'/>
+  <pieceOfFurniture id='pieceOfFurniture-88ba3d45-1170-483d-b4a2-0a9f9345caf9' catalogId='eTeks#bedsideTable' name='Bedside table' creator='eTeks' model='15' icon='14' x='610.0' y='150.0' width='38.1' depth='38.1' height='49.53' modelSize='2243' license='GNU GPL / CC-BY'/>
+  <pieceOfFurniture id='pieceOfFurniture-3d60e33f-45f9-41fb-b970-a0de2f16177a' catalogId='eTeks#bunkBed90x190' name='Bunk bed' creator='eTeks' model='17' icon='16' x='690.0' y='250.0' angle='0.7853982' width='129.54' depth='207.01' height='180.34' modelMirrored='true' modelSize='19590' license='GNU GPL / CC-BY' dropOnTopElevation='0.8539426'/>
+  <pieceOfFurniture id='pieceOfFurniture-3e999ad3-daac-4e8c-a291-0b4cb194ba41' catalogId='eTeks#chest' name='Chest' creator='eTeks' model='19' icon='18' x='770.0' y='50.0' width='100.33' depth='55.88' height='80.01' modelSize='52875' license='GNU GPL / CC-BY'/>
+  <pieceOfFurniture id='pieceOfFurniture-be380f99-2cff-4ac5-a61b-7db6ff04f810' catalogId='eTeks#cornerBunkBed90x190' name='Corner bunk bed' creator='eTeks' model='21' icon='20' x='850.0' y='150.0' angle='0.7853982' width='207.01' depth='207.01' height='154.94' modelSize='24469' license='GNU GPL / CC-BY' dropOnTopElevation='0.8267717'/>
+  <pieceOfFurniture id='pieceOfFurniture-02df8b83-70e6-428e-a738-219c97a0650c' catalogId='eTeks#crib' name='Crib' creator='eTeks' model='23' icon='22' x='930.0' y='250.0' width='67.0' depth='125.0' height='85.0' modelSize='34501' license='GNU GPL / CC-BY' dropOnTopElevation='0.32000002'/>
+  <doorOrWindow id='doorOrWindow-f2059be2-a112-4a0e-b182-1bde8f26152f' catalogId='eTeks#door' name='Door' creator='eTeks' model='25' icon='24' x='300.0' y='0.0' width='91.44' depth='14.605' height='208.28' modelSize='14086' license='GNU GPL / CC-BY' movable='false' dropOnTopElevation='-0.004801229' wallThickness='20.0' wallDistance='10.0' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true' boundToWall='false'>
+    <sash xAxis='0.054680664' yAxis='0.5819925' width='0.89129484' startAngle='0.0' endAngle='-1.5707964'/>
+  </doorOrWindow>
+  <light id='light-5fe1104e-0fad-4697-8d9a-90c9e57cd4db' catalogId='eTeks#blueLightSource' name='Blue light source' creator='eTeks' model='27' icon='26' planIcon='28' x='5.0' y='5.0' elevation='220.0' width='10.0' depth='10.0' height='10.0' modelSize='1286' license='GNU GPL / CC-BY' horizontallyRotatable='false' deformable='false' texturable='false' dropOnTopElevation='-0.1' power='0.5'>
+    <lightSource x='0.5' y='0.5' z='0.5' color='001010FF' diameter='1.0'/>
+  </light>
+  <shelfUnit id='shelfUnit-bc02199a-05fe-4026-be3e-d4f53f765bb8' catalogId='eTeks#bedsideTable' name='Bedside table' creator='eTeks' model='15' icon='14' x='19.05' y='19.05' width='38.1' depth='38.1' height='49.53' modelSize='2243' license='GNU GPL / CC-BY'>
+    <shelf elevation='0.22612558'/>
+    <shelf elevation='0.7672118'/>
+    <shelf elevation='1.0094892'/>
+  </shelfUnit>
+  <shelfUnit id='shelfUnit-45cb8381-e42c-4f6c-93a7-fa58ce24020e' catalogId='eTeks#bookcase' name='Bookcase' creator='eTeks' model='30' icon='29' x='50.165' y='20.0025' width='100.33' depth='40.005' height='210.82' modelSize='3516' license='GNU GPL / CC-BY' dropOnTopElevation='0.4610568'>
+    <shelf elevation='0.0607153'/>
+    <shelf elevation='0.19447869'/>
+    <shelf elevation='0.32729343'/>
+    <shelf elevation='0.4610568'/>
+    <shelf elevation='0.5948202'/>
+    <shelf elevation='0.72858363'/>
+    <shelf elevation='0.8618726'/>
+    <shelf elevation='0.9961104'/>
+  </shelfUnit>
+  <furnitureGroup id='furnitureGroup-d06eb888-2602-42ce-af99-8c8ca3dea205' name='Test group' x='88.01316' y='108.013176' angle='0.7853982' width='298.36176' depth='179.60513' height='71.12' license='GNU GPL / CC-BY' movable='false' dropOnTopElevation='0.87879634'>
+    <pieceOfFurniture id='pieceOfFurniture-ff89a277-756e-4fa1-8266-95dfee9abf3b' catalogId='eTeks#bath' name='Bath' creator='eTeks' model='1' icon='0' x='50.0' y='50.0' angle='0.7853982' width='162.56' depth='73.66' height='57.15' modelMirrored='true' modelRotation='0 0 -1 0 1 0 1 0 0' modelSize='139580' license='GNU GPL / CC-BY' movable='false'/>
+    <pieceOfFurniture id='pieceOfFurniture-c4c48412-aa3f-4f9f-8d51-d550a556ee81' catalogId='eTeks#fittedBath' name='Fitted bath' creator='eTeks' model='3' icon='2' x='130.0' y='150.0' width='177.8' depth='76.2' height='71.12' modelRotation='0 0 -1 0 1 0 1 0 0' modelSize='87663' license='GNU GPL / CC-BY' movable='false' dropOnTopElevation='0.87879634'/>
+  </furnitureGroup>
+  <wall id='wall-5a3964e0-5487-4c56-9ce0-e22a88f5be50' xStart='0.0' yStart='0.0' xEnd='600.0' yEnd='0.0' height='0.0' thickness='20.0'/>
+</home>

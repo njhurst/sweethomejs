@@ -1,0 +1,18 @@
+<?xml version='1.0'?>
+<home version='7400' name='cameras' camera='topCamera' wallHeight='250.0'>
+  <furnitureVisibleProperty name='NAME'/>
+  <furnitureVisibleProperty name='WIDTH'/>
+  <furnitureVisibleProperty name='DEPTH'/>
+  <furnitureVisibleProperty name='HEIGHT'/>
+  <furnitureVisibleProperty name='VISIBLE'/>
+  <environment groundColor='00A8A8A8' skyColor='00CCE4FC' lightColor='00D0D0D0' ceillingLightColor='00D0D0D0' photoWidth='400' photoHeight='300' photoAspectRatio='VIEW_3D_RATIO' photoQuality='0' videoWidth='320' videoAspectRatio='RATIO_4_3' videoQuality='0' videoFrameRate='25'>
+    <camera attribute='cameraPath' id='camera-e3b6bd39-66e1-41fa-86f7-8188e81703e4' lens='PINHOLE' x='0.0' y='0.0' z='300.0' yaw='0.0' pitch='-0.17453292' fieldOfView='1.0995574' time='1785585600000'/>
+    <camera attribute='cameraPath' id='camera-ca9418ce-b230-4837-b722-e30029d125d3' lens='PINHOLE' x='400.0' y='0.0' z='300.0' yaw='0.0' pitch='-0.17453292' fieldOfView='1.0995574' time='1785585600000'/>
+    <camera attribute='cameraPath' id='camera-6698292a-b27f-4b04-89fb-c889c0930986' lens='PINHOLE' x='400.0' y='400.0' z='300.0' yaw='1.5707964' pitch='-0.17453292' fieldOfView='1.0995574' time='1785585600000'/>
+  </environment>
+  <compass x='-100.0' y='50.0' diameter='100.0' northDirection='0.0' longitude='2.5301454' latitude='-0.6600253' timeZone='Australia/Melbourne'/>
+  <observerCamera attribute='observerCamera' lens='PINHOLE' x='200.0' y='150.0' z='175.0' yaw='0.5235988' pitch='0.17453292' fieldOfView='1.0995574' time='1785585600000'/>
+  <camera attribute='topCamera' lens='PINHOLE' x='200.0' y='150.0' z='1000.0' yaw='0.0' pitch='-1.5707964' fieldOfView='1.0995574' time='1785585600000'/>
+  <camera attribute='storedCamera' id='camera-61a1a24b-59a9-4592-9f08-d3724589af73' lens='PINHOLE' x='100.0' y='100.0' z='500.0' yaw='0.7853982' pitch='-0.34906584' fieldOfView='1.0995574' time='1785585600000'/>
+  <camera attribute='storedCamera' id='camera-9582d392-915d-47cf-bdf7-490dcc6d5715' lens='PINHOLE' x='300.0' y='200.0' z='600.0' yaw='-0.7853982' pitch='-0.2617994' fieldOfView='1.0995574' time='1785585600000'/>
+</home>

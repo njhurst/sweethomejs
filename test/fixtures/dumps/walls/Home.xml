@@ -1,0 +1,20 @@
+<?xml version='1.0'?>
+<home version='7400' name='walls' camera='topCamera' wallHeight='250.0'>
+  <furnitureVisibleProperty name='NAME'/>
+  <furnitureVisibleProperty name='WIDTH'/>
+  <furnitureVisibleProperty name='DEPTH'/>
+  <furnitureVisibleProperty name='HEIGHT'/>
+  <furnitureVisibleProperty name='VISIBLE'/>
+  <environment groundColor='00A8A8A8' skyColor='00CCE4FC' lightColor='00D0D0D0' ceillingLightColor='00D0D0D0' photoWidth='400' photoHeight='300' photoAspectRatio='VIEW_3D_RATIO' photoQuality='0' videoWidth='320' videoAspectRatio='RATIO_4_3' videoQuality='0' videoFrameRate='25'/>
+  <compass x='-100.0' y='50.0' diameter='100.0' northDirection='0.0' longitude='2.5301454' latitude='-0.6600253' timeZone='Australia/Melbourne'/>
+  <observerCamera attribute='observerCamera' lens='PINHOLE' x='50.0' y='50.0' z='170.0' yaw='5.4977875' pitch='0.19634955' fieldOfView='1.0995575' time='1785585600000'/>
+  <camera attribute='topCamera' lens='PINHOLE' x='50.0' y='1050.0' z='1010.0' yaw='3.1415927' pitch='0.7853982' fieldOfView='1.0995575' time='1785585600000'/>
+  <wall id='wall-0a4d75bf-cd4f-4e27-bc54-6331199070fd' xStart='0.0' yStart='0.0' xEnd='400.0' yEnd='0.0' height='0.0' thickness='12.0'/>
+  <wall id='wall-ada83b86-fafc-48c9-9240-b532d7a04a0a' xStart='400.0' yStart='0.0' xEnd='400.0' yEnd='300.0' height='0.0' thickness='12.0'/>
+  <wall id='wall-fdff0bfd-9e83-4dba-a119-f85307f50019' wallAtStart='wall-ada83b86-fafc-48c9-9240-b532d7a04a0a' xStart='400.0' yStart='300.0' xEnd='100.0' yEnd='300.0' height='0.0' thickness='12.0'/>
+  <wall id='wall-ca6d57ff-0a78-48d6-bdca-b230a1b17e5e' xStart='100.0' yStart='0.0' xEnd='0.0' yEnd='200.0' height='0.0' thickness='20.0' arcExtent='90.0'/>
+  <wall id='wall-a33234fe-1d97-40ec-9d86-85a5b0a83d4b' xStart='500.0' yStart='0.0' xEnd='700.0' yEnd='0.0' height='300.0' heightAtEnd='240.0' thickness='15.0'>
+    <baseboard attribute='leftSideBaseboard' thickness='12.0' height='10.0' color='008B4513'/>
+    <baseboard attribute='rightSideBaseboard' thickness='12.0' height='12.0' color='00696969'/>
+  </wall>
+</home>

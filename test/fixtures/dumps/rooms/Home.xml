@@ -1,0 +1,32 @@
+<?xml version='1.0'?>
+<home version='7400' name='rooms' camera='topCamera' wallHeight='250.0'>
+  <furnitureVisibleProperty name='NAME'/>
+  <furnitureVisibleProperty name='WIDTH'/>
+  <furnitureVisibleProperty name='DEPTH'/>
+  <furnitureVisibleProperty name='HEIGHT'/>
+  <furnitureVisibleProperty name='VISIBLE'/>
+  <environment groundColor='00A8A8A8' skyColor='00CCE4FC' lightColor='00D0D0D0' ceillingLightColor='00D0D0D0' photoWidth='400' photoHeight='300' photoAspectRatio='VIEW_3D_RATIO' photoQuality='0' videoWidth='320' videoAspectRatio='RATIO_4_3' videoQuality='0' videoFrameRate='25'/>
+  <compass x='-100.0' y='50.0' diameter='100.0' northDirection='0.0' longitude='2.5301454' latitude='-0.6600253' timeZone='Australia/Melbourne'/>
+  <observerCamera attribute='observerCamera' lens='PINHOLE' x='50.0' y='50.0' z='170.0' yaw='5.4977875' pitch='0.19634955' fieldOfView='1.0995575' time='1785585600000'/>
+  <camera attribute='topCamera' lens='PINHOLE' x='50.0' y='1050.0' z='1010.0' yaw='3.1415927' pitch='0.7853982' fieldOfView='1.0995575' time='1785585600000'/>
+  <room id='room-4c05ed5e-ee64-49bd-99e9-a4539e501060' areaVisible='true' ceilingFlat='true'>
+    <point x='0.0' y='0.0'/>
+    <point x='400.0' y='0.0'/>
+    <point x='400.0' y='300.0'/>
+    <point x='0.0' y='300.0'/>
+  </room>
+  <room id='room-19de9c89-a254-430e-ae1e-7ed8b2e185a8' areaVisible='true' ceilingFlat='true'>
+    <point x='500.0' y='0.0'/>
+    <point x='900.0' y='0.0'/>
+    <point x='900.0' y='400.0'/>
+    <point x='700.0' y='400.0'/>
+    <point x='700.0' y='200.0'/>
+    <point x='500.0' y='200.0'/>
+  </room>
+  <room id='room-c998db19-98ce-4731-b9b0-9d76e8583e17' areaVisible='true' floorColor='00E0C9A0' ceilingFlat='true'>
+    <point x='0.0' y='400.0'/>
+    <point x='400.0' y='400.0'/>
+    <point x='400.0' y='700.0'/>
+    <point x='0.0' y='700.0'/>
+  </room>
+</home>

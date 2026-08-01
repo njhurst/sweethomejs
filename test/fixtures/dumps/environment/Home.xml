@@ -1,0 +1,12 @@
+<?xml version='1.0'?>
+<home version='7400' name='environment' camera='topCamera' wallHeight='250.0'>
+  <furnitureVisibleProperty name='NAME'/>
+  <furnitureVisibleProperty name='WIDTH'/>
+  <furnitureVisibleProperty name='DEPTH'/>
+  <furnitureVisibleProperty name='HEIGHT'/>
+  <furnitureVisibleProperty name='VISIBLE'/>
+  <environment groundColor='008B8B6B' skyColor='0087CEEB' lightColor='00FFF8DC' wallsAlpha='0.5' allLevelsVisible='true' observerCameraElevationAdjusted='false' ceillingLightColor='00FFFFFF' drawingMode='FILL_AND_OUTLINE' photoWidth='400' photoHeight='300' photoAspectRatio='VIEW_3D_RATIO' photoQuality='0' videoWidth='320' videoAspectRatio='RATIO_4_3' videoQuality='0' videoFrameRate='25'/>
+  <compass x='200.0' y='150.0' diameter='100.0' northDirection='-0.43633232' longitude='0.041053634' latitude='0.8527085' timeZone='GMT+01:00'/>
+  <observerCamera attribute='observerCamera' lens='PINHOLE' x='50.0' y='50.0' z='170.0' yaw='5.4977875' pitch='0.19634955' fieldOfView='1.0995575' time='1785585600000'/>
+  <camera attribute='topCamera' lens='PINHOLE' x='50.0' y='1050.0' z='1010.0' yaw='3.1415927' pitch='0.7853982' fieldOfView='1.0995575' time='1785585600000'/>
+</home>

@@ -1,0 +1,18 @@
+<?xml version='1.0'?>
+<home version='7400' name='levels' camera='topCamera' wallHeight='250.0'>
+  <furnitureVisibleProperty name='NAME'/>
+  <furnitureVisibleProperty name='WIDTH'/>
+  <furnitureVisibleProperty name='DEPTH'/>
+  <furnitureVisibleProperty name='HEIGHT'/>
+  <furnitureVisibleProperty name='VISIBLE'/>
+  <environment groundColor='00A8A8A8' skyColor='00CCE4FC' lightColor='00D0D0D0' ceillingLightColor='00D0D0D0' photoWidth='400' photoHeight='300' photoAspectRatio='VIEW_3D_RATIO' photoQuality='0' videoWidth='320' videoAspectRatio='RATIO_4_3' videoQuality='0' videoFrameRate='25'/>
+  <compass x='-100.0' y='50.0' diameter='100.0' northDirection='0.0' longitude='2.5301454' latitude='-0.6600253' timeZone='Australia/Melbourne'/>
+  <observerCamera attribute='observerCamera' lens='PINHOLE' x='50.0' y='50.0' z='170.0' yaw='5.4977875' pitch='0.19634955' fieldOfView='1.0995575' time='1785585600000'/>
+  <camera attribute='topCamera' lens='PINHOLE' x='50.0' y='1050.0' z='1010.0' yaw='3.1415927' pitch='0.7853982' fieldOfView='1.0995575' time='1785585600000'/>
+  <level id='level-498c95bc-4ef9-41df-819d-073debdc8407' name='Ground floor' elevation='0.0' floorThickness='20.0' height='250.0' elevationIndex='0'/>
+  <level id='level-8810f81b-024e-4105-aa75-ea91c6484044' name='First floor' elevation='280.0' floorThickness='20.0' height='250.0' elevationIndex='0'/>
+  <level id='level-e2f2ae61-4bdf-488c-9322-fad8bc124dc8' name='Attic' elevation='560.0' floorThickness='15.0' height='220.0' elevationIndex='0'/>
+  <wall id='wall-3cdd8ae3-5051-4665-bba5-85bc95fe8cc2' xStart='0.0' yStart='0.0' xEnd='300.0' yEnd='0.0' height='0.0' thickness='12.0'/>
+  <wall id='wall-305af23e-24d1-4a2b-b079-561f1698b5d3' xStart='0.0' yStart='0.0' xEnd='300.0' yEnd='0.0' height='0.0' thickness='12.0'/>
+  <wall id='wall-c1e733ef-6819-49b2-86c8-f2aca45069d4' xStart='0.0' yStart='0.0' xEnd='300.0' yEnd='0.0' height='0.0' thickness='12.0'/>
+</home>

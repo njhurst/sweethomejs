@@ -14,6 +14,14 @@
         "references/ls_2819.svg": "Plan SVG export from the Java app (FreeHEP PlanComponent$SVGSupport).",
         "references/ls_2819.csv": "Furniture list CSV export from the Java app."
       }
+    },
+    "generated": {
+      "source": "test/fixtures/generated/*.sh3d (built by tools/java-harness/BuildFixture.java, version 7400)",
+      "origin": "Programmatically-built feature-covering homes: walls (straight/arc/connected/tapered/baseboards), rooms (rect/concave/textured), furniture (catalog pieces rotated/mirrored + door/window + light + shelf + group), levels (3), dimensions-labels (dimension lines/labels/polylines with caps/dashes/arrows), cameras (observer/top/stored/path), environment (sky/ground/drawing-mode/compass), big (1000 furniture), serialized-only (legacy serialized Home entry, no Home.xml), damaged (missing content entry -> repaired=true).",
+      "artifacts": {
+        "dumps/<name>/home.dump.json": "Field dumps captured by DumpHome for each generated fixture.",
+        "dumps/<name>/Home.xml": "XML entry for each fixture."
+      }
     }
   }
 }

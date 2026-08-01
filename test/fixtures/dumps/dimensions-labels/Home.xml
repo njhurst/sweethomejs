@@ -1,0 +1,33 @@
+<?xml version='1.0'?>
+<home version='7400' name='dimensions-labels' camera='topCamera' wallHeight='250.0'>
+  <furnitureVisibleProperty name='NAME'/>
+  <furnitureVisibleProperty name='WIDTH'/>
+  <furnitureVisibleProperty name='DEPTH'/>
+  <furnitureVisibleProperty name='HEIGHT'/>
+  <furnitureVisibleProperty name='VISIBLE'/>
+  <environment groundColor='00A8A8A8' skyColor='00CCE4FC' lightColor='00D0D0D0' ceillingLightColor='00D0D0D0' photoWidth='400' photoHeight='300' photoAspectRatio='VIEW_3D_RATIO' photoQuality='0' videoWidth='320' videoAspectRatio='RATIO_4_3' videoQuality='0' videoFrameRate='25'/>
+  <compass x='-100.0' y='50.0' diameter='100.0' northDirection='0.0' longitude='2.5301454' latitude='-0.6600253' timeZone='Australia/Melbourne'/>
+  <observerCamera attribute='observerCamera' lens='PINHOLE' x='50.0' y='50.0' z='170.0' yaw='5.4977875' pitch='0.19634955' fieldOfView='1.0995575' time='1785585600000'/>
+  <camera attribute='topCamera' lens='PINHOLE' x='50.0' y='1050.0' z='1010.0' yaw='3.1415927' pitch='0.7853982' fieldOfView='1.0995575' time='1785585600000'/>
+  <polyline id='polyline-ac7d4fe4-1935-4825-a72d-6a89d1aeeb19' thickness='10.0' capStyle='ROUND' joinStyle='ROUND' startArrowStyle='DELTA' endArrowStyle='OPEN' color='00000000'>
+    <point x='0.0' y='600.0'/>
+    <point x='100.0' y='650.0'/>
+    <point x='200.0' y='600.0'/>
+  </polyline>
+  <polyline id='polyline-ef87209e-6d7f-4c08-89f1-ae1bc90774cb' thickness='6.0' joinStyle='BEVEL' dashStyle='DASH' color='000000FF' closedPath='true'>
+    <point x='300.0' y='600.0'/>
+    <point x='400.0' y='650.0'/>
+    <point x='500.0' y='600.0'/>
+  </polyline>
+  <dimensionLine id='dimensionLine-fd60bea8-d7aa-428f-8154-39aacd436b39' xStart='0.0' yStart='0.0' xEnd='400.0' yEnd='0.0' offset='50.0'/>
+  <dimensionLine id='dimensionLine-7a219bf0-0b7b-425e-9d4f-a95551feb698' xStart='0.0' yStart='50.0' xEnd='0.0' yEnd='400.0' offset='30.0'/>
+  <dimensionLine id='dimensionLine-ce831f5d-b4fb-42c2-979c-8b5a32703681' xStart='100.0' yStart='100.0' xEnd='500.0' yEnd='100.0' offset='40.0'>
+    <textStyle attribute='lengthStyle' fontSize='8.0'/>
+  </dimensionLine>
+  <label id='label-bffccd55-463b-452c-a3f9-dd861b5ae899' x='200.0' y='150.0'>
+    <text>Living room</text>
+  </label>
+  <label id='label-b9219b37-0b0a-4b31-9ac1-b34a88ffe5c8' x='400.0' y='500.0'>
+    <text>Kitchen</text>
+  </label>
+</home>
