@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "fflate": "^0.8.3",
-    "polygon-clipping": "^0.15.7"
+    "polygon-clipping": "^0.15.7",
+    "saxes": "^6.0.0"
   }
 }

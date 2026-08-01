@@ -8,39 +8,72 @@ import { HomeObject } from "./HomeObject.js";
 export class BackgroundImage extends HomeObject {
   static readonly Property = {
     IMAGE: "IMAGE",
-    SCALE: "SCALE",
-    X_OFFSET: "X_OFFSET",
-    Y_OFFSET: "Y_OFFSET",
-    ANGLE: "ANGLE",
+    SCALE_DISTANCE: "SCALE_DISTANCE",
+    SCALE_DISTANCE_X_START: "SCALE_DISTANCE_X_START",
+    SCALE_DISTANCE_Y_START: "SCALE_DISTANCE_Y_START",
+    SCALE_DISTANCE_X_END: "SCALE_DISTANCE_X_END",
+    SCALE_DISTANCE_Y_END: "SCALE_DISTANCE_Y_END",
+    X_ORIGIN: "X_ORIGIN",
+    Y_ORIGIN: "Y_ORIGIN",
+    VISIBLE: "VISIBLE",
   } as const;
 
-  private image: Content | null = null;
-  private scale: number;
-  private xOffset: number;
-  private yOffset: number;
-  private angle: number;
+  private image: Content | null;
+  private scaleDistance: number;
+  private scaleDistanceXStart: number;
+  private scaleDistanceYStart: number;
+  private scaleDistanceXEnd: number;
+  private scaleDistanceYEnd: number;
+  private xOrigin: number;
+  private yOrigin: number;
+  private invisible: boolean;
 
-  constructor(scale: number, xOffset: number, yOffset: number, angle: number);
-  constructor(id: string, scale: number, xOffset: number, yOffset: number, angle: number);
   constructor(
-    scaleOrId: number | string,
-    scaleOrXOffset: number,
-    xOffsetOrYOffset: number,
-    yOffsetOrAngle: number,
-    angle = 0,
+    image: Content | null,
+    scaleDistance: number,
+    scaleDistanceXStart: number,
+    scaleDistanceYStart: number,
+    scaleDistanceXEnd: number,
+    scaleDistanceYEnd: number,
+    xOrigin: number,
+    yOrigin: number,
+    visible: boolean,
+  );
+  constructor(id: string, image: Content | null, scaleDistance: number, scaleDistanceXStart: number, scaleDistanceYStart: number, scaleDistanceXEnd: number, scaleDistanceYEnd: number, xOrigin: number, yOrigin: number, visible: boolean);
+  constructor(
+    imageOrId: Content | null | string,
+    scaleDistanceOrImage: number | Content | null,
+    scaleDistanceXStartOrScale: number,
+    scaleDistanceYStartOrXStart: number,
+    scaleDistanceXEndOrYStart: number,
+    scaleDistanceYEndOrXEnd: number,
+    xOriginOrYEnd: number,
+    yOriginOrXOrigin: number,
+    visibleOrYOrigin: number | boolean,
+    visible?: boolean,
   ) {
-    if (typeof scaleOrId === "string") {
-      super(scaleOrId);
-      this.scale = f32(scaleOrXOffset);
-      this.xOffset = f32(xOffsetOrYOffset);
-      this.yOffset = f32(yOffsetOrAngle);
-      this.angle = f32(angle);
+    if (typeof imageOrId === "string") {
+      super(imageOrId);
+      this.image = scaleDistanceOrImage as Content | null;
+      this.scaleDistance = f32(scaleDistanceXStartOrScale);
+      this.scaleDistanceXStart = f32(scaleDistanceYStartOrXStart);
+      this.scaleDistanceYStart = f32(scaleDistanceXEndOrYStart);
+      this.scaleDistanceXEnd = f32(scaleDistanceYEndOrXEnd);
+      this.scaleDistanceYEnd = f32(xOriginOrYEnd);
+      this.xOrigin = f32(yOriginOrXOrigin);
+      this.yOrigin = f32(visibleOrYOrigin as number);
+      this.invisible = visible === false;
     } else {
       super();
-      this.scale = f32(scaleOrId);
-      this.xOffset = f32(scaleOrXOffset);
-      this.yOffset = f32(xOffsetOrYOffset);
-      this.angle = f32(yOffsetOrAngle);
+      this.image = imageOrId;
+      this.scaleDistance = f32(scaleDistanceOrImage as number);
+      this.scaleDistanceXStart = f32(scaleDistanceXStartOrScale);
+      this.scaleDistanceYStart = f32(scaleDistanceYStartOrXStart);
+      this.scaleDistanceXEnd = f32(scaleDistanceXEndOrYStart);
+      this.scaleDistanceYEnd = f32(scaleDistanceYEndOrXEnd);
+      this.xOrigin = f32(xOriginOrYEnd);
+      this.yOrigin = f32(yOriginOrXOrigin);
+      this.invisible = visibleOrYOrigin === false;
     }
   }
 
@@ -48,74 +81,50 @@ export class BackgroundImage extends HomeObject {
     return this.image;
   }
 
-  setImage(image: Content | null): void {
-    if (image !== this.image) {
-      const oldImage = this.image;
-      this.image = image;
-      this.firePropertyChange(BackgroundImage.Property.IMAGE, oldImage, image);
-    }
+  getScaleDistance(): number {
+    return this.scaleDistance;
   }
 
-  getScale(): number {
-    return this.scale;
+  getScaleDistanceXStart(): number {
+    return this.scaleDistanceXStart;
   }
 
-  setScale(scale: number): void {
-    const narrowed = f32(scale);
-    if (narrowed !== this.scale) {
-      const oldScale = this.scale;
-      this.scale = narrowed;
-      this.firePropertyChange(BackgroundImage.Property.SCALE, oldScale, narrowed);
-    }
+  getScaleDistanceYStart(): number {
+    return this.scaleDistanceYStart;
   }
 
-  getXOffset(): number {
-    return this.xOffset;
+  getScaleDistanceXEnd(): number {
+    return this.scaleDistanceXEnd;
   }
 
-  setXOffset(xOffset: number): void {
-    const narrowed = f32(xOffset);
-    if (narrowed !== this.xOffset) {
-      const oldXOffset = this.xOffset;
-      this.xOffset = narrowed;
-      this.firePropertyChange(BackgroundImage.Property.X_OFFSET, oldXOffset, narrowed);
-    }
+  getScaleDistanceYEnd(): number {
+    return this.scaleDistanceYEnd;
   }
 
-  getYOffset(): number {
-    return this.yOffset;
+  getXOrigin(): number {
+    return this.xOrigin;
   }
 
-  setYOffset(yOffset: number): void {
-    const narrowed = f32(yOffset);
-    if (narrowed !== this.yOffset) {
-      const oldYOffset = this.yOffset;
-      this.yOffset = narrowed;
-      this.firePropertyChange(BackgroundImage.Property.Y_OFFSET, oldYOffset, narrowed);
-    }
+  getYOrigin(): number {
+    return this.yOrigin;
   }
 
-  getAngle(): number {
-    return this.angle;
-  }
-
-  setAngle(angle: number): void {
-    const narrowed = f32(angle);
-    if (narrowed !== this.angle) {
-      const oldAngle = this.angle;
-      this.angle = narrowed;
-      this.firePropertyChange(BackgroundImage.Property.ANGLE, oldAngle, narrowed);
-    }
+  isVisible(): boolean {
+    return !this.invisible;
   }
 
   override clone(): BackgroundImage {
     const copy = Object.create(BackgroundImage.prototype) as BackgroundImage;
     this.copyBaseTo(copy);
     copy.image = this.image;
-    copy.scale = this.scale;
-    copy.xOffset = this.xOffset;
-    copy.yOffset = this.yOffset;
-    copy.angle = this.angle;
+    copy.scaleDistance = this.scaleDistance;
+    copy.scaleDistanceXStart = this.scaleDistanceXStart;
+    copy.scaleDistanceYStart = this.scaleDistanceYStart;
+    copy.scaleDistanceXEnd = this.scaleDistanceXEnd;
+    copy.scaleDistanceYEnd = this.scaleDistanceYEnd;
+    copy.xOrigin = this.xOrigin;
+    copy.yOrigin = this.yOrigin;
+    copy.invisible = this.invisible;
     return copy;
   }
 }

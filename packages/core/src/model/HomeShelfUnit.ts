@@ -2,6 +2,7 @@
  * Port of com.eteks.sweethome3d.model.HomeShelfUnit (GPL v2+).
  */
 import { f32 } from "../util/f32.js";
+import { HomeObject } from "./HomeObject.js";
 import { HomePieceOfFurniture } from "./HomePieceOfFurniture.js";
 import type { ShelfUnit } from "./Interfaces.js";
 
@@ -21,7 +22,7 @@ export class HomeShelfUnit extends HomePieceOfFurniture implements ShelfUnit {
     if (typeof idOrShelf === "string") {
       super(idOrShelf, shelfOrProps as ShelfUnit, props ?? null);
     } else {
-      super(idOrShelf, (shelfOrProps as string[] | null | undefined) ?? null);
+      super(HomeObject.createId("shelfUnit"), idOrShelf, (shelfOrProps as string[] | null | undefined) ?? null);
     }
     const shelfUnit = typeof idOrShelf === "string" ? (shelfOrProps as ShelfUnit) : idOrShelf;
     this.shelfElevations = [...shelfUnit.getShelfElevations()];

@@ -3,6 +3,7 @@
  */
 import { f32 } from "../util/f32.js";
 import type { DoorOrWindow } from "./Interfaces.js";
+import { HomeObject } from "./HomeObject.js";
 import { HomePieceOfFurniture } from "./HomePieceOfFurniture.js";
 import type { Sash } from "./stubs.js";
 
@@ -40,7 +41,7 @@ export class HomeDoorOrWindow extends HomePieceOfFurniture implements DoorOrWind
     if (typeof idOrDoor === "string") {
       super(idOrDoor, doorOrProps as DoorOrWindow, props ?? null);
     } else {
-      super(idOrDoor, (doorOrProps as string[] | null | undefined) ?? null);
+      super(HomeObject.createId("doorOrWindow"), idOrDoor, (doorOrProps as string[] | null | undefined) ?? null);
     }
     const door = typeof idOrDoor === "string" ? (doorOrProps as DoorOrWindow) : idOrDoor;
     this.wallThickness = f32(door.getWallThickness());

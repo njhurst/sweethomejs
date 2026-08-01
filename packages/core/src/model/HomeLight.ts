@@ -2,6 +2,7 @@
  * Port of com.eteks.sweethome3d.model.HomeLight (GPL v2+).
  */
 import { f32 } from "../util/f32.js";
+import { HomeObject } from "./HomeObject.js";
 import { HomePieceOfFurniture } from "./HomePieceOfFurniture.js";
 import type { Light } from "./Interfaces.js";
 import type { LightSource } from "./stubs.js";
@@ -24,7 +25,7 @@ export class HomeLight extends HomePieceOfFurniture implements Light {
     if (typeof idOrLight === "string") {
       super(idOrLight, lightOrProps as Light, props ?? null);
     } else {
-      super(idOrLight, (lightOrProps as string[] | null | undefined) ?? null);
+      super(HomeObject.createId("light"), idOrLight, (lightOrProps as string[] | null | undefined) ?? null);
     }
     const light = typeof idOrLight === "string" ? (lightOrProps as Light) : idOrLight;
     this.power = f32(light.getPower());
