@@ -44,7 +44,7 @@
 [x] 1.4  Golden corpus: write Java harness to dump Home field-JSON, plan/3D/photo PNGs, Home.xml bytes, PDF/SVG from fixtures
 [x] 1.5  Golden corpus: add examples/ls_2819.sh3d (+ its SVG/CSV/OBJ) as first fixture; capture its dumps and reference renders
 [x] 1.6  Golden corpus: build feature-covering fixture homes (walls, rooms, furniture, levels, dims/labels, cameras, environment, damaged, big)
-[ ] 1.7  Spike: run real Java app in-browser (CheerpJ) as test oracle + demo; decide if viable for golden-image capture in CI
+[-] 1.7  Spike: run real Java app in-browser (CheerpJ) as test oracle + demo; decide if viable for golden-image capture in CI
 [ ] 1.8  Spike: float32 formatFloat() helper matching Java Float.toString across a large float corpus (drives 05-file-format.md policy)
 [ ] 1.9  Spike: read a legacy serialized-Home entry with a TS Java-serialization reader on 3 old .sh3d files
 [ ] 1.10  Port awt.geom shim: Point2D, GeneralPath/PathIterator, Area (boolean ops), Line2D/Ellipse2D/CubicCurve2D/Rectangle2D, AffineTransform
@@ -161,3 +161,12 @@
 [ ] 10.1  Keep TRANSLATION.md mapping Java class → TS file → status (audit trail for GPL attribution)
 [ ] 10.2  Maintain fixture corpus + regenerate goldens after any rendering/format change
 [ ] 10.3  Track KNOWN_DIFFS.md for intentional divergences (fonts, 3D shading, photo output)
+
+## Decisions
+
+- **1.7 dropped (CheerpJ spike)**: the native JVM golden-corpus harness
+  (tools/java-harness, tasks 1.4–1.6) already provides the test oracle —
+  field dumps, XML bytes, content and (to be added) Java2D plan renders —
+  without a ~100MB in-browser Java toolchain. The TS app itself is the demo;
+  CheerpJ adds complexity for no oracle or demo value. Revisit only if native
+  Java2D plan rendering proves impossible in CI.
