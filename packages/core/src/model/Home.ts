@@ -118,7 +118,7 @@ export class Home {
     this.topCamera.setId(Home.HOME_TOP_CAMERA_ID);
     this.environment = new HomeEnvironment();
     this.environment.setId(Home.HOME_ENVIRONMENT_ID);
-    this.compass = new Compass();
+    this.compass = new Compass(0, 0, 100);
     this.compass.setId(Home.HOME_COMPASS_ID);
   }
 

@@ -46,21 +46,12 @@ export class Label implements Elevatable {
   }
 }
 
-export class HomeEnvironment extends HomeObject {
-  getVideoCameraPath(): Camera[] {
-    return [];
-  }
-}
-
-export class Compass extends HomeObject {
-  isVisible(): boolean {
-    return false;
-  }
-}
+export { Compass } from "./Compass.js";
+export { HomeEnvironment } from "./HomeEnvironment.js";
 
 export class ObjectProperty {}
-export class HomeTexture {}
-export class HomeMaterial {}
+export { HomeTexture } from "./HomeTexture.js";
+export { HomeMaterial } from "./HomeMaterial.js";
 export class TextStyle {}
 export class TextureImage {}
 export class LightSource {}
