@@ -74,7 +74,7 @@
 [ ] 3.2  HomeXMLHandler port (reader): all elements/attributes per 05-file-format.md §1.1, tolerant of unknown attrs
 [ ] 3.3  XMLWriter + HomeXMLExporter port (writer): canonical ordering, escaping, float formatting, content-name traversal order
 [ ] 3.4  Legacy Java-serialized Home deserializer (TC_* tags, class descriptors, back-references; typed per serialized class)
-[ ] 3.5  ContentDigestManager + ContentDigests manifest read/write + damaged-content repair flow
+[x] 3.5  ContentDigestManager + ContentDigests manifest read/write + damaged-content repair flow
 [ ] 3.6  Catalog codec: read/write .sh3f furniture and .sh3t textures library bundles
 [ ] 3.7  HomeFileRecorder TS API: readHomeFromZip/Xml/Serialized, writeHome (XML-only v1), detect damaged files
 [ ] 3.8  Round-trip identity tests + Java↔JS cross-read field-dump parity + XML byte parity (incl. entry-name order)
