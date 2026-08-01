@@ -1,0 +1,12 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./packages/core" },
+    { "path": "./packages/render2d" },
+    { "path": "./packages/render3d" },
+    { "path": "./packages/photo" },
+    { "path": "./packages/codecs" },
+    { "path": "./apps/web" },
+    { "path": "./apps/cli" }
+  ]
+}

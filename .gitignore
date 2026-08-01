@@ -20,3 +20,5 @@ coverage/
 # never commit the original zip
 SweetHome3D-7.5-src.zip
 src/SweetHome3D-7.5-src.zip
+__pycache__/
+*.pyc

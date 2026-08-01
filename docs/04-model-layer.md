@@ -14,61 +14,61 @@
 
 ### 2.1 Document root & core
 
-| Java class | TS file | Notes |
-|---|---|---|
-| `Home` | `Home.ts` | The root. Port `CURRENT_VERSION = 7400`, all collections, `Property` enum, `get/set` for every field, listener support, `getSelectedItems()`, `getFurnitureWithSubGroups()` helper, clone, `HomeObject` id handling, visual/properties maps, base plan lock, additional furniture properties |
-| `HomeObject` | `HomeObject.ts` | base class: id (uuid or name-based), name, visibility, level binding, `getVisualProperty`/`setVisualProperty`, `clone` |
-| `Selectable` | `Selectable.ts` | interface: `getX/getY/getZ/getPoints`, `containsPoint`, `move`, `clone` |
-| `CollectionChangeSupport` / `CollectionEvent` / `CollectionListener` | `events/` | port of the collection event plumbing (ADD/DELETE with index) |
-| `HomeApplication` | `HomeApplication.ts` | small: holds `HomeRecorder` + `UserPreferences` |
-| `HomeRecorder` | `HomeRecorder.ts` | interface (readHome/writeHome/exists) + `Type` enum |
-| `Content` | `Content.ts` | interface: `openStream()`, `getURL()` — web impl: `Blob`/`File`/URL-backed |
+| Java class                                                           | TS file              | Notes                                                                                                                                                                                                                                                                                        |
+| -------------------------------------------------------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Home`                                                               | `Home.ts`            | The root. Port `CURRENT_VERSION = 7400`, all collections, `Property` enum, `get/set` for every field, listener support, `getSelectedItems()`, `getFurnitureWithSubGroups()` helper, clone, `HomeObject` id handling, visual/properties maps, base plan lock, additional furniture properties |
+| `HomeObject`                                                         | `HomeObject.ts`      | base class: id (uuid or name-based), name, visibility, level binding, `getVisualProperty`/`setVisualProperty`, `clone`                                                                                                                                                                       |
+| `Selectable`                                                         | `Selectable.ts`      | interface: `getX/getY/getZ/getPoints`, `containsPoint`, `move`, `clone`                                                                                                                                                                                                                      |
+| `CollectionChangeSupport` / `CollectionEvent` / `CollectionListener` | `events/`            | port of the collection event plumbing (ADD/DELETE with index)                                                                                                                                                                                                                                |
+| `HomeApplication`                                                    | `HomeApplication.ts` | small: holds `HomeRecorder` + `UserPreferences`                                                                                                                                                                                                                                              |
+| `HomeRecorder`                                                       | `HomeRecorder.ts`    | interface (readHome/writeHome/exists) + `Type` enum                                                                                                                                                                                                                                          |
+| `Content`                                                            | `Content.ts`         | interface: `openStream()`, `getURL()` — web impl: `Blob`/`File`/URL-backed                                                                                                                                                                                                                   |
 
 ### 2.2 Furniture family
 
-| Java class | Notes |
-|---|---|
-| `HomePieceOfFurniture` (1849 LOC) | the biggest model class: x/y/z, yaw/pitch/roll, width/depth/height, model `Content`, catalog id, name/description, color/texture/material, visibility, movable, deformable, resizable, model mirrored, backface shininess, name label (offset/style/angle), light sources, elevation, level, home transform, box bounds. Port all `Property` members. |
-| `HomeDoorOrWindow` | wall attachment (thickness, distance, wall width/left/height/top, sashes, boundary/wall thickness flags, hinge) — pure math port |
-| `HomeLight` | power (lumens), light sources list, light source material names |
-| `HomeShelfUnit` | shelf elevations + shelf boxes (4 shelf properties) |
-| `HomeFurnitureGroup` | group of `HomePieceOfFurniture` with `getFurniture()`, bounding box compute, `setMovable`, etc. |
-| `CatalogPieceOfFurniture`, `CatalogDoorOrWindow`, `CatalogLight`, `CatalogShelfUnit` | immutable catalog entries (imported model, category, creator, license) |
-| `PieceOfFurniture`, `DoorOrWindow`, `Light`, `ShelfUnit` | interfaces implemented by both Home- and Catalog- variants |
-| `Elevatable`, `Selectable`, `Transformation` | small interfaces; `Transformation` (Matrix3D-ish affine) used by the 3D layer |
+| Java class                                                                           | Notes                                                                                                                                                                                                                                                                                                                                                 |
+| ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `HomePieceOfFurniture` (1849 LOC)                                                    | the biggest model class: x/y/z, yaw/pitch/roll, width/depth/height, model `Content`, catalog id, name/description, color/texture/material, visibility, movable, deformable, resizable, model mirrored, backface shininess, name label (offset/style/angle), light sources, elevation, level, home transform, box bounds. Port all `Property` members. |
+| `HomeDoorOrWindow`                                                                   | wall attachment (thickness, distance, wall width/left/height/top, sashes, boundary/wall thickness flags, hinge) — pure math port                                                                                                                                                                                                                      |
+| `HomeLight`                                                                          | power (lumens), light sources list, light source material names                                                                                                                                                                                                                                                                                       |
+| `HomeShelfUnit`                                                                      | shelf elevations + shelf boxes (4 shelf properties)                                                                                                                                                                                                                                                                                                   |
+| `HomeFurnitureGroup`                                                                 | group of `HomePieceOfFurniture` with `getFurniture()`, bounding box compute, `setMovable`, etc.                                                                                                                                                                                                                                                       |
+| `CatalogPieceOfFurniture`, `CatalogDoorOrWindow`, `CatalogLight`, `CatalogShelfUnit` | immutable catalog entries (imported model, category, creator, license)                                                                                                                                                                                                                                                                                |
+| `PieceOfFurniture`, `DoorOrWindow`, `Light`, `ShelfUnit`                             | interfaces implemented by both Home- and Catalog- variants                                                                                                                                                                                                                                                                                            |
+| `Elevatable`, `Selectable`, `Transformation`                                         | small interfaces; `Transformation` (Matrix3D-ish affine) used by the 3D layer                                                                                                                                                                                                                                                                         |
 
 ### 2.3 Plan geometry
 
-| Java class | Notes |
-|---|---|
-| `Wall` (1254 LOC) | start/end points, arc extent, thickness, height, wallAtStart/End (connecting walls), baseboards (left/right `Baseboard`), `getPoints()` → polygon via `GeneralPath`; `getWallAtStart/End` topology helpers; intersection math |
-| `Baseboard` | height, thickness, color/texture |
-| `Room` (864) | points, floor texture/surface color, ceiling/trim colors, name + label style, area visibility, level; `getArea()`/`getPerimeter()` ported math; point-in-polygon, room point detection (`getRoomAtPoint`) |
-| `Polyline` (766) | points, thickness, cap/join/dash styles, arrows, closed path, elevation, 3D visibility; arc-length/flattening for dashed rendering |
-| `DimensionLine` (658) | start/end/elevation, offset, end mark size, pitch, length style, color, visibility; `getLength()` |
-| `Label` (362) | text, position, style, color/outline, angle/pitch, level |
-| `Compass` (1094) | x/y, diameter, north direction, latitude/longitude/timezone + sun position math (`getSunPosition`), visible flag |
-| `Level` (258) | name, elevation, height, floor thickness, background image, visible/viewable |
-| `BackgroundImage` (164) | file content, scale, offset, rotation |
-| `HomeTexture` (285) | texture image content + scale + color; `getFilteredImage` helper used by renderers |
-| `HomeMaterial` (151) | diffuse/specular/ambient colors, shininess, texture |
-| `HomeEnvironment` (665) | sky/ground colors, textures, light color, walls alpha, drawing mode (FILL/OUTLINE/FILL_AND_OUTLINE), camera elevation adjustment, video paths, sun lighting, ground/ceiling visibility, subpart lights |
-| `HomePrint` (208) | paper format/size/orientation, margins, furniture printed flags, grid |
-| `Camera` (368) / `ObserverCamera` (310) / `TopCamera` | lens (PINHOLE/NORMAL/FISHEYE/SPHERICAL), fov, yaw/pitch, time-of-day, renderer name |
-| `LightSource` | x/y/z + color + diameter — geometry only |
-| `Sash` | axis, x/y/z, width/height, horizontal |
-| `BoxBounds` (old) | legacy bounds |
-| `AspectRatio`, `TextStyle` (240), `ObjectProperty` (209) | value objects |
+| Java class                                               | Notes                                                                                                                                                                                                                         |
+| -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Wall` (1254 LOC)                                        | start/end points, arc extent, thickness, height, wallAtStart/End (connecting walls), baseboards (left/right `Baseboard`), `getPoints()` → polygon via `GeneralPath`; `getWallAtStart/End` topology helpers; intersection math |
+| `Baseboard`                                              | height, thickness, color/texture                                                                                                                                                                                              |
+| `Room` (864)                                             | points, floor texture/surface color, ceiling/trim colors, name + label style, area visibility, level; `getArea()`/`getPerimeter()` ported math; point-in-polygon, room point detection (`getRoomAtPoint`)                     |
+| `Polyline` (766)                                         | points, thickness, cap/join/dash styles, arrows, closed path, elevation, 3D visibility; arc-length/flattening for dashed rendering                                                                                            |
+| `DimensionLine` (658)                                    | start/end/elevation, offset, end mark size, pitch, length style, color, visibility; `getLength()`                                                                                                                             |
+| `Label` (362)                                            | text, position, style, color/outline, angle/pitch, level                                                                                                                                                                      |
+| `Compass` (1094)                                         | x/y, diameter, north direction, latitude/longitude/timezone + sun position math (`getSunPosition`), visible flag                                                                                                              |
+| `Level` (258)                                            | name, elevation, height, floor thickness, background image, visible/viewable                                                                                                                                                  |
+| `BackgroundImage` (164)                                  | file content, scale, offset, rotation                                                                                                                                                                                         |
+| `HomeTexture` (285)                                      | texture image content + scale + color; `getFilteredImage` helper used by renderers                                                                                                                                            |
+| `HomeMaterial` (151)                                     | diffuse/specular/ambient colors, shininess, texture                                                                                                                                                                           |
+| `HomeEnvironment` (665)                                  | sky/ground colors, textures, light color, walls alpha, drawing mode (FILL/OUTLINE/FILL_AND_OUTLINE), camera elevation adjustment, video paths, sun lighting, ground/ceiling visibility, subpart lights                        |
+| `HomePrint` (208)                                        | paper format/size/orientation, margins, furniture printed flags, grid                                                                                                                                                         |
+| `Camera` (368) / `ObserverCamera` (310) / `TopCamera`    | lens (PINHOLE/NORMAL/FISHEYE/SPHERICAL), fov, yaw/pitch, time-of-day, renderer name                                                                                                                                           |
+| `LightSource`                                            | x/y/z + color + diameter — geometry only                                                                                                                                                                                      |
+| `Sash`                                                   | axis, x/y/z, width/height, horizontal                                                                                                                                                                                         |
+| `BoxBounds` (old)                                        | legacy bounds                                                                                                                                                                                                                 |
+| `AspectRatio`, `TextStyle` (240), `ObjectProperty` (209) | value objects                                                                                                                                                                                                                 |
 
 ### 2.4 Catalogs & preferences
 
-| Java class | Notes |
-|---|---|
-| `FurnitureCatalog`, `FurnitureCategory`, `TexturesCatalog`, `TexturesCategory`, `PatternsCatalog` | tree structures + change events |
-| `UserPreferences` (1401) | the big preferences object: language, units, currency, VAT, furniture/texture catalogs, patterns, 3D view attributes, navigation panel, recent files, keyboard shortcuts, actions (`ActionType` enum? it's actually on `HomeController`/`UserPreferences`), tool-tip feedback, default textures; port all `Property` members |
-| `LengthUnit` (1127) | units: CENTIMETER, METER, FOOT, INCH, CENTIMETER_INCH, METER_FOOT; conversions; `getFormatWithUnit()`; decimal formatting parity is important for dimension rendering |
-| `Library`, `HomeDescriptor` | library bundle metadata (name, id, version, license, contributor) |
-| `TexturesCatalog`, `PatternsCatalog` | as above |
+| Java class                                                                                        | Notes                                                                                                                                                                                                                                                                                                                        |
+| ------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `FurnitureCatalog`, `FurnitureCategory`, `TexturesCatalog`, `TexturesCategory`, `PatternsCatalog` | tree structures + change events                                                                                                                                                                                                                                                                                              |
+| `UserPreferences` (1401)                                                                          | the big preferences object: language, units, currency, VAT, furniture/texture catalogs, patterns, 3D view attributes, navigation panel, recent files, keyboard shortcuts, actions (`ActionType` enum? it's actually on `HomeController`/`UserPreferences`), tool-tip feedback, default textures; port all `Property` members |
+| `LengthUnit` (1127)                                                                               | units: CENTIMETER, METER, FOOT, INCH, CENTIMETER_INCH, METER_FOOT; conversions; `getFormatWithUnit()`; decimal formatting parity is important for dimension rendering                                                                                                                                                        |
+| `Library`, `HomeDescriptor`                                                                       | library bundle metadata (name, id, version, license, contributor)                                                                                                                                                                                                                                                            |
+| `TexturesCatalog`, `PatternsCatalog`                                                              | as above                                                                                                                                                                                                                                                                                                                     |
 
 ### 2.5 Exceptions
 
@@ -133,11 +133,12 @@ compat** (e.g., `furnitureSortedProperty` in Home) — those must be serialized.
 
 `LengthUnit` is used everywhere the plan shows dimensions and in import
 wizards. The Java class builds `DecimalFormat` patterns per unit, e.g.:
+
 - CENTIMETER: `0.##` + " cm"
 - INCH: `0.##"` with fractions
 - FOOT: `0'##"` etc.
 
-Port the format patterns *literally* and use `Intl.NumberFormat` with
+Port the format patterns _literally_ and use `Intl.NumberFormat` with
 `useGrouping:false` and matching min/max fraction digits, plus the unit
 suffix logic. Add golden tests comparing formatted strings against Java output
 for a grid of values (0.5, 1, 2.5, 12.34, -3.2, 1000.1) across all units.
@@ -145,6 +146,7 @@ for a grid of values (0.5, 1, 2.5, 12.34, -3.2, 1000.1) across all units.
 ## 5. UserPreferences & i18n bridge
 
 `UserPreferences` wraps message bundles. Port with:
+
 - `getLocalizedString(bundleName, key, args)` → resolves from a `Messages`
   registry built from ported `.properties` files (see
   [03-porting-strategy.md](03-porting-strategy.md#8-i18n)).

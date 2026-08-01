@@ -10,7 +10,7 @@
    Every Java class lands in a TS file with the same name so upstream
    bugfixes map 1:1 (greppable translation table).
 3. **Faithful translation, not clever rewrite** — for model/io/controllers.
-   The correctness bar is *"same output as Java"*, and creative rewrites make
+   The correctness bar is _"same output as Java"_, and creative rewrites make
    parity impossible to reason about. (Cleverness is reserved for the parts we
    must rebuild: UI chrome, 3D backend, photo renderer.)
 4. **float32 discipline.** Model fields are Java `float`s; TS `number` is
@@ -54,18 +54,18 @@ keep the test matrix small.
 
 ## 3. Translation order and gates
 
-| Phase | Output | Gate (definition of done) |
-|---|---|---|
-| P0 tooling | repo scaffold, tsconfig, CI, f32 lint, golden corpus capture | CI green; corpus of `.sh3d` files (from Java app + hand-built) collected |
-| P1 `geom` shim | `geom/` + tests | awt.geom semantics tests ported from Java (e.g., `Area` ops on known polygons, `PathIterator` segment outputs) |
-| P2 `model` | all 64 classes | 1. TypeScript compiles strict. 2. Unit tests ported from `test/` (RoomTest, HomeCameraTest, etc.). 3. A "model replay" harness: deserialize fixture homes and assert field-by-field equality vs Java-produced JSON dumps |
-| P3 `io` codecs | `.sh3d` reader/writer, XML, catalogs | **Round-trip gate**: Java-written `.sh3d` → our reader → our writer → Java reader → identical `Home` (field diff). Plus byte-level golden tests for XML entry |
-| P4 `controllers` (plan core) | PlanController + furniture/room/wall/etc. controllers | Ported unit tests pass (PlanControllerTest etc. run headless with a mock view) |
-| P5 `render2d` | PlanComponent → Canvas2D | **Golden-image gate**: render fixture homes on a canvas, diff against Java-rendered PNGs (see [12-testing-and-parity.md](12-testing-and-parity.md)) |
-| P6 `render3d` | Three.js scene builders | Golden screenshots at fixed cameras vs Java 3D screenshots; model-loading parity |
-| P7 `ui` shell | React HomePane + dialogs | e2e flows: open → edit wall → save → reopen |
-| P8 photo/video/print | path tracer, video, PDF/SVG export | Photo: perceptual similarity vs Sunflow reference images; Print: PDF reopens in Java identically |
-| P9 polish | i18n, PWA, cloud sync, touch | acceptance suite |
+| Phase                        | Output                                                       | Gate (definition of done)                                                                                                                                                                                                |
+| ---------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| P0 tooling                   | repo scaffold, tsconfig, CI, f32 lint, golden corpus capture | CI green; corpus of `.sh3d` files (from Java app + hand-built) collected                                                                                                                                                 |
+| P1 `geom` shim               | `geom/` + tests                                              | awt.geom semantics tests ported from Java (e.g., `Area` ops on known polygons, `PathIterator` segment outputs)                                                                                                           |
+| P2 `model`                   | all 64 classes                                               | 1. TypeScript compiles strict. 2. Unit tests ported from `test/` (RoomTest, HomeCameraTest, etc.). 3. A "model replay" harness: deserialize fixture homes and assert field-by-field equality vs Java-produced JSON dumps |
+| P3 `io` codecs               | `.sh3d` reader/writer, XML, catalogs                         | **Round-trip gate**: Java-written `.sh3d` → our reader → our writer → Java reader → identical `Home` (field diff). Plus byte-level golden tests for XML entry                                                            |
+| P4 `controllers` (plan core) | PlanController + furniture/room/wall/etc. controllers        | Ported unit tests pass (PlanControllerTest etc. run headless with a mock view)                                                                                                                                           |
+| P5 `render2d`                | PlanComponent → Canvas2D                                     | **Golden-image gate**: render fixture homes on a canvas, diff against Java-rendered PNGs (see [12-testing-and-parity.md](12-testing-and-parity.md))                                                                      |
+| P6 `render3d`                | Three.js scene builders                                      | Golden screenshots at fixed cameras vs Java 3D screenshots; model-loading parity                                                                                                                                         |
+| P7 `ui` shell                | React HomePane + dialogs                                     | e2e flows: open → edit wall → save → reopen                                                                                                                                                                              |
+| P8 photo/video/print         | path tracer, video, PDF/SVG export                           | Photo: perceptual similarity vs Sunflow reference images; Print: PDF reopens in Java identically                                                                                                                         |
+| P9 polish                    | i18n, PWA, cloud sync, touch                                 | acceptance suite                                                                                                                                                                                                         |
 
 ## 4. Translation tooling
 
@@ -77,15 +77,15 @@ Options for the mechanical pass:
    `j2ts`, `meteor/deepdive` research, CheerpJ is Java-in-browser not
    translation). Quality is poor for idiomatic Java (generics, anonymous
    classes, overloading). **Verdict: not viable for full automation**, but
-   useful as a *scaffold*: transpile a file, then hand-fix. We can script
+   useful as a _scaffold_: transpile a file, then hand-fix. We can script
    per-file scaffolding: class skeleton + method signatures + enum/Property
    lists from the Java source, which is ~50% of the typing work.
 3. **Runtime transpilation (CheerpJ/TeaVM/GWT)**: run the Java bytecode in
    browser. Tempting for instant fidelity, but (a) it drags in Swing/Java3D
-   which we want to *replace*, (b) it makes the web app unmaintainable and
+   which we want to _replace_, (b) it makes the web app unmaintainable and
    un-hackable by JS devs, (c) performance and UX constraints. **Verdict:
-   rejected for the main product**, though *CheerpJ might serve as an interim
-   "Java in browser" stopgap* if we ever want to demo a working app early
+   rejected for the main product**, though _CheerpJ might serve as an interim
+   "Java in browser" stopgap_ if we ever want to demo a working app early
    (spike only, see [13-roadmap.md](13-roadmap.md#p0-spikes)).
 
 **Chosen approach**: hand port with codegen assistance:
@@ -100,25 +100,25 @@ Options for the mechanical pass:
 
 ## 5. Java→TS idiom translation table
 
-| Java | TS |
-|---|---|
-| class with fields, getters/setters | class with typed private fields + getters/setters (port names exactly: `getWallHeight()` → `getWallHeight()`) |
-| `float`, `double`, `int`, `long`, `boolean` | `number`, `boolean`; `Math.fround` at narrowing points |
-| `String` | `string` |
-| `List<T>`, `ArrayList` | `T[]` internally or `List<T>` wrapper only where Java index semantics matter; prefer arrays for perf, wrapper class `HomeList` only if needed for identity semantics (most lists are replaced wholesale via setters) |
-| `Map<K,V>`, `HashMap` | `Map<K,V>` |
-| interfaces | interfaces |
-| enums (`enum Property {...}`) | const string unions + frozen const objects (port `.name()` semantics) — but keep Java names in comments for mapping |
-| anonymous inner classes (listeners, comparators) | arrow functions / named classes |
-| `PropertyChangeSupport` | `EventEmitter<Property>` (see below) |
-| `CollectionChangeSupport<T>` | `CollectionEventEmitter<T>` (ADD/DELETE with `getIndex()`) |
-| `SwingUtilities.invokeLater` | `queueMicrotask` / `requestAnimationFrame` (must preserve ordering semantics carefully — see [06-2d-plan-view.md](06-2d-plan-view.md#event-ordering)) |
-| `Timer` | `setInterval` wrapper with the same `isRunning/restart` API |
-| `Executors` | worker pool wrapper (or just `Promise` chains in UI) |
-| `java.text.DecimalFormat`, `Collator` | `Intl.NumberFormat`, `Intl.Collator` with pinned locales |
-| `ResourceBundle.getString` | `messages` lookup from ported `.properties` |
-| `Serializable` / `clone()` | `clone()` method (deep) |
-| `throws XException` | TS exceptions; port exception hierarchy names |
+| Java                                             | TS                                                                                                                                                                                                                   |
+| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| class with fields, getters/setters               | class with typed private fields + getters/setters (port names exactly: `getWallHeight()` → `getWallHeight()`)                                                                                                        |
+| `float`, `double`, `int`, `long`, `boolean`      | `number`, `boolean`; `Math.fround` at narrowing points                                                                                                                                                               |
+| `String`                                         | `string`                                                                                                                                                                                                             |
+| `List<T>`, `ArrayList`                           | `T[]` internally or `List<T>` wrapper only where Java index semantics matter; prefer arrays for perf, wrapper class `HomeList` only if needed for identity semantics (most lists are replaced wholesale via setters) |
+| `Map<K,V>`, `HashMap`                            | `Map<K,V>`                                                                                                                                                                                                           |
+| interfaces                                       | interfaces                                                                                                                                                                                                           |
+| enums (`enum Property {...}`)                    | const string unions + frozen const objects (port `.name()` semantics) — but keep Java names in comments for mapping                                                                                                  |
+| anonymous inner classes (listeners, comparators) | arrow functions / named classes                                                                                                                                                                                      |
+| `PropertyChangeSupport`                          | `EventEmitter<Property>` (see below)                                                                                                                                                                                 |
+| `CollectionChangeSupport<T>`                     | `CollectionEventEmitter<T>` (ADD/DELETE with `getIndex()`)                                                                                                                                                           |
+| `SwingUtilities.invokeLater`                     | `queueMicrotask` / `requestAnimationFrame` (must preserve ordering semantics carefully — see [06-2d-plan-view.md](06-2d-plan-view.md#event-ordering))                                                                |
+| `Timer`                                          | `setInterval` wrapper with the same `isRunning/restart` API                                                                                                                                                          |
+| `Executors`                                      | worker pool wrapper (or just `Promise` chains in UI)                                                                                                                                                                 |
+| `java.text.DecimalFormat`, `Collator`            | `Intl.NumberFormat`, `Intl.Collator` with pinned locales                                                                                                                                                             |
+| `ResourceBundle.getString`                       | `messages` lookup from ported `.properties`                                                                                                                                                                          |
+| `Serializable` / `clone()`                       | `clone()` method (deep)                                                                                                                                                                                              |
+| `throws XException`                              | TS exceptions; port exception hierarchy names                                                                                                                                                                        |
 
 ## 6. Event system design (port of JavaBeans)
 
@@ -139,6 +139,7 @@ class CollectionChangeSupport<T> {
 ```
 
 Notes:
+
 - Event **delivery is synchronous** in Java (listeners run in the same stack).
   Keep it synchronous — the plan/3D views schedule their own repaint batching;
   don't introduce async event delivery, or ordering bugs will creep in.
@@ -196,7 +197,7 @@ replacement:
   machines), and keep a feature-flag'd UI during porting.
 - **Float parity**: see [05-file-format.md](05-file-format.md#floating-point-policy).
 - **Sunflow**: the biggest "invent" item. De-risked by the seam: `PhotoRenderer`
-  port can initially shell out to a WebGPU path tracer with a *different*
+  port can initially shell out to a WebGPU path tracer with a _different_
   look; exact parity is explicitly **not** required for photo (it's a creative
   output), only quality parity. See [09-photo-video-print.md](09-photo-video-print.md).
 - **Legal**: GPL. Attribution header on every translated file (original

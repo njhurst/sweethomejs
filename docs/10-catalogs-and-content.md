@@ -8,7 +8,7 @@
   PNG preview images (bed, sofa, kitchen, bathroom, office…) plus the default
   **textures catalog** (wood, tiles, stone…) and 8 **hatch patterns** used on
   the plan.
-- The catalog *structure* (names, categories, descriptions, licenses) lives in
+- The catalog _structure_ (names, categories, descriptions, licenses) lives in
   `DefaultFurnitureCatalog.properties` / `DefaultTexturesCatalog.properties`
   (one per locale, ~20 languages), parsed by `DefaultFurnitureCatalog` /
   `DefaultTexturesCatalog` in `io/`.
@@ -43,7 +43,7 @@
 ## 2. Help system
 
 - 12 MB of localized HTML help (`viewcontroller/resources/help/<locale>/index.html`
-  + pages + images), shown in a `HelpController`/`HelpView` browser pane.
+  - pages + images), shown in a `HelpController`/`HelpView` browser pane.
 - Web: ship the help as static pages; open in a new tab or an in-app iframe/
   side panel. Keep the same `ActionType.HELP` menu wiring. Stretch: convert to
   Markdown and generate docs — but **shipping the existing HTML is cheapest
@@ -73,7 +73,7 @@ XML). Web: **IndexedDB** store:
 - `recoveredHomes` — auto-recovery data (see below).
 - Recent files: store last N file handles (File System Access API) + blobs.
 
-Port `DefaultUserPreferences`/`FileUserPreferences` *structure* (properties
+Port `DefaultUserPreferences`/`FileUserPreferences` _structure_ (properties
 and defaults), with an async `Preferences` interface:
 
 ```ts

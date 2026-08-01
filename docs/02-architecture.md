@@ -45,8 +45,8 @@ Key design properties that make the port tractable:
    These have 1:1 JavaScript equivalents (see §4).
 2. **Views are behind interfaces.** `viewcontroller/View.java`, `PlanView`,
    `View3D`, `HomeView`, `DialogView`, `FurnitureView`, and `ViewFactory`
-   abstract every concrete widget. The `swing` package is *an implementation
-   of ViewFactory*. Our web UI is another implementation. **The controllers
+   abstract every concrete widget. The `swing` package is _an implementation
+   of ViewFactory_. Our web UI is another implementation. **The controllers
    should be ported nearly unchanged.**
 3. **Events everywhere.** Controllers mutate the model; the model fires
    `PropertyChangeEvent`s / `CollectionEvent`s; views listen and repaint.
@@ -187,16 +187,16 @@ classes: `HomeFileRecorder` (.sh3d = ZIP), `DefaultHomeInputStream` /
 
 ### 2.1 Package mapping (Java → TS)
 
-| Java package | TS module | Notes |
-|---|---|---|
-| `com.eteks.sweethome3d.model` | `src/model/` | 1:1 class port, events, geometry shims |
-| `com.eteks.sweethome3d.viewcontroller` | `src/controllers/` | ported mostly verbatim; views are interfaces returning React/DOM components |
-| `com.eteks.sweethome3d.swing` | split: `src/views/plan/`, `src/views/ui/` (React), `src/views/3d/` | `PlanComponent` → Canvas engine; `HomeComponent3D` → Three.js scene; dialogs → React components; `FurnitureTable` → virtualized table |
-| `com.eteks.sweethome3d.j3d` | `src/render3d/` | `Object3DBranch` subclasses → `Object3D` builders producing Three.js objects |
-| `com.eteks.sweethome3d.io` | `src/io/` | format codecs, catalog loaders, preferences |
-| `com.eteks.sweethome3d.tools` | `src/util/` | URL/content helpers, OS checks dropped |
-| `com.eteks.sweethome3d.plugin` | `src/plugins/` | web plugin API (separate design) |
-| root bootstrap | `src/app/` | React root, DI container, workers |
+| Java package                           | TS module                                                          | Notes                                                                                                                                 |
+| -------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `com.eteks.sweethome3d.model`          | `src/model/`                                                       | 1:1 class port, events, geometry shims                                                                                                |
+| `com.eteks.sweethome3d.viewcontroller` | `src/controllers/`                                                 | ported mostly verbatim; views are interfaces returning React/DOM components                                                           |
+| `com.eteks.sweethome3d.swing`          | split: `src/views/plan/`, `src/views/ui/` (React), `src/views/3d/` | `PlanComponent` → Canvas engine; `HomeComponent3D` → Three.js scene; dialogs → React components; `FurnitureTable` → virtualized table |
+| `com.eteks.sweethome3d.j3d`            | `src/render3d/`                                                    | `Object3DBranch` subclasses → `Object3D` builders producing Three.js objects                                                          |
+| `com.eteks.sweethome3d.io`             | `src/io/`                                                          | format codecs, catalog loaders, preferences                                                                                           |
+| `com.eteks.sweethome3d.tools`          | `src/util/`                                                        | URL/content helpers, OS checks dropped                                                                                                |
+| `com.eteks.sweethome3d.plugin`         | `src/plugins/`                                                     | web plugin API (separate design)                                                                                                      |
+| root bootstrap                         | `src/app/`                                                         | React root, DI container, workers                                                                                                     |
 
 ### 2.2 Threading model
 
@@ -213,7 +213,7 @@ Web version:
 
 ### 2.3 State management choice
 
-Sweet Home 3D's model is *already* a mutable observable store with property
+Sweet Home 3D's model is _already_ a mutable observable store with property
 paths (`"wallHeight"`, `"furniture"`, `"selectedItems"`). Options:
 
 1. **Port the JavaBeans pattern directly**: every model class has typed
@@ -231,15 +231,15 @@ exactly mirroring `PlanComponent`/`HomeComponent3D`.
 
 ### 2.4 Rendering backends
 
-| View | Java | Web |
-|---|---|---|
-| 2D plan | `java.awt.Graphics2D` on `JComponent` | `CanvasRenderingContext2D` (same immediate-mode model, same transform math) — **SVG only for export** |
-| 3D | Java3D scene graph + JOGL | Three.js (see [07-3d-view.md](07-3d-view.md)) |
-| Icons/previews | Java2D offscreen images | OffscreenCanvas |
-| Photo | Sunflow (CPU raytracer) | Ported raytracer in WASM/worker or Three.js pathtracer |
-| Video | JMF AVI frames | `canvas.captureStream()` + `MediaRecorder` (webm) or WebCodecs |
-| Print/PDF | iText + Java2D | `pdf-lib` + Canvas/SVG vector draw; browser print dialog |
-| SVG export | FreeHEP/Batik | `Path2D` → `<path>` + `XMLSerializer` |
+| View           | Java                                  | Web                                                                                                   |
+| -------------- | ------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| 2D plan        | `java.awt.Graphics2D` on `JComponent` | `CanvasRenderingContext2D` (same immediate-mode model, same transform math) — **SVG only for export** |
+| 3D             | Java3D scene graph + JOGL             | Three.js (see [07-3d-view.md](07-3d-view.md))                                                         |
+| Icons/previews | Java2D offscreen images               | OffscreenCanvas                                                                                       |
+| Photo          | Sunflow (CPU raytracer)               | Ported raytracer in WASM/worker or Three.js pathtracer                                                |
+| Video          | JMF AVI frames                        | `canvas.captureStream()` + `MediaRecorder` (webm) or WebCodecs                                        |
+| Print/PDF      | iText + Java2D                        | `pdf-lib` + Canvas/SVG vector draw; browser print dialog                                              |
+| SVG export     | FreeHEP/Batik                         | `Path2D` → `<path>` + `XMLSerializer`                                                                 |
 
 ### 2.5 Dependency graph (target)
 
@@ -257,35 +257,36 @@ exactly mirroring `PlanComponent`/`HomeComponent3D`.
 
 ## 3. What must be invented vs. ported
 
-| Artifact | Approach |
-|---|---|
-| Model classes | Port 1:1 (they are mostly plain data + events) |
-| Geometry code (wall polygons, room areas, intersections) | Port 1:1; replace awt.geom calls with shim module |
-| PlanController state machines | Port 1:1; replace Swing `MouseEvent`/`KeyEvent` with DOM equivalents |
-| PlanComponent drawing | Port: identical immediate-mode Canvas2D port; keep clipping/transform structure |
-| Java3D branches | Port to Three.js object builders with a documented attribute map |
-| OBJ/DAE/3DS parsers | Port; output Three.js-ready geometry instead of Java3D geometry |
-| Sunflow | **Rebuild** — Sunflow is a full raytracer; transpiling Java→JS is impractical at that scale. Design a new path tracer in TS/WASM informed by Sunflow's architecture (buckets, GI, light plugins). See [09-photo-video-print.md](09-photo-video-print.md). |
-| `.sh3d` codec | Reimplement from the XML schema + serialized-format docs; verify by round-trip against Java-produced files (golden corpus) |
-| UI chrome | Rebuild as React (menus, dialogs) — the Java dialogs inform behavior, not markup |
-| i18n | Port the `.properties` bundles (they are GPL data we already redistribute) into TS/JSON |
+| Artifact                                                 | Approach                                                                                                                                                                                                                                                  |
+| -------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Model classes                                            | Port 1:1 (they are mostly plain data + events)                                                                                                                                                                                                            |
+| Geometry code (wall polygons, room areas, intersections) | Port 1:1; replace awt.geom calls with shim module                                                                                                                                                                                                         |
+| PlanController state machines                            | Port 1:1; replace Swing `MouseEvent`/`KeyEvent` with DOM equivalents                                                                                                                                                                                      |
+| PlanComponent drawing                                    | Port: identical immediate-mode Canvas2D port; keep clipping/transform structure                                                                                                                                                                           |
+| Java3D branches                                          | Port to Three.js object builders with a documented attribute map                                                                                                                                                                                          |
+| OBJ/DAE/3DS parsers                                      | Port; output Three.js-ready geometry instead of Java3D geometry                                                                                                                                                                                           |
+| Sunflow                                                  | **Rebuild** — Sunflow is a full raytracer; transpiling Java→JS is impractical at that scale. Design a new path tracer in TS/WASM informed by Sunflow's architecture (buckets, GI, light plugins). See [09-photo-video-print.md](09-photo-video-print.md). |
+| `.sh3d` codec                                            | Reimplement from the XML schema + serialized-format docs; verify by round-trip against Java-produced files (golden corpus)                                                                                                                                |
+| UI chrome                                                | Rebuild as React (menus, dialogs) — the Java dialogs inform behavior, not markup                                                                                                                                                                          |
+| i18n                                                     | Port the `.properties` bundles (they are GPL data we already redistribute) into TS/JSON                                                                                                                                                                   |
 
 ## 4. The awt.geom shim (critical enabler)
 
 The model and plan code use these AWT geometry classes. JavaScript
 equivalents:
 
-| java.awt.geom | TS shim |
-|---|---|
-| `Point2D.Float`/`Double` | `{x: number, y: number}` or `Vector2` |
-| `GeneralPath` | `Path2D` (custom impl wrapping `Path2D` DOM class; supports `moveTo/lineTo/quadTo/cubicTo/closePath`, `getPathIterator`) |
-| `PathIterator` | custom iterator object (`currentSegment` returning segment type + coords) |
-| `Area` (boolean ops) | `path2d-polygon-clipping` or `polygon-clipping` (Martinez algorithm); verify identical semantics for wall/room unions |
-| `Line2D`, `Ellipse2D`, `CubicCurve2D`, `Rectangle2D` | small geometry classes (port math from AWT: `ptSegDist`, `intersectsLine`, flattening) |
-| `AffineTransform` | `DOMMatrix` or a small matrix class (port `createInverse`, `transform`, `concatenate` used by plan) |
-| `Shape` interface | `IShape` TS interface (getBounds2D, contains, intersects, getPathIterator) |
+| java.awt.geom                                        | TS shim                                                                                                                  |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `Point2D.Float`/`Double`                             | `{x: number, y: number}` or `Vector2`                                                                                    |
+| `GeneralPath`                                        | `Path2D` (custom impl wrapping `Path2D` DOM class; supports `moveTo/lineTo/quadTo/cubicTo/closePath`, `getPathIterator`) |
+| `PathIterator`                                       | custom iterator object (`currentSegment` returning segment type + coords)                                                |
+| `Area` (boolean ops)                                 | `path2d-polygon-clipping` or `polygon-clipping` (Martinez algorithm); verify identical semantics for wall/room unions    |
+| `Line2D`, `Ellipse2D`, `CubicCurve2D`, `Rectangle2D` | small geometry classes (port math from AWT: `ptSegDist`, `intersectsLine`, flattening)                                   |
+| `AffineTransform`                                    | `DOMMatrix` or a small matrix class (port `createInverse`, `transform`, `concatenate` used by plan)                      |
+| `Shape` interface                                    | `IShape` TS interface (getBounds2D, contains, intersects, getPathIterator)                                               |
 
 **Caution points:**
+
 - `Area` boolean ops semantics must match Java2D's winding rules. `polygon-clipping`
   uses the Martinez algorithm with nonzero/evenodd support; test against Java
   `Area` on the same inputs in parity tests ([12-testing-and-parity.md](12-testing-and-parity.md)).

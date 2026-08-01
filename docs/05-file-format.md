@@ -12,12 +12,12 @@ everything else (plan, 3D, photo) can be validated against real user files.
 `.sh3d` is a **ZIP archive** (`java.util.zip`). Entries (from
 `DefaultHomeOutputStream.writeHome` / `DefaultHomeInputStream.readHome`):
 
-| Entry name | Content | Written by Java 7.x | Read by Java 7.x |
-|---|---|---|---|
-| `Home` | Java-serialized object graph (`ObjectOutputStream` on the `Home`). Legacy format; contents referenced via `jar:file:temp!/<name>` URLs. | yes (unless XML-only mode) | yes (if `Home.xml` missing or damaged) |
-| `Home.xml` | Canonical XML document (UTF-8), written second by the writer. Preferred on read. | yes | **preferred** |
-| `ContentDigests` | Repair manifest (added in v4.4): `ContentDigests-Version: 1.0` then repeated `Name: <entry>` + `SHA-1-Digest: <base64>` pairs, one per content entry | yes (when content saved) | yes (repair) |
-| `<index>` or `<index>/<file>` | Referenced content blobs. **Single-file** content (PNG/JPG textures, OBJ without dependencies) is written as a bare index entry `0`, `1`, `2`…; **multi-part** content (OBJ+MTL+textures, DAE+textures) is written as a directory `3/armchair.obj`, `3/armchair.mtl`, `3/armchair.png`, … (entry name = index + original path/name). Dedup: content with an identical SHA-1 digest reuses an existing entry name. | yes | yes |
+| Entry name                    | Content                                                                                                                                                                                                                                                                                                                                                                                                           | Written by Java 7.x        | Read by Java 7.x                       |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- | -------------------------------------- |
+| `Home`                        | Java-serialized object graph (`ObjectOutputStream` on the `Home`). Legacy format; contents referenced via `jar:file:temp!/<name>` URLs.                                                                                                                                                                                                                                                                           | yes (unless XML-only mode) | yes (if `Home.xml` missing or damaged) |
+| `Home.xml`                    | Canonical XML document (UTF-8), written second by the writer. Preferred on read.                                                                                                                                                                                                                                                                                                                                  | yes                        | **preferred**                          |
+| `ContentDigests`              | Repair manifest (added in v4.4): `ContentDigests-Version: 1.0` then repeated `Name: <entry>` + `SHA-1-Digest: <base64>` pairs, one per content entry                                                                                                                                                                                                                                                              | yes (when content saved)   | yes (repair)                           |
+| `<index>` or `<index>/<file>` | Referenced content blobs. **Single-file** content (PNG/JPG textures, OBJ without dependencies) is written as a bare index entry `0`, `1`, `2`…; **multi-part** content (OBJ+MTL+textures, DAE+textures) is written as a directory `3/armchair.obj`, `3/armchair.mtl`, `3/armchair.png`, … (entry name = index + original path/name). Dedup: content with an identical SHA-1 digest reuses an existing entry name. | yes                        | yes                                    |
 
 Additional notes from source:
 
@@ -180,7 +180,7 @@ verify Java 7.5 opens it.
   zip via `fflate`; when reading a zip, materialize entries lazily into a
   `Content` registry (`Content.openStream()` → `Blob`); parse `ContentDigests`
   into a name→digest map to drive the same repair flow.
-- **Entry-name parity**: when *writing* we must generate the same
+- **Entry-name parity**: when _writing_ we must generate the same
   `<index>`/`<index>/<file>` names Java would (same index order = order of
   first encounter while serializing content) so XML bytes match for parity
   tests. Since v1 writes only `Home.xml` (no serialized `Home`), the index

@@ -1,0 +1,26 @@
+{
+  "name": "@sweethomejs/core",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Pure-TS port of the Sweet Home 3D model, io, controllers and geometry shim (no DOM deps)",
+  "license": "GPL-2.0-or-later",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^3.0.5"
+  }
+}

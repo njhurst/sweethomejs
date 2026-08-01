@@ -12,12 +12,12 @@ matters because the same OBJ must look the same in 3D and photo rendering.
 
 ## 1. Input formats supported
 
-| Format | Notes |
-|---|---|
-| **OBJ** (Wavefront) | MTL files; `v/vt/vn/f/o/g/usemtl/mtllib/s/…`; negative indices; smoothing groups; quad faces (`f a b c d`) must be triangulated; comments; continuation lines. Java's loader is very tolerant. |
+| Format                    | Notes                                                                                                                                                                                            |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **OBJ** (Wavefront)       | MTL files; `v/vt/vn/f/o/g/usemtl/mtllib/s/…`; negative indices; smoothing groups; quad faces (`f a b c d`) must be triangulated; comments; continuation lines. Java's loader is very tolerant.   |
 | **DAE** (COLLADA 1.4/1.5) | XML; `<geometry><mesh>` with `<source>` float arrays, `<vertices>`, `<polylist>/<triangles>/<triangles>`; `<library_materials>/<library_effects>`; bindings. Java's `DAELoader` uses DOM (JDOM). |
-| **3DS** (3D Studio) | Chunked binary format; material chunks, mesh chunks, transform chunks, keyframe chunk; Java's loader is lenient with malformed chunk lengths. |
-| **LWS** (LightWave Scene) | Text scene format via `Lw3dLoader` (Java3D) — rarely used; port only if needed (defer). |
+| **3DS** (3D Studio)       | Chunked binary format; material chunks, mesh chunks, transform chunks, keyframe chunk; Java's loader is lenient with malformed chunk lengths.                                                    |
+| **LWS** (LightWave Scene) | Text scene format via `Lw3dLoader` (Java3D) — rarely used; port only if needed (defer).                                                                                                          |
 
 Plus **texture images** referenced by materials (PNG/JPG), loaded via
 `TextureManager`.
@@ -36,17 +36,20 @@ interface LoadedModel {
 }
 interface ModelGroup {
   name: string;
-  positions: Float32Array;   // vertex xyz
-  normals: Float32Array;     // per-vertex (computed if missing)
+  positions: Float32Array; // vertex xyz
+  normals: Float32Array; // per-vertex (computed if missing)
   uvs: Float32Array | null;
   indices: Uint32Array | null;
   materialIndex: number;
 }
 interface ModelMaterial {
   name: string;
-  diffuse?: [r,g,b]; specular?: [r,g,b]; ambient?: [r,g,b];
-  shininess?: number; opacity?: number;
-  texture?: string;            // relative file name
+  diffuse?: [r, g, b];
+  specular?: [r, g, b];
+  ambient?: [r, g, b];
+  shininess?: number;
+  opacity?: number;
+  texture?: string; // relative file name
   // DAE-specific: effect parameters (transparent, reflectivity, bump)
   extra?: Record<string, unknown>;
 }
@@ -69,6 +72,7 @@ OBJ from one catalog sit next to a cm-scaled one from another. Details:
 ## 3. Parser porting notes per format
 
 ### OBJ
+
 - Tokenizer with continuation handling (`\`).
 - Face winding: Java preserves winding; ensure consistent CCW faces for
   Three.js (material side set per model; don't auto-flip).
@@ -81,11 +85,12 @@ OBJ from one catalog sit next to a cm-scaled one from another. Details:
   texture paths resolved relative to the OBJ location.
 
 ### DAE
+
 - Use a DOM parser (`DOMParser`) instead of JDOM — same data.
 - `polylist` with varying counts → triangulation (fan) — match Java.
 - `accessor` strides, `float_array` ids; `<bind_vertex_input>` for UVs.
 - Effects: `Phong`/`Lambert`/`Blinn` → map to material params; `<texture
-  texcoord="…">` ↔ `<input semantic="TEXCOORD">`.
+texcoord="…">` ↔ `<input semantic="TEXCOORD">`.
 - Node `<matrix>`/`<translate>/<rotate>/<scale>` — Java applies node
   transforms to meshes; apply per-group.
 - Handle `up_axis` (Y_UP default in COLLADA; SweetHome3D models are typically
@@ -94,6 +99,7 @@ OBJ from one catalog sit next to a cm-scaled one from another. Details:
   authored against it).
 
 ### 3DS
+
 - Chunk parser: read `chunkId` + length, recurse; skip unknown chunks; guard
   against length overruns (Java tolerates bad files — same tolerance).
 - `0x4000` (object), `0x4100` (triangular mesh), `0x4110` vertices,

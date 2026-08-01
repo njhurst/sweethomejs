@@ -5,6 +5,7 @@ Registry of agents working on SweetHomeJS. Agents register with
 Use these IDs in TODO.md claim brackets (`[@ agent-id]`).
 
 ## Active
-`pi-icsk9p` — registered 2026-08-02
+
+`pi-ltkr51` — working on 1.1 (scaffold); registered 2026-08-02
 
 ## Completed

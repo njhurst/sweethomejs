@@ -28,20 +28,20 @@ test architecture: **unit tests** (ported upstream tests), **parity tests**
 **Capture from the Java app** (a scripted harness we write, run on a machine
 with Java): generate `.sh3d` fixtures covering every feature:
 
-| Fixture family | Content |
-|---|---|
-| `empty.sh3d` | blank home |
-| `walls.sh3d` | straight, curved (arc), connected, different heights, baseboards, wall-start/end attachments |
-| `rooms.sh3d` | simple, concave, multi-level, textured floors, custom colors |
-| `furniture.sh3d` | every catalog item, rotated/mirrored/resized, groups, doors/windows in walls, lights, shelf units |
-| `levels.sh3d` | multi-level homes, per-level backgrounds |
-| `dimensions-labels.sh3d` | dimension lines (all styles), labels, polylines (all dash/cap/arrow styles) |
-| `cameras.sh3d` | observer/top/stored cameras, camera paths |
-| `environment.sh3d` | sky/ground textures, drawing modes, day/night, compass at various coords |
-| `legacy-serialized.sh3d` | homes saved *without* XML entry (serialized `Home` only), produced by older versions too |
-| `big.sh3d` | 1,000+ furniture items (perf + instancing) |
-| `damaged.sh3d` | missing content entry, truncated, wrong digest (repair flow) |
-| `imported-libraries.sh3f/.sh3t` | sample library bundles |
+| Fixture family                  | Content                                                                                           |
+| ------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `empty.sh3d`                    | blank home                                                                                        |
+| `walls.sh3d`                    | straight, curved (arc), connected, different heights, baseboards, wall-start/end attachments      |
+| `rooms.sh3d`                    | simple, concave, multi-level, textured floors, custom colors                                      |
+| `furniture.sh3d`                | every catalog item, rotated/mirrored/resized, groups, doors/windows in walls, lights, shelf units |
+| `levels.sh3d`                   | multi-level homes, per-level backgrounds                                                          |
+| `dimensions-labels.sh3d`        | dimension lines (all styles), labels, polylines (all dash/cap/arrow styles)                       |
+| `cameras.sh3d`                  | observer/top/stored cameras, camera paths                                                         |
+| `environment.sh3d`              | sky/ground textures, drawing modes, day/night, compass at various coords                          |
+| `legacy-serialized.sh3d`        | homes saved _without_ XML entry (serialized `Home` only), produced by older versions too          |
+| `big.sh3d`                      | 1,000+ furniture items (perf + instancing)                                                        |
+| `damaged.sh3d`                  | missing content entry, truncated, wrong digest (repair flow)                                      |
+| `imported-libraries.sh3f/.sh3t` | sample library bundles                                                                            |
 
 For each fixture, the Java harness also emits:
 
@@ -99,7 +99,7 @@ read(fixture)` (modulo fround). And `write(home') == write(home)` byte-equal.
 - Same camera → screenshot; compare with perceptual metric (e.g., SSIM/deltaE
   histograms) since lighting/shading differs by design
   ([07-3d-view.md](07-3d-view.md#3-material--texture-parity)). Thresholds
-  per fixture; regressions flagged by *relative* change vs. the stored
+  per fixture; regressions flagged by _relative_ change vs. the stored
   baseline more than by absolute Java match.
 
 ### 3.6 Photo perceptual parity
@@ -143,6 +143,7 @@ Where Java tests are spot-checks, property tests widen coverage:
 ## 6. E2E (Playwright)
 
 Flows (post-P7):
+
 1. Open app → create wall → draw room → drop furniture → save → reopen → assert.
 2. Open a golden fixture → plan renders (screenshot compare) → 3D renders.
 3. Import library `.sh3f` → catalog updates → drop model → renders.
@@ -154,14 +155,14 @@ Flows (post-P7):
 
 ## 7. Performance budgets (CI-tracked)
 
-| Operation | Budget (M1 MacBook-class, Chrome) |
-|---|---|
-| Open 50 MB `.sh3d` (parse XML + lazy content) | < 3 s to editable plan |
-| Plan repaint (1,000 items, no model change) | < 16 ms |
-| 3D first frame for 500 furniture | < 2 s incl. model load |
-| Furniture icon generation (top view) | < 5 s for 100 items (worker) |
-| Photo render (640×480, LOW) | < 60 s (v1 target) |
-| Video 5 s @ 720p | < 2× realtime |
+| Operation                                     | Budget (M1 MacBook-class, Chrome) |
+| --------------------------------------------- | --------------------------------- |
+| Open 50 MB `.sh3d` (parse XML + lazy content) | < 3 s to editable plan            |
+| Plan repaint (1,000 items, no model change)   | < 16 ms                           |
+| 3D first frame for 500 furniture              | < 2 s incl. model load            |
+| Furniture icon generation (top view)          | < 5 s for 100 items (worker)      |
+| Photo render (640×480, LOW)                   | < 60 s (v1 target)                |
+| Video 5 s @ 720p                              | < 2× realtime                     |
 
 Track in CI with `lighthouse`-style checks + perf traces on the `big.sh3d`
 fixture.

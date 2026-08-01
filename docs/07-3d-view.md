@@ -16,42 +16,43 @@ also a retained scene graph: `Group`, `Mesh` with `BufferGeometry` +
 
 ### 1.1 Node mapping
 
-| Java3D | Three.js |
-|---|---|
-| `BranchGroup` | `Group` |
-| `TransformGroup` | `Group` with `matrix` (from `Transform3D`) |
-| `Shape3D` | `Mesh` / `LineSegments` / `Points` |
+| Java3D                                                                                                     | Three.js                                                                              |
+| ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `BranchGroup`                                                                                              | `Group`                                                                               |
+| `TransformGroup`                                                                                           | `Group` with `matrix` (from `Transform3D`)                                            |
+| `Shape3D`                                                                                                  | `Mesh` / `LineSegments` / `Points`                                                    |
 | `GeometryArray` / `IndexedGeometryArray` (TriangleArray, QuadArray, LineArray, LineStripArray, PointArray) | `BufferGeometry` (positions, normals, uv, index) — convert quads → tris at build time |
-| `Appearance` | `Material` (see §3) |
-| `Material` | `MeshStandardMaterial` (diffuse/ambient/specular/shininess) |
-| `Texture` | `Texture` (canvas/bitmap) + `texture.transform` → `texture.offset/rotation/repeat` |
-| `TextureAttributes` | `texture.wrapS/wrapT`, `blending` |
-| `TransparencyAttributes` | `transparent`, `opacity`, `depthWrite` |
-| `PolygonAttributes` | `side` (DoubleSide/BackSide), `polygonOffset` |
-| `LineAttributes` | `LineBasicMaterial` (linewidth is 1 on most WebGL platforms — see §4.3) |
-| `ColoringAttributes` | vertex colors / `color` on material |
-| `RenderingAttributes.visible` | `material.visible` / `mesh.visible` |
-| `View` / `Canvas3D` | `PerspectiveCamera` + `WebGLRenderer` |
-| `SimpleUniverse` | scene + camera management code |
-| `Background` | `scene.background` / `scene.fog` |
+| `Appearance`                                                                                               | `Material` (see §3)                                                                   |
+| `Material`                                                                                                 | `MeshStandardMaterial` (diffuse/ambient/specular/shininess)                           |
+| `Texture`                                                                                                  | `Texture` (canvas/bitmap) + `texture.transform` → `texture.offset/rotation/repeat`    |
+| `TextureAttributes`                                                                                        | `texture.wrapS/wrapT`, `blending`                                                     |
+| `TransparencyAttributes`                                                                                   | `transparent`, `opacity`, `depthWrite`                                                |
+| `PolygonAttributes`                                                                                        | `side` (DoubleSide/BackSide), `polygonOffset`                                         |
+| `LineAttributes`                                                                                           | `LineBasicMaterial` (linewidth is 1 on most WebGL platforms — see §4.3)               |
+| `ColoringAttributes`                                                                                       | vertex colors / `color` on material                                                   |
+| `RenderingAttributes.visible`                                                                              | `material.visible` / `mesh.visible`                                                   |
+| `View` / `Canvas3D`                                                                                        | `PerspectiveCamera` + `WebGLRenderer`                                                 |
+| `SimpleUniverse`                                                                                           | scene + camera management code                                                        |
+| `Background`                                                                                               | `scene.background` / `scene.fog`                                                      |
 
 ### 1.2 The `Object3DBranch` family → TS builders
 
 Each branch class becomes a TS class `XxxObject3D` that builds/updates Three.js
 objects from model items, subscribing to model events:
 
-| Java class | TS | Builds |
-|---|---|---|
-| `Wall3D` | `WallObject3D.ts` | wall body (extruded polygon along height, from `Wall.getPoints()`), baseboards, outline shapes |
-| `Room3D` | `RoomObject3D.ts` | floor polygon with texture/color, optional outline |
-| `HomePieceOfFurniture3D` | `FurnitureObject3D.ts` | transform group; child = loaded model mesh or default box/cube; selection box |
-| `DimensionLine3D` | `DimensionLineObject3D.ts` | lines + end marks in 3D |
-| `Label3D` | `LabelObject3D.ts` | 3D text (Java uses `Text3D` — use canvas-texture billboards or troika-three-text) |
-| `Polyline3D` | `PolylineObject3D.ts` | extruded polyline (thickness, cap/join) |
-| `Ground3D` | `GroundObject3D.ts` | ground plane with color/texture + horizon fade |
-| `Object3DBranch` base | `Object3DBase.ts` | shared attribute caches (materials/textures), outline/selection styles |
+| Java class               | TS                         | Builds                                                                                         |
+| ------------------------ | -------------------------- | ---------------------------------------------------------------------------------------------- |
+| `Wall3D`                 | `WallObject3D.ts`          | wall body (extruded polygon along height, from `Wall.getPoints()`), baseboards, outline shapes |
+| `Room3D`                 | `RoomObject3D.ts`          | floor polygon with texture/color, optional outline                                             |
+| `HomePieceOfFurniture3D` | `FurnitureObject3D.ts`     | transform group; child = loaded model mesh or default box/cube; selection box                  |
+| `DimensionLine3D`        | `DimensionLineObject3D.ts` | lines + end marks in 3D                                                                        |
+| `Label3D`                | `LabelObject3D.ts`         | 3D text (Java uses `Text3D` — use canvas-texture billboards or troika-three-text)              |
+| `Polyline3D`             | `PolylineObject3D.ts`      | extruded polyline (thickness, cap/join)                                                        |
+| `Ground3D`               | `GroundObject3D.ts`        | ground plane with color/texture + horizon fade                                                 |
+| `Object3DBranch` base    | `Object3DBase.ts`          | shared attribute caches (materials/textures), outline/selection styles                         |
 
 Behavior notes to port:
+
 - **Static attribute caches**: `Object3DBranch` caches `Material`s and
   `TextureAttributes` keyed by values. Port as LRU caches keyed by
   (color, shininess, texture) so identical furniture shares materials.
@@ -76,6 +77,7 @@ Behavior notes to port:
 ### 1.3 Scene assembly (`HomeComponent3D` port)
 
 `HomeComponent3D` builds the whole scene:
+
 - `Ground3D`, sky background, light sources (sun, light color), navigation
   panel overlay (Java renders a 3D view into a button — on web, a small
   second Three.js renderer canvas or a static snapshot updated on camera
@@ -90,9 +92,11 @@ Behavior notes to port:
 ## 2. Camera math port
 
 `Camera.getPosition()` in the model computes position from yaw/pitch/fov/eye:
+
 ```
 x = eye.x - r * cos(yaw) * cos(pitch)   (etc.)
 ```
+
 Port from `Camera.java`/`ObserverCamera.java`; reuse for both the 3D view and
 the photo renderer. Test with `HomeCameraTest`.
 
@@ -101,13 +105,13 @@ the photo renderer. Test with `HomeCameraTest`.
 Java3D lighting is the old fixed-function model: ambient/diffuse/specular +
 shininess. Three.js `MeshStandardMaterial` with `roughness ≈ 1 - shininess`
 closeness; but **exact parity with Java3D fixed-function shading is not
-achievable nor desirable** — the 3D view is a *preview*; photo rendering
+achievable nor desirable** — the 3D view is a _preview_; photo rendering
 (raytraced) is the "real" output. Policy:
 
 - Match **colors, textures, and overall look** (day/night, sun position,
   light color) closely.
 - Choose Three.js rendering quality (shadows on by default if perf allows)
-  as a *documented improvement*, excluded from golden-image *exactness*
+  as a _documented improvement_, excluded from golden-image _exactness_
   requirements — parity tests for 3D use tolerance-based metrics (see
   [12-testing-and-parity.md](12-testing-and-parity.md#3d-view-parity)).
 - Port texture management semantics: `TextureManager` loads textures async
@@ -141,6 +145,7 @@ achievable nor desirable** — the 3D view is a *preview*; photo rendering
 ## 5. ModelManager port (async model loading)
 
 `ModelManager` (2.6K LOC):
+
 - Loads OBJ/DAE/3DS/LWS into branch graphs on a background executor.
 - Cache: `loadedModelNodes` (WeakHashMap) + `loadingModelObservers`
   (waiters per content).
@@ -150,6 +155,7 @@ achievable nor desirable** — the 3D view is a *preview*; photo rendering
 - `ModelObserver` callback on success/error → branch `modelUpdated`.
 
 TS port: `ModelLoaderManager` in a worker (Comlink):
+
 - Parsers (from [08-model-loaders.md](08-model-loaders.md)) return
   `BufferGeometry`-ready data (positions/normals/uvs/indices + materials +
   transforms per sub-object).

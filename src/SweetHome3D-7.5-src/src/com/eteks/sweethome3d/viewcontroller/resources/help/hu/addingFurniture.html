@@ -1,111 +1,190 @@
 <html>
-<head>
-	<meta http-equiv="content-type" content="text/html;charset=iso-8859-2">
-	<title>Bútor hozzáadása</title>
-	<link href="../help.css" rel="stylesheet" media="all">
-</head>
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=iso-8859-2" />
+    <title>Bďż˝tor hozzďż˝adďż˝sa</title>
+    <link href="../help.css" rel="stylesheet" media="all" />
+  </head>
 
-<body  bgcolor="#ffffff">
-<div id="banner">
-	<div id="helpheader">
-		<a class="bread" href="index.html">Sweet Home 3D Súgó</a> > <a class="bread" href="tocCreating.html">Otthon, fal és bútor hozzáadása</a>
-	</div>
-</div>
-<div id="mainbox" align="left">
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-	<tr valign="bottom" height="32">
-	<td width="3" height="32">&nbsp;</td>
-	<td width="32" height="32"><img src="../images/applicationIcon32.png" alt="Sweet Home 3D Ikon" height="32" width="32"></td>
-	<td width="8" height="32">&nbsp;&nbsp;</td>
-	<td valign="bottom" height="32"><font id="topic">Bútor hozzáadása</font></td>
-	</tr>
-	<tr height="10">
-	<td colspan="4" height="10">&nbsp;</td>
-	</tr>
-</table>
-<table width="100%" border="0" cellspacing="0" cellpadding="3">
-	<tr>
-	<td><p>Bútor, ajtó vagy ablak hozzáadásánál válasszon ki egy tárgyat, vagy akár többet is a Katalógusból és húzza be az Alaprajz ablakba, vagy a Bútorlistába.</p>
-	  <p align="center"><img src="images/addingFurniture.png" alt="Bútor hozzáadása" width="435" height="179"></p>
-	  <p align="left">Úgy is hozzáadhat bútorokat (akár egyszerre egynél többet) otthonához, ha kijelöli a menüben a <i>Bútor &gt; Hozzáadás az otthonhoz</i> pontot, vagy használhatja a
-	    <i>Hozzáadás az otthonhoz</i> eszközt is.</p>
-	  <blockquote>
-	    <p align="left"><img src="../images/addToHomeTool.png" alt="Hozzáadás az otthonhoz eszköz" width="24" height="24" align="absmiddle">&nbsp;<i>Hozzáadás az otthonhoz</i> eszköz</p>
-	    </blockquote>	  
-	  <p align="left">
-	      Ha a bútorokat a Bútorlistába húzza vagy a <i>Bútor &gt; Hozzáadás az otthonhoz</i> menüt használja, akkor a bútor bal felső sarka a (0,0) pontoknál lesz.                                                                                                       <br>    Ha egy bútort az Alaprajz ablakba húz, az elem helye és helyzete a közeli falak helyétől is függ. Például ha a kiválsztott elem ajtó vagy ablak, a keresztezett fal tulajdonságainak megfelelően automatikusan elfordul és átméreteződik. Más típusú elemek automatikusan elfordulnak, hogy a hátsó oldaluk illeszkedjen a legközelebbi falhoz. <br>                                                                                                                                              </p>
-	    <p align="left">Az otthonhoz hozzáadott bútorok megjelennek a Bútorlistában, az Alaprajz nézetben, és a 3D nézetben is. Amíg a 3D nézet betölt, addig ezek fehér színű kockákként lesznek láthatóak.</p></td>
-	</tr>
-</table>
-<div id="taskbox">
-  <table width="100%" border="0" cellspacing="0" cellpadding="7" BGCOLOR="#eeeeee">
-    <tr valign="top" BGCOLOR="#eeeeee">
-      <td bgcolor="#eeeeee" width="98%">
-        <table border="0" cellspacing="0" cellpadding="4">
-          <tr valign="top">
-            <td>
-              <p>&#149;</p>
-            </td>
-            <td>
-              <p>Ha a Katalógus nem tartalmazza azt a bútort, amit hozzá akar adni otthonához, válassza a <i>Doboz</i> nevű elemet
-                az <i>Egyebek</i> kategóriából
-                és méretezze azt át, vagy <a href="importingFurniture.html">importáljon</a> bútort egy fájlból.</p>
-            </td>
-          </tr>
-          <tr valign="top">
-            <td>
-              <p>&#149;</p>
-            </td>
-            <td>
-              <p>Az ajtóként vagy ablakként kategorizált elemek használatakor a Sweet Home 3D automatikusan nyílást vág a falakba az elemek felhasználási helyén. Hasonlóképpen, a lépcsők a mennyzetbe, illetve a felső szint padlójába vágnak lyukat. Ez másfajta bútorokra nem vonatkozik.
-               </td>
-          </tr>
-		  <tr valign="top">
-            <td>
-              <p>&#149;</p>
-            </td>
-		  <td>
-              <p>Ha egy bútort egy másikra ejt, az automatikusan az előző bútor tetejére helyeződik (felemelkedik), amennyiben az alsó(első) bútor emelése 0 (vagyis a padlón van), és a ráejtett bútor teljes egészében az első bútor fölött van. Ha a behúzott bútor kissé fed egy másik, már bent levő bútort, a behúzott elem a másiknak megfelelő szögbe fordul hogy az élek párhuzamosak legyenek, és a bútor mellé helyeződik. Ez a funkció csak az újonnan hozzáadott bútorokkal működik, az alaprajzon levő bútorok áthelyezésekor nem. A funkció úgyszintén nem működik, ha a Mágnesesség inaktív.
-               </td>
-          </tr>
-		  <tr valign="top">
-            <td>
-              <p>&#149;</p>
-            </td>
-            <td>
-              <p>Az egérrel behúzott elem iránya, mélysége és emelése automatikusan kiszámolódik, ha a Mágnesesség engedélyezve van a <a href="editingPreferences.html">Beállítások</a> panelen.</p>
-            </td>
-          </tr>
-          <tr valign="top">
-            <td>
-              <p>&#149;</p>
-            </td>
-            <td>
-              <p>Miután egy bútort hozzáadott otthonához, <a href="editingFurniture.html">változtatni tud</a> a nevén, szögén, helyzetén, méretén, és színén. A bútorokat akár csoportba is rendezheti ha többet egyszerre kijelöl, majd kiválasztja a <i>Bútor &gt; Csoport</i> menüpontot.</p>
-            </td>
-          </tr>
-          <tr valign="top">
-            <td>
-              <p>&#149;</p>
-            </td>
-            <td>
-              <p>Válassza az <i>Alaprajz &gt; Nagyítás</i> vagy <i>Alaprajz &gt; Kicsinyítés</i> menüpontokat vagy <i>Alaprajz &gt; Nagyítás</i> menüpontokat, vagy használja az egér görgőjét - miközben nyomva tartja a <i>Ctrl</i> gombot (Mac OS X alatt a <i>cmd</i> gombot) az Alaprajz nézet méretarányának változtatásához.   
-            </td>
-          </tr>
-          <tr valign="top">
-            <td width="16">
-              <p>&#149;</p>
-            </td>
-            <td>
-              <p>Miután hozzáadott egy elemet otthonához, a <i><a href="drawingWalls.html">A Kijelölés</a></i><a href="drawingWalls.html"> eszköz</a> válik aktívvá.</p>
+  <body bgcolor="#ffffff">
+    <div id="banner">
+      <div id="helpheader">
+        <a class="bread" href="index.html">Sweet Home 3D Sďż˝gďż˝</a> >
+        <a class="bread" href="tocCreating.html">Otthon, fal ďż˝s bďż˝tor hozzďż˝adďż˝sa</a>
+      </div>
+    </div>
+    <div id="mainbox" align="left">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr valign="bottom" height="32">
+          <td width="3" height="32">&nbsp;</td>
+          <td width="32" height="32">
+            <img
+              src="../images/applicationIcon32.png"
+              alt="Sweet Home 3D Ikon"
+              height="32"
+              width="32"
+            />
+          </td>
+          <td width="8" height="32">&nbsp;&nbsp;</td>
+          <td valign="bottom" height="32"><font id="topic">Bďż˝tor hozzďż˝adďż˝sa</font></td>
+        </tr>
+        <tr height="10">
+          <td colspan="4" height="10">&nbsp;</td>
+        </tr>
+      </table>
+      <table width="100%" border="0" cellspacing="0" cellpadding="3">
+        <tr>
+          <td>
+            <p>
+              Bďż˝tor, ajtďż˝ vagy ablak hozzďż˝adďż˝sďż˝nďż˝l vďż˝lasszon ki egy tďż˝rgyat, vagy akďż˝r tďż˝bbet is a
+              Katalďż˝gusbďż˝l ďż˝s hďż˝zza be az Alaprajz ablakba, vagy a Bďż˝torlistďż˝ba.
+            </p>
+            <p align="center">
+              <img
+                src="images/addingFurniture.png"
+                alt="Bďż˝tor hozzďż˝adďż˝sa"
+                width="435"
+                height="179"
+              />
+            </p>
+            <p align="left">
+              ďż˝gy is hozzďż˝adhat bďż˝torokat (akďż˝r egyszerre egynďż˝l tďż˝bbet) otthonďż˝hoz, ha kijelďż˝li a
+              menďż˝ben a <i>Bďż˝tor &gt; Hozzďż˝adďż˝s az otthonhoz</i> pontot, vagy hasznďż˝lhatja a
+              <i>Hozzďż˝adďż˝s az otthonhoz</i> eszkďż˝zt is.
+            </p>
+            <blockquote>
+              <p align="left">
+                <img
+                  src="../images/addToHomeTool.png"
+                  alt="Hozzďż˝adďż˝s az otthonhoz eszkďż˝z"
+                  width="24"
+                  height="24"
+                  align="absmiddle"
+                />&nbsp;<i>Hozzďż˝adďż˝s az otthonhoz</i> eszkďż˝z
+              </p>
+            </blockquote>
+            <p align="left">
+              Ha a bďż˝torokat a Bďż˝torlistďż˝ba hďż˝zza vagy a
+              <i>Bďż˝tor &gt; Hozzďż˝adďż˝s az otthonhoz</i> menďż˝t hasznďż˝lja, akkor a bďż˝tor bal felsďż˝
+              sarka a (0,0) pontoknďż˝l lesz. <br />
+              Ha egy bďż˝tort az Alaprajz ablakba hďż˝z, az elem helye ďż˝s helyzete a kďż˝zeli falak
+              helyďż˝tďż˝l is fďż˝gg. Pďż˝ldďż˝ul ha a kivďż˝lsztott elem ajtďż˝ vagy ablak, a keresztezett fal
+              tulajdonsďż˝gainak megfelelďż˝en automatikusan elfordul ďż˝s ďż˝tmďż˝retezďż˝dik. Mďż˝s tďż˝pusďż˝
+              elemek automatikusan elfordulnak, hogy a hďż˝tsďż˝ oldaluk illeszkedjen a legkďż˝zelebbi
+              falhoz. <br />
+            </p>
+            <p align="left">
+              Az otthonhoz hozzďż˝adott bďż˝torok megjelennek a Bďż˝torlistďż˝ban, az Alaprajz nďż˝zetben, ďż˝s
+              a 3D nďż˝zetben is. Amďż˝g a 3D nďż˝zet betďż˝lt, addig ezek fehďż˝r szďż˝nďż˝ kockďż˝kkďż˝nt lesznek
+              lďż˝thatďż˝ak.
+            </p>
+          </td>
+        </tr>
+      </table>
+      <div id="taskbox">
+        <table width="100%" border="0" cellspacing="0" cellpadding="7" bgcolor="#eeeeee">
+          <tr valign="top" bgcolor="#eeeeee">
+            <td bgcolor="#eeeeee" width="98%">
+              <table border="0" cellspacing="0" cellpadding="4">
+                <tr valign="top">
+                  <td>
+                    <p>&#149;</p>
+                  </td>
+                  <td>
+                    <p>
+                      Ha a Katalďż˝gus nem tartalmazza azt a bďż˝tort, amit hozzďż˝ akar adni otthonďż˝hoz,
+                      vďż˝lassza a <i>Doboz</i> nevďż˝ elemet az <i>Egyebek</i> kategďż˝riďż˝bďż˝l ďż˝s
+                      mďż˝retezze azt ďż˝t, vagy
+                      <a href="importingFurniture.html">importďż˝ljon</a> bďż˝tort egy fďż˝jlbďż˝l.
+                    </p>
+                  </td>
+                </tr>
+                <tr valign="top">
+                  <td>
+                    <p>&#149;</p>
+                  </td>
+                  <td>
+                    <p>
+                      Az ajtďż˝kďż˝nt vagy ablakkďż˝nt kategorizďż˝lt elemek hasznďż˝latakor a Sweet Home 3D
+                      automatikusan nyďż˝lďż˝st vďż˝g a falakba az elemek felhasznďż˝lďż˝si helyďż˝n.
+                      Hasonlďż˝kďż˝ppen, a lďż˝pcsďż˝k a mennyzetbe, illetve a felsďż˝ szint padlďż˝jďż˝ba vďż˝gnak
+                      lyukat. Ez mďż˝sfajta bďż˝torokra nem vonatkozik.
+                    </p>
+                  </td>
+                </tr>
+                <tr valign="top">
+                  <td>
+                    <p>&#149;</p>
+                  </td>
+                  <td>
+                    <p>
+                      Ha egy bďż˝tort egy mďż˝sikra ejt, az automatikusan az elďż˝zďż˝ bďż˝tor tetejďż˝re
+                      helyezďż˝dik (felemelkedik), amennyiben az alsďż˝(elsďż˝) bďż˝tor emelďż˝se 0 (vagyis a
+                      padlďż˝n van), ďż˝s a rďż˝ejtett bďż˝tor teljes egďż˝szďż˝ben az elsďż˝ bďż˝tor fďż˝lďż˝tt van. Ha
+                      a behďż˝zott bďż˝tor kissďż˝ fed egy mďż˝sik, mďż˝r bent levďż˝ bďż˝tort, a behďż˝zott elem a
+                      mďż˝siknak megfelelďż˝ szďż˝gbe fordul hogy az ďż˝lek pďż˝rhuzamosak legyenek, ďż˝s a
+                      bďż˝tor mellďż˝ helyezďż˝dik. Ez a funkciďż˝ csak az ďż˝jonnan hozzďż˝adott bďż˝torokkal
+                      mďż˝kďż˝dik, az alaprajzon levďż˝ bďż˝torok ďż˝thelyezďż˝sekor nem. A funkciďż˝ ďż˝gyszintďż˝n
+                      nem mďż˝kďż˝dik, ha a Mďż˝gnesessďż˝g inaktďż˝v.
+                    </p>
+                  </td>
+                </tr>
+                <tr valign="top">
+                  <td>
+                    <p>&#149;</p>
+                  </td>
+                  <td>
+                    <p>
+                      Az egďż˝rrel behďż˝zott elem irďż˝nya, mďż˝lysďż˝ge ďż˝s emelďż˝se automatikusan
+                      kiszďż˝molďż˝dik, ha a Mďż˝gnesessďż˝g engedďż˝lyezve van a
+                      <a href="editingPreferences.html">Beďż˝llďż˝tďż˝sok</a> panelen.
+                    </p>
+                  </td>
+                </tr>
+                <tr valign="top">
+                  <td>
+                    <p>&#149;</p>
+                  </td>
+                  <td>
+                    <p>
+                      Miutďż˝n egy bďż˝tort hozzďż˝adott otthonďż˝hoz,
+                      <a href="editingFurniture.html">vďż˝ltoztatni tud</a> a nevďż˝n, szďż˝gďż˝n,
+                      helyzetďż˝n, mďż˝retďż˝n, ďż˝s szďż˝nďż˝n. A bďż˝torokat akďż˝r csoportba is rendezheti ha
+                      tďż˝bbet egyszerre kijelďż˝l, majd kivďż˝lasztja a
+                      <i>Bďż˝tor &gt; Csoport</i> menďż˝pontot.
+                    </p>
+                  </td>
+                </tr>
+                <tr valign="top">
+                  <td>
+                    <p>&#149;</p>
+                  </td>
+                  <td>
+                    <p>
+                      Vďż˝lassza az <i>Alaprajz &gt; Nagyďż˝tďż˝s</i> vagy
+                      <i>Alaprajz &gt; Kicsinyďż˝tďż˝s</i> menďż˝pontokat vagy
+                      <i>Alaprajz &gt; Nagyďż˝tďż˝s</i> menďż˝pontokat, vagy hasznďż˝lja az egďż˝r gďż˝rgďż˝jďż˝t -
+                      mikďż˝zben nyomva tartja a <i>Ctrl</i> gombot (Mac OS X alatt a
+                      <i>cmd</i> gombot) az Alaprajz nďż˝zet mďż˝retarďż˝nyďż˝nak vďż˝ltoztatďż˝sďż˝hoz.
+                    </p>
+                  </td>
+                </tr>
+                <tr valign="top">
+                  <td width="16">
+                    <p>&#149;</p>
+                  </td>
+                  <td>
+                    <p>
+                      Miutďż˝n hozzďż˝adott egy elemet otthonďż˝hoz, a
+                      <i><a href="drawingWalls.html">A Kijelďż˝lďż˝s</a></i
+                      ><a href="drawingWalls.html"> eszkďż˝z</a> vďż˝lik aktďż˝vvďż˝.
+                    </p>
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
         </table>
-       </td>
-    </tr>
-  </table>
-</div>
-</div>
-</body>
-
+      </div>
+    </div>
+  </body>
 </html>

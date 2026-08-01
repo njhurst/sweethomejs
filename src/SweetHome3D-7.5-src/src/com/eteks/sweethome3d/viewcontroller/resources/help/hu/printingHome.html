@@ -1,125 +1,170 @@
 <html>
-<head>
-	<meta http-equiv="content-type" content="text/html;charset=iso-8859-2">
-	<title>Otthon kinyomtatása</title>
-	<link href="../help.css" rel="stylesheet" media="all">
-</head>
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=iso-8859-2" />
+    <title>Otthon kinyomtatďż˝sa</title>
+    <link href="../help.css" rel="stylesheet" media="all" />
+  </head>
 
-<body  bgcolor="#ffffff">
-<div id="banner">
-	<div id="helpheader">
-		<a class="bread" href="index.html">Sweet Home 3D Súgó</a> > <a class="bread" href="tocCreating.html">Otthonok, falak és bútorok készítése</a>
-	</div>
-</div>
-<div id="mainbox" align="left">
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-	<tr valign="bottom" height="32">
-	<td width="3" height="32">&nbsp;</td>
-	<td width="32" height="32"><img src="../images/applicationIcon32.png" alt="Sweet Home 3D Icon" height="32" width="32"></td>
-	<td width="8" height="32">&nbsp;&nbsp;</td>
-	<td valign="bottom" height="32"><font id="topic">Otthon kinyomtatása</font></td>
-	</tr>
-	<tr height="10">
-	<td colspan="4" height="10">&nbsp;</td>
-	</tr>
-</table>
-<table width="100%" border="0" cellspacing="0" cellpadding="3">
-  <tr>
-    <td><p>Otthon kinyomtatásához válassza a <i>Fájl &gt; nyomtatás</i> menüt.<br>
-      Ez a menü megjeleníti a rendszer nyomtatási ablakát, ahol kiválaszthatja a nyomtatót, a nyomtatandó oldalak számát, a nyomtatás minőségét, stb.</p>
-      <p>A Sweet Home 3D alapbeállítások szerint kinyomtatja a bútorlistát, az alaprajzot, és az aktuális háromdimenziós nézetet, az alapértelmezett papírméretet, margókat és tájolást használva.<br>
-	  	  
-        Ha ezeken változtatni szeretne, válassza ki a <i>Fájl &gt; Oldalbeállítás</i> menüt.</p>
-      <p align="center"><img src="images/pageSetup.png" alt="Page setup"></p>
-      <p>          Az Oldalbeállítás panelen megváltoztathatja a papírméretet és a tájolást az <i>Oldal formátum</i> 
-      gombra kattintással. Azt is kiválaszthatja, hogy a bútorlista, az alaprajz, és a 3D nézet kinyomtatódjon-e.</p>
-      Ha nem szeretné, hogy a program az alaprajz méretarányát automatikusan az oldalhoz igazítsa, megadhat más méretarányt. <br>
-	  Megadhat fejlécet és láblécet is, melyek minden kinyomtatott oldal alján és tetején megjelennek. A <i>Fejléc</i> és <i>Lábléc</i> mezőkbe írhat szöveget és van lehetőség változók megadására is, melyek helyére a változók értéke fog nyomtatódni. Jelenleg az alábbi 7 változót használhatja:
-	  
-	  <ul>
-        <li><i>$pageNumber</i> - oldalszám,</li>
-        <li><i>$pageCount</i> - oldalak száma,</li>
-        <li><i>$planScale</i> - méretarány (akár automatikusan számolt, akár kézzel adta meg a <i>Méretarány</i> mezőben,</li>
-        <li><i>$date</i> - nyomtatás dátuma,</li>
-        <li><i>$time</i> - nyomtatás ideje,</li>
-        <li><i>$name</i> - otthon neve,</li>
-        <li><i>$file</i> - fájl elérési útja.</li>
-        </ul>     
-	  
-	  A <i>Fejléc</i> és <i>Lábléc</i> mezők található gombok megnyomására a változók beíródnak az éppen kiválasztott mezőbe, így nem kell azokat kézzel beírnia. Mivel a $ jel a változónevek miatt foglal, ha meg szeretné nyomtatásban jeleníteni, írjon $$ jelet.
-	  
-	  
-	  
-	  
-	  <p>A nyomtatási kép megtekintéséhez válassza a <i>Fájl &gt; Nyomtatási kép</i> menüpontot.</p>
-      <p align="center"><img src="images/printPreview.png" alt="Print preview"></p>
-      <p>Az előnézeti képen láthatja mi kerül az egyes oldalakon kinyomtatásra. A lapok között a lap tetején található nyilakra kattintással vagy a kurzornyilakkal válthat.</p></td>
-  </tr>
-</table>
-<div id="taskbox">
-  <table width="100%" border="0" cellspacing="0" cellpadding="7" BGCOLOR="#eeeeee">
-    <tr valign="top" BGCOLOR="#eeeeee">
-      <td bgcolor="#eeeeee" width="98%">
-        <table border="0" cellspacing="0" cellpadding="4">
-          <tr valign="top">
-            <td width="16"><p>&#149;</p>
-            </td>
-            <td>
-              <p>A nyomtatási funkció esetleg nem működik linux alatt. Ebben az esetben válassza a <i>Fájl &gt; 
-              Exportálás PDF-be</i> menüpontját, majd nyomtassa ki az elkészült PDF fájlt.</p>
-            </td>
-          </tr>
-          <tr valign="top">
-            <td><p>&#149;</p>
-            </td>
-            <td>
-              <p>A rendszerkonfiguráció hiányosságai miatt előfordulhat, hogy a 3D nézetet nem lehet kinyomtatni. 
-              Ez esetben a <i>3D nézet nyomtatása</i> jelölőnégyzet jelölése törlésre és letiltásra kerül.</p>
-            </td>
-          </tr>
-		  <tr valign="top">
-            <td><p>&#149;</p>
-            </td>
-            <td>
-              <p>Ha a nyomtatni kívánt otthon <a href="addingLevels.html">többszintes</a>, a kiynomtatott bútorlista csak az aktuálisan kiválasztott 
-              szinten található bútorok listáját fogja tartalmazni, kivéve, ha csak a bútorlistát nyomtatja, ez esetben minden bútor rákerül a listára. 
-              Az alaprajzból és 3D nézetből az éppen aktuálisan megjelenített kerül kinyomtatásra.</p>
-            </td>
-          </tr>
-          <tr valign="top">
-            <td width="16"><p>&#149;</p>
-            </td>
-            <td>
-              <p> A3D nézet 150 dpi felbontással kerül nyomtatásra. egy oldalnyi méretre nagyítva, leszámítva a margókat.</p>
-            </td>
-          </tr>
-		  <tr valign="top">
-            <td><p>&#149;</p>
-            </td>
-            <td>
-              <p>A papíron is jelezheti az alaprajz méretarányát, ha az alaprajzon elhelyez egy szabványos, pl 1 méter nagyságú <a href="drawingDimensions.html">méretvonalat</a>.</p>
-            </td>
-          </tr>
-          <tr valign="top">
-            <td><p>&#149;</p>
-            </td>
-            <td>
-              <p>Az oldalbeállítások <a href="savingHome.html">elmentésre</a> kerülnek az otthon fájljába.</p>
-            </td>
-          </tr>
-          <tr valign="top">
-            <td width="16"><p>&#149;</p>
-            </td>
-            <td>
-              <p>A nyomtatási kép panel megnagyítható.</p>
+  <body bgcolor="#ffffff">
+    <div id="banner">
+      <div id="helpheader">
+        <a class="bread" href="index.html">Sweet Home 3D Sďż˝gďż˝</a> >
+        <a class="bread" href="tocCreating.html">Otthonok, falak ďż˝s bďż˝torok kďż˝szďż˝tďż˝se</a>
+      </div>
+    </div>
+    <div id="mainbox" align="left">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr valign="bottom" height="32">
+          <td width="3" height="32">&nbsp;</td>
+          <td width="32" height="32">
+            <img
+              src="../images/applicationIcon32.png"
+              alt="Sweet Home 3D Icon"
+              height="32"
+              width="32"
+            />
+          </td>
+          <td width="8" height="32">&nbsp;&nbsp;</td>
+          <td valign="bottom" height="32"><font id="topic">Otthon kinyomtatďż˝sa</font></td>
+        </tr>
+        <tr height="10">
+          <td colspan="4" height="10">&nbsp;</td>
+        </tr>
+      </table>
+      <table width="100%" border="0" cellspacing="0" cellpadding="3">
+        <tr>
+          <td>
+            <p>
+              Otthon kinyomtatďż˝sďż˝hoz vďż˝lassza a <i>Fďż˝jl &gt; nyomtatďż˝s</i> menďż˝t.<br />
+              Ez a menďż˝ megjelenďż˝ti a rendszer nyomtatďż˝si ablakďż˝t, ahol kivďż˝laszthatja a nyomtatďż˝t,
+              a nyomtatandďż˝ oldalak szďż˝mďż˝t, a nyomtatďż˝s minďż˝sďż˝gďż˝t, stb.
+            </p>
+            <p>
+              A Sweet Home 3D alapbeďż˝llďż˝tďż˝sok szerint kinyomtatja a bďż˝torlistďż˝t, az alaprajzot, ďż˝s
+              az aktuďż˝lis hďż˝romdimenziďż˝s nďż˝zetet, az alapďż˝rtelmezett papďż˝rmďż˝retet, margďż˝kat ďż˝s
+              tďż˝jolďż˝st hasznďż˝lva.<br />
+
+              Ha ezeken vďż˝ltoztatni szeretne, vďż˝lassza ki a <i>Fďż˝jl &gt; Oldalbeďż˝llďż˝tďż˝s</i> menďż˝t.
+            </p>
+            <p align="center"><img src="images/pageSetup.png" alt="Page setup" /></p>
+            <p>
+              Az Oldalbeďż˝llďż˝tďż˝s panelen megvďż˝ltoztathatja a papďż˝rmďż˝retet ďż˝s a tďż˝jolďż˝st az
+              <i>Oldal formďż˝tum</i> gombra kattintďż˝ssal. Azt is kivďż˝laszthatja, hogy a bďż˝torlista,
+              az alaprajz, ďż˝s a 3D nďż˝zet kinyomtatďż˝djon-e.
+            </p>
+            Ha nem szeretnďż˝, hogy a program az alaprajz mďż˝retarďż˝nyďż˝t automatikusan az oldalhoz
+            igazďż˝tsa, megadhat mďż˝s mďż˝retarďż˝nyt. <br />
+            Megadhat fejlďż˝cet ďż˝s lďż˝blďż˝cet is, melyek minden kinyomtatott oldal aljďż˝n ďż˝s tetejďż˝n
+            megjelennek. A <i>Fejlďż˝c</i> ďż˝s <i>Lďż˝blďż˝c</i> mezďż˝kbe ďż˝rhat szďż˝veget ďż˝s van lehetďż˝sďż˝g
+            vďż˝ltozďż˝k megadďż˝sďż˝ra is, melyek helyďż˝re a vďż˝ltozďż˝k ďż˝rtďż˝ke fog nyomtatďż˝dni. Jelenleg az
+            alďż˝bbi 7 vďż˝ltozďż˝t hasznďż˝lhatja:
+
+            <ul>
+              <li><i>$pageNumber</i> - oldalszďż˝m,</li>
+              <li><i>$pageCount</i> - oldalak szďż˝ma,</li>
+              <li>
+                <i>$planScale</i> - mďż˝retarďż˝ny (akďż˝r automatikusan szďż˝molt, akďż˝r kďż˝zzel adta meg a
+                <i>Mďż˝retarďż˝ny</i> mezďż˝ben,
+              </li>
+              <li><i>$date</i> - nyomtatďż˝s dďż˝tuma,</li>
+              <li><i>$time</i> - nyomtatďż˝s ideje,</li>
+              <li><i>$name</i> - otthon neve,</li>
+              <li><i>$file</i> - fďż˝jl elďż˝rďż˝si ďż˝tja.</li>
+            </ul>
+
+            A <i>Fejlďż˝c</i> ďż˝s <i>Lďż˝blďż˝c</i> mezďż˝k talďż˝lhatďż˝ gombok megnyomďż˝sďż˝ra a vďż˝ltozďż˝k
+            beďż˝rďż˝dnak az ďż˝ppen kivďż˝lasztott mezďż˝be, ďż˝gy nem kell azokat kďż˝zzel beďż˝rnia. Mivel a $
+            jel a vďż˝ltozďż˝nevek miatt foglal, ha meg szeretnďż˝ nyomtatďż˝sban jelenďż˝teni, ďż˝rjon $$
+            jelet.
+
+            <p>
+              A nyomtatďż˝si kďż˝p megtekintďż˝sďż˝hez vďż˝lassza a
+              <i>Fďż˝jl &gt; Nyomtatďż˝si kďż˝p</i> menďż˝pontot.
+            </p>
+            <p align="center"><img src="images/printPreview.png" alt="Print preview" /></p>
+            <p>
+              Az elďż˝nďż˝zeti kďż˝pen lďż˝thatja mi kerďż˝l az egyes oldalakon kinyomtatďż˝sra. A lapok kďż˝zďż˝tt
+              a lap tetejďż˝n talďż˝lhatďż˝ nyilakra kattintďż˝ssal vagy a kurzornyilakkal vďż˝lthat.
+            </p>
+          </td>
+        </tr>
+      </table>
+      <div id="taskbox">
+        <table width="100%" border="0" cellspacing="0" cellpadding="7" bgcolor="#eeeeee">
+          <tr valign="top" bgcolor="#eeeeee">
+            <td bgcolor="#eeeeee" width="98%">
+              <table border="0" cellspacing="0" cellpadding="4">
+                <tr valign="top">
+                  <td width="16"><p>&#149;</p></td>
+                  <td>
+                    <p>
+                      A nyomtatďż˝si funkciďż˝ esetleg nem mďż˝kďż˝dik linux alatt. Ebben az esetben
+                      vďż˝lassza a <i>Fďż˝jl &gt; Exportďż˝lďż˝s PDF-be</i> menďż˝pontjďż˝t, majd nyomtassa ki
+                      az elkďż˝szďż˝lt PDF fďż˝jlt.
+                    </p>
+                  </td>
+                </tr>
+                <tr valign="top">
+                  <td><p>&#149;</p></td>
+                  <td>
+                    <p>
+                      A rendszerkonfigurďż˝ciďż˝ hiďż˝nyossďż˝gai miatt elďż˝fordulhat, hogy a 3D nďż˝zetet nem
+                      lehet kinyomtatni. Ez esetben a <i>3D nďż˝zet nyomtatďż˝sa</i> jelďż˝lďż˝nďż˝gyzet
+                      jelďż˝lďż˝se tďż˝rlďż˝sre ďż˝s letiltďż˝sra kerďż˝l.
+                    </p>
+                  </td>
+                </tr>
+                <tr valign="top">
+                  <td><p>&#149;</p></td>
+                  <td>
+                    <p>
+                      Ha a nyomtatni kďż˝vďż˝nt otthon <a href="addingLevels.html">tďż˝bbszintes</a>, a
+                      kiynomtatott bďż˝torlista csak az aktuďż˝lisan kivďż˝lasztott szinten talďż˝lhatďż˝
+                      bďż˝torok listďż˝jďż˝t fogja tartalmazni, kivďż˝ve, ha csak a bďż˝torlistďż˝t nyomtatja,
+                      ez esetben minden bďż˝tor rďż˝kerďż˝l a listďż˝ra. Az alaprajzbďż˝l ďż˝s 3D nďż˝zetbďż˝l az
+                      ďż˝ppen aktuďż˝lisan megjelenďż˝tett kerďż˝l kinyomtatďż˝sra.
+                    </p>
+                  </td>
+                </tr>
+                <tr valign="top">
+                  <td width="16"><p>&#149;</p></td>
+                  <td>
+                    <p>
+                      A3D nďż˝zet 150 dpi felbontďż˝ssal kerďż˝l nyomtatďż˝sra. egy oldalnyi mďż˝retre
+                      nagyďż˝tva, leszďż˝mďż˝tva a margďż˝kat.
+                    </p>
+                  </td>
+                </tr>
+                <tr valign="top">
+                  <td><p>&#149;</p></td>
+                  <td>
+                    <p>
+                      A papďż˝ron is jelezheti az alaprajz mďż˝retarďż˝nyďż˝t, ha az alaprajzon elhelyez egy
+                      szabvďż˝nyos, pl 1 mďż˝ter nagysďż˝gďż˝
+                      <a href="drawingDimensions.html">mďż˝retvonalat</a>.
+                    </p>
+                  </td>
+                </tr>
+                <tr valign="top">
+                  <td><p>&#149;</p></td>
+                  <td>
+                    <p>
+                      Az oldalbeďż˝llďż˝tďż˝sok <a href="savingHome.html">elmentďż˝sre</a> kerďż˝lnek az
+                      otthon fďż˝jljďż˝ba.
+                    </p>
+                  </td>
+                </tr>
+                <tr valign="top">
+                  <td width="16"><p>&#149;</p></td>
+                  <td>
+                    <p>A nyomtatďż˝si kďż˝p panel megnagyďż˝thatďż˝.</p>
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
         </table>
-        </td>
-    </tr>
-  </table>
-</div>
-</div>
-</body>
-
+      </div>
+    </div>
+  </body>
 </html>

@@ -1,0 +1,25 @@
+{
+  "name": "@sweethomejs/cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "SweetHomeJS CLI: headless .sh3d conversion, rendering, parity tooling (runs core in Node)",
+  "license": "GPL-2.0-or-later",
+  "bin": {
+    "sweethomejs": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@sweethomejs/core": "0.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^3.0.5"
+  }
+}

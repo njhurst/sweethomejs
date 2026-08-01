@@ -24,19 +24,20 @@
 
 ### 1.2 Port options
 
-| Option | Description | Pros | Cons |
-|---|---|---|---|
-| **A. Port Sunflow to TS/WASM** | Transcribe the raytracer (scene, GI, buckets, materials) into TS or C/Rust → WASM | Exact parity of output; reuse Sunflow's proven algorithms | Big effort (~20–30K LOC port); long tail of features (GI modes, caustics, instancing) |
-| **B. New GPU path tracer** | Write a WebGPU/WebGL2 path tracer in a worker, fed by the same scene intermediate used by Three.js | Modern, fast, interactive-quality; smaller code | Output differs from Sunflow; needs careful material/light mapping to stay "SweetHome3D-like" |
-| **C. Three.js-based renderer** | Use Three.js with physically-correct lights, shadows, postprocessing (e.g., render to high-res + denoise) | Cheap, reuses `render3d` scene builders | Not raytraced; GI quality limited (no real global illumination) |
-| **D. Hybrid** | B for real-time preview; A (WASM) for high-quality final render | Best quality + speed | Two renderers to maintain |
+| Option                         | Description                                                                                               | Pros                                                      | Cons                                                                                         |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| **A. Port Sunflow to TS/WASM** | Transcribe the raytracer (scene, GI, buckets, materials) into TS or C/Rust → WASM                         | Exact parity of output; reuse Sunflow's proven algorithms | Big effort (~20–30K LOC port); long tail of features (GI modes, caustics, instancing)        |
+| **B. New GPU path tracer**     | Write a WebGPU/WebGL2 path tracer in a worker, fed by the same scene intermediate used by Three.js        | Modern, fast, interactive-quality; smaller code           | Output differs from Sunflow; needs careful material/light mapping to stay "SweetHome3D-like" |
+| **C. Three.js-based renderer** | Use Three.js with physically-correct lights, shadows, postprocessing (e.g., render to high-res + denoise) | Cheap, reuses `render3d` scene builders                   | Not raytraced; GI quality limited (no real global illumination)                              |
+| **D. Hybrid**                  | B for real-time preview; A (WASM) for high-quality final render                                           | Best quality + speed                                      | Two renderers to maintain                                                                    |
 
 **Recommendation: start with C** (ship photo feature fast, reuse the Three.js
 scene, add `MeshPhysicalMaterial` + env lighting + postprocessing like
 SSAO/Bloom), **then graduate to B (WebGPU path tracer)** as the flagship
-photo engine, with A as a long-term stretch. Photo output is a *creative
-artifact* — exact Sunflow parity is explicitly **not required** (unlike plan
+photo engine, with A as a long-term stretch. Photo output is a _creative
+artifact_ — exact Sunflow parity is explicitly **not required** (unlike plan
 rendering). We only need:
+
 - same cameras/lenses (pinhole/normal/fisheye/spherical — port camera math
   exactly),
 - same light sources (sun position from `Compass` + `HomeEnvironment` light
@@ -55,7 +56,7 @@ PhotoController (ported) ──► PhotoRenderer (interface, ported)
       Three.js photo renderer  WebGPU path tracer   Sunflow-WASM (stretch)
              │                    │                    │
              └──────────┬─────────┘                    │
-                        ▼                              
+                        ▼
              Scene Intermediate (port of Object3DBranch
              family → triangles + materials + lights)
 ```
@@ -85,6 +86,7 @@ options B's quality gap is measured.
 ### 2.1 Java behavior
 
 `VideoController` + `VideoPanel`:
+
 - Defines a **camera path** (list of `Camera` with time) in the environment.
 - Renders each frame with the 3D view or the photo renderer at a chosen
   format (JPEG frames; 4:3/16:9; up to 8K; fps presets 12–30).
@@ -125,6 +127,7 @@ options B's quality gap is measured.
 
 Because we already abstracted plan drawing behind `PlanPainter`
 ([06-2d-plan-view.md](06-2d-plan-view.md#svg-export)), we get:
+
 - **SVG export**: `PlanPainter` → SVG implementation (direct `<path>` +
   text elements + embedded images). Round-trips through Inkscape/browsers.
 - **PDF export**: two options:
@@ -132,8 +135,8 @@ Because we already abstracted plan drawing behind `PlanPainter`
      vector paths + text via embedded fonts). Best quality, closest to
      `HomePDFPrinter`'s vector output.
   2. Raster: render plan canvas at print DPI → embed PNG/JPEG in PDF.
-  Ship (1) with (2) as fallback for fonts (embed the font subset; plan text
-  uses `TextStyle` — map to embedded PDF fonts).
+     Ship (1) with (2) as fallback for fonts (embed the font subset; plan text
+     uses `TextStyle` — map to embedded PDF fonts).
 - **Print dialog**: browser `window.print()` with a print stylesheet that lays
   out the plan at the chosen paper size (`HomePrint`: format/orientation/
   margins). Match Java's paper presets (A4, Letter, etc.).

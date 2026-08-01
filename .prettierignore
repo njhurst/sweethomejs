@@ -1,0 +1,18 @@
+# Upstream Java source — reference only, never formatted
+src/SweetHome3D-7.5-src/
+
+# Build output
+node_modules/
+dist/
+build/
+coverage/
+
+# Git
+.git/
+
+# Large binary fixtures are managed separately
+examples/*.obj
+examples/*.blend
+examples/*.sh3d
+TODO.md
+AGENTS.md

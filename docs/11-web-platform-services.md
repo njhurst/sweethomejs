@@ -9,21 +9,21 @@ interfaces implemented in `apps/web`.
 
 ### 1.1 Opening `.sh3d` files
 
-| Mechanism | Use |
-|---|---|
-| `<input type="file">` | baseline open (works everywhere) |
-| **File System Access API** (`showOpenFilePicker`) | primary UX: returns a `FileSystemFileHandle` we can re-open and save *in place* (like the Java app's open/save) |
-| Drag & drop | drop `.sh3d`/`.sh3f`/`.sh3t` onto the window → open |
-| URL param / import | `?open=<url>` opens a remote home (like the Java applet's URL open); CORS permitting |
+| Mechanism                                         | Use                                                                                                             |
+| ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `<input type="file">`                             | baseline open (works everywhere)                                                                                |
+| **File System Access API** (`showOpenFilePicker`) | primary UX: returns a `FileSystemFileHandle` we can re-open and save _in place_ (like the Java app's open/save) |
+| Drag & drop                                       | drop `.sh3d`/`.sh3f`/`.sh3t` onto the window → open                                                             |
+| URL param / import                                | `?open=<url>` opens a remote home (like the Java applet's URL open); CORS permitting                            |
 
 ### 1.2 Saving
 
-| Mechanism | Use |
-|---|---|
+| Mechanism                                                            | Use                                                                                  |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | **File System Access API** (`showSaveFilePicker` + `createWritable`) | primary: true save-as with same-file re-save; also "recent files" via stored handles |
-| `a[download]` + Blob URL | fallback (Safari/Firefox) and "Export a copy" |
-| **OPFS** (Origin Private File System) | autosave, recovery copies, and offline "My files" area |
-| Web Share API | share `.sh3d` via OS share sheet (nice-to-have) |
+| `a[download]` + Blob URL                                             | fallback (Safari/Firefox) and "Export a copy"                                        |
+| **OPFS** (Origin Private File System)                                | autosave, recovery copies, and offline "My files" area                               |
+| Web Share API                                                        | share `.sh3d` via OS share sheet (nice-to-have)                                      |
 
 `ContentManager` port: the `viewcontroller/ContentManager` interface
 (`showOpenDialog`, `showSaveDialog`, `getContentName`…) gets a browser
@@ -67,14 +67,14 @@ db "sweethomejs"
 
 ## 3. Web Workers
 
-| Worker | Work | Notes |
-|---|---|---|
-| `codec.worker` | zip inflate/deflate for big files, XML parse (saxes-style), legacy serialized-`Home` deserialization | COM: transfers `ArrayBuffer`s |
-| `model.worker` | OBJ/DAE/3DS parsing + normalization | parse → `LoadedModel` transfer |
-| `texture.worker` | image decode (`createImageBitmap`), colorize filters | |
-| `photo.worker` | WebGPU/WebGL2 path tracer | owns its own renderer context |
-| `video.worker` | WebCodecs encode + mux | |
-| `icon.worker` | offscreen top-view model icons | WebGL2 in worker |
+| Worker           | Work                                                                                                 | Notes                          |
+| ---------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------ |
+| `codec.worker`   | zip inflate/deflate for big files, XML parse (saxes-style), legacy serialized-`Home` deserialization | COM: transfers `ArrayBuffer`s  |
+| `model.worker`   | OBJ/DAE/3DS parsing + normalization                                                                  | parse → `LoadedModel` transfer |
+| `texture.worker` | image decode (`createImageBitmap`), colorize filters                                                 |                                |
+| `photo.worker`   | WebGPU/WebGL2 path tracer                                                                            | owns its own renderer context  |
+| `video.worker`   | WebCodecs encode + mux                                                                               |                                |
+| `icon.worker`    | offscreen top-view model icons                                                                       | WebGL2 in worker               |
 
 Comlink wraps them; the interface types live in `core` (`ModelManager`,
 `PhotoRenderer`, etc.) so workers are swappable.

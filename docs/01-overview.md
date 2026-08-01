@@ -29,34 +29,34 @@ Extracted source: `src/SweetHome3D-7.5-src/`.
 
 ### 2.1 Package census (242 Java files)
 
-| Package | Files | LOC (approx) | Dependencies | Role |
-|---|---|---|---|---|
-| `com.eteks.sweethome3d.model` | 64 | 22,650 | java.beans, java.awt.geom (only in a few classes), java.io, java.text | Pure data model: `Home`, furniture, walls, rooms, cameras, environments, catalogs, units |
-| `com.eteks.sweethome3d.viewcontroller` | 49 | 41,530 | model, swing (via interfaces only) | Controllers: `PlanController` (15.9K LOC!), `HomeController`, all tool/wizard/panel controllers; `View`, `ViewFactory` seams |
-| `com.eteks.sweethome3d.swing` | 64 | 55,770 | AWT/Swing, model, viewcontroller, j3d | Concrete views: `PlanComponent` (7.1K), `HomePane` (5.9K), `HomeComponent3D` (3.9K), `FurnitureTable` (3.1K), all dialogs |
-| `com.eteks.sweethome3d.j3d` | 21 | ~15,000 | Java3D, vecmath, Sunflow | 3D scene graph: `Object3DBranch` + subclasses (Wall3D, Room3D, furniture, labels, dim lines, polyline, ground), `ModelManager`, OBJ/DAE/3DS loaders, `PhotoRenderer` (Sunflow) |
-| `com.eteks.sweethome3d.io` | 21 | ~11,000 | java.io, XML (SAX), model, tools | File format: `HomeFileRecorder` (.sh3d zip), `DefaultHomeInputStream/OutputStream` (Java serialization), `HomeXMLHandler/Exporter` (Home.xml), `XMLWriter`, `Base64`, default catalogs, `AutoRecoveryManager` |
-| `com.eteks.sweethome3d.tools` | 6 | ~800 | java.net, java.io | `OperatingSystem`, `URLContent` family, `ExtensionsClassLoader` |
-| `com.eteks.sweethome3d.plugin` | 4 | ~700 | model, viewcontroller | Plugin API (`Plugin`, `PluginAction`, `PluginManager`) |
-| `com.eteks.sweethome3d.applet` | 8 | ~2,000 | javax.jnlp, model | Legacy applet/Web Start entry points — **out of scope**, but `SweetHome3DViewer` documents the read-only-viewer use case |
-| root (`SweetHome3D.java`, `HomeFrameController`, `HomeFramePane`, `MacOSXConfiguration`) | 4 | ~3,500 | everything | Application bootstrap, main frame, single-instance socket, auto-recovery |
+| Package                                                                                  | Files | LOC (approx) | Dependencies                                                          | Role                                                                                                                                                                                                          |
+| ---------------------------------------------------------------------------------------- | ----- | ------------ | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `com.eteks.sweethome3d.model`                                                            | 64    | 22,650       | java.beans, java.awt.geom (only in a few classes), java.io, java.text | Pure data model: `Home`, furniture, walls, rooms, cameras, environments, catalogs, units                                                                                                                      |
+| `com.eteks.sweethome3d.viewcontroller`                                                   | 49    | 41,530       | model, swing (via interfaces only)                                    | Controllers: `PlanController` (15.9K LOC!), `HomeController`, all tool/wizard/panel controllers; `View`, `ViewFactory` seams                                                                                  |
+| `com.eteks.sweethome3d.swing`                                                            | 64    | 55,770       | AWT/Swing, model, viewcontroller, j3d                                 | Concrete views: `PlanComponent` (7.1K), `HomePane` (5.9K), `HomeComponent3D` (3.9K), `FurnitureTable` (3.1K), all dialogs                                                                                     |
+| `com.eteks.sweethome3d.j3d`                                                              | 21    | ~15,000      | Java3D, vecmath, Sunflow                                              | 3D scene graph: `Object3DBranch` + subclasses (Wall3D, Room3D, furniture, labels, dim lines, polyline, ground), `ModelManager`, OBJ/DAE/3DS loaders, `PhotoRenderer` (Sunflow)                                |
+| `com.eteks.sweethome3d.io`                                                               | 21    | ~11,000      | java.io, XML (SAX), model, tools                                      | File format: `HomeFileRecorder` (.sh3d zip), `DefaultHomeInputStream/OutputStream` (Java serialization), `HomeXMLHandler/Exporter` (Home.xml), `XMLWriter`, `Base64`, default catalogs, `AutoRecoveryManager` |
+| `com.eteks.sweethome3d.tools`                                                            | 6     | ~800         | java.net, java.io                                                     | `OperatingSystem`, `URLContent` family, `ExtensionsClassLoader`                                                                                                                                               |
+| `com.eteks.sweethome3d.plugin`                                                           | 4     | ~700         | model, viewcontroller                                                 | Plugin API (`Plugin`, `PluginAction`, `PluginManager`)                                                                                                                                                        |
+| `com.eteks.sweethome3d.applet`                                                           | 8     | ~2,000       | javax.jnlp, model                                                     | Legacy applet/Web Start entry points — **out of scope**, but `SweetHome3DViewer` documents the read-only-viewer use case                                                                                      |
+| root (`SweetHome3D.java`, `HomeFrameController`, `HomeFramePane`, `MacOSXConfiguration`) | 4     | ~3,500       | everything                                                            | Application bootstrap, main frame, single-instance socket, auto-recovery                                                                                                                                      |
 
 Total ≈ **153K LOC** of Java.
 
 ### 2.2 External library dependencies
 
-| Library | Purpose | Web replacement |
-|---|---|---|
-| Java3D 1.6 + JOGL (`j3dcore`, `j3dutils`, `jogl-all`, `gluegen-rt`) | 3D scene graph + hardware rendering | **Three.js** (or raw WebGL/WebGPU) |
-| `vecmath` | Vector/matrix math | `three` math classes or a tiny vec-math lib |
-| Sunflow 0.07.3i | Photorealistic (GI/ray-traced) photo rendering | Replace: Three.js raytracer port or Three.js pathtracer (e.g. port of the Sunflow algorithm), or WebGPU path tracer; **WASM transpile of Sunflow is a fallback** |
-| Yafaray (native C++) | Alternative photorealistic renderer | Out of scope (native); keep as extension seam |
-| iText 2.1.7 | PDF export (print) | `pdf-lib` / `jspdf` or print-to-PDF via browser |
-| FreeHEP SVG + Batik SVG path parser | SVG export | Native `svg`/`Path2D` + `XMLSerializer` |
-| JMF | Video export (camera path → AVI) | `MediaRecorder` + `Canvas.captureStream` or WebCodecs |
-| jeksparser-calculator | Furniture/room "plan + description" formulas | Port (~200 LOC) or replace with a small expression parser |
-| JUnit (test only) | Tests | Vitest/Jest |
-| JDOM/abbot (test only) | XML/UI tests | n/a (replaced by DOM testing) |
+| Library                                                             | Purpose                                        | Web replacement                                                                                                                                                  |
+| ------------------------------------------------------------------- | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Java3D 1.6 + JOGL (`j3dcore`, `j3dutils`, `jogl-all`, `gluegen-rt`) | 3D scene graph + hardware rendering            | **Three.js** (or raw WebGL/WebGPU)                                                                                                                               |
+| `vecmath`                                                           | Vector/matrix math                             | `three` math classes or a tiny vec-math lib                                                                                                                      |
+| Sunflow 0.07.3i                                                     | Photorealistic (GI/ray-traced) photo rendering | Replace: Three.js raytracer port or Three.js pathtracer (e.g. port of the Sunflow algorithm), or WebGPU path tracer; **WASM transpile of Sunflow is a fallback** |
+| Yafaray (native C++)                                                | Alternative photorealistic renderer            | Out of scope (native); keep as extension seam                                                                                                                    |
+| iText 2.1.7                                                         | PDF export (print)                             | `pdf-lib` / `jspdf` or print-to-PDF via browser                                                                                                                  |
+| FreeHEP SVG + Batik SVG path parser                                 | SVG export                                     | Native `svg`/`Path2D` + `XMLSerializer`                                                                                                                          |
+| JMF                                                                 | Video export (camera path → AVI)               | `MediaRecorder` + `Canvas.captureStream` or WebCodecs                                                                                                            |
+| jeksparser-calculator                                               | Furniture/room "plan + description" formulas   | Port (~200 LOC) or replace with a small expression parser                                                                                                        |
+| JUnit (test only)                                                   | Tests                                          | Vitest/Jest                                                                                                                                                      |
+| JDOM/abbot (test only)                                              | XML/UI tests                                   | n/a (replaced by DOM testing)                                                                                                                                    |
 
 ### 2.3 Resource inventory (content that must ship or be served)
 
@@ -73,9 +73,9 @@ bundled assets.
 
 ## 3. License
 
-Sweet Home 3D is **GPL v2-or-later** (see headers: *"GNU General Public License
+Sweet Home 3D is **GPL v2-or-later** (see headers: _"GNU General Public License
 as published by the Free Software Foundation; either version 2 of the License,
-or (at your option) any later version"*). Consequences:
+or (at your option) any later version"_). Consequences:
 
 - If we translate/adapt the Java source, the derived work must be distributed
   under GPL v2+.
@@ -99,7 +99,7 @@ or (at your option) any later version"*). Consequences:
 2. **Yafaray native renderer** (C++). Kept as a documented extension point.
 3. **Desktop installer plumbing** (`install/`, `deploy/`, MacOSX
    configuration classes) — irrelevant on the web.
-4. **Bit-perfect Java-serialized `Home` entry** *writing*. We can **read** the
+4. **Bit-perfect Java-serialized `Home` entry** _writing_. We can **read** the
    legacy serialized `Home` (to open old files) but we will **write** only
    `Home.xml` + content, like the Java app does since 7.x (the Java version
    writes both; we write the XML entry and can optionally omit the serialized

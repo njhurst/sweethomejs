@@ -70,22 +70,22 @@ path is also used by the furniture catalog panel.
 translates events into `PlanController` calls; `PlanController` owns all the
 state machines and tool feedback. Porting rules:
 
-| Java input | Web input |
-|---|---|
-| `MouseEvent` (click, press, drag, release, move) | `PointerEvent` (unify mouse + touch; `setPointerCapture`) |
-| `MouseWheelEvent` (zoom/pan) | `wheel` event (with `ctrlKey` zoom semantics like the app) |
-| `KeyEvent` / key bindings | `KeyboardEvent` on the canvas + document |
-| `MouseEvent.getButton` | `event.button` (0 left, 1 middle, 2 right) |
-| `isShiftDown/isControlDown/isAltDown` | `event.shiftKey/ctrlKey/altKey` |
-| `SwingUtilities.isLeftMouseButton` etc. | helpers |
-| Double-click detection | `detail` count on click |
-| Tooltips (`setToolTipText`) | custom positioned tooltip div (plan draws its own tool-tip feedback anyway) |
+| Java input                                       | Web input                                                                   |
+| ------------------------------------------------ | --------------------------------------------------------------------------- |
+| `MouseEvent` (click, press, drag, release, move) | `PointerEvent` (unify mouse + touch; `setPointerCapture`)                   |
+| `MouseWheelEvent` (zoom/pan)                     | `wheel` event (with `ctrlKey` zoom semantics like the app)                  |
+| `KeyEvent` / key bindings                        | `KeyboardEvent` on the canvas + document                                    |
+| `MouseEvent.getButton`                           | `event.button` (0 left, 1 middle, 2 right)                                  |
+| `isShiftDown/isControlDown/isAltDown`            | `event.shiftKey/ctrlKey/altKey`                                             |
+| `SwingUtilities.isLeftMouseButton` etc.          | helpers                                                                     |
+| Double-click detection                           | `detail` count on click                                                     |
+| Tooltips (`setToolTipText`)                      | custom positioned tooltip div (plan draws its own tool-tip feedback anyway) |
 
 **Cursor management**: Java sets named cursors (`CURSOR_MOVE`, resize cursors)
-and draws a *custom plan cursor* (the crosshair + tool icon). Port: hide the
+and draws a _custom plan cursor_ (the crosshair + tool icon). Port: hide the
 DOM cursor over the canvas and draw the cursor ourselves in the plan canvas
 (Java does exactly this via `setCustomCursor` + painted cursor), or set CSS
-cursors — but note the Java app draws cursor *with tool feedback*, so painting
+cursors — but note the Java app draws cursor _with tool feedback_, so painting
 is more faithful.
 
 **Magnetism**: plan snaps to grid and wall ends; the magnetic cursor feedback
@@ -133,7 +133,7 @@ Porting guidance:
 - **Dashed lines**: Java `BasicStroke` dash patterns with `phase`; Canvas
   `setLineDash` + `lineDashOffset` — same semantics.
 - **Text**: Java `Font` + `TextLayout`-ish metrics. Use Canvas `measureText`
-  for `getStringBounds`-equivalent (note Java returns *logical* bounds; the
+  for `getStringBounds`-equivalent (note Java returns _logical_ bounds; the
   plan uses these for label centering — minor visual drift acceptable but
   keep an eye on label layout parity).
 - **Hatches/textures**: plan floors use `TextureImage` patterns tiled via
@@ -145,7 +145,7 @@ Porting guidance:
   via FreeHEP — port to direct `<path>` emission using the same paint
   functions parameterized by a "SVG painter" instead of Canvas2D. Design the
   painter as an interface from day one (`PlanPainter` with `moveTo/lineTo/
-  fillPath/strokePath/drawImage/drawText/setTransform`) with Canvas and SVG
+fillPath/strokePath/drawImage/drawText/setTransform`) with Canvas and SVG
   (and print-PDF) implementations.
 
 ## 6. Performance
