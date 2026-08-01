@@ -58,7 +58,7 @@ describe("HomeXMLHandler parity (task 3.2)", () => {
     expect(first.getId()).toMatch(/^doorOrWindow-/);
     expect(f32(first.getX())).toBe(f32(483.69727));
     expect(first.getAngle()).toBe(f32(Math.PI));
-    expect(first.getWidthInPlan()).toBe(91.44);
+    expect(first.getWidthInPlan()).toBe(f32(91.44));
 
     // Levels sorted by elevation with indices
     expect(home.getLevels()[0]!.getElevationIndex()).toBe(0);
