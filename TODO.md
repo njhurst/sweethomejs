@@ -65,7 +65,7 @@
 [x] 2.9  Port model interfaces (Selectable, Content, PieceOfFurniture, Elevatable, Transformation) + exception hierarchy
 [.] 2.10  Model replay harness: deserialize fixture homes, dump all fields as JSON, compare to Java field-dumps (fround tolerance)
 [x] 2.11  Verify clone deep-copy semantics and id-generation parity vs Java
-[ ] 2.12  Port upstream model tests: RoomTest, HomeCameraTest, TestUtilities, event-semantics tests
+[x] 2.12  Port upstream model tests: RoomTest, HomeCameraTest, TestUtilities, event-semantics tests
 
 ## P2 — File format codecs
 
