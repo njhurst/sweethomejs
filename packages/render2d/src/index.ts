@@ -8,4 +8,5 @@ export { PlanPainterPipeline, DEFAULT_PLAN_COLORS } from "./PlanPainterPipeline.
 export type { PlanColors, PlanPaintOptions } from "./PlanPainterPipeline.js";
 export { FurnitureIconCache, getModelIdentity, paintFurniturePlanIcon } from "./FurnitureIconCache.js";
 export type { FurnitureIconRenderer } from "./FurnitureIconCache.js";
+export { PlanInputAdapter } from "./PlanInputAdapter.js";
 export { SVGPainter } from "./SVGPainter.js";
