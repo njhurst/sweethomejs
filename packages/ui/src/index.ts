@@ -1,27 +1,12 @@
-/*
- * index.ts
- *
- * Original SweetHomeJS code, Copyright (c) 2026 SweetHomeJS contributors
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
-
 /**
- * @sweethomejs/ui
- *
- * Scaffold placeholder. Real implementation lands with the corresponding
- * phase (see docs/13-roadmap.md).
+ * @sweethomejs/ui — React UI shell (docs/02-architecture.md, docs/06-2d-plan-view.md).
  */
-export {};
+export { HomePane } from "./HomePane.js";
+export type { HomePaneProps, View3DPosition } from "./HomePane.js";
+export { PlanCanvas } from "./plan/PlanCanvas.js";
+export { PlanCanvasView } from "./plan/PlanCanvasView.js";
+export type { PlanCanvasHost } from "./plan/PlanCanvasView.js";
+export { View3DCanvas } from "./view3d/View3DCanvas.js";
+export { WebViewFactory, ElementView } from "./WebViewFactory.js";
+export type { WebViewFactoryOptions } from "./WebViewFactory.js";
+export { HomeViewAdapter } from "./HomeViewAdapter.js";

@@ -61,5 +61,6 @@ export { HomePrint } from "./model/HomePrint.js";
 export { BackgroundImage } from "./model/BackgroundImage.js";
 export { LengthUnit } from "./model/LengthUnit.js";
 export { TextStyle } from "./model/TextStyle.js";
+export type { Selectable } from "./model/Selectable.js";
 export { FurnitureCatalog, FurnitureCategory, TexturesCatalog, TexturesCategory, PatternsCatalog } from "./model/Catalogs.js";
 export { CatalogPieceOfFurniture, CatalogDoorOrWindow, CatalogLight, CatalogShelfUnit, CatalogTexture } from "./io/CatalogClasses.js";

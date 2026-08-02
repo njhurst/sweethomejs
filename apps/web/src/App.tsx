@@ -18,21 +18,76 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-import { formatFloat } from "@sweethomejs/core";
+import { useEffect, useState } from "react";
 import type { ReactElement } from "react";
+import { Home, UserPreferences, HomeController } from "@sweethomejs/core";
+import { HomePane, HomeViewAdapter } from "@sweethomejs/ui";
+import "@sweethomejs/ui/theme.css";
 
 /**
- * Placeholder shell for the SweetHomeJS plan/3D editor.
- * Replaced by the real HomePane implementation in phase P6 (docs/13-roadmap.md).
+ * The SweetHomeJS app: creates a Home + HomeController and mounts the
+ * HomePane (plan + 3D editor).
  */
 export function App(): ReactElement {
+  const [session] = useState(() => createSession());
+
+  useEffect(() => {
+    return () => {
+      void session;
+    };
+  }, [session]);
+
   return (
-    <main style={{ fontFamily: "system-ui, sans-serif", padding: "1rem" }}>
-      <h1>SweetHomeJS</h1>
-      <p>
-        TypeScript port of Sweet Home 3D — scaffold running. Core f32 helper:
-        <code> formatFloat(0.1) = {formatFloat(0.1)}</code>
-      </p>
-    </main>
+    <HomePane
+      home={session.home}
+      preferences={session.preferences}
+      homeController={session.homeController}
+    />
   );
+}
+
+interface Session {
+  home: Home;
+  preferences: UserPreferences;
+  homeController: HomeController;
+}
+
+function createSession(): Session {
+  const home = new Home();
+  home.setName("Untitled");
+  const preferences = new UserPreferences();
+  const homeViewAdapter = new HomeViewAdapter();
+  const homeController = new HomeController(home, preferences, {
+    createHomeView: () => homeViewAdapter,
+    createFurnitureView: () => ({}) as never,
+    createFurnitureCatalogView: () => ({}) as never,
+    createPlanView: () => ({}) as never,
+    createView3D: () => ({}) as never,
+    createWizardView: () => ({}) as never,
+    createBackgroundImageWizardStepsView: () => ({}) as never,
+    createImportedFurnitureWizardStepsView: () => ({}) as never,
+    createImportedTextureWizardStepsView: () => ({}) as never,
+    createThreadedTaskView: () => ({}) as never,
+    createUserPreferencesView: () => ({}) as never,
+    createLevelView: () => ({}) as never,
+    createHomeFurnitureView: () => ({}) as never,
+    createWallView: () => ({}) as never,
+    createRoomView: () => ({}) as never,
+    createPolylineView: () => ({}) as never,
+    createDimensionLineView: () => ({}) as never,
+    createLabelView: () => ({}) as never,
+    createCompassView: () => ({}) as never,
+    createObserverCameraView: () => ({}) as never,
+    createHome3DAttributesView: () => ({}) as never,
+    createTextureChoiceView: () => ({}) as never,
+    createBaseboardChoiceView: () => ({}) as never,
+    createModelMaterialsView: () => ({}) as never,
+    createPageSetupView: () => ({}) as never,
+    createPrintPreviewView: () => ({}) as never,
+    createPhotoView: () => ({}) as never,
+    createPhotosView: () => ({}) as never,
+    createVideoView: () => ({}) as never,
+    createHelpView: () => ({}) as never,
+  } as never);
+  return { home, preferences, homeController };
 }

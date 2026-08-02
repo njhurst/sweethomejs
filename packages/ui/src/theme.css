@@ -1,0 +1,147 @@
+/*
+ * theme.css
+ *
+ * Original SweetHomeJS code, Copyright (c) 2026 SweetHomeJS contributors
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+/* SweetHomeJS shell theme (task 7.1). */
+.sh-home {
+  --sh-bg: #f4f4f4;
+  --sh-fg: #222;
+  --sh-accent: #1d5fa8;
+  --sh-border: #ccc;
+  --sh-toolbar-bg: #ececec;
+  --sh-statusbar-bg: #e4e4e4;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-family: system-ui, sans-serif;
+  background: var(--sh-bg);
+  color: var(--sh-fg);
+}
+
+.sh-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 8px;
+  background: var(--sh-toolbar-bg);
+  border-bottom: 1px solid var(--sh-border);
+  flex: 0 0 auto;
+}
+
+.sh-toolbar-button {
+  border: 1px solid transparent;
+  background: transparent;
+  padding: 4px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.sh-toolbar-button:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.sh-toolbar-button.active {
+  background: var(--sh-accent);
+  color: white;
+}
+
+.sh-toolbar-separator {
+  width: 1px;
+  height: 20px;
+  background: var(--sh-border);
+  margin: 0 4px;
+}
+
+.sh-toolbar-spacer {
+  flex: 1;
+}
+
+.sh-home-name {
+  font-size: 13px;
+  color: #666;
+}
+
+.sh-home-body {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.sh-plan {
+  flex: 1 1 60%;
+  min-width: 0;
+  position: relative;
+  border-right: 1px solid var(--sh-border);
+}
+
+.sh-view3d {
+  flex: 1 1 40%;
+  min-width: 0;
+  position: relative;
+}
+
+.sh-tabs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.sh-tab-bar {
+  display: flex;
+  border-bottom: 1px solid var(--sh-border);
+}
+
+.sh-tab {
+  border: none;
+  background: transparent;
+  padding: 6px 16px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.sh-tab.active {
+  border-bottom-color: var(--sh-accent);
+  font-weight: 600;
+}
+
+.sh-tab-body {
+  flex: 1;
+  min-height: 0;
+}
+
+.sh-statusbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 3px 8px;
+  background: var(--sh-statusbar-bg);
+  border-top: 1px solid var(--sh-border);
+  font-size: 12px;
+  color: #444;
+  flex: 0 0 auto;
+}
+
+.sh-statusbar-spacer {
+  flex: 1;
+}
+
+.sh-view3d-select {
+  font-size: 13px;
+}

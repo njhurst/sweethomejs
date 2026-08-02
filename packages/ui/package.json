@@ -9,7 +9,8 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    }
+    },
+    "./theme.css": "./src/theme.css"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -19,7 +20,13 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@sweethomejs/core": "0.1.0"
+    "@sweethomejs/core": "0.1.0",
+    "@sweethomejs/render2d": "^0.1.0",
+    "@sweethomejs/render3d": "^0.1.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
   },
   "devDependencies": {
     "tsup": "^8.3.5",

@@ -1,0 +1,174 @@
+/*
+ * HomePane.tsx
+ *
+ * Original SweetHomeJS code, Copyright (c) 2026 SweetHomeJS contributors
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+/**
+ * HomePane (task 7.1): the main layout — toolbar, plan view, 3D view
+ * (tabbed/dockable), status bar. Wires the HomeController + sub-controllers
+ * to the PlanCanvas and View3DCanvas.
+ */
+import { useEffect, useState } from "react";
+import type { Home, UserPreferences, HomeController } from "@sweethomejs/core";
+import { PlanCanvas } from "./plan/PlanCanvas.js";
+import { View3DCanvas } from "./view3d/View3DCanvas.js";
+
+export type View3DPosition = "tab" | "split" | "hidden";
+
+export interface HomePaneProps {
+  home: Home;
+  preferences: UserPreferences;
+  homeController: HomeController;
+  /** Where the 3D view sits (default "split"). */
+  view3DPosition?: View3DPosition;
+}
+
+export function HomePane(props: HomePaneProps): React.JSX.Element {
+  const { home, preferences, homeController } = props;
+  const [view3DPosition, setView3DPosition] = useState<View3DPosition>(props.view3DPosition ?? "split");
+  const [undoEnabled, setUndoEnabled] = useState(false);
+  const [redoEnabled, setRedoEnabled] = useState(false);
+  const [selectedCount, setSelectedCount] = useState(0);
+
+  useEffect(() => {
+    const syncSelection = (): void => setSelectedCount(home.getSelectedItems().length);
+    home.addSelectionListener(syncSelection);
+    const furnitureListener = { collectionChanged: syncSelection };
+    home.addFurnitureListener(furnitureListener);
+    return () => {
+      home.removeFurnitureListener(furnitureListener);
+    };
+  }, [home]);
+
+  const planController = homeController.getPlanController();
+  const homeController3D = homeController.getHomeController3D();
+
+  return (
+    <div className="sh-home">
+      <Toolbar
+        home={home}
+        homeController={homeController}
+        view3DPosition={view3DPosition}
+        onView3DPositionChange={setView3DPosition}
+        undoEnabled={undoEnabled}
+        redoEnabled={redoEnabled}
+      />
+      <div className="sh-home-body">
+        <div className="sh-plan">
+          <PlanCanvas home={home} preferences={preferences} controller={planController} />
+        </div>
+        {view3DPosition === "split" && (
+          <div className="sh-view3d">
+            <View3DCanvas home={home} preferences={preferences} homeController3D={homeController3D} />
+          </div>
+        )}
+        {view3DPosition === "tab" && (
+          <TabbedViews
+            home={home}
+            preferences={preferences}
+            planController={planController}
+            homeController3D={homeController3D}
+          />
+        )}
+      </div>
+      <div className="sh-statusbar">
+        <span data-testid="status-selection">{selectedCount} selected</span>
+        <span className="sh-statusbar-spacer" />
+        <span data-testid="status-mode">{planController.getMode().toString()}</span>
+      </div>
+    </div>
+  );
+}
+
+function Toolbar(props: {
+  home: Home;
+  homeController: HomeController;
+  view3DPosition: View3DPosition;
+  onView3DPositionChange: (position: View3DPosition) => void;
+  undoEnabled: boolean;
+  redoEnabled: boolean;
+}): React.JSX.Element {
+  const { home, homeController, view3DPosition, onView3DPositionChange } = props;
+  const planController = homeController.getPlanController();
+  return (
+    <div className="sh-toolbar">
+      <ToolbarButton label="New" onClick={() => homeController.newHome()} />
+      <ToolbarButton label="Open" onClick={() => homeController.open()} />
+      <ToolbarButton label="Save" onClick={() => homeController.save()} />
+      <div className="sh-toolbar-separator" />
+      <ToolbarButton label="Undo" onClick={() => homeController.undo()} />
+      <ToolbarButton label="Redo" onClick={() => homeController.redo()} />
+      <div className="sh-toolbar-separator" />
+      <ToolbarButton label="Select" active={planController.getMode().toString() === "SELECTION"} onClick={() => planController.setMode(PlanMode.SELECTION)} />
+      <ToolbarButton label="Wall" active={planController.getMode().toString() === "WALL_CREATION"} onClick={() => planController.setMode(PlanMode.WALL_CREATION)} />
+      <ToolbarButton label="Room" active={planController.getMode().toString() === "ROOM_CREATION"} onClick={() => planController.setMode(PlanMode.ROOM_CREATION)} />
+      <ToolbarButton label="Dim" active={planController.getMode().toString() === "DIMENSION_LINE_CREATION"} onClick={() => planController.setMode(PlanMode.DIMENSION_LINE_CREATION)} />
+      <ToolbarButton label="Label" active={planController.getMode().toString() === "LABEL_CREATION"} onClick={() => planController.setMode(PlanMode.LABEL_CREATION)} />
+      <ToolbarButton label="Delete" onClick={() => planController.deleteSelection()} />
+      <div className="sh-toolbar-separator" />
+      <select
+        className="sh-view3d-select"
+        value={view3DPosition}
+        onChange={(event) => onView3DPositionChange(event.target.value as View3DPosition)}
+        aria-label="3D view"
+      >
+        <option value="split">3D: split</option>
+        <option value="tab">3D: tab</option>
+        <option value="hidden">3D: hidden</option>
+      </select>
+      <div className="sh-toolbar-spacer" />
+      <span className="sh-home-name">{home.getName() ?? "Untitled"}</span>
+    </div>
+  );
+}
+
+function TabbedViews(props: {
+  home: Home;
+  preferences: UserPreferences;
+  planController: ReturnType<HomeController["getPlanController"]>;
+  homeController3D: ReturnType<HomeController["getHomeController3D"]>;
+}): React.JSX.Element {
+  const [tab, setTab] = useState<"plan" | "3d">("plan");
+  return (
+    <div className="sh-tabs">
+      <div className="sh-tab-bar">
+        <button className={`sh-tab${tab === "plan" ? " active" : ""}`} onClick={() => setTab("plan")}>Plan</button>
+        <button className={`sh-tab${tab === "3d" ? " active" : ""}`} onClick={() => setTab("3d")}>3D</button>
+      </div>
+      <div className="sh-tab-body">
+        {tab === "plan" ? (
+          <PlanCanvas home={props.home} preferences={props.preferences} controller={props.planController} />
+        ) : (
+          <View3DCanvas home={props.home} preferences={props.preferences} homeController3D={props.homeController3D} />
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ToolbarButton(props: { label: string; onClick: () => void; active?: boolean }): React.JSX.Element {
+  return (
+    <button className={`sh-toolbar-button${props.active ? " active" : ""}`} onClick={props.onClick}>
+      {props.label}
+    </button>
+  );
+}
+
+// The plan modes (re-exported from core's PlanController.Mode)
+import { PlanController } from "@sweethomejs/core";
+const PlanMode = PlanController.Mode;

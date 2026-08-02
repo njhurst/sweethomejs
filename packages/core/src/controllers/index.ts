@@ -40,11 +40,9 @@ export type { TransferableView as TransferableViewInterface } from "./Transferab
 export type { FurnitureView } from "./FurnitureView.js";
 export type { FurnitureView as FurnitureViewNamespace } from "./FurnitureView.js";
 export type { HelpView } from "./HelpView.js";
-export type { HomeView } from "./HomeView.js";
-export type { HomeView as HomeViewNamespace } from "./HomeView.js";
+export { HomeView } from "./HomeView.js";
 export type { ImportedFurnitureWizardStepsView } from "./ImportedFurnitureWizardStepsView.js";
-export type { PlanView } from "./PlanView.js";
-export type { PlanView as PlanViewNamespace } from "./PlanView.js";
+export { PlanView } from "./PlanView.js";
 export type { TextureChoiceView } from "./TextureChoiceView.js";
 export type { ThreadedTaskView } from "./ThreadedTaskView.js";
 export type { View3D } from "./View3D.js";
