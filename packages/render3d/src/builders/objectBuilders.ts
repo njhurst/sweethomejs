@@ -27,6 +27,7 @@ import * as THREE from "three";
 import type { Home, UserPreferences, Room, HomePieceOfFurniture, DimensionLine, Label, Polyline } from "@sweethomejs/core";
 import { Object3DBase } from "../Object3DBase.js";
 import { MaterialCache, TextureCache, applyHomeTextureAttributes } from "../AttributeCaches.js";
+import { ModelManager, type LoadedModel } from "../ModelManager.js";
 import { groundElevation } from "./Elevations.js";
 
 /** Builds a 2D polygon mesh (rooms, ground planes). */
@@ -151,11 +152,15 @@ function pointsBoundsHeight(points: number[][]): number {
 export class FurnitureObject3D extends Object3DBase<HomePieceOfFurniture> {
   private readonly root = new THREE.Group();
   private readonly materialCache: MaterialCache;
+  private readonly modelManager: ModelManager;
   private mesh: THREE.Mesh | null = null;
+  private modelGroup: THREE.Group | null = null;
+  private loadedModel: LoadedModel | null = null;
 
-  constructor(piece: HomePieceOfFurniture, home: Home, preferences: UserPreferences, materialCache: MaterialCache, context: unknown = null) {
+  constructor(piece: HomePieceOfFurniture, home: Home, preferences: UserPreferences, materialCache: MaterialCache, modelManager: ModelManager | null = null, context: unknown = null) {
     super(piece, home, preferences, context);
     this.materialCache = materialCache;
+    this.modelManager = modelManager ?? new ModelManager();
     this.addModelListener(piece, () => this.update());
     this.update();
   }
@@ -170,13 +175,31 @@ export class FurnitureObject3D extends Object3DBase<HomePieceOfFurniture> {
       this.mesh.geometry.dispose();
       this.mesh = null;
     }
+    if (this.modelGroup !== null) {
+      this.modelGroup.clear();
+      this.modelGroup = null;
+    }
     const piece = this.item;
     const width = piece.getWidth();
     const depth = piece.getDepth();
     const height = piece.getHeight();
     const elevation = piece.getElevation() + groundElevation(piece);
 
-    // Placeholder box centered on the piece position (model loading is 6.5)
+    // Try the 3D model; fall back to the placeholder box while loading
+    const model = piece.getModel();
+    if (model !== null) {
+      const loaded = this.modelManager.getModel(model, (loadedModel) => {
+        if (loadedModel !== null) {
+          this.applyModel(loadedModel);
+        }
+      });
+      if (loaded !== null) {
+        this.applyModel(loaded);
+        return;
+      }
+    }
+
+    // Placeholder box centered on the piece position
     const geometry = new THREE.BoxGeometry(width, height, depth);
     const material = this.materialCache.getMaterial({
       diffuseColor: piece.getColor() ?? 0x8f8f8f,
@@ -191,9 +214,29 @@ export class FurnitureObject3D extends Object3DBase<HomePieceOfFurniture> {
     this.root.add(this.mesh);
   }
 
+  private applyModel(model: LoadedModel): void {
+    this.loadedModel = model;
+    this.modelGroup = new THREE.Group();
+    this.modelManager.applyPieceTransform(model, this.item, this.modelGroup);
+    const piece = this.item;
+    const elevation = piece.getElevation() + groundElevation(piece);
+    this.modelGroup.position.set(piece.getX(), elevation + piece.getHeight() / 2, piece.getY());
+    this.modelGroup.rotation.y = piece.getAngle();
+    this.root.clear();
+    this.root.add(this.modelGroup);
+  }
+
+  /** The loaded model group (null when the placeholder is shown). */
+  getLoadedModel(): LoadedModel | null {
+    return this.loadedModel;
+  }
+
   override destroy(): void {
     if (this.mesh !== null) {
       this.mesh.geometry.dispose();
+    }
+    if (this.modelGroup !== null) {
+      this.modelGroup.clear();
     }
     super.destroy();
   }
