@@ -25,7 +25,7 @@
 import { describe, expect, it } from "vitest";
 import { Home, Wall, UserPreferences, PlanController, HomePieceOfFurniture } from "@sweethomejs/core";
 import { SVGPainter } from "./SVGPainter.js";
-import { paintSelectionFeedback, paintToolTip, emptyToolTip, paintAlignmentFeedback, emptyAlignmentFeedback, commitEditableProperty } from "./ToolFeedback.js";
+import { paintToolTip, emptyToolTip, paintAlignmentFeedback, emptyAlignmentFeedback, commitEditableProperty } from "./ToolFeedback.js";
 import { paintSelectionFeedback as paintSelection } from "./SelectionFeedbackPainter.js";
 
 class FakePlanView {

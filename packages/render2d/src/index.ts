@@ -9,6 +9,8 @@ export type { PlanColors, PlanPaintOptions } from "./PlanPainterPipeline.js";
 export { FurnitureIconCache, getModelIdentity, paintFurniturePlanIcon } from "./FurnitureIconCache.js";
 export type { FurnitureIconRenderer } from "./FurnitureIconCache.js";
 export { PlanInputAdapter } from "./PlanInputAdapter.js";
+export { PlanSVGExporter, homePlanBounds } from "./PlanSVGExporter.js";
+export type { PlanSVGExportOptions, PlanSVGExportResult } from "./PlanSVGExporter.js";
 export { paintSelectionOutline, paintPointIndicators, paintItemGrips, paintSelectionFeedback, DEFAULT_SELECTION_COLOR } from "./SelectionFeedbackPainter.js";
 export type { SelectionFeedbackColors } from "./SelectionFeedbackPainter.js";
 export { emptyToolTip, paintToolTip, emptyAlignmentFeedback, paintAlignmentFeedback, EditablePropertyInput, commitEditableProperty } from "./ToolFeedback.js";
