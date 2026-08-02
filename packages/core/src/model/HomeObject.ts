@@ -5,7 +5,7 @@
  * a stable id and an arbitrary string/content property map. Property-change
  * events fire synchronously (see events/PropertyChangeSupport.ts).
  */
-import { PropertyChangeSupport } from "../events/PropertyChangeSupport.js";
+import { PropertyChangeSupport, type PropertyChangeListener } from "../events/PropertyChangeSupport.js";
 import type { Content } from "./Content.js";
 
 const ID_DEFAULT_PREFIX = "object";
@@ -37,20 +37,40 @@ export abstract class HomeObject {
     return this.propertyChangeSupportValue;
   }
 
+  // Plain-callback convenience API; adapts to the JavaBeans-style listener
+  // objects the support expects (so identity-based removal keeps working).
+  private readonly callbackListeners = new WeakMap<(evt: unknown) => void, PropertyChangeListener>();
+
   addPropertyChangeListener(listener: (evt: unknown) => void): void {
-    this.propertyChangeSupport.addPropertyChangeListener(listener as never);
+    let record = this.callbackListeners.get(listener);
+    if (record === undefined) {
+      record = { propertyChange: (evt) => listener(evt) };
+      this.callbackListeners.set(listener, record);
+    }
+    this.propertyChangeSupport.addPropertyChangeListener(record);
   }
 
   removePropertyChangeListener(listener: (evt: unknown) => void): void {
-    this.propertyChangeSupport.removePropertyChangeListener(listener as never);
+    const record = this.callbackListeners.get(listener);
+    if (record !== undefined) {
+      this.propertyChangeSupport.removePropertyChangeListener(record);
+    }
   }
 
   addPropertyChangeListenerFor(propertyName: string, listener: (evt: unknown) => void): void {
-    this.propertyChangeSupport.addPropertyChangeListener(propertyName, listener as never);
+    let record = this.callbackListeners.get(listener);
+    if (record === undefined) {
+      record = { propertyChange: (evt) => listener(evt) };
+      this.callbackListeners.set(listener, record);
+    }
+    this.propertyChangeSupport.addPropertyChangeListener(propertyName, record);
   }
 
   removePropertyChangeListenerFor(propertyName: string, listener: (evt: unknown) => void): void {
-    this.propertyChangeSupport.removePropertyChangeListener(propertyName, listener as never);
+    const record = this.callbackListeners.get(listener);
+    if (record !== undefined) {
+      this.propertyChangeSupport.removePropertyChangeListener(propertyName, record);
+    }
   }
 
   protected firePropertyChange(propertyName: string, oldValue: unknown, newValue: unknown): void {

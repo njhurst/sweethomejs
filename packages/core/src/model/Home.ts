@@ -331,11 +331,9 @@ export class Home {
   }
 
   addPieceOfFurnitureToGroup(piece: HomePieceOfFurniture, group: HomeFurnitureGroup, index: number): void {
-    // Grouping moves the piece into the group (the group's own list).
-    const furniture = [...this.furnitureValue];
-    furniture.splice(index, 0, group);
-    this.furnitureValue = furniture;
-    this.furnitureChangeSupport.fireCollectionChangedAt(group, index, CollectionEvent.Type.ADD);
+    piece.setLevel(this.getSelectedLevel());
+    group.addPieceOfFurniture(piece, index);
+    this.furnitureChangeSupport.fireCollectionChanged(piece, CollectionEvent.Type.ADD);
   }
 
   deletePieceOfFurniture(piece: HomePieceOfFurniture): void {
@@ -911,6 +909,11 @@ export class Home {
   /** Returns the items in `items` that are instances of the given class. */
   static getSubList<T>(items: Selectable[], type: new (...args: never[]) => T): T[] {
     return items.filter((item) => item instanceof type) as T[];
+  }
+
+  /** Returns a sub list of `items` that contains only home furniture. */
+  static getFurnitureSubList(items: Selectable[]): HomePieceOfFurniture[] {
+    return Home.getSubList(items, HomePieceOfFurniture);
   }
 }
 
