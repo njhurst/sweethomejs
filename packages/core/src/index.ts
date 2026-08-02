@@ -37,3 +37,4 @@ export { f32, formatFloat } from "./util/f32.js";
 export { readFurnitureCatalog, readFurnitureCatalogWithLocale, readTexturesCatalog, loadBundle } from "./io/CatalogReader.js";
 export { HomeFileRecorder, DamagedHomeRecorderException, RecorderException } from "./io/HomeFileRecorder.js";
 export { parseJavaProperties } from "./io/JavaProperties.js";
+export * from "./controllers/index.js";
