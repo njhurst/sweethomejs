@@ -113,8 +113,8 @@
 [x] 6.4  Lighting: sun position from Compass, light color/power, day/night, shadows; selection outlines + blue selection boxes
 [x] 6.5  ModelManager port: async OBJ/DAE/3DS loading in worker, model cache + waiters, placeholder→loaded swap, unit normalization
 [x] 6.6  Offscreen top-view icon rendering pipeline (WebGL2 in worker where supported)
-[@ pi-ltkr51] 6.7  Instancing optimization for large homes + culling
-[ ] 6.8  Tolerance-based golden 3D screenshots vs Java at fixed cameras + perf budget (500 furniture)
+[x] 6.7  Instancing optimization for large homes + culling
+[@ pi-ltkr51] 6.8  Tolerance-based golden 3D screenshots vs Java at fixed cameras + perf budget (500 furniture)
 
 ## P6 — UI shell & dialogs
 

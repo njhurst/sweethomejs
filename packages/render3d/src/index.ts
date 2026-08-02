@@ -16,3 +16,5 @@ export type { LoadedModel, ModelSource, ModelLoader, ModelLoaderFactory } from "
 export { TopViewIconRenderer } from "./TopViewIconRenderer.js";
 export type { TopViewIconRendererOptions } from "./TopViewIconRenderer.js";
 export { InstancedFurniture } from "./InstancedFurniture.js";
+export { HomeScene3D } from "./HomeScene3D.js";
+export type { HomeScene3DOptions } from "./HomeScene3D.js";
