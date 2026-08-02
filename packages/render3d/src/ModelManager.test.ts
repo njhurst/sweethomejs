@@ -25,13 +25,13 @@
 import { describe, expect, it } from "vitest";
 import * as THREE from "three";
 import { Home, HomePieceOfFurniture, UserPreferences } from "@sweethomejs/core";
-import { ModelManager, detectModelFormat, computeModelBounds, normalizeModel, type ModelLoaderFactory, type ModelSource } from "./ModelManager.js";
+import { ModelManager, detectModelFormat, computeModelBounds, normalizeModel, type ModelLoaderFactory, type ModelSource, type LoadedModel } from "./ModelManager.js";
 import { MaterialCache } from "./AttributeCaches.js";
 import { FurnitureObject3D } from "./builders/objectBuilders.js";
 
 function source(url: string, bytes: Uint8Array = new Uint8Array([1, 2, 3])): ModelSource {
   return {
-    openStream: async () => new Blob([bytes]).stream(),
+    openStream: async () => new Blob([bytes as unknown as BlobPart]).stream(),
     getURL: () => url,
   };
 }
@@ -87,13 +87,13 @@ describe("ModelManager (task 6.5)", () => {
   it("loads, caches and notifies waiters once", async () => {
     const manager = new ModelManager(boxModelLoaderFactory());
     const model = source("zip:0/sofa.obj");
-    let loaded: unknown = "pending";
+    let loaded: string | LoadedModel | null | "pending" = "pending";
     const first = manager.getModel(model, (m) => { loaded = m; });
     expect(first).toBeNull();
     await new Promise((resolve) => setTimeout(resolve, 100));
     expect(loaded).not.toBe("pending");
     // Second request reuses the cache
-    let secondLoaded = "pending";
+    let secondLoaded: string | LoadedModel | null = "pending";
     const second = manager.getModel(model, (m) => { secondLoaded = m; });
     expect(second).not.toBeNull();
     expect(second).toBe(loaded);

@@ -13,3 +13,5 @@ export { SceneLights } from "./SceneLights.js";
 export { SelectionBoxes3D, SELECTION_BOX_COLOR } from "./SelectionBoxes3D.js";
 export { ModelManager, detectModelFormat, computeModelBounds, normalizeModel } from "./ModelManager.js";
 export type { LoadedModel, ModelSource, ModelLoader, ModelLoaderFactory } from "./ModelManager.js";
+export { TopViewIconRenderer } from "./TopViewIconRenderer.js";
+export type { TopViewIconRendererOptions } from "./TopViewIconRenderer.js";
