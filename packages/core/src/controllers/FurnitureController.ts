@@ -52,11 +52,11 @@ import type { PieceOfFurniture } from "../model/PieceOfFurniture.js";
 import type { DoorOrWindow, Light, ShelfUnit } from "../model/Interfaces.js";
 
 export class FurnitureController implements Controller {
-  protected readonly home: Home;
-  protected readonly preferences: UserPreferences;
-  protected readonly viewFactory: ViewFactory;
-  protected readonly contentManager: ContentManager | null;
-  protected readonly undoSupport: UndoableEditSupport | null;
+  readonly home: Home;
+  readonly preferences: UserPreferences;
+  readonly viewFactory: ViewFactory;
+  readonly contentManager: ContentManager | null;
+  readonly undoSupport: UndoableEditSupport | null;
   private furnitureView: View | null = null;
   private leadSelectedPieceOfFurniture: HomePieceOfFurniture | null = null;
 

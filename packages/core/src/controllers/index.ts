@@ -53,7 +53,7 @@ export { LocalizedUndoableEdit } from "./LocalizedUndoableEdit.js";
 export { FurnitureController } from "./FurnitureController.js";
 export { FurnitureCatalogController } from "./FurnitureCatalogController.js";
 export { HomeController } from "./HomeController.js";
-export { PlanController } from "./PlanController.js";
+export { PlanController, ControllerState, ControllerStateDecorator, AbstractModeChangeState } from "./PlanController.js";
 export { HomeController3D } from "./HomeController3D.js";
 export { CameraControllerState, EditingCameraState, TopCameraState, ObserverCameraState, getObserverCameraMinimumElevation } from "./HomeController3D.js";
 export { UserPreferencesController } from "./UserPreferencesController.js";

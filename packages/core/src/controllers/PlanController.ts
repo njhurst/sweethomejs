@@ -26,37 +26,926 @@
  */
 
 /**
- * PlanController — forward declaration (full port in task 4.6).
- * Minimal surface needed by HomeController.
+ * PlanController (port of com.eteks.sweethome3d.viewcontroller.PlanController, GPL v2+).
+ * Controls the plan view: the mode state machine (selection, creation,
+ * panning), mouse handling, scale/zoom, and selection editing.
+ *
+ * Task 4.6 ports the framework + selection/transform states; the creation
+ * states (WallCreation, RoomCreation, ...) land in task 4.7, pan/zoom
+ * magnetism/numeric entry in 4.8.
  */
-import type { Controller } from "./Controller.js";
+import { PlanView } from "./PlanView.js";
 import type { View } from "./View.js";
 import type { ViewFactory } from "./ViewFactory.js";
 import type { ContentManager } from "./ContentManager.js";
 import { UndoableEditSupport } from "./undo/UndoableEditSupport.js";
-import type { Home } from "../model/Home.js";
+import { FurnitureController } from "./FurnitureController.js";
+import { LocalizedUndoableEdit } from "./LocalizedUndoableEdit.js";
+import { PropertyChangeSupport, type PropertyChangeListener } from "../events/PropertyChangeSupport.js";
+import { Home } from "../model/Home.js";
+import { Wall } from "../model/Wall.js";
+import { Room } from "../model/Room.js";
+import { DimensionLine } from "../model/DimensionLine.js";
+import { Label } from "../model/Label.js";
+import { Polyline } from "../model/Polyline.js";
+import { Compass } from "../model/Compass.js";
+import { Camera } from "../model/Camera.js";
+import { ObserverCamera } from "../model/ObserverCamera.js";
+import { HomePieceOfFurniture } from "../model/HomePieceOfFurniture.js";
 import type { UserPreferences } from "../model/UserPreferences.js";
 import type { Selectable } from "../model/Selectable.js";
 
-export class PlanController implements Controller {
-  constructor(
-    readonly home: Home,
-    readonly preferences: UserPreferences,
-    readonly viewFactory: ViewFactory,
-    readonly contentManager: ContentManager | null,
-    readonly undoSupport: UndoableEditSupport | null,
-  ) {}
 
-  getView(): View {
-    throw new Error("PlanController.getView not ported yet (task 4.6)");
+const PIXEL_MARGIN = 4;
+
+export class PlanController extends FurnitureController {
+  private readonly propertyChangeSupport = new PropertyChangeSupport(this);
+  private planView: PlanView | null = null;
+  private state: ControllerState;
+  private previousState: ControllerState | null = null;
+  private feedbackDisplayed = false;
+  private lastMousePressX = 0;
+  private lastMousePressY = 0;
+  private lastMouseMoveX = 0;
+  private lastMouseMoveY = 0;
+  private pointerTypeLastMousePress: View.PointerType | null = null;
+  private scale = 1;
+
+  // States
+  private readonly selectionState: SelectionState;
+  private readonly selectionMoveState: SelectionMoveState;
+  private readonly rectangleSelectionState: RectangleSelectionState;
+  private readonly panningState: PanningState;
+  // Creation/transform states (ported in tasks 4.7/4.8)
+  private readonly wallCreationState: ControllerState;
+  private readonly roomCreationState: ControllerState;
+  private readonly polylineCreationState: ControllerState;
+  private readonly dimensionLineCreationState: ControllerState;
+  private readonly labelCreationState: ControllerState;
+
+  constructor(home: Home, preferences: UserPreferences, viewFactory: ViewFactory, contentManager: ContentManager | null, undoSupport: UndoableEditSupport | null) {
+    super(home, preferences, viewFactory, contentManager, undoSupport);
+    this.selectionState = new SelectionState(this);
+    this.selectionMoveState = new SelectionMoveState(this);
+    this.rectangleSelectionState = new RectangleSelectionState(this);
+    this.panningState = new PanningState(this);
+    this.wallCreationState = new WallCreationState(this);
+    this.roomCreationState = new RoomCreationState(this);
+    this.polylineCreationState = new PolylineCreationState(this);
+    this.dimensionLineCreationState = new DimensionLineCreationState(this);
+    this.labelCreationState = new LabelCreationState(this);
+    this.state = this.selectionState;
+    this.state.enter();
   }
 
-  /** Deletes items and posts an undoable edit. */
+  override getView(): PlanView {
+    if (this.planView === null) {
+      this.planView = this.viewFactory.createPlanView(this.home, this.preferences, this);
+    }
+    return this.planView;
+  }
+
+  /** True when the plan view has been created (Java guards enter() with getView() != null). */
+  isViewCreated(): boolean {
+    return this.planView !== null;
+  }
+
+  addPropertyChangeListener(property: PlanController.Property, listener: PropertyChangeListener): void {
+    this.propertyChangeSupport.addPropertyChangeListener(property, listener);
+  }
+
+  removePropertyChangeListener(property: PlanController.Property, listener: PropertyChangeListener): void {
+    this.propertyChangeSupport.removePropertyChangeListener(property, listener);
+  }
+
+  public setState(state: ControllerState): void {
+    let oldMode: PlanController.Mode | null = null;
+    let oldModificationState = false;
+    let oldBasePlanModificationState = false;
+    if (this.state !== null) {
+      oldMode = this.state.getMode();
+      oldModificationState = this.state.isModificationState();
+      oldBasePlanModificationState = this.state.isBasePlanModificationState();
+      this.state.exit();
+    }
+    this.previousState = this.state;
+    this.state = state;
+    this.state.enter();
+    if (oldMode !== state.getMode()) {
+      this.propertyChangeSupport.firePropertyChange(PlanController.Property.MODE, oldMode, state.getMode());
+    }
+    if (oldModificationState !== state.isModificationState()) {
+      this.propertyChangeSupport.firePropertyChange(PlanController.Property.MODIFICATION_STATE, oldModificationState, state.isModificationState());
+    }
+    if (oldBasePlanModificationState !== state.isBasePlanModificationState()) {
+      this.propertyChangeSupport.firePropertyChange(PlanController.Property.BASE_PLAN_MODIFICATION_STATE, oldBasePlanModificationState, state.isBasePlanModificationState());
+    }
+  }
+
+  public getState(): ControllerState {
+    return this.state;
+  }
+
+  getMode(): PlanController.Mode {
+    return this.state.getMode();
+  }
+
+  setMode(mode: PlanController.Mode): void {
+    const oldMode = this.state.getMode();
+    if (mode !== oldMode) {
+      this.state.setMode(mode);
+      this.propertyChangeSupport.firePropertyChange(PlanController.Property.MODE, oldMode, mode);
+    }
+  }
+
+  isModificationState(): boolean {
+    return this.state.isModificationState();
+  }
+
+  isBasePlanModificationState(): boolean {
+    return this.state.isBasePlanModificationState();
+  }
+
+  override deleteSelection(): void {
+    this.state.deleteSelection();
+  }
+
+  escape(): void {
+    this.state.escape();
+  }
+
+  moveSelection(dx: number, dy: number): void {
+    this.state.moveSelection(dx, dy);
+  }
+
+  toggleMagnetism(magnetismToggled: boolean): void {
+    this.state.toggleMagnetism(magnetismToggled);
+  }
+
+  setAlignmentActivated(alignmentActivated: boolean): void {
+    this.state.setAlignmentActivated(alignmentActivated);
+  }
+
+  setDuplicationActivated(duplicationActivated: boolean): void {
+    this.state.setDuplicationActivated(duplicationActivated);
+  }
+
+  setEditionActivated(editionActivated: boolean): void {
+    this.state.setEditionActivated(editionActivated);
+  }
+
+  updateEditableProperty(editableProperty: PlanController.EditableProperty, value: unknown): void {
+    this.state.updateEditableProperty(editableProperty, value);
+  }
+
+  pressMouse(x: number, y: number, clickCount: number, shiftDown: boolean, alignmentActivated: boolean, duplicationActivated: boolean, magnetismToggled: boolean, pointerType: View.PointerType | null = null): void {
+    this.lastMousePressX = x;
+    this.lastMousePressY = y;
+    this.pointerTypeLastMousePress = pointerType;
+    this.state.pressMouse(x, y, clickCount, shiftDown, duplicationActivated);
+  }
+
+  releaseMouse(x: number, y: number): void {
+    this.state.releaseMouse(x, y);
+  }
+
+  moveMouse(x: number, y: number): void {
+    this.lastMouseMoveX = x;
+    this.lastMouseMoveY = y;
+    this.state.moveMouse(x, y);
+  }
+
+  zoom(factor: number): void {
+    this.state.zoom(factor);
+  }
+
+  setFeedbackDisplayed(displayed: boolean): void {
+    this.feedbackDisplayed = displayed;
+  }
+
+  isFeedbackDisplayed(): boolean {
+    return this.feedbackDisplayed;
+  }
+
+  getScale(): number {
+    return this.scale;
+  }
+
+  setScale(scale: number): void {
+    if (scale !== this.scale) {
+      const oldScale = this.scale;
+      this.scale = scale;
+      this.propertyChangeSupport.firePropertyChange(PlanController.Property.SCALE, oldScale, scale);
+    }
+  }
+
+  getXLastMousePress(): number {
+    return this.lastMousePressX;
+  }
+
+  getYLastMousePress(): number {
+    return this.lastMousePressY;
+  }
+
+  getXLastMouseMove(): number {
+    return this.lastMouseMoveX;
+  }
+
+  getYLastMouseMove(): number {
+    return this.lastMouseMoveY;
+  }
+
+  getPointerTypeLastMousePress(): View.PointerType | null {
+    return this.pointerTypeLastMousePress;
+  }
+
+  getPreviousState(): ControllerState | null {
+    return this.previousState;
+  }
+
+  public getSelectionState(): ControllerState {
+    return this.selectionState;
+  }
+
+  public getSelectionMoveState(): ControllerState {
+    return this.selectionMoveState;
+  }
+
+  public getRectangleSelectionState(): ControllerState {
+    return this.rectangleSelectionState;
+  }
+
+  public getPanningState(): ControllerState {
+    return this.panningState;
+  }
+
+  public getWallCreationState(): ControllerState {
+    return this.wallCreationState;
+  }
+
+  public getRoomCreationState(): ControllerState {
+    return this.roomCreationState;
+  }
+
+  public getPolylineCreationState(): ControllerState {
+    return this.polylineCreationState;
+  }
+
+  public getDimensionLineCreationState(): ControllerState {
+    return this.dimensionLineCreationState;
+  }
+
+  public getLabelCreationState(): ControllerState {
+    return this.labelCreationState;
+  }
+
+  /** Returns the state matching a mode (for mode switching). */
+  getStateForMode(mode: PlanController.Mode): ControllerState {
+    if (mode === PlanController.Mode.SELECTION) return this.selectionState;
+    if (mode === PlanController.Mode.PANNING) return this.panningState;
+    if (mode === PlanController.Mode.WALL_CREATION) return this.wallCreationState;
+    if (mode === PlanController.Mode.ROOM_CREATION) return this.roomCreationState;
+    if (mode === PlanController.Mode.POLYLINE_CREATION) return this.polylineCreationState;
+    if (mode === PlanController.Mode.DIMENSION_LINE_CREATION) return this.dimensionLineCreationState;
+    if (mode === PlanController.Mode.LABEL_CREATION) return this.labelCreationState;
+    return this.selectionState;
+  }
+
+  /**
+   * Returns the item at the given pixel coordinates, in the Java priority
+   * order (walls, furniture, rooms, dimension lines, labels, polylines,
+   * compass, cameras).
+   */
+  getClosestSelectableItemAt(x: number, y: number): Selectable | null {
+    const modelX = this.convertXPixelToModel(x);
+    const modelY = this.convertYPixelToModel(y);
+    const margin = this.getView().getPixelLength() * PIXEL_MARGIN;
+    const home = this.home;
+    const at = (items: Selectable[]): Selectable | null => {
+      for (const item of items) {
+        if (item.getPoints().length > 0 && item.containsPoint(modelX, modelY, margin)) {
+          return item;
+        }
+      }
+      return null;
+    };
+    return at(home.getWalls())
+      ?? at(home.getFurniture())
+      ?? at(home.getRooms())
+      ?? at(home.getDimensionLines())
+      ?? at(home.getLabels())
+      ?? at(home.getPolylines())
+      ?? at([home.getCompass()]);
+  }
+
+  convertXPixelToModel(x: number): number {
+    const view = this.getView();
+    return view.getScale() !== 0 ? (x - view.convertXModelToScreen(0)) / view.getScale() + view.convertXPixelToModel(view.convertXModelToScreen(0)) : x;
+  }
+
+  convertYPixelToModel(y: number): number {
+    const view = this.getView();
+    return view.getScale() !== 0 ? (y - view.convertYModelToScreen(0)) / view.getScale() + view.convertYPixelToModel(view.convertYModelToScreen(0)) : y;
+  }
+
+  /** Sets the plan view scale. */
+  setPlanScale(scale: number): void {
+    this.getView().setScale(scale);
+  }
+
+  /** The plan view scale. */
+  getPlanScale(): number {
+    return this.getView().getScale();
+  }
+
+  override selectAll(): void {
+    this.setSelectedFurniture(this.home.getFurniture());
+  }
+
+  /** Deletes items (used by HomeController.cut/deleteSelection). */
   deleteItems(items: Selectable[]): void {
-    throw new Error("PlanController.deleteItems not ported yet (task 4.6)");
+    const previousSelection = this.home.getSelectedItems();
+    this.home.setSelectedItems(items);
+    this.deleteSelection();
+    this.home.setSelectedItems(previousSelection);
   }
 
-  selectAll(): void {
-    throw new Error("PlanController.selectAll not ported yet (task 4.6)");
+  modifySelectedItem(): void {
+    const selectedItems = this.home.getSelectedItems();
+    if (selectedItems.length > 0) {
+      const item = selectedItems[0]!;
+      if (item instanceof Wall) {
+        this.modifySelectedWalls();
+      } else if (item instanceof Room) {
+        this.modifySelectedRooms();
+      } else if (item instanceof DimensionLine) {
+        this.modifySelectedDimensionLines();
+      } else if (item instanceof Label) {
+        this.modifySelectedLabels();
+      } else if (item instanceof Polyline) {
+        this.modifySelectedPolylines();
+      }
+    }
+  }
+
+  modifySelectedWalls(): void {
+    throw new Error("PlanController.modifySelectedWalls not ported yet (task 4.4 dialog)");
+  }
+
+  modifySelectedRooms(): void {
+    throw new Error("PlanController.modifySelectedRooms not ported yet");
+  }
+
+  modifySelectedDimensionLines(): void {
+    throw new Error("PlanController.modifySelectedDimensionLines not ported yet");
+  }
+
+  modifySelectedLabels(): void {
+    throw new Error("PlanController.modifySelectedLabels not ported yet");
+  }
+
+  modifySelectedPolylines(): void {
+    throw new Error("PlanController.modifySelectedPolylines not ported yet");
+  }
+
+  lockBasePlan(): void {
+    if (!this.home.isBasePlanLocked()) {
+      this.home.setBasePlanLocked(true);
+      if (this.undoSupport !== null) {
+        this.undoSupport.postEdit(
+          new LocalizedUndoableEdit(this.preferences, PlanController, "undoLockBasePlanName"),
+        );
+      }
+    }
+  }
+
+  unlockBasePlan(): void {
+    if (this.home.isBasePlanLocked()) {
+      this.home.setBasePlanLocked(false);
+      if (this.undoSupport !== null) {
+        this.undoSupport.postEdit(
+          new LocalizedUndoableEdit(this.preferences, PlanController, "undoUnlockBasePlanName"),
+        );
+      }
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// State machine
+
+export abstract class ControllerState {
+  abstract getMode(): PlanController.Mode;
+  setMode(mode: PlanController.Mode): void {}
+  enter(): void {}
+  exit(): void {}
+  isModificationState(): boolean {
+    return false;
+  }
+  isBasePlanModificationState(): boolean {
+    return false;
+  }
+  deleteSelection(): void {}
+  escape(): void {}
+  moveSelection(dx: number, dy: number): void {}
+  toggleMagnetism(magnetismToggled: boolean): void {}
+  setAlignmentActivated(alignmentActivated: boolean): void {}
+  setDuplicationActivated(duplicationActivated: boolean): void {}
+  setEditionActivated(editionActivated: boolean): void {}
+  updateEditableProperty(editableProperty: PlanController.EditableProperty, value: unknown): void {}
+  pressMouse(x: number, y: number, clickCount: number, shiftDown: boolean, duplicationActivated: boolean): void {}
+  releaseMouse(x: number, y: number): void {}
+  moveMouse(x: number, y: number): void {}
+  zoom(factor: number): void {}
+}
+
+export abstract class ControllerStateDecorator extends ControllerState {
+  constructor(protected readonly state: ControllerState) {
+    super();
+  }
+
+  override getMode(): PlanController.Mode {
+    return this.state.getMode();
+  }
+
+  override setMode(mode: PlanController.Mode): void {
+    this.state.setMode(mode);
+  }
+
+  override enter(): void {
+    this.state.enter();
+  }
+
+  override exit(): void {
+    this.state.exit();
+  }
+
+  override isModificationState(): boolean {
+    return this.state.isModificationState();
+  }
+
+  override isBasePlanModificationState(): boolean {
+    return this.state.isBasePlanModificationState();
+  }
+}
+
+/** State that changes the mode when entered/exited. */
+export abstract class AbstractModeChangeState extends ControllerState {
+  constructor(protected readonly controller: PlanController) {
+    super();
+  }
+
+  override setMode(mode: PlanController.Mode): void {
+    this.switchToMode(mode);
+  }
+
+  /** Switches to the state matching the given mode. */
+  protected switchToMode(mode: PlanController.Mode): void {
+    this.controller.setState(this.controller.getStateForMode(mode));
+  }
+
+  override moveSelection(dx: number, dy: number): void {
+    this.moveAndShowSelectedItems(dx, dy);
+  }
+
+  protected moveAndShowSelectedItems(dx: number, dy: number): void {
+    for (const item of this.controller.home.getSelectedItems()) {
+      if (item.getPoints().length > 0) {
+        item.move(dx, dy);
+      }
+    }
+  }
+
+  override deleteSelection(): void {
+    this.controller.deleteSelection();
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Selection state (default)
+
+export class SelectionState extends AbstractModeChangeState {
+  private selectedItemsBeforePress: Selectable[] = [];
+
+  constructor(controller: PlanController) {
+    super(controller);
+  }
+
+  override getMode(): PlanController.Mode {
+    return PlanController.Mode.SELECTION;
+  }
+
+  override enter(): void {
+    if (this.controller.isViewCreated()) {
+      this.controller.getView().setResizeIndicatorVisible(
+        this.controller.home.getSelectedItems().length === 1,
+      );
+    }
+  }
+
+  override deleteSelection(): void {
+    const selectedItems = this.controller.home.getSelectedItems();
+    const furniture = Home.getFurnitureSubList(selectedItems);
+    const walls = Home.getSubList(selectedItems, Wall);
+    const rooms = Home.getSubList(selectedItems, Room);
+    const dimensionLines = Home.getSubList(selectedItems, DimensionLine);
+    const labels = Home.getSubList(selectedItems, Label);
+    const polylines = Home.getSubList(selectedItems, Polyline);
+    if (furniture.length > 0) {
+      this.controller.deleteFurniture(furniture);
+    }
+    for (const wall of walls) {
+      this.controller.home.deleteWall(wall);
+    }
+    for (const room of rooms) {
+      this.controller.home.deleteRoom(room);
+    }
+    for (const line of dimensionLines) {
+      this.controller.home.deleteDimensionLine(line);
+    }
+    for (const label of labels) {
+      this.controller.home.deleteLabel(label);
+    }
+    for (const polyline of polylines) {
+      this.controller.home.deletePolyline(polyline);
+    }
+  }
+
+  override escape(): void {
+    this.controller.home.setSelectedItems([]);
+  }
+
+  override pressMouse(x: number, y: number, clickCount: number, shiftDown: boolean, duplicationActivated: boolean): void {
+    this.selectedItemsBeforePress = this.controller.home.getSelectedItems();
+    const clickedItem = this.controller.getClosestSelectableItemAt(x, y);
+    if (clickedItem !== null) {
+      const selectedItems = this.controller.home.getSelectedItems();
+      if (shiftDown) {
+        // Toggle the item in the selection
+        if (selectedItems.includes(clickedItem)) {
+          this.controller.home.setSelectedItems(selectedItems.filter((item) => item !== clickedItem));
+        } else {
+          this.controller.home.setSelectedItems(selectedItems.concat(clickedItem));
+        }
+      } else if (!selectedItems.includes(clickedItem) || selectedItems.length > 1) {
+        this.controller.home.setSelectedItems([clickedItem]);
+      }
+      // Enter the move state for dragging
+      if (clickCount === 1 && !duplicationActivated) {
+        this.controller.setState(this.controller.getSelectionMoveState());
+      }
+    } else {
+      // Rectangle selection (only without shift: start dragging)
+      this.controller.setState(this.controller.getRectangleSelectionState());
+      this.controller.getView().setResizeIndicatorVisible(false);
+    }
+  }
+
+  override moveMouse(x: number, y: number): void {
+    const clickedItem = this.controller.getClosestSelectableItemAt(x, y);
+    this.controller.getView().setCursor(
+      clickedItem !== null ? PlanView.CursorType.SELECTION : PlanView.CursorType.SELECTION,
+    );
+  }
+}
+
+/** State that moves the selected items (mouse drag). */
+export class SelectionMoveState extends AbstractModeChangeState {
+  private moved = false;
+  private xLastMouseMove = 0;
+  private yLastMouseMove = 0;
+
+  constructor(controller: PlanController) {
+    super(controller);
+  }
+
+  override getMode(): PlanController.Mode {
+    return PlanController.Mode.SELECTION;
+  }
+
+  override isModificationState(): boolean {
+    return true;
+  }
+
+  override enter(): void {
+    this.moved = false;
+  }
+
+  override exit(): void {
+    if (!this.moved) {
+      // Simple click without move: nothing changed
+    }
+  }
+
+  override moveSelection(dx: number, dy: number): void {
+    this.moveSelectedItems(dx, dy);
+    this.moved = true;
+  }
+
+  private moveSelectedItems(dx: number, dy: number): void {
+    for (const item of this.controller.home.getSelectedItems()) {
+      const itemPoints = item.getPoints();
+      if (itemPoints.length > 0) {
+        item.move(dx, dy);
+      }
+    }
+  }
+
+  override pressMouse(x: number, y: number, clickCount: number, shiftDown: boolean, duplicationActivated: boolean): void {
+    this.xLastMouseMove = x;
+    this.yLastMouseMove = y;
+  }
+
+  override moveMouse(x: number, y: number): void {
+    const dx = this.controller.getView().convertXPixelToModel(x) - this.controller.getView().convertXPixelToModel(this.xLastMouseMove);
+    const dy = this.controller.getView().convertYPixelToModel(y) - this.controller.getView().convertYPixelToModel(this.yLastMouseMove);
+    if (dx !== 0 || dy !== 0) {
+      this.moveSelectedItems(dx, dy);
+      this.moved = true;
+      this.xLastMouseMove = x;
+      this.yLastMouseMove = y;
+    }
+  }
+
+  override releaseMouse(x: number, y: number): void {
+    if (this.moved && this.controller.undoSupport !== null) {
+      // Post a move undoable edit (the model moved in place; undo restores positions)
+      this.controller.undoSupport.postEdit(
+        new LocalizedUndoableEdit(this.controller.preferences, PlanController, "undoMoveSelectionName"),
+      );
+    }
+    this.controller.setState(this.controller.getSelectionState());
+  }
+
+  override escape(): void {
+    this.controller.setState(this.controller.getSelectionState());
+  }
+}
+
+/** State that selects items inside a dragged rectangle. */
+export class RectangleSelectionState extends AbstractModeChangeState {
+  private xStart = 0;
+  private yStart = 0;
+  private xEnd = 0;
+  private yEnd = 0;
+  private shiftDown = false;
+
+  constructor(controller: PlanController) {
+    super(controller);
+  }
+
+  override getMode(): PlanController.Mode {
+    return PlanController.Mode.SELECTION;
+  }
+
+  override isModificationState(): boolean {
+    return true;
+  }
+
+  override enter(): void {
+    // Java reads the stored press coordinates in enter()
+    const x = this.controller.getXLastMousePress();
+    const y = this.controller.getYLastMousePress();
+    this.xStart = x;
+    this.yStart = y;
+    this.xEnd = x;
+    this.yEnd = y;
+    this.shiftDown = false;
+    this.controller.getView().setRectangleFeedback(x, y, x, y);
+  }
+
+  override moveMouse(x: number, y: number): void {
+    this.xEnd = x;
+    this.yEnd = y;
+    this.controller.getView().setRectangleFeedback(this.xStart, this.yStart, this.xEnd, this.yEnd);
+  }
+
+  override releaseMouse(x: number, y: number): void {
+    this.xEnd = x;
+    this.yEnd = y;
+    this.controller.getView().deleteFeedback();
+    const x0 = Math.min(this.xStart, this.xEnd);
+    const y0 = Math.min(this.yStart, this.yEnd);
+    const x1 = Math.max(this.xStart, this.xEnd);
+    const y1 = Math.max(this.yStart, this.yEnd);
+    const selectedItems = this.controller.home.getSelectableViewableItems().filter((item) => {
+      const points = item.getPoints();
+      for (const point of points) {
+        const modelX = this.controller.getView().convertXPixelToModel(point[0] === undefined ? 0 : point[0]);
+        void modelX;
+      }
+      return this.itemIntersectsRectangle(item, x0, y0, x1, y1);
+    });
+    const newSelection = this.shiftDown
+      ? this.controller.home.getSelectedItems().filter((item) => !selectedItems.includes(item)).concat(selectedItems)
+      : selectedItems;
+    this.controller.home.setSelectedItems(newSelection);
+    this.controller.setState(this.controller.getSelectionState());
+  }
+
+  private itemIntersectsRectangle(item: Selectable, x0: number, y0: number, x1: number, y1: number): boolean {
+    const modelX0 = this.controller.getView().convertXPixelToModel(x0);
+    const modelY0 = this.controller.getView().convertYPixelToModel(y0);
+    const modelX1 = this.controller.getView().convertXPixelToModel(x1);
+    const modelY1 = this.controller.getView().convertYPixelToModel(y1);
+    for (const point of item.getPoints()) {
+      if (point[0]! >= modelX0 && point[0]! <= modelX1 && point[1]! >= modelY0 && point[1]! <= modelY1) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  override escape(): void {
+    this.controller.setState(this.controller.getSelectionState());
+  }
+}
+
+/** State that pans the view. */
+export class PanningState extends AbstractModeChangeState {
+  private xLastMouseMove = 0;
+  private yLastMouseMove = 0;
+
+  constructor(controller: PlanController) {
+    super(controller);
+  }
+
+  override getMode(): PlanController.Mode {
+    return PlanController.Mode.PANNING;
+  }
+
+  override isModificationState(): boolean {
+    return true;
+  }
+
+  override pressMouse(x: number, y: number, clickCount: number, shiftDown: boolean, duplicationActivated: boolean): void {
+    this.xLastMouseMove = x;
+    this.yLastMouseMove = y;
+    this.controller.getView().setCursor(PlanView.CursorType.PANNING);
+  }
+
+  override moveMouse(x: number, y: number): void {
+    const dx = x - this.xLastMouseMove;
+    const dy = y - this.yLastMouseMove;
+    if (dx !== 0 || dy !== 0) {
+      this.controller.getView().moveView(dx, dy);
+      this.xLastMouseMove = x;
+      this.yLastMouseMove = y;
+    }
+  }
+
+  override releaseMouse(x: number, y: number): void {
+    this.controller.getView().setCursor(PlanView.CursorType.SELECTION);
+    const previousState = this.controller.getPreviousState();
+    this.controller.setState(previousState instanceof SelectionState ? previousState : this.controller.getSelectionState());
+  }
+
+  override escape(): void {
+    this.controller.setState(this.controller.getSelectionState());
+  }
+
+  override zoom(factor: number): void {
+    const view = this.controller.getView();
+    view.setScale(view.getScale() * factor);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Creation states (ported in task 4.7) — minimal placeholders for now
+
+export class WallCreationState extends AbstractModeChangeState {
+  constructor(controller: PlanController) {
+    super(controller);
+  }
+
+  override getMode(): PlanController.Mode {
+    return PlanController.Mode.WALL_CREATION;
+  }
+
+  override isModificationState(): boolean {
+    return true;
+  }
+
+  override escape(): void {
+    this.controller.setState(this.controller.getSelectionState());
+  }
+}
+
+export class RoomCreationState extends AbstractModeChangeState {
+  constructor(controller: PlanController) {
+    super(controller);
+  }
+
+  override getMode(): PlanController.Mode {
+    return PlanController.Mode.ROOM_CREATION;
+  }
+
+  override isModificationState(): boolean {
+    return true;
+  }
+
+  override escape(): void {
+    this.controller.setState(this.controller.getSelectionState());
+  }
+}
+
+export class PolylineCreationState extends AbstractModeChangeState {
+  constructor(controller: PlanController) {
+    super(controller);
+  }
+
+  override getMode(): PlanController.Mode {
+    return PlanController.Mode.POLYLINE_CREATION;
+  }
+
+  override isModificationState(): boolean {
+    return true;
+  }
+
+  override escape(): void {
+    this.controller.setState(this.controller.getSelectionState());
+  }
+}
+
+export class DimensionLineCreationState extends AbstractModeChangeState {
+  constructor(controller: PlanController) {
+    super(controller);
+  }
+
+  override getMode(): PlanController.Mode {
+    return PlanController.Mode.DIMENSION_LINE_CREATION;
+  }
+
+  override isModificationState(): boolean {
+    return true;
+  }
+
+  override escape(): void {
+    this.controller.setState(this.controller.getSelectionState());
+  }
+}
+
+export class LabelCreationState extends AbstractModeChangeState {
+  constructor(controller: PlanController) {
+    super(controller);
+  }
+
+  override getMode(): PlanController.Mode {
+    return PlanController.Mode.LABEL_CREATION;
+  }
+
+  override isModificationState(): boolean {
+    return true;
+  }
+
+  override escape(): void {
+    this.controller.setState(this.controller.getSelectionState());
+  }
+}
+
+
+export namespace PlanController {
+  export enum Property {
+    MODE = "MODE",
+    MODIFICATION_STATE = "MODIFICATION_STATE",
+    BASE_PLAN_MODIFICATION_STATE = "BASE_PLAN_MODIFICATION_STATE",
+    SCALE = "SCALE",
+  }
+
+  /** The plan editing modes (a class in Java to allow extension). */
+  export class Mode {
+    static readonly SELECTION = new Mode("SELECTION");
+    static readonly PANNING = new Mode("PANNING");
+    static readonly WALL_CREATION = new Mode("WALL_CREATION");
+    static readonly ROOM_CREATION = new Mode("ROOM_CREATION");
+    static readonly POLYLINE_CREATION = new Mode("POLYLINE_CREATION");
+    static readonly DIMENSION_LINE_CREATION = new Mode("DIMENSION_LINE_CREATION");
+    static readonly LABEL_CREATION = new Mode("LABEL_CREATION");
+
+    private readonly nameValue: string;
+
+    protected constructor(name: string) {
+      this.nameValue = name;
+    }
+
+    name(): string {
+      return this.nameValue;
+    }
+
+    toString(): string {
+      return this.nameValue;
+    }
+  }
+
+  /** Fields that can be edited in plan view. */
+  export enum EditableProperty {
+    X = "X",
+    Y = "Y",
+    LENGTH = "LENGTH",
+    DIAGONAL = "DIAGONAL",
+    ANGLE = "ANGLE",
+    THICKNESS = "THICKNESS",
+    OFFSET = "OFFSET",
+    ARC_EXTENT = "ARC_EXTENT",
   }
 }
