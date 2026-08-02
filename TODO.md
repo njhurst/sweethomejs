@@ -118,7 +118,7 @@
 
 ## P6 — UI shell & dialogs
 
-[ ] 7  P6 UI shell: React HomePane + dialogs (02/10 docs)
+[x] 7  P6 UI shell: React HomePane + dialogs (02/10 docs)
 [x] 7.1  React shell: menus, toolbars, split panes, status bar, dockable 3D view, theme
 [x] 7.2  Furniture catalog panel (tree, search, drag&drop to plan) + FurnitureTable (virtualized, sortable)
 [x] 7.3  Furniture properties panel + furniture/room/wall dialogs as React components bound to controllers
@@ -128,7 +128,7 @@
 [x] 7.7  File I/O: ContentManager web impl (File System Access + download fallback + drag&drop + URL param)
 [x] 7.8  Persistence: IndexedDB schema (preferences/documents/content/recovery), PreferencesStore, autosave + recovery dialog
 [x] 7.9  HomeStore interface + IndexedDB implementation (local documents; cloud later)
-[@ pi-ltkr51] 7.10  e2e flows (Playwright): create→save→reopen, open fixture→plan/3D render, import library, preference persistence, recovery
+[x] 7.10  e2e flows (Playwright): create→save→reopen, open fixture→plan/3D render, import library, preference persistence, recovery
 
 ## P7 — Photo / video / print
 
