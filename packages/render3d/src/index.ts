@@ -5,3 +5,6 @@ export { Object3DBase } from "./Object3DBase.js";
 export type { Object3DContext } from "./Object3DBase.js";
 export { MaterialCache, TextureCache, colorToThree, applyHomeTextureAttributes } from "./AttributeCaches.js";
 export type { MaterialKey, LoadedTexture, TextureSource, HomeTextureAttributes } from "./AttributeCaches.js";
+export { WallObject3D, buildPrismGeometry } from "./builders/WallObject3D.js";
+export { RoomObject3D, FurnitureObject3D, DimensionLineObject3D, PolylineObject3D, LabelObject3D, GroundObject3D, buildPolygonGeometry } from "./builders/objectBuilders.js";
+export { groundElevation, levelElevation } from "./builders/Elevations.js";
