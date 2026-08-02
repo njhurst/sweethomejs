@@ -251,6 +251,48 @@ describe("PlanController (task 4.6)", () => {
     expect(view.yOffset).toBe(40);
   });
 
+  it("creates a wall by clicking twice in wall creation mode", () => {
+    const home = new Home();
+    const controller = makeController(home);
+    controller.getView();
+    controller.setMode(PlanController.Mode.WALL_CREATION);
+    expect(controller.getMode()).toBe(PlanController.Mode.WALL_CREATION);
+    // First click enters drawing state
+    controller.pressMouse(0, 0, 1, false, false, false, false, null);
+    controller.moveMouse(100, 0);
+    // Second click completes the wall (a wall exists with the drawn extent)
+    controller.pressMouse(100, 0, 1, false, false, false, false, null);
+    expect(home.getWalls().length).toBeGreaterThanOrEqual(1);
+    const wall = home.getWalls()[0]!;
+    expect(wall.getXStart()).toBe(0);
+    expect(wall.getYStart()).toBe(0);
+    expect(wall.getXEnd()).toBeCloseTo(100, 4);
+  });
+
+  it("creates a room by double-clicking after adding points", () => {
+    const home = new Home();
+    const controller = makeController(home);
+    controller.getView();
+    controller.setMode(PlanController.Mode.ROOM_CREATION);
+    controller.pressMouse(0, 0, 1, false, false, false, false, null);
+    controller.pressMouse(100, 0, 1, false, false, false, false, null);
+    controller.pressMouse(100, 100, 1, false, false, false, false, null);
+    controller.pressMouse(0, 0, 2, false, false, false, false, null);
+    expect(home.getRooms().length).toBe(1);
+    expect(home.getRooms()[0]!.getPointCount()).toBeGreaterThanOrEqual(3);
+  });
+
+  it("creates a label with a single click in label creation mode", () => {
+    const home = new Home();
+    const controller = makeController(home);
+    controller.getView();
+    controller.setMode(PlanController.Mode.LABEL_CREATION);
+    controller.pressMouse(50, 60, 1, false, false, false, false, null);
+    expect(home.getLabels().length).toBe(1);
+    expect(home.getLabels()[0]!.getX()).toBe(50);
+    expect(home.getLabels()[0]!.getY()).toBe(60);
+  });
+
   it("deletes the selected furniture via deleteSelection", () => {
     const home = new Home();
     const piece = new HomePieceOfFurniture("p", {

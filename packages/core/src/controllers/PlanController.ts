@@ -78,9 +78,13 @@ export class PlanController extends FurnitureController {
   private readonly panningState: PanningState;
   // Creation/transform states (ported in tasks 4.7/4.8)
   private readonly wallCreationState: ControllerState;
+  private readonly wallDrawingState: ControllerState;
   private readonly roomCreationState: ControllerState;
+  private readonly roomDrawingState: ControllerState;
   private readonly polylineCreationState: ControllerState;
+  private readonly polylineDrawingState: ControllerState;
   private readonly dimensionLineCreationState: ControllerState;
+  private readonly dimensionLineDrawingState: ControllerState;
   private readonly labelCreationState: ControllerState;
 
   constructor(home: Home, preferences: UserPreferences, viewFactory: ViewFactory, contentManager: ContentManager | null, undoSupport: UndoableEditSupport | null) {
@@ -90,9 +94,13 @@ export class PlanController extends FurnitureController {
     this.rectangleSelectionState = new RectangleSelectionState(this);
     this.panningState = new PanningState(this);
     this.wallCreationState = new WallCreationState(this);
+    this.wallDrawingState = new WallDrawingState(this);
     this.roomCreationState = new RoomCreationState(this);
+    this.roomDrawingState = new RoomDrawingState(this);
     this.polylineCreationState = new PolylineCreationState(this);
+    this.polylineDrawingState = new PolylineDrawingState(this);
     this.dimensionLineCreationState = new DimensionLineCreationState(this);
+    this.dimensionLineDrawingState = new DimensionLineDrawingState(this);
     this.labelCreationState = new LabelCreationState(this);
     this.state = this.selectionState;
     this.state.enter();
@@ -283,16 +291,32 @@ export class PlanController extends FurnitureController {
     return this.wallCreationState;
   }
 
+  getWallCreationDrawingState(): ControllerState {
+    return this.wallDrawingState;
+  }
+
   public getRoomCreationState(): ControllerState {
     return this.roomCreationState;
+  }
+
+  getRoomCreationDrawingState(): ControllerState {
+    return this.roomDrawingState;
   }
 
   public getPolylineCreationState(): ControllerState {
     return this.polylineCreationState;
   }
 
+  getPolylineCreationDrawingState(): ControllerState {
+    return this.polylineDrawingState;
+  }
+
   public getDimensionLineCreationState(): ControllerState {
     return this.dimensionLineCreationState;
+  }
+
+  getDimensionLineCreationDrawingState(): ControllerState {
+    return this.dimensionLineDrawingState;
   }
 
   public getLabelCreationState(): ControllerState {
@@ -811,8 +835,9 @@ export class PanningState extends AbstractModeChangeState {
 }
 
 // ---------------------------------------------------------------------------
-// Creation states (ported in task 4.7) — minimal placeholders for now
+// Creation states (task 4.7)
 
+/** Wall creation: first click enters the drawing state. */
 export class WallCreationState extends AbstractModeChangeState {
   constructor(controller: PlanController) {
     super(controller);
@@ -826,11 +851,163 @@ export class WallCreationState extends AbstractModeChangeState {
     return true;
   }
 
+  override enter(): void {
+    if (this.controller.isViewCreated()) {
+      this.controller.getView().setCursor(PlanView.CursorType.DRAW);
+    }
+  }
+
+  override pressMouse(x: number, y: number, clickCount: number, shiftDown: boolean, duplicationActivated: boolean): void {
+    // Change state to WallDrawingState
+    this.controller.setState(this.controller.getWallCreationDrawingState());
+    this.controller.getState().pressMouse(x, y, clickCount, shiftDown, duplicationActivated);
+  }
+
   override escape(): void {
     this.controller.setState(this.controller.getSelectionState());
   }
 }
 
+/** Base of wall drawing: creates walls between clicks. */
+export abstract class AbstractWallState extends AbstractModeChangeState {
+  override getMode(): PlanController.Mode {
+    return PlanController.Mode.WALL_CREATION;
+  }
+
+  protected newWall: Wall | null = null;
+  protected lastWall: Wall | null = null;
+  protected xStart = 0;
+  protected yStart = 0;
+  protected wallArcExtent: number | null = null;
+  protected roundWall = false;
+  protected lastWallCreationTime = -1;
+
+  constructor(controller: PlanController) {
+    super(controller);
+  }
+
+  /** Creates a wall and adds it to the home, joining it to existing walls. */
+  protected createWall(xStart: number, yStart: number, xEnd: number, yEnd: number, wallStartAtStart: Wall | null, wallEndAtStart: Wall | null): Wall {
+    const newWall = new Wall(
+      xStart, yStart, xEnd, yEnd,
+      this.controller.preferences.getNewWallThickness(),
+      this.controller.preferences.getNewWallHeight(),
+      this.controller.preferences.getNewWallPattern() as never,
+    );
+    this.controller.home.addWall(newWall);
+    if (wallStartAtStart !== null) {
+      newWall.setWallAtStart(wallStartAtStart);
+      wallStartAtStart.setWallAtStart(newWall);
+    } else if (wallEndAtStart !== null) {
+      newWall.setWallAtStart(wallEndAtStart);
+      wallEndAtStart.setWallAtEnd(newWall);
+    }
+    return newWall;
+  }
+
+  /** Selects an item (used when a wall is completed). */
+  protected selectItem(item: Selectable): void {
+    this.controller.home.setSelectedItems([item]);
+  }
+
+  override deleteSelection(): void {
+    this.endWallCreation();
+  }
+
+  /** Ends the current wall: the next wall starts at this wall's end. */
+  protected endWallCreation(): void {
+    if (this.newWall !== null) {
+      this.lastWall = this.newWall;
+      this.xStart = this.newWall.getXEnd();
+      this.yStart = this.newWall.getYEnd();
+      this.newWall = null;
+      this.wallArcExtent = null;
+    }
+  }
+
+  override escape(): void {
+    // Delete the in-progress wall
+    if (this.newWall !== null) {
+      this.controller.home.deleteWall(this.newWall);
+    }
+    this.newWall = null;
+    this.controller.setState(this.controller.getSelectionState());
+  }
+
+  override exit(): void {
+    this.newWall = null;
+    this.lastWall = null;
+    this.lastWallCreationTime = -1;
+  }
+}
+
+/** Wall drawing: enter computes the start point, clicks create walls. */
+export class WallDrawingState extends AbstractWallState {
+  constructor(controller: PlanController) {
+    super(controller);
+  }
+
+  override getMode(): PlanController.Mode {
+    return PlanController.Mode.WALL_CREATION;
+  }
+
+  override enter(): void {
+    this.xStart = this.controller.getXLastMouseMove();
+    this.yStart = this.controller.getYLastMouseMove();
+  }
+
+  override moveMouse(x: number, y: number): void {
+    if (this.newWall === null) {
+      // Create the wall on first move, joining to any wall end at the start point
+      const wallEndAtStart = this.getWallEndAt(this.xStart, this.yStart);
+      this.newWall = this.createWall(this.xStart, this.yStart, x, y, null, wallEndAtStart);
+    } else {
+      this.newWall.setXEnd(x);
+      this.newWall.setYEnd(y);
+    }
+    if (this.controller.isFeedbackDisplayed()) {
+      this.controller.getView().setAlignmentFeedback(Wall as unknown as { new (): Selectable }, x, y, 0, 0);
+    }
+  }
+
+  /** Returns the wall ending at the given point (approximate). */
+  private getWallEndAt(x: number, y: number): Wall | null {
+    for (const wall of this.controller.home.getWalls()) {
+      if (Math.abs(wall.getXEnd() - x) < 0.5 && Math.abs(wall.getYEnd() - y) < 0.5) {
+        return wall;
+      }
+    }
+    return null;
+  }
+
+  override pressMouse(x: number, y: number, clickCount: number, shiftDown: boolean, duplicationActivated: boolean): void {
+    if (clickCount === 2) {
+      // Double-click finishes the wall creation
+      if (this.newWall !== null && this.newWall.getStartPointToEndPointDistance() > 0) {
+        this.selectItem(this.newWall);
+        this.endWallCreation();
+      } else if (this.newWall !== null) {
+        this.controller.home.deleteWall(this.newWall);
+        this.newWall = null;
+      }
+      // Return to the selection state after a double click
+      this.controller.setState(this.controller.getSelectionState());
+    } else if (this.newWall !== null && this.newWall.getStartPointToEndPointDistance() > 0) {
+      // Complete the current wall and continue from its end
+      this.selectItem(this.newWall);
+      this.endWallCreation();
+      // Create the next wall starting at the current end
+      const wallEndAtStart = this.getWallEndAt(this.xStart, this.yStart);
+      this.newWall = this.createWall(this.xStart, this.yStart, x, y, null, wallEndAtStart);
+    }
+  }
+
+  override releaseMouse(x: number, y: number): void {
+    // Nothing to do on release during drawing
+  }
+}
+
+/** Room creation: first click enters the drawing state. */
 export class RoomCreationState extends AbstractModeChangeState {
   constructor(controller: PlanController) {
     super(controller);
@@ -844,11 +1021,72 @@ export class RoomCreationState extends AbstractModeChangeState {
     return true;
   }
 
+  override enter(): void {
+    if (this.controller.isViewCreated()) {
+      this.controller.getView().setCursor(PlanView.CursorType.DRAW);
+    }
+  }
+
+  override pressMouse(x: number, y: number, clickCount: number, shiftDown: boolean, duplicationActivated: boolean): void {
+    this.controller.setState(this.controller.getRoomCreationDrawingState());
+    this.controller.getState().pressMouse(x, y, clickCount, shiftDown, duplicationActivated);
+  }
+
   override escape(): void {
     this.controller.setState(this.controller.getSelectionState());
   }
 }
 
+/** Room drawing: accumulate points, double-click creates the room. */
+export class RoomDrawingState extends AbstractModeChangeState {
+  private points: number[][] = [];
+
+  constructor(controller: PlanController) {
+    super(controller);
+  }
+
+  override getMode(): PlanController.Mode {
+    return PlanController.Mode.ROOM_CREATION;
+  }
+
+  override isModificationState(): boolean {
+    return true;
+  }
+
+  override pressMouse(x: number, y: number, clickCount: number, shiftDown: boolean, duplicationActivated: boolean): void {
+    if (clickCount === 2) {
+      // Double-click closes the room
+      if (this.points.length >= 3) {
+        const room = new Room("room", this.points);
+        this.controller.home.addRoom(room);
+        this.controller.home.setSelectedItems([room]);
+      }
+      this.points = [];
+      this.controller.setState(this.controller.getSelectionState());
+    } else {
+      this.points.push([x, y]);
+      this.controller.getView().setRectangleFeedback(x, y, x, y);
+    }
+  }
+
+  override moveMouse(x: number, y: number): void {
+    if (this.points.length > 0) {
+      this.controller.getView().setRectangleFeedback(this.points[this.points.length - 1]![0]!, this.points[this.points.length - 1]![1]!, x, y);
+    }
+  }
+
+  override escape(): void {
+    this.points = [];
+    this.controller.setState(this.controller.getSelectionState());
+  }
+
+  override exit(): void {
+    this.points = [];
+    this.controller.getView().deleteFeedback();
+  }
+}
+
+/** Polyline creation: first click enters the drawing state. */
 export class PolylineCreationState extends AbstractModeChangeState {
   constructor(controller: PlanController) {
     super(controller);
@@ -862,11 +1100,61 @@ export class PolylineCreationState extends AbstractModeChangeState {
     return true;
   }
 
+  override pressMouse(x: number, y: number, clickCount: number, shiftDown: boolean, duplicationActivated: boolean): void {
+    this.controller.setState(this.controller.getPolylineCreationDrawingState());
+    this.controller.getState().pressMouse(x, y, clickCount, shiftDown, duplicationActivated);
+  }
+
   override escape(): void {
     this.controller.setState(this.controller.getSelectionState());
   }
 }
 
+/** Polyline drawing: accumulate points, double-click creates the polyline. */
+export class PolylineDrawingState extends AbstractModeChangeState {
+  private points: number[][] = [];
+
+  constructor(controller: PlanController) {
+    super(controller);
+  }
+
+  override getMode(): PlanController.Mode {
+    return PlanController.Mode.POLYLINE_CREATION;
+  }
+
+  override isModificationState(): boolean {
+    return true;
+  }
+
+  override pressMouse(x: number, y: number, clickCount: number, shiftDown: boolean, duplicationActivated: boolean): void {
+    if (clickCount === 2) {
+      if (this.points.length >= 2) {
+        const polyline = new Polyline(
+          "polyline", this.points, this.controller.preferences.getNewWallThickness(),
+          Polyline.CapStyle.SQUARE, Polyline.JoinStyle.MITER, Polyline.DashStyle.SOLID, 0,
+          Polyline.ArrowStyle.NONE, Polyline.ArrowStyle.NONE, false, 0,
+        );
+        this.controller.home.addPolyline(polyline);
+        this.controller.home.setSelectedItems([polyline]);
+      }
+      this.points = [];
+      this.controller.setState(this.controller.getSelectionState());
+    } else {
+      this.points.push([x, y]);
+    }
+  }
+
+  override escape(): void {
+    this.points = [];
+    this.controller.setState(this.controller.getSelectionState());
+  }
+
+  override exit(): void {
+    this.points = [];
+  }
+}
+
+/** Dimension line creation: first click enters the drawing state. */
 export class DimensionLineCreationState extends AbstractModeChangeState {
   constructor(controller: PlanController) {
     super(controller);
@@ -880,11 +1168,65 @@ export class DimensionLineCreationState extends AbstractModeChangeState {
     return true;
   }
 
+  override pressMouse(x: number, y: number, clickCount: number, shiftDown: boolean, duplicationActivated: boolean): void {
+    this.controller.setState(this.controller.getDimensionLineCreationDrawingState());
+    this.controller.getState().pressMouse(x, y, clickCount, shiftDown, duplicationActivated);
+  }
+
   override escape(): void {
     this.controller.setState(this.controller.getSelectionState());
   }
 }
 
+/** Dimension line drawing: two clicks (start, end) create the line. */
+export class DimensionLineDrawingState extends AbstractModeChangeState {
+  private startPoint: number[] | null = null;
+
+  constructor(controller: PlanController) {
+    super(controller);
+  }
+
+  override getMode(): PlanController.Mode {
+    return PlanController.Mode.DIMENSION_LINE_CREATION;
+  }
+
+  override isModificationState(): boolean {
+    return true;
+  }
+
+  override pressMouse(x: number, y: number, clickCount: number, shiftDown: boolean, duplicationActivated: boolean): void {
+    if (this.startPoint === null) {
+      this.startPoint = [x, y];
+    } else {
+      const line = new DimensionLine(
+        this.startPoint[0]!, this.startPoint[1]!, 0, x, y, 0,
+        this.controller.preferences.getNewWallThickness(),
+      );
+      this.controller.home.addDimensionLine(line);
+      this.controller.home.setSelectedItems([line]);
+      this.startPoint = null;
+      this.controller.setState(this.controller.getSelectionState());
+    }
+  }
+
+  override moveMouse(x: number, y: number): void {
+    if (this.startPoint !== null) {
+      this.controller.getView().setRectangleFeedback(this.startPoint[0]!, this.startPoint[1]!, x, y);
+    }
+  }
+
+  override escape(): void {
+    this.startPoint = null;
+    this.controller.setState(this.controller.getSelectionState());
+  }
+
+  override exit(): void {
+    this.startPoint = null;
+    this.controller.getView().deleteFeedback();
+  }
+}
+
+/** Label creation: single click creates a label. */
 export class LabelCreationState extends AbstractModeChangeState {
   constructor(controller: PlanController) {
     super(controller);
@@ -896,6 +1238,13 @@ export class LabelCreationState extends AbstractModeChangeState {
 
   override isModificationState(): boolean {
     return true;
+  }
+
+  override pressMouse(x: number, y: number, clickCount: number, shiftDown: boolean, duplicationActivated: boolean): void {
+    const label = new Label("", x, y);
+    this.controller.home.addLabel(label);
+    this.controller.home.setSelectedItems([label]);
+    // Stay in label creation mode so the user can add several labels
   }
 
   override escape(): void {
