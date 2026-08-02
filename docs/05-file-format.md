@@ -268,6 +268,16 @@ entries lazily (only fetch a model blob when the 3D view needs it).
 - `XMLWriter` escaping rules must match Java (`&`, `<`, `>`, `"`, `'`, and
   non-ASCII as-is in UTF-8).
 
+## 7.5 Group/room float32 accumulation notes
+
+- `HomeFurnitureGroup` bounds: Java truncates the unrotated-bounds center to
+  float32 **before** rotating (`new Point2D.Float((float)cx, (float)cy)`), and
+  rounds every `elevation + heightInPlan` sum (and the final `height -=
+  elevation`) to float32 — see `model/HomeFurnitureGroup.ts` for the f32
+  placement.
+- `Room.getXCenter/getYCenter`: Java computes `(xMin + xMax) / 2` with the
+  **sum** rounded to float32, not `bounds.x + bounds.width / 2`.
+
 ## 8. Parity test matrix (see [12-testing-and-parity.md](12-testing-and-parity.md))
 
 1. **Round-trip identity**: for N fixture homes: `read(write(h)) ≈ h`

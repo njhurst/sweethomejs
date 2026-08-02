@@ -158,14 +158,16 @@ export class HomeFileRecorder {
 
     const contents = tracker.getContentsInOrder();
     if (contents.length > 0) {
+      // Java writes the ContentDigests manifest before the content entries
       const digests = new Map<string, string>();
       for (const { name, content } of contents) {
-        const stream = await content.openStream();
-        const data = await streamToBytes(stream);
-        entries.set(name, data);
+        const data = await streamToBytes(await content.openStream());
         digests.set(name, await sha1Base64(data));
       }
       entries.set("ContentDigests", new TextEncoder().encode(writeContentDigests(digests)));
+      for (const { name, content } of contents) {
+        entries.set(name, await streamToBytes(await content.openStream()));
+      }
     }
 
     return Sh3dContainer.write(entries, options.compressLevel ?? 4);

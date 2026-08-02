@@ -326,13 +326,27 @@ export class Room extends HomeObject implements Selectable {
   }
 
   getXCenter(): number {
-    const bounds = this.getShape().getBounds2D();
-    return f32(bounds.x + bounds.width / 2);
+    // Java: (xMin + xMax) / 2 with float32 rounding on the sum
+    const points = this.getPoints();
+    let xMin = points[0]![0]!;
+    let xMax = points[0]![0]!;
+    for (let i = 1; i < points.length; i++) {
+      xMin = Math.min(xMin, points[i]![0]!);
+      xMax = Math.max(xMax, points[i]![0]!);
+    }
+    return f32(f32(xMin + xMax) / 2);
   }
 
   getYCenter(): number {
-    const bounds = this.getShape().getBounds2D();
-    return f32(bounds.y + bounds.height / 2);
+    // Java: (yMin + yMax) / 2 with float32 rounding on the sum
+    const points = this.getPoints();
+    let yMin = points[0]![1]!;
+    let yMax = points[0]![1]!;
+    for (let i = 1; i < points.length; i++) {
+      yMin = Math.min(yMin, points[i]![1]!);
+      yMax = Math.max(yMax, points[i]![1]!);
+    }
+    return f32(f32(yMin + yMax) / 2);
   }
 
   isFloorVisible(): boolean {

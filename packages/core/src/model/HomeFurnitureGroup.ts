@@ -181,13 +181,15 @@ export class HomeFurnitureGroup extends HomePieceOfFurniture {
     let height = 0;
     let dropOnTopElevation = -1;
     for (const piece of furniture) {
-      height = Math.max(height, piece.getElevation() + piece.getHeightInPlan());
+      // Java float arithmetic: each sum rounds to float32 before max()
+      height = Math.max(height, f32(piece.getElevation() + piece.getHeightInPlan()));
       if (piece.getDropOnTopElevation() >= 0) {
-        dropOnTopElevation = Math.max(dropOnTopElevation, piece.getElevation() + piece.getHeightInPlan() * piece.getDropOnTopElevation());
+        dropOnTopElevation = Math.max(dropOnTopElevation,
+            f32(piece.getElevation() + f32(piece.getHeightInPlan() * piece.getDropOnTopElevation())));
       }
     }
-    height -= elevation;
-    dropOnTopElevation -= elevation;
+    height = f32(height - elevation);
+    dropOnTopElevation = f32(dropOnTopElevation - elevation);
 
     const { width, depth, centerX, centerY } = computeGroupBounds(furniture, angle);
     this.fixedWidth = width;
@@ -455,12 +457,15 @@ function computeGroupBounds(furniture: HomePieceOfFurniture[], angle: number): {
   if (unrotatedBoundingRectangle === null) {
     return { width: 0, depth: 0, centerX: 0, centerY: 0 };
   }
-  const center = new Point2D(unrotatedBoundingRectangle.getCenterX(), unrotatedBoundingRectangle.getCenterY());
+  // Java: new Point2D.Float((float)getCenterX(), (float)getCenterY()) — the
+  // center is truncated to float32 BEFORE the rotation (float32 accumulation
+  // order matters for group-bounds parity)
+  const center = new Point2D(f32(unrotatedBoundingRectangle.getCenterX()), f32(unrotatedBoundingRectangle.getCenterY()));
   const rotatedCenter = AffineTransform.getRotateInstance(angle).transformPoint(center.x, center.y);
   return {
     width: unrotatedBoundingRectangle.getWidth(),
     depth: unrotatedBoundingRectangle.getHeight(),
-    centerX: rotatedCenter.x,
-    centerY: rotatedCenter.y,
+    centerX: f32(rotatedCenter.x),
+    centerY: f32(rotatedCenter.y),
   };
 }
