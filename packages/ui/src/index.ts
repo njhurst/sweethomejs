@@ -14,3 +14,7 @@ export { FurnitureCatalogPanel, filterCatalog } from "./catalog/FurnitureCatalog
 export type { CatalogSearchResult } from "./catalog/FurnitureCatalogPanel.js";
 export { FurnitureTable, sortFurniture, FURNITURE_COLUMNS } from "./catalog/FurnitureTable.js";
 export type { FurnitureColumn } from "./catalog/FurnitureTable.js";
+export { FurniturePropertiesPanel } from "./properties/FurniturePropertiesPanel.js";
+export type { FurniturePropertiesPanelProps } from "./properties/FurniturePropertiesPanel.js";
+export { WallDialog, RoomDialog } from "./properties/ControllerDialogs.js";
+export type { WallDialogProps, RoomDialogProps } from "./properties/ControllerDialogs.js";

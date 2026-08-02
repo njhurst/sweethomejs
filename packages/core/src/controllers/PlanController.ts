@@ -663,14 +663,18 @@ export class SelectionState extends AbstractModeChangeState {
     const numberValue = typeof value === "number" ? value : 0;
     switch (editableProperty) {
       case PlanController.EditableProperty.X: {
-        const dx = numberValue - selectedItems[0]!.getPoints()[0]![0]!;
+        const lead = selectedItems[0]!;
+        const referenceX = lead instanceof HomePieceOfFurniture ? lead.getX() : lead.getPoints()[0]![0]!;
+        const dx = numberValue - referenceX;
         for (const item of selectedItems) {
           item.move(dx, 0);
         }
         break;
       }
       case PlanController.EditableProperty.Y: {
-        const dy = numberValue - selectedItems[0]!.getPoints()[0]![1]!;
+        const lead = selectedItems[0]!;
+        const referenceY = lead instanceof HomePieceOfFurniture ? lead.getY() : lead.getPoints()[0]![1]!;
+        const dy = numberValue - referenceY;
         for (const item of selectedItems) {
           item.move(0, dy);
         }
