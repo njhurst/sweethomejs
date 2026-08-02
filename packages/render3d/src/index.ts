@@ -15,3 +15,4 @@ export { ModelManager, detectModelFormat, computeModelBounds, normalizeModel } f
 export type { LoadedModel, ModelSource, ModelLoader, ModelLoaderFactory } from "./ModelManager.js";
 export { TopViewIconRenderer } from "./TopViewIconRenderer.js";
 export type { TopViewIconRendererOptions } from "./TopViewIconRenderer.js";
+export { InstancedFurniture } from "./InstancedFurniture.js";
