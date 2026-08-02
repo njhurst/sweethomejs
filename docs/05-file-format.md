@@ -251,6 +251,16 @@ entries lazily (only fetch a model blob when the 3D view needs it).
   `io/CatalogReader.ts` (`readFurnitureCatalog` / `readTexturesCatalog` +
   locale-aware bundle loading).
 
+## 6.5 HomeFileRecorder TS facade
+
+- `io/HomeFileRecorder.ts` provides the top-level API: `readHomeFromZip`
+  (prefers `Home.xml`, falls back to the serialized `Home` entry, throws
+  `DamagedHomeRecorderException` when neither is present), `readHomeFromXml`,
+  `readHomeFromSerialized`, `writeHome` (XML-only v1: `Home.xml` +
+  `ContentDigests` + content entries; entry names assigned lazily in the XML
+  exporter's traversal order via a name resolver so references always match),
+  and `readCatalogFromZip`/`readTexturesCatalogFromZip` (.sh3f/.sh3t).
+
 ## 7. Export formats reused for import
 
 - `ObjectXMLExporter` also writes individual furniture as XML (copy/paste and

@@ -62,12 +62,18 @@ function matrixToString(matrix: number[][]): string {
 
 export class HomeXMLExporter {
   private savedContentNames = new Map<Content, string>();
+  private savedContentNameResolver: ((content: Content) => string | null) | null = null;
   private levelIds = new Map<Level, string>();
   private wallIds = new Map<Wall, string>();
 
   /** Assigns zip entry names to contents (order matters for byte parity). */
   setSavedContentNames(savedContentNames: Map<Content, string>): void {
     this.savedContentNames = savedContentNames;
+  }
+
+  /** Lazily assigns entry names during traversal (used by HomeFileRecorder). */
+  setSavedContentNameResolver(resolver: (content: Content) => string | null): void {
+    this.savedContentNameResolver = resolver;
   }
 
   getId(object: object): string | null {
@@ -87,6 +93,12 @@ export class HomeXMLExporter {
     const contentName = this.savedContentNames.get(content);
     if (contentName !== undefined) {
       return contentName;
+    }
+    if (this.savedContentNameResolver !== null) {
+      const resolved = this.savedContentNameResolver(content);
+      if (resolved !== null) {
+        return resolved;
+      }
     }
     return content.getURL();
   }
