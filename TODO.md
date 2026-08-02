@@ -94,7 +94,7 @@
 
 ## P4 — 2D plan view
 
-[ ] 5  P4 2D plan view: PlanComponent → Canvas2D/SVG (06-2d-plan-view.md)
+[x] 5  P4 2D plan view: PlanComponent → Canvas2D/SVG (06-2d-plan-view.md)
 [x] 5.1  PlanPainter interface + Canvas2D implementation + SVG implementation
 [x] 5.2  Viewport/transform module: scale, pan, zoom-at-point, HiDPI (devicePixelRatio), plan bounds + margin
 [x] 5.3  Paint-order pipeline: background, grid, rulers, levels, rooms, walls, dims/labels/polylines, furniture, compass, scale bar
@@ -102,7 +102,7 @@
 [x] 5.5  Input translation: Pointer/Keyboard events → PlanController; custom painted cursor; magnetism feedback
 [x] 5.6  Tool feedback: length/angle tooltips, editable-property fields (hidden input overlay), selection grips/alignment/duplication
 [x] 5.7  Golden plan image tests vs Java PNGs (vector-exact, text-tolerance; KNOWN_DIFFS.md registry)
-[@ pi-ltkr51] 5.8  SVG export of the plan via PlanPainter (compare to examples/ls_2819.svg)
+[x] 5.8  SVG export of the plan via PlanPainter (compare to examples/ls_2819.svg)
 
 ## P5 — 3D view
 
