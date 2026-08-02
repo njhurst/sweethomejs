@@ -10,3 +10,7 @@ export { View3DCanvas } from "./view3d/View3DCanvas.js";
 export { WebViewFactory, ElementView } from "./WebViewFactory.js";
 export type { WebViewFactoryOptions } from "./WebViewFactory.js";
 export { HomeViewAdapter } from "./HomeViewAdapter.js";
+export { FurnitureCatalogPanel, filterCatalog } from "./catalog/FurnitureCatalogPanel.js";
+export type { CatalogSearchResult } from "./catalog/FurnitureCatalogPanel.js";
+export { FurnitureTable, sortFurniture, FURNITURE_COLUMNS } from "./catalog/FurnitureTable.js";
+export type { FurnitureColumn } from "./catalog/FurnitureTable.js";

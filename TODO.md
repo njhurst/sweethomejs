@@ -119,8 +119,8 @@
 ## P6 — UI shell & dialogs
 
 [ ] 7  P6 UI shell: React HomePane + dialogs (02/10 docs)
-[@ pi-ltkr51] 7.1  React shell: menus, toolbars, split panes, status bar, dockable 3D view, theme
-[ ] 7.2  Furniture catalog panel (tree, search, drag&drop to plan) + FurnitureTable (virtualized, sortable)
+[x] 7.1  React shell: menus, toolbars, split panes, status bar, dockable 3D view, theme
+[@ pi-ltkr51] 7.2  Furniture catalog panel (tree, search, drag&drop to plan) + FurnitureTable (virtualized, sortable)
 [ ] 7.3  Furniture properties panel + furniture/room/wall dialogs as React components bound to controllers
 [ ] 7.4  Wizards UI: import furniture/texture, background image, model materials, baseboard choice
 [ ] 7.5  i18n pipeline: .properties → JSON build step + Messages runtime with locale fallback chain; top-8 locales first
