@@ -34,7 +34,7 @@ function colorToHex(color: Color): string {
 
 function colorToRgba(color: Color, alpha: number): string {
   // 0xRRGGBB has no alpha byte (alpha = 255); 0xAARRGGBB carries it in the top byte
-  const hasAlphaByte = color > 0xffffff;
+  const hasAlphaByte = (color >>> 0) > 0xffffff;
   const a = hasAlphaByte ? (color >>> 24) & 0xff : 255;
   const r = (color >>> 16) & 0xff;
   const g = (color >>> 8) & 0xff;
@@ -242,11 +242,28 @@ export class SVGPainter implements PlanPainter {
   }
 
   drawRect(x: number, y: number, w: number, h: number): void {
-    this.emit("rect", { x: String(x), y: String(y), width: String(w), height: String(h), fill: "none", stroke: colorToRgba(this.currentStroke.color ?? this.currentColor, this.currentAlpha), "stroke-width": String(this.currentStroke.width) });
+    const attributes: Record<string, string> = {
+      x: String(x), y: String(y), width: String(w), height: String(h),
+      fill: "none",
+      stroke: colorToRgba(this.currentStroke.color ?? this.currentColor, this.currentAlpha),
+      "stroke-width": String(this.currentStroke.width),
+    };
+    if (this.currentStroke.dash.length > 0) {
+      attributes["stroke-dasharray"] = this.currentStroke.dash.join(",");
+    }
+    this.emit("rect", attributes);
   }
 
   drawLine(x1: number, y1: number, x2: number, y2: number): void {
-    this.emit("line", { x1: String(x1), y1: String(y1), x2: String(x2), y2: String(y2), stroke: colorToRgba(this.currentStroke.color ?? this.currentColor, this.currentAlpha), "stroke-width": String(this.currentStroke.width) });
+    const attributes: Record<string, string> = {
+      x1: String(x1), y1: String(y1), x2: String(x2), y2: String(y2),
+      stroke: colorToRgba(this.currentStroke.color ?? this.currentColor, this.currentAlpha),
+      "stroke-width": String(this.currentStroke.width),
+    };
+    if (this.currentStroke.dash.length > 0) {
+      attributes["stroke-dasharray"] = this.currentStroke.dash.join(",");
+    }
+    this.emit("line", attributes);
   }
 
   fillOval(x: number, y: number, w: number, h: number): void {

@@ -29,7 +29,7 @@ const clampAlpha = (a: number): number => Math.max(0, Math.min(1, a));
 
 function colorToCss(color: Color, alpha: number): string {
   // 0xRRGGBB has no alpha byte (alpha = 255); 0xAARRGGBB carries it in the top byte
-  const hasAlphaByte = color > 0xffffff;
+  const hasAlphaByte = (color >>> 0) > 0xffffff;
   const a = hasAlphaByte ? (color >>> 24) & 0xff : 255;
   const r = (color >>> 16) & 0xff;
   const g = (color >>> 8) & 0xff;

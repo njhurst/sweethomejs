@@ -99,8 +99,8 @@
 [x] 5.2  Viewport/transform module: scale, pan, zoom-at-point, HiDPI (devicePixelRatio), plan bounds + margin
 [x] 5.3  Paint-order pipeline: background, grid, rulers, levels, rooms, walls, dims/labels/polylines, furniture, compass, scale bar
 [x] 5.4  Furniture top-view icons: offscreen 3D render cache by model digest + placeholder fallback (mirror PieceOfFurnitureTopViewIcon)
-[@ pi-ltkr51] 5.5  Input translation: Pointer/Keyboard events → PlanController; custom painted cursor; magnetism feedback
-[ ] 5.6  Tool feedback: length/angle tooltips, editable-property fields (hidden input overlay), selection grips/alignment/duplication
+[x] 5.5  Input translation: Pointer/Keyboard events → PlanController; custom painted cursor; magnetism feedback
+[@ pi-ltkr51] 5.6  Tool feedback: length/angle tooltips, editable-property fields (hidden input overlay), selection grips/alignment/duplication
 [ ] 5.7  Golden plan image tests vs Java PNGs (vector-exact, text-tolerance; KNOWN_DIFFS.md registry)
 [ ] 5.8  SVG export of the plan via PlanPainter (compare to examples/ls_2819.svg)
 
