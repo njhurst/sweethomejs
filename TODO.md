@@ -123,8 +123,8 @@
 [x] 7.2  Furniture catalog panel (tree, search, drag&drop to plan) + FurnitureTable (virtualized, sortable)
 [x] 7.3  Furniture properties panel + furniture/room/wall dialogs as React components bound to controllers
 [x] 7.4  Wizards UI: import furniture/texture, background image, model materials, baseboard choice
-[@ pi-ltkr51] 7.5  i18n pipeline: .properties → JSON build step + Messages runtime with locale fallback chain; top-8 locales first
-[ ] 7.6  Help: ship existing HTML help as static assets + in-app display; wire HELP actions
+[x] 7.5  i18n pipeline: .properties → JSON build step + Messages runtime with locale fallback chain; top-8 locales first
+[@ pi-ltkr51] 7.6  Help: ship existing HTML help as static assets + in-app display; wire HELP actions
 [ ] 7.7  File I/O: ContentManager web impl (File System Access + download fallback + drag&drop + URL param)
 [ ] 7.8  Persistence: IndexedDB schema (preferences/documents/content/recovery), PreferencesStore, autosave + recovery dialog
 [ ] 7.9  HomeStore interface + IndexedDB implementation (local documents; cloud later)

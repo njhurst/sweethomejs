@@ -21,3 +21,5 @@ export type { WallDialogProps, RoomDialogProps } from "./properties/ControllerDi
 export { FurnitureWizard, TextureWizard, BackgroundImageWizard, ModelMaterialsView, BaseboardChoiceView } from "./wizards/Wizards.js";
 export type { FurnitureWizardProps, TextureWizardProps, BackgroundImageWizardProps, ModelMaterialsViewProps, BaseboardChoiceViewProps } from "./wizards/Wizards.js";
 export { getLocalizedString, setLocale, initMessages, guessBrowserLocale, SUPPORTED_LOCALES, getLocale } from "./i18n/Messages.js";
+export { HelpPane, HELP_PAGES } from "./help/HelpPane.js";
+export type { HelpPaneProps } from "./help/HelpPane.js";
