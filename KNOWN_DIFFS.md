@@ -44,3 +44,16 @@ parity (SSIM/LPIPS) is the target, not pixel equality (docs/09-photo-video-print
 
 **Status: pending (phase P4).** Plan text uses Canvas text metrics vs Java2D
 font metrics; golden plan tests mask text regions (docs/12-testing-and-parity.md §3.4).
+
+## Golden plan image (task 5.7)
+
+- Our pipeline renders the ls_2819 plan with a **~19% pixel-diff ratio** vs the
+  Java golden PNG (tolerance 35%). The delta is expected:
+  - furniture top-view icons render as placeholders (3D icon rendering lands
+    with render3d, P5);
+  - text metrics differ (system fonts vs canvas/sans-serif);
+  - the FreeHEP SVG export uses a different origin/margin mapping than our
+    viewport (our preferred size is 752×666 vs the golden 1052×1253).
+- Wall/room geometry is **vector-exact** (both sides derive from the same
+  model points); the vector-geometry check asserts every wall produces a
+  fill + outline path.
