@@ -25,3 +25,7 @@ export { HelpPane, HELP_PAGES } from "./help/HelpPane.js";
 export type { HelpPaneProps } from "./help/HelpPane.js";
 export { WebContent, readContentBytes } from "./io/WebContent.js";
 export { WebContentManager } from "./io/WebContentManager.js";
+export { IndexedDBStore, DB_NAME, DB_VERSION } from "./persistence/IndexedDBStore.js";
+export type { DocumentRecord, RecoveryRecord, StoreName } from "./persistence/IndexedDBStore.js";
+export { PreferencesStore, HomeDocumentStore, Autosaver, snapshotPreferences } from "./persistence/Persistence.js";
+export type { PreferencesSnapshot, AutosaverOptions } from "./persistence/Persistence.js";
