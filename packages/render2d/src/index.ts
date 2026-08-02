@@ -3,4 +3,5 @@
  */
 export type { Color, PaintStyle, StrokeStyle, FontStyle, PlanPainter } from "./PlanPainter.js";
 export { Canvas2DPainter } from "./Canvas2DPainter.js";
+export { PlanViewport } from "./PlanViewport.js";
 export { SVGPainter } from "./SVGPainter.js";
