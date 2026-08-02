@@ -47,6 +47,7 @@ interface SvgElement {
   tag: string;
   attributes: Record<string, string>;
   children: SvgElement[];
+  textContent?: string;
 }
 
 function el(tag: string, attributes: Record<string, string> = {}, children: SvgElement[] = []): SvgElement {
@@ -77,7 +78,7 @@ export class SVGPainter implements PlanPainter {
   private currentPath = "";
   private currentColor: Color = 0x000000;
   private currentAlpha = 1;
-  private currentStroke: { width: number; dash: number[]; color: Color } = { width: 1, dash: [], color: 0x000000 };
+  private currentStroke: { width: number; dash: number[]; color: Color | null } = { width: 1, dash: [], color: null };
   private currentFont: FontStyle | null = null;
   private currentPaintTexture: { image: unknown; bounds: [number, number, number, number] } | null = null;
 
@@ -120,7 +121,7 @@ export class SVGPainter implements PlanPainter {
   }
 
   setStroke(width: number, dash?: number[]): void {
-    this.currentStroke = { width, dash: dash ?? [], color: this.currentColor };
+    this.currentStroke = { width, dash: dash ?? [], color: null };
   }
 
   setStrokeStyle(style: StrokeStyle): void {
@@ -196,7 +197,7 @@ export class SVGPainter implements PlanPainter {
     const attributes: Record<string, string> = {
       d: this.currentPath.trim(),
       fill: "none",
-      stroke: colorToRgba(this.currentStroke.color, this.currentAlpha),
+      stroke: colorToRgba(this.currentStroke.color ?? this.currentColor, this.currentAlpha),
       "stroke-width": String(this.currentStroke.width),
     };
     if (this.currentStroke.dash.length > 0) {
@@ -241,11 +242,11 @@ export class SVGPainter implements PlanPainter {
   }
 
   drawRect(x: number, y: number, w: number, h: number): void {
-    this.emit("rect", { x: String(x), y: String(y), width: String(w), height: String(h), fill: "none", stroke: colorToRgba(this.currentStroke.color, this.currentAlpha), "stroke-width": String(this.currentStroke.width) });
+    this.emit("rect", { x: String(x), y: String(y), width: String(w), height: String(h), fill: "none", stroke: colorToRgba(this.currentStroke.color ?? this.currentColor, this.currentAlpha), "stroke-width": String(this.currentStroke.width) });
   }
 
   drawLine(x1: number, y1: number, x2: number, y2: number): void {
-    this.emit("line", { x1: String(x1), y1: String(y1), x2: String(x2), y2: String(y2), stroke: colorToRgba(this.currentStroke.color, this.currentAlpha), "stroke-width": String(this.currentStroke.width) });
+    this.emit("line", { x1: String(x1), y1: String(y1), x2: String(x2), y2: String(y2), stroke: colorToRgba(this.currentStroke.color ?? this.currentColor, this.currentAlpha), "stroke-width": String(this.currentStroke.width) });
   }
 
   fillOval(x: number, y: number, w: number, h: number): void {
@@ -253,13 +254,13 @@ export class SVGPainter implements PlanPainter {
   }
 
   drawOval(x: number, y: number, w: number, h: number): void {
-    this.emit("ellipse", { cx: String(x + w / 2), cy: String(y + h / 2), rx: String(w / 2), ry: String(h / 2), fill: "none", stroke: colorToRgba(this.currentStroke.color, this.currentAlpha), "stroke-width": String(this.currentStroke.width) });
+    this.emit("ellipse", { cx: String(x + w / 2), cy: String(y + h / 2), rx: String(w / 2), ry: String(h / 2), fill: "none", stroke: colorToRgba(this.currentStroke.color ?? this.currentColor, this.currentAlpha), "stroke-width": String(this.currentStroke.width) });
   }
 
   drawArc(x: number, y: number, w: number, h: number, startAngle: number, arcExtent: number): void {
     // SVG arcs: (x1,y1) → (x2,y2) with rx/ry; approximate with a path
     const d = arcPathData(x, y, w, h, startAngle, arcExtent);
-    this.emit("path", { d, fill: "none", stroke: colorToRgba(this.currentStroke.color, this.currentAlpha), "stroke-width": String(this.currentStroke.width) });
+    this.emit("path", { d, fill: "none", stroke: colorToRgba(this.currentStroke.color ?? this.currentColor, this.currentAlpha), "stroke-width": String(this.currentStroke.width) });
   }
 
   fillArc(x: number, y: number, w: number, h: number, startAngle: number, arcExtent: number): void {
@@ -282,7 +283,7 @@ export class SVGPainter implements PlanPainter {
       attributes["font-weight"] = weight;
       attributes["font-style"] = style;
     }
-    this.elements.push(el("text", attributes, [{ tag: "#text", attributes: {}, children: [] }]));
+    this.elements.push({ tag: "text", attributes, children: [{ tag: "#text", attributes: {}, children: [], textContent: text }] });
   }
 
   // ------------------------------------------------------------- images
@@ -347,14 +348,15 @@ function arcPathData(x: number, y: number, w: number, h: number, startAngle: num
 
 function serializeNode(node: SvgElement): string {
   if (node.tag === "#text") {
-    return "";
+    return node.textContent !== undefined ? escapeXml(node.textContent) : "";
   }
   const attrs = Object.entries(node.attributes)
     .map(([k, v]) => `${k}='${escapeXml(v)}'`)
     .join(" ");
-  if (node.children.length === 0) {
+  if (node.children.length === 0 && node.textContent === undefined) {
     return `<${node.tag}${attrs ? " " + attrs : ""}/>`;
   }
   const inner = node.children.map((child) => serializeNode(child)).join("");
-  return `<${node.tag}${attrs ? " " + attrs : ""}>${inner}</${node.tag}>`;
+  const content = node.textContent !== undefined ? escapeXml(node.textContent) : "";
+  return `<${node.tag}${attrs ? " " + attrs : ""}>${inner}${content}</${node.tag}>`;
 }

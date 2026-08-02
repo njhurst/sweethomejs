@@ -96,8 +96,8 @@
 
 [ ] 5  P4 2D plan view: PlanComponent → Canvas2D/SVG (06-2d-plan-view.md)
 [x] 5.1  PlanPainter interface + Canvas2D implementation + SVG implementation
-[@ pi-ltkr51] 5.2  Viewport/transform module: scale, pan, zoom-at-point, HiDPI (devicePixelRatio), plan bounds + margin
-[ ] 5.3  Paint-order pipeline: background, grid, rulers, levels, rooms, walls, dims/labels/polylines, furniture, compass, scale bar
+[x] 5.2  Viewport/transform module: scale, pan, zoom-at-point, HiDPI (devicePixelRatio), plan bounds + margin
+[@ pi-ltkr51] 5.3  Paint-order pipeline: background, grid, rulers, levels, rooms, walls, dims/labels/polylines, furniture, compass, scale bar
 [ ] 5.4  Furniture top-view icons: offscreen 3D render cache by model digest + placeholder fallback (mirror PieceOfFurnitureTopViewIcon)
 [ ] 5.5  Input translation: Pointer/Keyboard events → PlanController; custom painted cursor; magnetism feedback
 [ ] 5.6  Tool feedback: length/angle tooltips, editable-property fields (hidden input overlay), selection grips/alignment/duplication
