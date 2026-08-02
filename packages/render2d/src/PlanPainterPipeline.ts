@@ -34,6 +34,7 @@ import { Label } from "@sweethomejs/core";
 import { Compass } from "@sweethomejs/core";
 import { HomePieceOfFurniture } from "@sweethomejs/core";
 import type { UserPreferences } from "@sweethomejs/core";
+import { FurnitureIconCache, paintFurniturePlanIcon } from "./FurnitureIconCache.js";
 
 /** Plan color scheme (desktop-app defaults). */
 export interface PlanColors {
@@ -90,9 +91,22 @@ export interface PlanPaintOptions {
 
 export class PlanPainterPipeline {
   private readonly colors: PlanColors;
+  private readonly iconCache: FurnitureIconCache;
+  private iconReadyCallback: (() => void) | null = null;
 
-  constructor(colors: PlanColors = DEFAULT_PLAN_COLORS) {
+  constructor(colors: PlanColors = DEFAULT_PLAN_COLORS, iconCache: FurnitureIconCache | null = null) {
     this.colors = colors;
+    this.iconCache = iconCache ?? new FurnitureIconCache();
+  }
+
+  /** The icon cache used for furniture plan icons. */
+  getIconCache(): FurnitureIconCache {
+    return this.iconCache;
+  }
+
+  /** Called when an async icon render completes (the plan should repaint). */
+  setIconReadyCallback(callback: (() => void) | null): void {
+    this.iconReadyCallback = callback;
   }
 
   /** Paints the home content for the selected level. */
@@ -266,11 +280,7 @@ export class PlanPainterPipeline {
       if (points.length === 0) {
         continue;
       }
-      // Placeholder: outlined rectangle (the 3D-icon path is task 5.4)
-      const color = piece.getColor() ?? this.colors.furnitureOutline;
-      painter.setColor(color);
-      drawPolygon(painter, points);
-      painter.strokePath();
+      paintFurniturePlanIcon(painter, piece, this.colors, this.iconCache, () => this.iconReadyCallback?.());
       void preferences;
     }
     painter.restore();

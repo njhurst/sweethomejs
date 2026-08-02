@@ -137,7 +137,7 @@ describe("PlanPainterPipeline (task 5.3)", () => {
     const painter = new SVGPainter();
     new PlanPainterPipeline().paint(painter, home, new UserPreferences(), null);
     const svg = painter.toString();
-    // Both pieces painted
-    expect((svg.match(/<path /g) ?? []).length).toBeGreaterThanOrEqual(2);
+    // Both pieces painted as placeholder rectangles
+    expect((svg.match(/<rect /g) ?? []).length).toBeGreaterThanOrEqual(2);
   });
 });
