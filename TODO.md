@@ -81,7 +81,7 @@
 
 ## P3 — Controllers
 
-[ ] 4  P3 Controllers: port viewcontroller package (03/04 porting strategy)
+[x] 4  P3 Controllers: port viewcontroller package (03/04 porting strategy)
 [x] 4.1  Port View/ViewFactory/Controller/ContentManager interfaces + UndoSupport + LocalizedUndoableEdit
 [x] 4.2  Port FurnitureController + HomeController (master controller, actions, menus)
 [x] 4.3  Port HomeController3D + Object3DFactory seam + UserPreferencesController
