@@ -23,3 +23,5 @@ export type { FurnitureWizardProps, TextureWizardProps, BackgroundImageWizardPro
 export { getLocalizedString, setLocale, initMessages, guessBrowserLocale, SUPPORTED_LOCALES, getLocale } from "./i18n/Messages.js";
 export { HelpPane, HELP_PAGES } from "./help/HelpPane.js";
 export type { HelpPaneProps } from "./help/HelpPane.js";
+export { WebContent, readContentBytes } from "./io/WebContent.js";
+export { WebContentManager } from "./io/WebContentManager.js";
