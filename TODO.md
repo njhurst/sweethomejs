@@ -88,8 +88,8 @@
 [x] 4.4  Port dialog controllers: Wall, Room, Polyline, DimensionLine, Label, Compass, Level, Home3DAttributes, ObserverCamera
 [x] 4.5  Port wizards: ImportedFurniture, ImportedTexture, BackgroundImage + ModelMaterials + BaseboardChoice + PageSetup + PrintPreview
 [x] 4.6  Port PlanController: Mode/EditableProperty enums, SelectionState + selection/transform tools
-[@ pi-ltkr51] 4.7  Port PlanController: WallCreation, RoomCreation, PolylineCreation, DimensionLineCreation, LabelCreation states + tool feedback
-[ ] 4.8  Port PlanController: pan/zoom, magnetism, editable-property numeric entry, keyboard nudge, actions
+[x] 4.7  Port PlanController: WallCreation, RoomCreation, PolylineCreation, DimensionLineCreation, LabelCreation states + tool feedback
+[@ pi-ltkr51] 4.8  Port PlanController: pan/zoom, magnetism, editable-property numeric entry, keyboard nudge, actions
 [ ] 4.9  Port upstream controller tests (PlanControllerTest, PlanComponentTest, PlanComponentWithFurnitureTest, HomeControllerTest) with mock view
 
 ## P4 — 2D plan view

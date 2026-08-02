@@ -69,6 +69,7 @@ export class PlanController extends FurnitureController {
   private lastMouseMoveX = 0;
   private lastMouseMoveY = 0;
   private pointerTypeLastMousePress: View.PointerType | null = null;
+  private magnetismToggledLastMousePress = false;
   private scale = 1;
 
   // States
@@ -210,6 +211,7 @@ export class PlanController extends FurnitureController {
     this.lastMousePressX = x;
     this.lastMousePressY = y;
     this.pointerTypeLastMousePress = pointerType;
+    this.magnetismToggledLastMousePress = magnetismToggled;
     this.state.pressMouse(x, y, clickCount, shiftDown, duplicationActivated);
   }
 
@@ -265,6 +267,10 @@ export class PlanController extends FurnitureController {
 
   getPointerTypeLastMousePress(): View.PointerType | null {
     return this.pointerTypeLastMousePress;
+  }
+
+  wasMagnetismToggledLastMousePress(): boolean {
+    return this.magnetismToggledLastMousePress;
   }
 
   getPreviousState(): ControllerState | null {
@@ -543,6 +549,11 @@ export abstract class AbstractModeChangeState extends ControllerState {
   override deleteSelection(): void {
     this.controller.deleteSelection();
   }
+
+  override zoom(factor: number): void {
+    const view = this.controller.getView();
+    view.setScale(view.getScale() * factor);
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -630,6 +641,100 @@ export class SelectionState extends AbstractModeChangeState {
     this.controller.getView().setCursor(
       clickedItem !== null ? PlanView.CursorType.SELECTION : PlanView.CursorType.SELECTION,
     );
+  }
+
+  override updateEditableProperty(editableProperty: PlanController.EditableProperty, value: unknown): void {
+    const selectedItems = this.controller.home.getSelectedItems();
+    if (selectedItems.length === 0) {
+      return;
+    }
+    const numberValue = typeof value === "number" ? value : 0;
+    switch (editableProperty) {
+      case PlanController.EditableProperty.X: {
+        const dx = numberValue - selectedItems[0]!.getPoints()[0]![0]!;
+        for (const item of selectedItems) {
+          item.move(dx, 0);
+        }
+        break;
+      }
+      case PlanController.EditableProperty.Y: {
+        const dy = numberValue - selectedItems[0]!.getPoints()[0]![1]!;
+        for (const item of selectedItems) {
+          item.move(0, dy);
+        }
+        break;
+      }
+      case PlanController.EditableProperty.LENGTH: {
+        const walls = this.controller.home.getWalls();
+        for (const wall of walls) {
+          if (selectedItems.includes(wall)) {
+            const dx = wall.getXEnd() - wall.getXStart();
+            const dy = wall.getYEnd() - wall.getYStart();
+            const length = Math.max(0.001, numberValue);
+            const angle = Math.atan2(dy, dx);
+            wall.setXEnd(wall.getXStart() + length * Math.cos(angle));
+            wall.setYEnd(wall.getYStart() + length * Math.sin(angle));
+          }
+        }
+        break;
+      }
+      case PlanController.EditableProperty.DIAGONAL: {
+        for (const item of selectedItems) {
+          if (item instanceof HomePieceOfFurniture) {
+            const width = item.getWidth();
+            const depth = item.getDepth();
+            const diagonal = Math.max(0.001, numberValue);
+            const factor = diagonal / Math.sqrt(width * width + depth * depth);
+            item.setWidth(width * factor);
+            item.setDepth(depth * factor);
+          }
+        }
+        break;
+      }
+      case PlanController.EditableProperty.ANGLE: {
+        for (const item of selectedItems) {
+          if (item instanceof HomePieceOfFurniture) {
+            item.setAngle((numberValue * Math.PI) / 180);
+          } else if (item instanceof Wall) {
+            const centerX = (item.getXStart() + item.getXEnd()) / 2;
+            const centerY = (item.getYStart() + item.getYEnd()) / 2;
+            const dx = item.getXEnd() - item.getXStart();
+            const dy = item.getYEnd() - item.getYStart();
+            const length = Math.sqrt(dx * dx + dy * dy);
+            const angle = (numberValue * Math.PI) / 180;
+            item.setXEnd(centerX + (length / 2) * Math.cos(angle));
+            item.setYEnd(centerY + (length / 2) * Math.sin(angle));
+            item.setXStart(centerX - (length / 2) * Math.cos(angle));
+            item.setYStart(centerY - (length / 2) * Math.sin(angle));
+          }
+        }
+        break;
+      }
+      case PlanController.EditableProperty.THICKNESS: {
+        for (const wall of this.controller.home.getWalls()) {
+          if (selectedItems.includes(wall)) {
+            wall.setThickness(numberValue);
+          }
+        }
+        break;
+      }
+      case PlanController.EditableProperty.OFFSET: {
+        for (const line of this.controller.home.getDimensionLines()) {
+          if (selectedItems.includes(line)) {
+            line.setOffset(numberValue);
+          }
+        }
+        break;
+      }
+      case PlanController.EditableProperty.ARC_EXTENT: {
+        for (const wall of this.controller.home.getWalls()) {
+          if (selectedItems.includes(wall)) {
+            wall.setArcExtent((numberValue * Math.PI) / 180);
+          }
+        }
+        break;
+      }
+    }
   }
 }
 

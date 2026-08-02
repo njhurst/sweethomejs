@@ -293,6 +293,32 @@ describe("PlanController (task 4.6)", () => {
     expect(home.getLabels()[0]!.getY()).toBe(60);
   });
 
+  it("edits the X property of a selected wall via numeric entry", () => {
+    const home = new Home();
+    const wall = new Wall("wall", 0, 0, 100, 0, 10, 250);
+    home.addWall(wall);
+    home.setSelectedItems([wall]);
+    const controller = makeController(home);
+    controller.getView();
+    controller.updateEditableProperty(PlanController.EditableProperty.X, 50);
+    // The wall moves so its start x becomes 50
+    expect(wall.getXStart()).toBe(50);
+    expect(wall.getXEnd()).toBe(150);
+    controller.updateEditableProperty(PlanController.EditableProperty.LENGTH, 200);
+    expect(Math.sqrt(Math.pow(wall.getXEnd() - wall.getXStart(), 2) + Math.pow(wall.getYEnd() - wall.getYStart(), 2))).toBeCloseTo(200, 4);
+  });
+
+  it("zooms via the abstract mode-change state", () => {
+    const home = new Home();
+    const controller = makeController(home);
+    const view = controller.getView() as MockPlanView;
+    expect(view.scale).toBe(1);
+    controller.zoom(2);
+    expect(view.scale).toBe(2);
+    controller.zoom(0.5);
+    expect(view.scale).toBe(1);
+  });
+
   it("deletes the selected furniture via deleteSelection", () => {
     const home = new Home();
     const piece = new HomePieceOfFurniture("p", {
