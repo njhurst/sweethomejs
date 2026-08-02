@@ -106,7 +106,7 @@
 
 ## P5 — 3D view
 
-[ ] 6  P5 3D view: Java3D scene graph → Three.js (07-3d-view.md)
+[x] 6  P5 3D view: Java3D scene graph → Three.js (07-3d-view.md)
 [x] 6.1  Object3DBase + shared attribute caches (materials/textures/outlines keyed by value)
 [x] 6.2  Object3D builders: Wall, Room, Furniture, DimensionLine, Label, Polyline, Ground (+ baseboards, drawing modes)
 [x] 6.3  Camera math port + navigation (orbit/observer/top, stored cameras, go-to-point-of-view, elevation) + navigation panel
@@ -114,7 +114,7 @@
 [x] 6.5  ModelManager port: async OBJ/DAE/3DS loading in worker, model cache + waiters, placeholder→loaded swap, unit normalization
 [x] 6.6  Offscreen top-view icon rendering pipeline (WebGL2 in worker where supported)
 [x] 6.7  Instancing optimization for large homes + culling
-[@ pi-ltkr51] 6.8  Tolerance-based golden 3D screenshots vs Java at fixed cameras + perf budget (500 furniture)
+[x] 6.8  Tolerance-based golden 3D screenshots vs Java at fixed cameras + perf budget (500 furniture)
 
 ## P6 — UI shell & dialogs
 
