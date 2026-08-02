@@ -216,17 +216,40 @@ entries lazily (only fetch a model blob when the 3D view needs it).
 
 ## 6. Catalog / library files
 
-- Furniture libraries (`.sh3f`) and textures libraries (`.sh3t`) are the **same
-  zip format**: an XML entry (`FurnitureCatalog.xml` / `TexturesCatalog.xml`),
-  content entries, and `Content.xml`.
-- `ObjectXMLExporter`/handlers already generalize: `<catalog>`, `<category>`,
-  `<pieceOfFurniture>`, `<texture>` with content references. The same codec
-  classes handle them with a different root element — so library import is
-  nearly free once the home codec exists.
-- Default furniture/textures catalogs are themselves resource zips inside the
-  Java jars (`io/resources` models + `DefaultFurnitureCatalog.properties`).
-  On web: serve as static assets or an IndexedDB-backed default library;
-  parsed by the same catalog reader (see [10-catalogs-and-content.md](10-catalogs-and-content.md)).
+- Furniture libraries (`.sh3f`) and textures libraries (`.sh3t`) are **zip
+  archives** containing a **`PluginFurnitureCatalog.properties`** /
+  **`PluginTexturesCatalog.properties`** resource bundle (Java 7.5 reads these
+  via `ResourceBundleTools.getBundle(url, family)` — there is no
+  `FurnitureCatalog.xml` in the current codebase), optional localized variants
+  (`_lang`, `_lang_country`, later files override earlier ones), and the
+  referenced content files (models, icons, images).
+- Each piece is described by indexed keys `name#N` (mandatory), `category#N`,
+  `icon#N`, `model#N`, `width#N`, `depth#N`, `height#N`, `movable#N`,
+  `doorOrWindow#N`, plus optional keys (`id#N`, `description#N`, `tags#N`,
+  `creationDate#N` (`yyyy-MM-dd`), `grade#N`, `planIcon#N`, `modelSize#N`,
+  `modelRotation#N` (9 floats), `elevation#N`, `dropOnTopElevation#N`,
+  `resizable#N`, `deformable#N`, `texturable#N`, `price#N`,
+  `valueAddedTaxPercentage#N`, `currency#N`, door/window sash keys
+  `doorOrWindowSashXAxis#N`/`YAxis`/`Width`/`StartAngle`/`EndAngle`, light keys
+  `lightSourceX#N`/`Y`/`Z`/`Color`/`Diameter`/`MaterialName`, shelf keys
+  `shelfElevations#N`, `shelfBoxes#N` (multiples of 6), `staircaseCutOutShape#N`,
+  and `property#N[:TYPE]` additional keys — TYPE ∈ {STRING, INTEGER, FLOAT,
+  BOOLEAN, ENUM, CONTENT}).
+- `ignored#N=true` skips an entry; the loop stops at the first index without a
+  `name#N`. Pieces are deduplicated by `id#N`.
+- Content references are zip entry names (Java resolves them as
+  `jar:…!/<entry>`); our `CatalogReader` resolves them lazily via
+  `ZipContent`. `modelSize#N` falls back to the zip central-directory size.
+- The default furniture/textures catalogs in the Java jars are the same
+  `.properties` format (`DefaultFurnitureCatalog.properties` +
+  `ContributedFurnitureCatalog.properties` families) with content in
+  `io/resources`. On web: serve as static assets or an IndexedDB-backed
+  default library; parsed by the same `readFurnitureCatalog` /
+  `readTexturesCatalog` codec.
+- Port: `io/JavaProperties.ts` (byte-compatible `java.util.Properties` load:
+  ISO-8859-1, `\uXXXX`, line continuations, `=`/`:`/whitespace separators),
+  `io/CatalogReader.ts` (`readFurnitureCatalog` / `readTexturesCatalog` +
+  locale-aware bundle loading).
 
 ## 7. Export formats reused for import
 

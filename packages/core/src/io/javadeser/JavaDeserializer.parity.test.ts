@@ -9,7 +9,7 @@ import { dirname, join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { f32 } from "../../util/f32.js";
 import { Sh3dContainer } from "../Sh3dContainer.js";
-import { readHomeXmlWithContentResolver, SerializedContent } from "../HomeXMLReader.js";
+import { readHomeXmlWithContentResolver } from "../HomeXMLReader.js";
 import { JavaObjectDecoder } from "./JavaObjectDecoder.js";
 
 import { Wall } from "../../model/Wall.js";
@@ -50,7 +50,7 @@ describe("Legacy serialized Home deserializer (task 3.4)", () => {
       (name) => new SerializedContent(name),
     );
     const wallKey = (w: Wall) =>
-      [w.getXStart(), w.getYStart(), w.getXEnd(), w.getYEnd(), w.getThickness(), w.getHeight()]
+      [w.getXStart(), w.getYStart(), w.getXEnd(), w.getYEnd(), w.getThickness(), w.getHeight() ?? 0]
         .map((v) => f32(v).toExponential())
         .join(",");
     const serializedKeys = home.getWalls().map(wallKey).sort();

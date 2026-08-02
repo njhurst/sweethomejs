@@ -151,6 +151,48 @@ export class Baseboard {
   }
 }
 
+export class BoxBounds {
+  private readonly xLower: number;
+  private readonly yLower: number;
+  private readonly zLower: number;
+  private readonly xUpper: number;
+  private readonly yUpper: number;
+  private readonly zUpper: number;
+
+  constructor(xLower: number, yLower: number, zLower: number, xUpper: number, yUpper: number, zUpper: number) {
+    this.xLower = f32(xLower);
+    this.yLower = f32(yLower);
+    this.zLower = f32(zLower);
+    this.xUpper = f32(xUpper);
+    this.yUpper = f32(yUpper);
+    this.zUpper = f32(zUpper);
+  }
+
+  getXLower(): number {
+    return this.xLower;
+  }
+
+  getYLower(): number {
+    return this.yLower;
+  }
+
+  getZLower(): number {
+    return this.zLower;
+  }
+
+  getXUpper(): number {
+    return this.xUpper;
+  }
+
+  getYUpper(): number {
+    return this.yUpper;
+  }
+
+  getZUpper(): number {
+    return this.zUpper;
+  }
+}
+
 export class ObjectProperty {
   static readonly Type = {
     STRING: "STRING",

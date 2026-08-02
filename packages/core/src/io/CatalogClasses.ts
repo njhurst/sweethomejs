@@ -14,7 +14,7 @@ function parseTags(tags: string | null): string[] {
 }
 
 export class CatalogPieceOfFurniture implements PieceOfFurniture {
-  protected readonly idValue: string;
+  protected readonly idValue: string | null;
   protected readonly name: string | null;
   protected readonly description: string | null;
   protected readonly information: string | null;
@@ -77,7 +77,7 @@ export class CatalogPieceOfFurniture implements PieceOfFurniture {
     properties?: Map<string, string | Content> | null,
     contents?: Map<string, Content> | null,
   ) {
-    this.idValue = id ?? "unknown";
+    this.idValue = id;
     this.name = name;
     this.description = description;
     this.information = information;
@@ -112,12 +112,24 @@ export class CatalogPieceOfFurniture implements PieceOfFurniture {
     this.currency = currency;
   }
 
-  getId(): string {
+  getId(): string | null {
     return this.idValue;
   }
 
   getName(): string | null {
     return this.name;
+  }
+
+  getCreationDate(): number | null {
+    return this.creationDate;
+  }
+
+  getGrade(): number | null {
+    return this.grade;
+  }
+
+  getTags(): string[] {
+    return this.tags;
   }
 
   getDescription(): string | null {
@@ -464,7 +476,7 @@ export class CatalogShelfUnit extends CatalogPieceOfFurniture implements ShelfUn
 }
 
 export class CatalogTexture {
-  private readonly idValue: string;
+  private readonly idValue: string | null;
   private readonly name: string | null;
   private readonly image: Content;
   private readonly width: number;
@@ -472,7 +484,7 @@ export class CatalogTexture {
   private readonly creator: string | null;
 
   constructor(id: string | null, name: string | null, image: Content | null, width: number, height: number, creator: string | null) {
-    this.idValue = id ?? "unknown";
+    this.idValue = id;
     this.name = name;
     this.image = image ?? { openStream: async () => new Blob([]).stream(), getURL: () => "" };
     this.width = f32(width);
@@ -480,7 +492,7 @@ export class CatalogTexture {
     this.creator = creator;
   }
 
-  getId(): string {
+  getId(): string | null {
     return this.idValue;
   }
 

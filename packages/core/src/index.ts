@@ -34,3 +34,5 @@
  *   src/util/        — shared helpers (f32/formatFloat, ...)
  */
 export { f32, formatFloat } from "./util/f32.js";
+export { readFurnitureCatalog, readFurnitureCatalogWithLocale, readTexturesCatalog, loadBundle } from "./io/CatalogReader.js";
+export { parseJavaProperties } from "./io/JavaProperties.js";

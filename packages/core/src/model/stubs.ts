@@ -46,13 +46,13 @@ export { Baseboard, LightSource } from "./ValueClasses.js";
 export { Sash } from "./ValueClasses.js";
 export { AspectRatio, HomeDescriptor, Library, Transformation } from "./ModelInterfaces.js";
 export class CatalogPieceOfFurniture {
-  getId(): string {
-    return "";
+  getId(): string | null {
+    return null;
   }
 }
 export class CatalogTexture {
-  getId(): string {
-    return "";
+  getId(): string | null {
+    return null;
   }
 }
 export class PieceOfFurniture {}
