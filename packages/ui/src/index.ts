@@ -29,3 +29,5 @@ export { IndexedDBStore, DB_NAME, DB_VERSION } from "./persistence/IndexedDBStor
 export type { DocumentRecord, RecoveryRecord, StoreName } from "./persistence/IndexedDBStore.js";
 export { PreferencesStore, HomeDocumentStore, Autosaver, snapshotPreferences } from "./persistence/Persistence.js";
 export type { PreferencesSnapshot, AutosaverOptions } from "./persistence/Persistence.js";
+export { IndexedDBHomeStore, InMemoryHomeStore } from "./persistence/HomeStore.js";
+export type { HomeStore } from "./persistence/HomeStore.js";

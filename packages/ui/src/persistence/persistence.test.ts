@@ -27,6 +27,7 @@ import { describe, expect, it } from "vitest";
 import "fake-indexeddb/auto";
 import { Home, UserPreferences } from "@sweethomejs/core";
 import { IndexedDBStore } from "./IndexedDBStore.js";
+import { InMemoryHomeStore, IndexedDBHomeStore } from "./HomeStore.js";
 import { PreferencesStore, HomeDocumentStore, Autosaver, snapshotPreferences } from "./Persistence.js";
 
 describe("IndexedDBStore (task 7.8)", () => {
@@ -55,7 +56,7 @@ describe("PreferencesStore (task 7.8)", () => {
   it("snapshots and restores preferences", async () => {
     const store = new IndexedDBStore("test-prefs");
     const preferences = new UserPreferences();
-    preferences.setUnit(new LengthUnitLike("INCH"));
+    preferences.setUnit(new LengthUnitLike("INCH") as never);
     const prefsStore = new PreferencesStore(store);
     await prefsStore.save(preferences);
     const snapshot = await prefsStore.load();
@@ -111,6 +112,36 @@ describe("Autosaver (task 7.8)", () => {
     expect(recoveries[0]!.name).toBe("recover-me.sh3d");
     await autosaver.deleteRecovery("recover-me.sh3d");
     expect(await autosaver.listRecovery()).toHaveLength(0);
+    await store.close();
+  });
+});
+
+describe("HomeStore (task 7.9)", () => {
+  it("InMemoryHomeStore saves, lists and deletes homes", async () => {
+    const store = new InMemoryHomeStore();
+    await store.saveHome("a.sh3d", new Uint8Array([1]));
+    await store.saveHome("b.sh3d", new Uint8Array([2]));
+    expect((await store.listHomes()).map((h) => h.name).sort()).toEqual(["a.sh3d", "b.sh3d"]);
+    expect(await store.openHome("a.sh3d")).not.toBeNull();
+    await store.deleteHome("a.sh3d");
+    expect(await store.openHome("a.sh3d")).toBeNull();
+  });
+
+  it("IndexedDBHomeStore persists across instances", async () => {
+    const store = new IndexedDBStore("test-homestore");
+    const homeStore = new IndexedDBHomeStore(store);
+    await homeStore.saveHome("test.sh3d", new Uint8Array([7]));
+    const reopened = new IndexedDBHomeStore(store);
+    const record = await reopened.openHome("test.sh3d");
+    expect(record).not.toBeNull();
+    expect(Array.from(record!.bytes)).toEqual([7]);
+    await store.close();
+  });
+
+  it("validates home bytes through the recorder", async () => {
+    const store = new IndexedDBStore("test-homestore2");
+    const homeStore = new IndexedDBHomeStore(store);
+    expect(await homeStore.validateHome(new TextEncoder().encode("not a zip"))).toBeNull();
     await store.close();
   });
 });
