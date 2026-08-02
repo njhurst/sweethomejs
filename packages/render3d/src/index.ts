@@ -8,3 +8,4 @@ export type { MaterialKey, LoadedTexture, TextureSource, HomeTextureAttributes }
 export { WallObject3D, buildPrismGeometry } from "./builders/WallObject3D.js";
 export { RoomObject3D, FurnitureObject3D, DimensionLineObject3D, PolylineObject3D, LabelObject3D, GroundObject3D, buildPolygonGeometry } from "./builders/objectBuilders.js";
 export { groundElevation, levelElevation } from "./builders/Elevations.js";
+export { View3DCamera, applyModelCameraToThree } from "./View3DCamera.js";

@@ -106,10 +106,10 @@ export function buildPrismGeometry(points: number[][], elevation: number, height
     const h1 = endHeights[i]!;
     const h2 = endHeights[(i + 1) % n]!;
     const base = vertexCount;
-    positions.push(p1[0]!, p1[1]!, elevation + 0);
-    positions.push(p2[0]!, p2[1]!, elevation + 0);
-    positions.push(p1[0]!, p1[1]!, elevation + h1);
-    positions.push(p2[0]!, p2[1]!, elevation + h2);
+    positions.push(p1[0]!, elevation + 0, p1[1]!);
+    positions.push(p2[0]!, elevation + 0, p2[1]!);
+    positions.push(p1[0]!, elevation + h1, p1[1]!);
+    positions.push(p2[0]!, elevation + h2, p2[1]!);
     // Edge normal in the xy plane
     const dx = p2[0]! - p1[0]!;
     const dy = p2[1]! - p1[1]!;
@@ -126,8 +126,8 @@ export function buildPrismGeometry(points: number[][], elevation: number, height
   // Bottom cap
   const bottomBase = vertexCount;
   for (const p of points) {
-    positions.push(p[0]!, p[1]!, elevation + 0);
-    normals.push(0, 0, -1);
+    positions.push(p[0]!, elevation + 0, p[1]!);
+    normals.push(0, -1, 0);
   }
   for (let i = 1; i < n - 1; i++) {
     indices.push(bottomBase, bottomBase + i, bottomBase + i + 1);
@@ -138,8 +138,8 @@ export function buildPrismGeometry(points: number[][], elevation: number, height
   const topBase = vertexCount;
   for (let i = 0; i < n; i++) {
     const p = points[i]!;
-    positions.push(p[0]!, p[1]!, elevation + endHeights[i]!);
-    normals.push(0, 0, 1);
+    positions.push(p[0]!, elevation + endHeights[i]!, p[1]!);
+    normals.push(0, 1, 0);
   }
   for (let i = 1; i < n - 1; i++) {
     indices.push(topBase, topBase + i + 1, topBase + i);

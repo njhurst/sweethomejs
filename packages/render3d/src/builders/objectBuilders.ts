@@ -38,7 +38,8 @@ export function buildPolygonGeometry(points: number[][], z: number): THREE.Buffe
   }
   shape.closePath();
   const geometry = new THREE.ShapeGeometry(shape);
-  geometry.rotateX(-Math.PI / 2); // ShapeGeometry is in XY; rotate to XZ plane
+  // ShapeGeometry is in XY; rotate +90° about X to map plan y → three z
+  geometry.rotateX(Math.PI / 2);
   geometry.translate(0, z, 0);
   geometry.computeVertexNormals();
   return geometry;
@@ -185,7 +186,7 @@ export class FurnitureObject3D extends Object3DBase<HomePieceOfFurniture> {
       doubleSided: false,
     });
     this.mesh = new THREE.Mesh(geometry, material);
-    this.mesh.position.set(piece.getX(), elevation + height / 2, -piece.getY());
+    this.mesh.position.set(piece.getX(), elevation + height / 2, piece.getY());
     this.mesh.rotation.y = piece.getAngle();
     this.root.add(this.mesh);
   }
@@ -230,8 +231,8 @@ export class DimensionLineObject3D extends Object3DBase<DimensionLine> {
     const z = line.getElevationStart() + groundElevation(line);
     const geometry = new THREE.BufferGeometry();
     const positions = [
-      line.getXStart(), z, -line.getYStart(),
-      line.getXEnd(), z, -line.getYEnd(),
+      line.getXStart(), z, line.getYStart(),
+      line.getXEnd(), z, line.getYEnd(),
     ];
     geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
     const material = new THREE.LineBasicMaterial({
@@ -282,7 +283,7 @@ export class PolylineObject3D extends Object3DBase<Polyline> {
     const z = polyline.getElevation() + groundElevation(polyline);
     const positions: number[] = [];
     for (const p of points) {
-      positions.push(p[0]!, z, -p[1]!);
+      positions.push(p[0]!, z, p[1]!);
     }
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
@@ -325,7 +326,7 @@ export class LabelObject3D extends Object3DBase<Label> {
       color: (label.getColor() ?? 0x000000) & 0xffffff,
     });
     const marker = new THREE.Mesh(geometry, material);
-    marker.position.set(label.getX(), z, -label.getY());
+    marker.position.set(label.getX(), z, label.getY());
     this.root.add(marker);
   }
 

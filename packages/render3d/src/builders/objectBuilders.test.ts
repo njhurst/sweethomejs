@@ -65,12 +65,12 @@ describe("WallObject3D (task 6.2)", () => {
     const mesh = builder.getRoot().children[0] as THREE.Mesh;
     const positions = (mesh.geometry as THREE.BufferGeometry).getAttribute("position") as THREE.BufferAttribute;
     // All bottom vertices are at z = 0 (level elevation) and tops at 250
-    const zValues = new Set<number>();
+    const yValues = new Set<number>();
     for (let i = 0; i < positions.count; i++) {
-      zValues.add(positions.getZ(i));
+      yValues.add(positions.getY(i));
     }
-    expect(zValues.has(0)).toBe(true);
-    expect(zValues.has(250)).toBe(true);
+    expect(yValues.has(0)).toBe(true);
+    expect(yValues.has(250)).toBe(true);
     builder.destroy();
   });
 });
@@ -111,7 +111,7 @@ describe("FurnitureObject3D (task 6.2)", () => {
     // Center of the box at (200, 20 + 15, -150)
     expect(mesh.position.x).toBeCloseTo(200, 4);
     expect(mesh.position.y).toBeCloseTo(35, 4);
-    expect(mesh.position.z).toBeCloseTo(-150, 4);
+    expect(mesh.position.z).toBeCloseTo(150, 4);
     builder.destroy();
   });
 });
