@@ -18,7 +18,7 @@ export class ObserverCamera extends Camera {
   private planScale = 1;
 
   constructor(x?: number, y?: number, z?: number, yaw?: number, pitch?: number, fieldOfView?: number);
-  constructor(id: string, x: number, y: number, z: number, yaw: number, pitch: number, fieldOfView: number);
+  constructor(id: string | undefined, x: number, y: number, z: number, yaw: number, pitch: number, fieldOfView: number);
   constructor(idOrX?: string | number, yOrX?: number, zOrY?: number, yawOrZ?: number, pitchOrYaw?: number, fovOrPitch?: number, fieldOfView?: number) {
     if (typeof idOrX === "string") {
       super(idOrX as string, yOrX ?? 0, zOrY ?? 0, yawOrZ ?? 0, pitchOrYaw ?? 0, fovOrPitch ?? 0, fieldOfView ?? 0, 0, Camera.Lens.PINHOLE);

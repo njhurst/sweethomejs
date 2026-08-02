@@ -40,9 +40,9 @@ export class DimensionLine extends HomeObject implements Selectable {
 
   constructor(xStart: number, yStart: number, xEnd: number, yEnd: number, offset: number);
   constructor(xStart: number, yStart: number, elevationStart: number, xEnd: number, yEnd: number, elevationEnd: number, offset: number);
-  constructor(id: string, xStart: number, yStart: number, xEnd: number, yEnd: number, offset: number);
-  constructor(id: string, xStart: number, yStart: number, elevationStart: number, xEnd: number, yEnd: number, elevationEnd: number, offset: number);
-  constructor(...args: Array<number | string>) {
+  constructor(id: string | undefined, xStart: number, yStart: number, xEnd: number, yEnd: number, offset: number);
+  constructor(id: string | undefined, xStart: number, yStart: number, elevationStart: number, xEnd: number, yEnd: number, elevationEnd: number, offset: number);
+  constructor(...args: Array<number | string | undefined>) {
     let id: string | null = null;
     let xStart = 0;
     let yStart = 0;

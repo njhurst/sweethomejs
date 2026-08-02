@@ -152,18 +152,21 @@ export class HomePieceOfFurniture extends HomeObject implements PieceOfFurniture
   private shapeCache: GeneralPath | null = null;
 
   constructor(piece: PieceOfFurniture, copiedProperties?: string[] | null);
-  constructor(id: string, piece: PieceOfFurniture, copiedProperties?: string[] | null);
-  constructor(idOrPiece: string | PieceOfFurniture, pieceOrProps?: PieceOfFurniture | string[] | null, props?: string[] | null) {
+  constructor(id: string | undefined, piece: PieceOfFurniture, copiedProperties?: string[] | null);
+  constructor(idOrPiece: string | PieceOfFurniture | undefined, pieceOrProps?: PieceOfFurniture | string[] | null, props?: string[] | null) {
     let id: string | null = null;
     let piece: PieceOfFurniture;
     let copiedProperties: string[] | null;
     if (typeof idOrPiece === "string") {
       id = idOrPiece;
+      if (pieceOrProps === null || pieceOrProps === undefined) {
+        throw new Error("Missing piece for furniture constructor");
+      }
       piece = pieceOrProps as PieceOfFurniture;
       copiedProperties = props ?? null;
     } else {
       id = null;
-      piece = idOrPiece;
+      piece = idOrPiece as PieceOfFurniture;
       copiedProperties = (pieceOrProps as string[] | null | undefined) ?? [];
     }
     super(id ?? HomeObject.createId("pieceOfFurniture"));

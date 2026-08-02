@@ -36,8 +36,8 @@ export class Compass extends HomeObject implements Selectable {
   private sunLocationCache: { date: number; elevation: number; azimuth: number } | null = null;
 
   constructor(x: number, y: number, diameter: number);
-  constructor(id: string, x: number, y: number, diameter: number);
-  constructor(idOrX: string | number, xOrY: number, yOrDiameter: number, diameter = 100) {
+  constructor(id: string | undefined, x: number, y: number, diameter: number);
+  constructor(idOrX: string | number | undefined, xOrY: number, yOrDiameter: number, diameter = 100) {
     if (typeof idOrX === "string") {
       super(idOrX);
       this.x = f32(xOrY);
@@ -45,7 +45,7 @@ export class Compass extends HomeObject implements Selectable {
       this.diameter = f32(diameter);
     } else {
       super(HomeObject.createId("compass"));
-      this.x = f32(idOrX);
+      this.x = f32(idOrX as number);
       this.y = f32(xOrY);
       this.diameter = f32(yOrDiameter);
     }

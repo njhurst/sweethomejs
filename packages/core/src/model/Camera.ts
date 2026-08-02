@@ -36,9 +36,9 @@ export class Camera extends HomeObject {
   private renderer: string | null = null;
 
   constructor(x: number, y: number, z: number, yaw: number, pitch: number, fieldOfView: number, time?: number, lens?: string);
-  constructor(id: string, x: number, y: number, z: number, yaw: number, pitch: number, fieldOfView: number, time?: number, lens?: string);
+  constructor(id: string | undefined, x: number, y: number, z: number, yaw: number, pitch: number, fieldOfView: number, time?: number, lens?: string);
   constructor(
-    xOrId: number | string,
+    xOrId: number | string | undefined,
     xOrY: number,
     yOrZ: number,
     zOrYaw: number,
@@ -60,7 +60,7 @@ export class Camera extends HomeObject {
       this.lens = typeof timeOrLens === "string" ? timeOrLens : lens;
     } else {
       super();
-      this.x = f32(xOrId);
+      this.x = f32(xOrId as number);
       this.y = f32(xOrY);
       this.z = f32(yOrZ);
       this.yaw = f32(zOrYaw);

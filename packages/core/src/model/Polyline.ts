@@ -72,9 +72,9 @@ export class Polyline extends HomeObject implements Selectable {
   private level: Level | null = null;
 
   constructor(points: number[][]);
-  constructor(id: string, points: number[][]);
+  constructor(id: string | undefined, points: number[][]);
   constructor(points: number[][], thickness: number, capStyle: string, joinStyle: string, dashStyle: string, dashOffset: number, startArrowStyle: string, endArrowStyle: string, closedPath: boolean, color: number);
-  constructor(id: string, points: number[][], thickness: number, capStyle: string, joinStyle: string, dashStyle: string, dashOffset: number, startArrowStyle: string, endArrowStyle: string, closedPath: boolean, color: number);
+  constructor(id: string | undefined, points: number[][], thickness: number, capStyle: string, joinStyle: string, dashStyle: string, dashOffset: number, startArrowStyle: string, endArrowStyle: string, closedPath: boolean, color: number);
   constructor(...args: unknown[]) {
     let points: number[][] = [];
     let thickness = 0;

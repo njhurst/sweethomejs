@@ -103,16 +103,29 @@ export class LightSource {
 }
 
 export class Baseboard {
-  private readonly thickness: number;
-  private readonly height: number;
-  private readonly color: number | null;
-  private readonly texture: HomeTexture | null;
+  private thickness: number;
+  private height: number;
+  private color: number | null;
+  private texture: HomeTexture | null;
 
   constructor(thickness: number, height: number, color: number | null, texture: HomeTexture | null) {
-    this.thickness = f32(thickness);
-    this.height = f32(height);
+    // The Java public constructor forwards to a private ctor with swapped args
+    // (this(height, thickness, ...)), so the fields end up swapped relative to
+    // the parameter names. Reproduce for parity.
+    this.thickness = f32(height);
+    this.height = f32(thickness);
     this.color = color;
     this.texture = texture;
+  }
+
+  /** Internal construction without the constructor's arg swap (used by deserialization). */
+  static fromFields(thickness: number, height: number, color: number | null, texture: HomeTexture | null): Baseboard {
+    const baseboard = Object.create(Baseboard.prototype) as Baseboard;
+    baseboard.thickness = f32(thickness);
+    baseboard.height = f32(height);
+    baseboard.color = color;
+    baseboard.texture = texture;
+    return baseboard;
   }
 
   getThickness(): number {

@@ -27,7 +27,7 @@ export class Level extends HomeObject {
   private elevationIndex = 0;
 
   constructor(name: string, elevation: number, floorThickness: number, height: number);
-  constructor(id: string, name: string, elevation: number, floorThickness: number, height: number);
+  constructor(id: string | undefined, name: string, elevation: number, floorThickness: number, height: number);
   constructor(
     nameOrId: string,
     nameOrElevation: string | number,

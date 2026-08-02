@@ -33,7 +33,7 @@ export class Label extends HomeObject implements Selectable {
   private level: Level | null = null;
 
   constructor(text: string, x: number, y: number);
-  constructor(id: string, text: string, x: number, y: number);
+  constructor(id: string | undefined, text: string, x: number, y: number);
   constructor(idOrText: string, textOrX: string | number, xOrY: number, y = 0) {
     if (typeof textOrX === "string") {
       super(idOrText);

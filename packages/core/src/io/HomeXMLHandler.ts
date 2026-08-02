@@ -1052,7 +1052,8 @@ export class HomeXMLHandler {
   }
 
   private createBaseboard(elementName: string, attributes: Map<string, string>): Baseboard {
-    return new Baseboard(
+    // Java's getInstance() goes through the private ctor (no arg swap), unlike the public ctor
+    return Baseboard.fromFields(
       this.parseFloat(attributes, "thickness"),
       this.parseFloat(attributes, "height"),
       this.parseOptionalColor(attributes, "color"),

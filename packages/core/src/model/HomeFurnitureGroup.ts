@@ -32,9 +32,9 @@ export class HomeFurnitureGroup extends HomePieceOfFurniture {
   constructor(furniture: HomePieceOfFurniture[], name: string);
   constructor(furniture: HomePieceOfFurniture[], leadingPiece: HomePieceOfFurniture, name: string);
   constructor(furniture: HomePieceOfFurniture[], angle: number, modelMirrored: boolean, name: string);
-  constructor(id: string, furniture: HomePieceOfFurniture[], angle: number, modelMirrored: boolean, name: string);
+  constructor(id: string | undefined, furniture: HomePieceOfFurniture[], angle: number, modelMirrored: boolean, name: string);
   constructor(
-    idOrFurniture: string | HomePieceOfFurniture[],
+    idOrFurniture: string | HomePieceOfFurniture[] | undefined,
     furnitureOrArg: HomePieceOfFurniture[] | HomePieceOfFurniture | number | string,
     arg2?: HomePieceOfFurniture | number | boolean | string,
     arg3?: boolean | string,
@@ -48,26 +48,26 @@ export class HomeFurnitureGroup extends HomePieceOfFurniture {
     let init = true;
     if (typeof idOrFurniture === "string") {
       id = idOrFurniture;
-      furniture = furnitureOrArg as HomePieceOfFurniture[];
+      furniture = (furnitureOrArg as HomePieceOfFurniture[] | undefined) ?? [];
       angle = arg2 as number;
       modelMirrored = arg3 as boolean;
       name = arg4 as string;
     } else if (typeof furnitureOrArg === "number") {
       id = null;
-      furniture = idOrFurniture;
+      furniture = (idOrFurniture as HomePieceOfFurniture[] | undefined) ?? [];
       angle = furnitureOrArg;
       modelMirrored = arg2 as boolean;
       name = arg3 as string;
     } else if (furnitureOrArg instanceof HomePieceOfFurniture) {
       id = null;
-      furniture = idOrFurniture;
+      furniture = (idOrFurniture as HomePieceOfFurniture[] | undefined) ?? [];
       angle = furnitureOrArg.getAngle();
       modelMirrored = false;
       name = arg2 as string;
       init = false;
     } else {
       id = null;
-      furniture = idOrFurniture;
+      furniture = (idOrFurniture as HomePieceOfFurniture[] | undefined) ?? [];
       angle = furniture[0]!.getAngle();
       modelMirrored = false;
       name = furnitureOrArg as string;

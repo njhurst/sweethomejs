@@ -75,10 +75,10 @@ export class Wall extends HomeObject implements Selectable {
   constructor(xStart: number, yStart: number, xEnd: number, yEnd: number, thickness: number);
   constructor(xStart: number, yStart: number, xEnd: number, yEnd: number, thickness: number, height: number);
   constructor(xStart: number, yStart: number, xEnd: number, yEnd: number, thickness: number, height: number, pattern: TextureImage);
-  constructor(id: string, xStart: number, yStart: number, xEnd: number, yEnd: number, thickness: number, height: number);
-  constructor(id: string, xStart: number, yStart: number, xEnd: number, yEnd: number, thickness: number, height: number, pattern: TextureImage);
+  constructor(id: string | undefined, xStart: number, yStart: number, xEnd: number, yEnd: number, thickness: number, height: number);
+  constructor(id: string | undefined, xStart: number, yStart: number, xEnd: number, yEnd: number, thickness: number, height: number, pattern: TextureImage);
   constructor(
-    xStartOrId: number | string,
+    xStartOrId: number | string | undefined,
     yStartOrXStart: number,
     xEndOrYStart: number,
     yEndOrXEnd: number,
@@ -98,7 +98,7 @@ export class Wall extends HomeObject implements Selectable {
       this.pattern = typeof heightOrPattern === "object" ? heightOrPattern : (pattern ?? null);
     } else {
       super(HomeObject.createId("wall"));
-      this.xStart = f32(xStartOrId);
+      this.xStart = f32(xStartOrId as number);
       this.yStart = f32(yStartOrXStart);
       this.xEnd = f32(xEndOrYStart);
       this.yEnd = f32(yEndOrXEnd);

@@ -69,14 +69,14 @@ export class Room extends HomeObject implements Selectable {
   private areaCache: number | null = null;
 
   constructor(points: number[][]);
-  constructor(id: string, points: number[][]);
-  constructor(idOrPoints: string | number[][], points?: number[][]) {
+  constructor(id: string | undefined, points: number[][]);
+  constructor(idOrPoints: string | number[][] | undefined, points?: number[][]) {
     if (typeof idOrPoints === "string") {
       super(idOrPoints);
-      this.pointsValue = deepCopy(points!);
+      this.pointsValue = deepCopy(points ?? []);
     } else {
       super(HomeObject.createId("room"));
-      this.pointsValue = deepCopy(idOrPoints);
+      this.pointsValue = deepCopy((idOrPoints as number[][]) ?? []);
     }
   }
 
