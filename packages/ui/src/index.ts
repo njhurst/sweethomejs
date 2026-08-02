@@ -20,3 +20,4 @@ export { WallDialog, RoomDialog } from "./properties/ControllerDialogs.js";
 export type { WallDialogProps, RoomDialogProps } from "./properties/ControllerDialogs.js";
 export { FurnitureWizard, TextureWizard, BackgroundImageWizard, ModelMaterialsView, BaseboardChoiceView } from "./wizards/Wizards.js";
 export type { FurnitureWizardProps, TextureWizardProps, BackgroundImageWizardProps, ModelMaterialsViewProps, BaseboardChoiceViewProps } from "./wizards/Wizards.js";
+export { getLocalizedString, setLocale, initMessages, guessBrowserLocale, SUPPORTED_LOCALES, getLocale } from "./i18n/Messages.js";

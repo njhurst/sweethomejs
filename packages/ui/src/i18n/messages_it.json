@@ -1,0 +1,205 @@
+{
+ "BackgroundImageWizardController": {
+  "undoImportBackgroundImageName": "Importa  immagine di sfondo",
+  "undoModifyBackgroundImageName": "Modifica immagine di sfondo",
+  "wizard.title": "Procedura guidata immagine di sfondo"
+ },
+ "BaseboardChoiceController": {
+  "baseboardTextureTitle": "Rivestimento battiscopa"
+ },
+ "CompassController": {
+  "undoModifyCompassName": "Modifica bussola"
+ },
+ "DimensionLineController": {
+  "undoModifyDimensionLinesName": "Modifica",
+  "undoCreateDimensionLineName": "Crea dimensioni"
+ },
+ "FurnitureController": {
+  "undoAddFurnitureName": "Aggiungi",
+  "undoDeleteSelectionName": "Elimina",
+  "undoReorderName": "Riordina",
+  "undoAlignName": "Allinea",
+  "undoDistributeName": "Distribuisci",
+  "undoGroupName": "Raggruppa",
+  "undoUngroupName": "Separa",
+  "undoResetElevation": "Ripristina elevazione",
+  "groupName": "Gruppo -%d-"
+ },
+ "HelpController": {
+  "helpIndex": "/com/eteks/sweethome3d/viewcontroller/resources/help/it/index.html",
+  "helpTitle": "Aiuto di Sweet Home 3D ",
+  "searchResult": "Risultati ricerca",
+  "searchNotFound": "Il termine cercato <b>%s</b> non è stato trovato in alcun documento. ",
+  "searchFound": "Il termine cercato <b>%s</b> è stato trovato nei seguenti documenti. "
+ },
+ "Home3DAttributesController": {
+  "undoModify3DAttributesName": "Modifica",
+  "groundTextureTitle": "Texture suolo",
+  "skyTextureTitle": "Texture cielo"
+ },
+ "HomeController": {
+  "undoCutName": "Taglia",
+  "undoPasteName": "Incolla",
+  "undoPasteToGroupName": "Incolla sul gruppo",
+  "undoPasteStyleName": "Incolla stile",
+  "undoDropName": "Aggiungi",
+  "undoHideBackgroundImageName": "Nascondi immagine di sfondo",
+  "undoShowBackgroundImageName": "Mostra immagine di sfondo",
+  "undoDeleteBackgroundImageName": "Elimina immagine di sfondo",
+  "alreadyOpen": "La casa \"%s\" è già aperta",
+  "moreRecentVersionHome": "<html><b>La casa \"%s\"<br>è stata creata con una versione più recente di Sweet Home 3D.</b><br>L'informazione aggiunta alla casa in questa versione non apparirà<br>con la versione di Sweet Home 3D che stai usando adesso, e potrebbe<br>essere persa se la casa viene salvata.",
+  "openError": "Impossibile aprire la casa\n\"%s\"",
+  "openMessage": "Lettura della casa...",
+  "openRepairedHomeMessage": "<html><b>I dati della casa \"%s\"<br>sono danneggiati, ma Sweet Home 3D li ha riparati con successo.</b><br>Dovresti salvare adesso per convalidare la riparazione.",
+  "saveError": "<html>Impossibile salvare la casa in<br>\"%s\"<br><font size=\"-2\">%s</font>",
+  "saveMessage": "Salvataggio della casa...",
+  "printError": "Impossibile stampare la casa",
+  "printMessage": "Stampo...",
+  "printToPDFError": "Impossibile creare il PDF\n\"%s\"",
+  "printToPDFMessage": "Stampa in PDF...",
+  "exportToCSVError": "Impossibile creare il file CSV\n\"%s\"",
+  "exportToCSVMessage": "Esporta arredo in formato CSV...",
+  "exportToSVGError": "Impossibile creare il file SVG\n\"%s\"",
+  "exportToSVGMessage": "Esportazione piantina in formato SVG...",
+  "exportToOBJError": "Impossibile creare il file OBJ\n\"%s\"",
+  "exportToOBJMessage": "Esporta la vista 3D in formato OBJ...",
+  "savePreferencesError": "Impossibile salvare le preferenze",
+  "importLanguageLibraryError": "Can't import language library\n\"%s\"",
+  "importFurnitureLibraryError": "Impossibile salvare la libreria arredamento\n\"%s\"",
+  "importedFurnitureLibraryMessage": "La libreria arredamento \"%s\" è stata importata con successo.\nModelli nuovi e aggiornati sono disponibili nel catalogo del mobilio.",
+  "importTexturesLibraryError": "Impossibile importare la libreria delle texture\n\"%s\"",
+  "importedTexturesLibraryMessage": "La libreria delle texture \"%s\" è stata importata con successo.\nModelli nuovi e aggiornati sono disponibili nel catalogo dei rivestimenti.",
+  "importPluginError": "Impossibile salvare il plug-in\n\"%s\"",
+  "importedPluginMessage": "Plug-in was successfully imported. Its features will be available\nin Sweet Home 3D at its next launch. ",
+  "checkUpdatesIOError": "<html>Impossibile leggere nuovi aggiornamenti/<br>Controlla la connessione.<br><font size=\"-2\">%s</font>",
+  "checkUpdatesXMLError": "<html>Impossibile interpretare gli aggiornamenti.<br><font size=\"-2\">%s</font>",
+  "checkUpdatesMessage": "Cerca aggiornamenti disponibili...",
+  "noUpdateMessage": "Non ci sono aggiornamenti ",
+  "updatesMessageTitle": "<h1 class=\"title\">Aggiornamenti disponibili!</h1>",
+  "applicationUpdateMessage": "<h2 class=\"update\"><b>%1$s</b> versione <b>%2$s</b></h2><p class=\"releaseDateAndSize\">rilasciata il %3$s %4$s</p>",
+  "libraryUpdateMessage": "<h2 class=\"update\"><b>%1$s</b> versione <b>%2$s</b></h3><p class=\"releaseDateAndSize\">rilasciata il %3$s %4$s</p>",
+  "sizeUpdateMessage": "(%s MB)",
+  "downloadUpdateMessage": "<p class=\"downloadPage\">Vai alla <a href=\"%1$s\">pagina Scarica</a></p>",
+  "updatesMessageSeparator": "<hr width=\"25%\"/>",
+  "updatesMessageStyleSheet": "body { font-family: sans-serif; margin-left: 5px; margin-right: 5px; margin-bottom: 10px;}.title { text-align: center;} .update { text-align: center; font-weight: normal; margin-bottom: 0;} .releaseDateAndSize { font-size: 95%; text-align: center; margin-top: 0; margin-bottom: 0;} .downloadPage { text-align: center; margin-top: 2px; margin-bottom: 0;} ",
+  "updatesUrl": "http://www.sweethome3d.com/SweetHome3DUpdates.xml",
+  "defaultGroupName": "Gruppo"
+ },
+ "HomeFurnitureController": {
+  "undoModifyFurnitureName": "Modifica",
+  "textureTitle": "Texture dell'arredamento",
+  "modelMaterialsTitle": "Materiali arredo"
+ },
+ "ImportedFurnitureWizardController": {
+  "undoImportFurnitureName": "Importa arredamento",
+  "importFurnitureWizard.title": "Procedura guidata di importazione arredamento",
+  "modifyFurnitureWizard.title": "Procedura guidata di modifica arredamento"
+ },
+ "ImportedTextureWizardController": {
+  "importTextureWizard.title": "Procedura guidata di importazione texture",
+  "modifyTextureWizard.title": "Procedura guidata di modifica texture"
+ },
+ "LabelController": {
+  "undoCreateLabelName": "Aggiungi testo",
+  "undoModifyLabelsName": "Modifica"
+ },
+ "LevelController": {
+  "undoModifyLevelName": "Modifica"
+ },
+ "ModelMaterialsController": {
+  "textureTitle": "Texture del materiale"
+ },
+ "PageSetupController": {
+  "undoPageSetupName": "Modifica impostazioni pagina"
+ },
+ "PlanController": {
+  "undoMoveSelectionName": "Sposta",
+  "undoDeleteSelectionName": "Elimina",
+  "undoCreateWallsName": "Crea muri",
+  "undoWallResizeName": "Ridimensiona muro",
+  "undoWallArcExtentName": "Modifica angolare",
+  "undoCreateDimensionLinesName": "Crea dimensioni",
+  "undoDimensionLineResizeName": "Ridimensiona dimensioni",
+  "undoDimensionLineOffsetName": "Modifica dimensioni",
+  "undoDimensionLineRotationName": "Ruota dimensione",
+  "undoDimensionLineHeightResizeName": "Ridimensiona dimensione",
+  "undoDimensionLineRaiseName": "Alza dimensione",
+  "undoDimensionLineLowerName": "Abbassa dimensione",
+  "undoPieceOfFurnitureRotationName": "Ruota",
+  "undoPieceOfFurnitureRaiseName": "Solleva",
+  "undoPieceOfFurnitureLowerName": "Inferiore",
+  "undoPieceOfFurnitureHeightResizeName": "Ridimensiona",
+  "undoPieceOfFurnitureWidthAndDepthResizeName": "Ridimensiona",
+  "undoLightPowerModificationName": "Modifica intensità",
+  "undoPieceOfFurnitureNameOffsetName": "Muovi testo",
+  "undoPieceOfFurnitureNameRotationName": "Ruota testo",
+  "undoLockBasePlan": "Blocca piantina",
+  "undoUnlockBasePlan": "Sblocca piantina",
+  "undoFlipName": "Ruota",
+  "undoJoinWallsName": "Unisci muri",
+  "undoReverseWallsDirectionName": "Inverti la direzione",
+  "undoSplitWallName": "Dividi muro",
+  "undoDuplicateSelectionName": "Duplica",
+  "undoCreateRoomsName": "Crea stanza",
+  "undoRoomResizeName": "Ridimensiona stanza",
+  "undoRoomAreaOffsetName": "Sposta area",
+  "undoRoomAreaRotationName": "Ruota area",
+  "undoRoomNameOffsetName": "Sposta testo",
+  "undoRoomNameRotationName": "Ruota testo",
+  "undoAddRoomPointName": "Aggiunge punto",
+  "undoDeleteRoomPointName": "Elimina punto",
+  "undoRecomputeRoomPointsName": "Ricalcola punti",
+  "undoCreatePolylinesName": "Crea polilinea",
+  "undoPolylineResizeName": "Modifica polilinea",
+  "undoCreateLabelsName": "Aggiungi testo",
+  "undoLabelRotationName": "Ruota testo",
+  "undoLabelRaiseName": "Solleva",
+  "undoLabelLowerName": "Inferiore",
+  "undoModifyTextStyleName": "Modifica stile",
+  "undoCompassRotationName": "Ruota bussola",
+  "undoCompassResizeName": "Ridimensiona bussola",
+  "undoAddLevel": "Aggiungi livello",
+  "undoModifyLevelName": "Modifica livello",
+  "undoModifyLevelViewabilityName": "Modifica la visibilità del livello",
+  "undoDeleteSelectedLevel": "Elimina livello",
+  "undoAddItemsName": "Add",
+  "levelName": "Livello %d",
+  "rotationToolTipFeedback": "Angolo: %d°",
+  "pitchRotationToolTipFeedback": "Inclinazione: %d°",
+  "rollRotationToolTipFeedback": "Rotazione: %d°",
+  "elevationToolTipFeedback": "Elevazione: %s",
+  "heightResizeToolTipFeedback": "Altezza: %s",
+  "widthResizeToolTipFeedback": "Larghezza: %s",
+  "depthResizeToolTipFeedback": "Profondità: %s",
+  "lightPowerToolTipFeedback": "Intensità %s%%",
+  "wallLengthToolTipFeedback": "Lunghezza: %s",
+  "wallAngleToolTipFeedback": "Angolo: %d°",
+  "wallThicknessToolTipFeedback": "Spessore: %s",
+  "roomSideLengthToolTipFeedback": "Lunghezza: %s",
+  "roomDiagonalLengthToolTipFeedback": "Diagonale: %s",
+  "roomSideAngleToolTipFeedback": "Angolo: %d°",
+  "polylineSegmentLengthToolTipFeedback": "Lunghezza: %s",
+  "polylineSegmentAngleToolTipFeedback": "Angolo: %d°",
+  "cameraYawRotationToolTipFeedback": "Angolo corpo: %d°",
+  "cameraPitchRotationToolTipFeedback": "Angolo testa: %d°",
+  "cameraElevationToolTipFeedback": "Altezza occhi: %s",
+  "observerHeightToolTipFeedback": "Altezza visitatore: %s",
+  "diameterToolTipFeedback": "Diametro: %s",
+  "wallArcRadiusToolTipFeedback": "Raggio: %s",
+  "wallArcExtentToolTipFeedback": "Apertura angolare: %d°"
+ },
+ "PolylineController": {
+  "undoModifyPolylinesName": "Modifica"
+ },
+ "RoomController": {
+  "undoModifyRoomsName": "Modifica",
+  "floorTextureTitle": "Texture del pavimento",
+  "ceilingTextureTitle": "Texture del soffitto",
+  "wallSidesTextureTitle": "Texture muri"
+ },
+ "WallController": {
+  "undoModifyWallsName": "Modifica",
+  "leftSideTextureTitle": "Texture lato sinistro dei muri",
+  "rightSideTextureTitle": "Texture lato destro dei muri"
+ }
+}

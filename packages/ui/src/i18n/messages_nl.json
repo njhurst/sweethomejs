@@ -1,0 +1,205 @@
+{
+ "BackgroundImageWizardController": {
+  "undoImportBackgroundImageName": "Importeer achtergrondafbeelding",
+  "undoModifyBackgroundImageName": "Bewerk achtergrondafbeelding",
+  "wizard.title": "Wizard achtergrondafbeelding"
+ },
+ "BaseboardChoiceController": {
+  "baseboardTextureTitle": "Plint structuur"
+ },
+ "CompassController": {
+  "undoModifyCompassName": "Bewerk kompas"
+ },
+ "DimensionLineController": {
+  "undoModifyDimensionLinesName": "Bewerken",
+  "undoCreateDimensionLineName": "Creëer dimensie"
+ },
+ "FurnitureController": {
+  "undoAddFurnitureName": "Toevoegen",
+  "undoDeleteSelectionName": "Verwijderen",
+  "undoReorderName": "Herrangschiken",
+  "undoAlignName": "Uitlijnen",
+  "undoDistributeName": "Uitrekken",
+  "undoGroupName": "Groeperen",
+  "undoUngroupName": "Degroeperen",
+  "undoResetElevation": "Herstel verhoging",
+  "groupName": "Groep -%d-"
+ },
+ "HelpController": {
+  "helpIndex": "/com/eteks/sweethome3d/viewcontroller/resources/help/nl/index.html",
+  "helpTitle": "Sweet Home 3D Help",
+  "searchResult": "Resultaat zoekopdracht",
+  "searchNotFound": "Uw zoekopdracht <b>%s</b> heeft geen overeenkomstige documenten opgeleverd.",
+  "searchFound": "Uw zoekopdracht <b>%s</b> is gevonden in de volgende documenten."
+ },
+ "Home3DAttributesController": {
+  "undoModify3DAttributesName": "Bewerken",
+  "groundTextureTitle": "Grond structuur",
+  "skyTextureTitle": "Lucht structuur"
+ },
+ "HomeController": {
+  "undoCutName": "Knippen",
+  "undoPasteName": "Plakken",
+  "undoPasteToGroupName": "Plak in groep",
+  "undoPasteStyleName": "Neem stijl over",
+  "undoDropName": "Toevoegen",
+  "undoHideBackgroundImageName": "Verberg achtergrondafbeelding",
+  "undoShowBackgroundImageName": "Toon achtergrondafbeelding",
+  "undoDeleteBackgroundImageName": "Verwijder achtergrondafbeelding",
+  "alreadyOpen": "Huis \"%s\" is al geopend",
+  "moreRecentVersionHome": "<html><b>Het huis \"%s\"<br>is gemaakt in een recentere versie van Sweet Home 3D.</b><br><font size=\"-2\">De informatie die aan het huis toegevoegd is in die versie<br>zal niet zichtbaar zijn in de huidige versie van Sweet Home 3D, en<br>zou verloren kunnen gaan wanneer dit huis wordt opgeslagen.",
+  "openError": "Kan huis \n\"%s\" niet openen",
+  "openMessage": "Lezen huis...",
+  "openRepairedHomeMessage": "<html><b>De data van het huis \"%s\"<br>is beschadigd maar Sweet Home 3D heeft het succesvol kunnen repareren.</b><br>Je dient het gerepareerde huis nu op te slaan zodat de reparatie bewaard zal worden.",
+  "saveError": "Kon huis niet opslaan in\n\"%s\"",
+  "saveMessage": "Opslaan huis...",
+  "printError": "Kan huis niet printen",
+  "printMessage": "Printen...",
+  "printToPDFError": "Kan PDF\n\"%s\" niet maken",
+  "printToPDFMessage": "Printen naar PDF...",
+  "exportToCSVError": "Can't create CSV file\n\"%s\"",
+  "exportToCSVMessage": "Exporting furniture to CSV format...",
+  "exportToSVGError": "Kan SVG bestand\n\"%s\" niet maken",
+  "exportToSVGMessage": "Exporteren plattegrond naar SVG formaat...",
+  "exportToOBJError": "Kan OBJ bestand\n\"%s\" niet maken",
+  "exportToOBJMessage": "Exporteren 3D beeld naar OBJ bestand...",
+  "savePreferencesError": "Kan voorkeuren in bestandssysteem niet opslaan",
+  "importLanguageLibraryError": "Kan taalverzameling\n\"%s\" niet importeren",
+  "importFurnitureLibraryError": "Kan meubilairverzameling\n\"%s\" niet importeren",
+  "importedFurnitureLibraryMessage": "Meubilairverzameling \"%s\" is succesvol geïmporteerd.\nNieuwe en bijgewerkte modellen zijn in de meubilaircatalogus te vinden.",
+  "importTexturesLibraryError": "Kan structuurverzameling\n\"%s\" niet importeren",
+  "importedTexturesLibraryMessage": "Structuurverzameling \"%s\" is succesvol geïmporteerd.\nNieuwe en bijgewerkte modellen zijn in de structuurcatalogus te vinden.",
+  "importPluginError": "Kan plug-in\n\"%s\" niet importeren",
+  "importedPluginMessage": "Plug-in is succesvol geïmporteerd. De toepassingen zullen beschikbaar zijn\nwanneer Sweet Home 3D opnieuw gestart is.",
+  "checkUpdatesIOError": "<html>Kan beschikbare updates niet laden.<br>Controleer je internet instellingen.<br><font size=\"-2\">%s</font>",
+  "checkUpdatesXMLError": "<html>Kan update informatie niet interpreteren.<br><font size=\"-2\">%s</font>",
+  "checkUpdatesMessage": "Controleer beschikbare updates...",
+  "noUpdateMessage": "Geen update beschikbaar",
+  "updatesMessageTitle": "<h1 class=\"title\">Updates beschikbaar!</h1>",
+  "applicationUpdateMessage": "<h2 class=\"update\"><b>%1$s</b> versie <b>%2$s</b></h2><p class=\"releaseDateAndSize\">released op %3$s %4$s</p>",
+  "libraryUpdateMessage": "<h2 class=\"update\"><b>%1$s</b> versie <b>%2$s</b></h2><p class=\"releaseDateAndSize\">released op %3$s %4$s</p>",
+  "sizeUpdateMessage": "(%s MB)",
+  "downloadUpdateMessage": "<p class=\"downloadPage\">Ga naar de <a href=\"%1$s\">download pagina</a></p>",
+  "updatesMessageSeparator": "<hr width=\"25%\"/>",
+  "updatesMessageStyleSheet": "body { font-family: sans-serif; margin-left: 5px; margin-right: 5px; margin-bottom: 10px;}.title { text-align: center;} .update { text-align: center; font-weight: normal; margin-bottom: 0;} .releaseDateAndSize { font-size: 95%; text-align: center; margin-top: 0; margin-bottom: 0;} .downloadPage { text-align: center; margin-top: 2px; margin-bottom: 0;} ",
+  "updatesUrl": "http://www.sweethome3d.com/SweetHome3DUpdates.xml",
+  "defaultGroupName": "Groep"
+ },
+ "HomeFurnitureController": {
+  "undoModifyFurnitureName": "Bewerken",
+  "textureTitle": "Meubilair structuur",
+  "modelMaterialsTitle": "Meubilair materialen"
+ },
+ "ImportedFurnitureWizardController": {
+  "undoImportFurnitureName": "Importeer meubilair",
+  "importFurnitureWizard.title": "Wizard meubilair importeren",
+  "modifyFurnitureWizard.title": "Wizard meubilair bewerken"
+ },
+ "ImportedTextureWizardController": {
+  "importTextureWizard.title": "Wizard structuur importeren",
+  "modifyTextureWizard.title": "Wizard structuur bewerken"
+ },
+ "LabelController": {
+  "undoCreateLabelName": "Tekst toevoegen",
+  "undoModifyLabelsName": "Bewerken"
+ },
+ "LevelController": {
+  "undoModifyLevelName": "Bewerken"
+ },
+ "ModelMaterialsController": {
+  "textureTitle": "Materiaalstructuur"
+ },
+ "PageSetupController": {
+  "undoPageSetupName": "Pagina-instelling bewerken"
+ },
+ "PlanController": {
+  "undoMoveSelectionName": "Verplaatsen",
+  "undoDeleteSelectionName": "Verwijderen",
+  "undoCreateWallsName": "Maak muren",
+  "undoWallResizeName": "Wijzig formaat muren",
+  "undoWallArcExtentName": "Wijzig rondheid",
+  "undoCreateDimensionLinesName": "Maak afmeting",
+  "undoDimensionLineResizeName": "Wijzig formaat afmeting",
+  "undoDimensionLineOffsetName": "Bewerk afmeting",
+  "undoDimensionLineRotationName": "Afmeting roteren",
+  "undoDimensionLineHeightResizeName": "Formaat wijzigen",
+  "undoDimensionLineRaiseName": "Verhoog de dimensie",
+  "undoDimensionLineLowerName": "Lagere dimensie",
+  "undoPieceOfFurnitureRotationName": "Draaien",
+  "undoPieceOfFurnitureRaiseName": "Omhoog",
+  "undoPieceOfFurnitureLowerName": "Omlaag",
+  "undoPieceOfFurnitureHeightResizeName": "Wijzig formaat",
+  "undoPieceOfFurnitureWidthAndDepthResizeName": "Wijzig formaat",
+  "undoLightPowerModificationName": "Bewerk kracht",
+  "undoPieceOfFurnitureNameOffsetName": "Verplaats tekst",
+  "undoPieceOfFurnitureNameRotationName": "Draai tekst",
+  "undoLockBasePlan": "Blokkeer plattegrond",
+  "undoUnlockBasePlan": "Deblokkeer plattegrond",
+  "undoFlipName": "Omkeren",
+  "undoJoinWallsName": "Verbind muren aan elkaar",
+  "undoReverseWallsDirectionName": "Draai muurrichting om",
+  "undoSplitWallName": "Splits muur",
+  "undoDuplicateSelectionName": "Dupliceren",
+  "undoCreateRoomsName": "Maak ruimte",
+  "undoRoomResizeName": "Wijzig formaat ruimte",
+  "undoRoomAreaOffsetName": "Verplaats ruimte",
+  "undoRoomAreaRotationName": "Draai ruimte",
+  "undoRoomNameOffsetName": "Verplaats tekst",
+  "undoRoomNameRotationName": "Draai tekst",
+  "undoAddRoomPointName": "Voeg punt toe",
+  "undoDeleteRoomPointName": "Verwijder punt",
+  "undoRecomputeRoomPointsName": "Punten opnieuw berekenen",
+  "undoCreatePolylinesName": "Maak lijn",
+  "undoPolylineResizeName": "Bewerk lijn",
+  "undoCreateLabelsName": "Voeg tekst toe",
+  "undoLabelRotationName": "Draai tekst toe",
+  "undoLabelRaiseName": "Omhoog",
+  "undoLabelLowerName": "Omlaag",
+  "undoModifyTextStyleName": "Bewerk stijl",
+  "undoCompassRotationName": "Draai kompas",
+  "undoCompassResizeName": "Wijzig kompasformaat",
+  "undoAddLevel": "Voeg verdieping toe",
+  "undoModifyLevelName": "Bewerk verdieping",
+  "undoModifyLevelViewabilityName": "Wijzig niveau zichtbaarheid",
+  "undoDeleteSelectedLevel": "Verwijder verdieping",
+  "undoAddItemsName": "Add",
+  "levelName": "Verdieping %d",
+  "rotationToolTipFeedback": "Hoek: %d°",
+  "pitchRotationToolTipFeedback": "X as omwenteling: %d°",
+  "rollRotationToolTipFeedback": "Y as omwenteling: %d°",
+  "elevationToolTipFeedback": "Verhoging: %s",
+  "heightResizeToolTipFeedback": "Hoogte: %s",
+  "widthResizeToolTipFeedback": "Breedte: %s",
+  "depthResizeToolTipFeedback": "Diepte: %s",
+  "lightPowerToolTipFeedback": "Kracht: %s%%",
+  "wallLengthToolTipFeedback": "Lengte: %s",
+  "wallAngleToolTipFeedback": "Hoek: %d°",
+  "wallThicknessToolTipFeedback": "Dikte: %s",
+  "roomSideLengthToolTipFeedback": "Lengte: %s",
+  "roomDiagonalLengthToolTipFeedback": "Diagonaal: %s",
+  "roomSideAngleToolTipFeedback": "Hoek: %d°",
+  "polylineSegmentLengthToolTipFeedback": "Lengte: %s",
+  "polylineSegmentAngleToolTipFeedback": "Hoek: %d°",
+  "cameraYawRotationToolTipFeedback": "Lichaamshoek: %d°",
+  "cameraPitchRotationToolTipFeedback": "Hoofdhoek: %d°",
+  "cameraElevationToolTipFeedback": "Ooghoogte: %s",
+  "observerHeightToolTipFeedback": "Hoogte bezoeker: %s",
+  "diameterToolTipFeedback": "Diameter: %s",
+  "wallArcRadiusToolTipFeedback": "Straal: %s",
+  "wallArcExtentToolTipFeedback": "Hoekgrootte: %d°"
+ },
+ "PolylineController": {
+  "undoModifyPolylinesName": "Bewerken"
+ },
+ "RoomController": {
+  "undoModifyRoomsName": "Bewerken",
+  "floorTextureTitle": "Vloerstructuur",
+  "ceilingTextureTitle": "Plafondstructuur",
+  "wallSidesTextureTitle": "Muurstructuur"
+ },
+ "WallController": {
+  "undoModifyWallsName": "Bewerken",
+  "leftSideTextureTitle": "Structuur van linker muurzijde",
+  "rightSideTextureTitle": "Structuur van rechter muurzijde"
+ }
+}

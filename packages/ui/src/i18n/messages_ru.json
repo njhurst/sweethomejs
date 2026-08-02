@@ -1,0 +1,205 @@
+{
+ "BackgroundImageWizardController": {
+  "undoImportBackgroundImageName": "добавление фонового изображения",
+  "undoModifyBackgroundImageName": "изменение фонового изображения",
+  "wizard.title": "Мастер фонового изображения"
+ },
+ "BaseboardChoiceController": {
+  "baseboardTextureTitle": "Текстура плинтуса"
+ },
+ "CompassController": {
+  "undoModifyCompassName": "изменение географических параметров"
+ },
+ "DimensionLineController": {
+  "undoModifyDimensionLinesName": "Изменить",
+  "undoCreateDimensionLineName": "Создать размер"
+ },
+ "FurnitureController": {
+  "undoAddFurnitureName": "добавление мебели",
+  "undoDeleteSelectionName": "удаление мебели",
+  "undoReorderName": "Упорядочение мебели",
+  "undoAlignName": "выравнивание мебели",
+  "undoDistributeName": "распределение мебели",
+  "undoGroupName": "группирование мебели",
+  "undoUngroupName": "разгруппирование мебели",
+  "undoResetElevation": "Сбросить приподнятость",
+  "groupName": "Группа -%d-"
+ },
+ "HelpController": {
+  "helpIndex": "/com/eteks/sweethome3d/viewcontroller/resources/help/ru/index.html",
+  "helpTitle": "Справка Sweet Home 3D",
+  "searchResult": "Результаты поиска",
+  "searchNotFound": "Ваша строка поиска <b>%s</b> в документации не найдена.",
+  "searchFound": "Ваша строка поиска <b>%s</b> найдена в следующих документах."
+ },
+ "Home3DAttributesController": {
+  "undoModify3DAttributesName": "Изменить",
+  "groundTextureTitle": "Текстура земли",
+  "skyTextureTitle": "Текстура неба"
+ },
+ "HomeController": {
+  "undoCutName": "удаление",
+  "undoPasteName": "вставку",
+  "undoPasteToGroupName": "Вставить в группу",
+  "undoPasteStyleName": "Вставить стиль",
+  "undoDropName": "добавление",
+  "undoHideBackgroundImageName": "скрытие фонового изображения",
+  "undoShowBackgroundImageName": "показ фонового изображения",
+  "undoDeleteBackgroundImageName": "удаление фонового изображения",
+  "alreadyOpen": "План \"%s\" уже открыт",
+  "moreRecentVersionHome": "<html><b>План \"%s\"<br>был создан в более поздней версии Sweet Home 3D</b><br><font size=\"-2\">Часть информации не будет отображаться в<br>Вашей версии Sweet Home 3D, и может быть утеряна<br>если Вы выполните сохранение.",
+  "openError": "Не удалось открыть план\n\"%s\"",
+  "openMessage": "Чтение плана...",
+  "openRepairedHomeMessage": "<html><b>Файл плана \"%s\"<br>был поврежден, но Sweet Home 3D удачно восстановила его.</b><br>Теперь Вы можете сохранить файл и проверить план на ошибки.",
+  "saveError": "<html>Не удалось сохранить план<br>\"%s\"<br><font size=\"-2\">%s</font>",
+  "saveMessage": "Сохранение плана...",
+  "printError": "Не удалось напечатать план",
+  "printMessage": "Печать...",
+  "printToPDFError": "Не удалось создать PDF\n\"%s\"",
+  "printToPDFMessage": "Печать в PDF...",
+  "exportToCSVError": "Can't create CSV file\n\"%s\"",
+  "exportToCSVMessage": "Exporting furniture to CSV format...",
+  "exportToSVGError": "Не удалось создать SVG-файл\n\"%s\"",
+  "exportToSVGMessage": "Экспорт в формат SVG...",
+  "exportToOBJError": "Не удалось создать OBJ-файл\n\"%s\"",
+  "exportToOBJMessage": "Экспорт в формат OBJ...",
+  "savePreferencesError": "Не удалось сохранить настройки в файле",
+  "importLanguageLibraryError": "Не удалось импортировать библиотеку языков\n\"%s\"",
+  "importFurnitureLibraryError": "Не удалось импортировать библиотеку мебели\n\"%s\"",
+  "importedFurnitureLibraryMessage": "Библиотека мебели \"%s\" успешно импортирована.\nНовые и обновленные модели вы можете найти в каталоге мебели. ",
+  "importTexturesLibraryError": "Не удалось импортировать библиотеку текстур\n\"%s\"",
+  "importedTexturesLibraryMessage": "Библиотека текстур \"%s\" успешно импортирована.\nНовые и обновленные текстуры вы можете найти в каталоге текстур. ",
+  "importPluginError": "Не удалось импортировать плагин\n\"%s\"",
+  "importedPluginMessage": "Плагин импортирован успешно и будет доступен после перезапуска Sweet Home 3D.",
+  "checkUpdatesIOError": "<html>Невозможно загрузить обновления.<br>Проверьте подключение к интернет.<br><font size=\"-2\">%s</font>",
+  "checkUpdatesXMLError": "<html>Ошибка данных обновления.<br><font size=\"-2\">%s</font>",
+  "checkUpdatesMessage": "Поиск обновлений...",
+  "noUpdateMessage": "Обновления не найдены",
+  "updatesMessageTitle": "<h1 class=\"title\">Доступны обновления!</h1>",
+  "applicationUpdateMessage": "<h2 class=\"update\"><b>%1$s</b> версия <b>%2$s</b></h2><p class=\"releaseDateAndSize\">выпущена %3$s %4$s</p>",
+  "libraryUpdateMessage": "<h2 class=\"update\"><b>%1$s</b> версия <b>%2$s</b></h2><p class=\"releaseDateAndSize\">выпущена %3$s %4$s</p>",
+  "sizeUpdateMessage": "(%s МБ)",
+  "downloadUpdateMessage": "<p class=\"downloadPage\">Перейти к <a href=\"%1$s\">странице для скачивания</a></p>",
+  "updatesMessageSeparator": "<hr width=\"25%\"/>",
+  "updatesMessageStyleSheet": "body { font-family: sans-serif; margin-left: 5px; margin-right: 5px; margin-bottom: 10px;}.title { text-align: center;} .update { text-align: center; font-weight: normal; margin-bottom: 0;} .releaseDateAndSize { font-size: 95%; text-align: center; margin-top: 0; margin-bottom: 0;} .downloadPage { text-align: center; margin-top: 2px; margin-bottom: 0;} ",
+  "updatesUrl": "http://www.sweethome3d.com/SweetHome3DUpdates.xml",
+  "defaultGroupName": "Группа"
+ },
+ "HomeFurnitureController": {
+  "undoModifyFurnitureName": "изменение мебели",
+  "textureTitle": "Текстура мебели",
+  "modelMaterialsTitle": "Материалы мебели"
+ },
+ "ImportedFurnitureWizardController": {
+  "undoImportFurnitureName": "импорт мебели",
+  "importFurnitureWizard.title": "Мастер импорта мебели",
+  "modifyFurnitureWizard.title": "Мастер изменения мебели"
+ },
+ "ImportedTextureWizardController": {
+  "importTextureWizard.title": "Мастер импорта текстур",
+  "modifyTextureWizard.title": "Мастер изменения текстур"
+ },
+ "LabelController": {
+  "undoCreateLabelName": "добавление текста",
+  "undoModifyLabelsName": "изменение текста"
+ },
+ "LevelController": {
+  "undoModifyLevelName": "изменение уровня"
+ },
+ "ModelMaterialsController": {
+  "textureTitle": "Текстура материала"
+ },
+ "PageSetupController": {
+  "undoPageSetupName": "изменение параметров страницы"
+ },
+ "PlanController": {
+  "undoMoveSelectionName": "перемещение",
+  "undoDeleteSelectionName": "удаление",
+  "undoCreateWallsName": "создание стен",
+  "undoWallResizeName": "изменение размеров стен",
+  "undoWallArcExtentName": "изгиб стены",
+  "undoCreateDimensionLinesName": "создание размерных линий",
+  "undoDimensionLineResizeName": "изменение длины размерных линий",
+  "undoDimensionLineOffsetName": "изменение размерных линий",
+  "undoDimensionLineRotationName": "Повернуть размер",
+  "undoDimensionLineHeightResizeName": "Изменить размер",
+  "undoDimensionLineRaiseName": "Увеличить размер",
+  "undoDimensionLineLowerName": "Уменьшить размер",
+  "undoPieceOfFurnitureRotationName": "поворот",
+  "undoPieceOfFurnitureRaiseName": "поднятие",
+  "undoPieceOfFurnitureLowerName": "опускание",
+  "undoPieceOfFurnitureHeightResizeName": "изменение размеров",
+  "undoPieceOfFurnitureWidthAndDepthResizeName": "изменение размеров",
+  "undoLightPowerModificationName": "изменение силы света",
+  "undoPieceOfFurnitureNameOffsetName": "перемещение текста",
+  "undoPieceOfFurnitureNameRotationName": "вращение текста",
+  "undoLockBasePlan": "закрепление плана",
+  "undoUnlockBasePlan": "снятие закрепления плана",
+  "undoFlipName": "Отражение",
+  "undoJoinWallsName": "Соединить стены",
+  "undoReverseWallsDirectionName": "изменение направления стен",
+  "undoSplitWallName": "разделение стены",
+  "undoDuplicateSelectionName": "дублирование",
+  "undoCreateRoomsName": "создание комнаты",
+  "undoRoomResizeName": "изменение размеров комнаты",
+  "undoRoomAreaOffsetName": "перемещение области",
+  "undoRoomAreaRotationName": "вращение области",
+  "undoRoomNameOffsetName": "перемещение текста",
+  "undoRoomNameRotationName": "вращение текста",
+  "undoAddRoomPointName": "Добавить точку",
+  "undoDeleteRoomPointName": "Удалить точку",
+  "undoRecomputeRoomPointsName": "Пересчитать точки",
+  "undoCreatePolylinesName": "Создать полилинию",
+  "undoPolylineResizeName": "Изменить полилинию",
+  "undoCreateLabelsName": "добавление текста",
+  "undoLabelRotationName": "вращение текста",
+  "undoLabelRaiseName": "поднятие",
+  "undoLabelLowerName": "опускание",
+  "undoModifyTextStyleName": "изменение стиля",
+  "undoCompassRotationName": "вращение указателя направления на север",
+  "undoCompassResizeName": "изменение размеров указателя направления на север",
+  "undoAddLevel": "добавление уровня",
+  "undoModifyLevelName": "Изменить этаж",
+  "undoModifyLevelViewabilityName": "Изменить видимость уровней",
+  "undoDeleteSelectedLevel": "удаление уровня",
+  "undoAddItemsName": "Add",
+  "levelName": "Уровень %d",
+  "rotationToolTipFeedback": "Угол поворота: %d°",
+  "pitchRotationToolTipFeedback": "Поворот вокруг оси X: %d°",
+  "rollRotationToolTipFeedback": "Поворот вокруг оси Y: %d°",
+  "elevationToolTipFeedback": "Приподнятость: %s",
+  "heightResizeToolTipFeedback": "Высота: %s",
+  "widthResizeToolTipFeedback": "Ширина: %s",
+  "depthResizeToolTipFeedback": "Глубина: %s",
+  "lightPowerToolTipFeedback": "Сила света: %s%%",
+  "wallLengthToolTipFeedback": "Длина: %s",
+  "wallAngleToolTipFeedback": "Угол: %d°",
+  "wallThicknessToolTipFeedback": "Толщина: %s",
+  "roomSideLengthToolTipFeedback": "Длина: %s",
+  "roomDiagonalLengthToolTipFeedback": "Диагональ: %s ",
+  "roomSideAngleToolTipFeedback": "Угол: %d°",
+  "polylineSegmentLengthToolTipFeedback": "Длина: %s",
+  "polylineSegmentAngleToolTipFeedback": "Угол: %d°",
+  "cameraYawRotationToolTipFeedback": "Угол поворота тела: %d°",
+  "cameraPitchRotationToolTipFeedback": "Угол наклона головы: %d°",
+  "cameraElevationToolTipFeedback": "Высота уровня глаз: %s",
+  "observerHeightToolTipFeedback": "Рост посетителя: %s",
+  "diameterToolTipFeedback": "Диаметр: %s",
+  "wallArcRadiusToolTipFeedback": "Радиус: %s",
+  "wallArcExtentToolTipFeedback": "Центральный угол: %d°"
+ },
+ "PolylineController": {
+  "undoModifyPolylinesName": "Изменить"
+ },
+ "RoomController": {
+  "undoModifyRoomsName": "изменение комнаты",
+  "floorTextureTitle": "Текстура пола",
+  "ceilingTextureTitle": "Текстура потолка",
+  "wallSidesTextureTitle": "Текстура стен"
+ },
+ "WallController": {
+  "undoModifyWallsName": "изменение стен",
+  "leftSideTextureTitle": "Текстура левой стороны",
+  "rightSideTextureTitle": "Текстура правой стороны"
+ }
+}

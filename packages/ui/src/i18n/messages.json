@@ -1,0 +1,205 @@
+{
+ "BackgroundImageWizardController": {
+  "undoImportBackgroundImageName": "Import background image",
+  "undoModifyBackgroundImageName": "Modify background image",
+  "wizard.title": "Background image wizard"
+ },
+ "BaseboardChoiceController": {
+  "baseboardTextureTitle": "Baseboard texture"
+ },
+ "CompassController": {
+  "undoModifyCompassName": "Modify compass"
+ },
+ "DimensionLineController": {
+  "undoModifyDimensionLinesName": "Modify",
+  "undoCreateDimensionLineName": "Create dimension"
+ },
+ "FurnitureController": {
+  "undoAddFurnitureName": "Add",
+  "undoDeleteSelectionName": "Delete",
+  "undoReorderName": "Reorder",
+  "undoAlignName": "Align",
+  "undoDistributeName": "Distribute",
+  "undoGroupName": "Group",
+  "undoUngroupName": "Ungroup",
+  "undoResetElevation": "Reset elevation",
+  "groupName": "Group -%d-"
+ },
+ "HelpController": {
+  "helpIndex": "/com/eteks/sweethome3d/viewcontroller/resources/help/en/index.html",
+  "helpTitle": "Sweet Home 3D Help",
+  "searchResult": "Result search",
+  "searchNotFound": "Your search <b>%s</b> did not match any documents. ",
+  "searchFound": "Your search <b>%s</b> was found in the following documents. "
+ },
+ "Home3DAttributesController": {
+  "undoModify3DAttributesName": "Modify",
+  "groundTextureTitle": "Ground texture",
+  "skyTextureTitle": "Sky texture"
+ },
+ "HomeController": {
+  "undoCutName": "Cut",
+  "undoPasteName": "Paste",
+  "undoPasteToGroupName": "Paste to group",
+  "undoPasteStyleName": "Paste style",
+  "undoDropName": "Add",
+  "undoHideBackgroundImageName": "Hide background image",
+  "undoShowBackgroundImageName": "Show background image",
+  "undoDeleteBackgroundImageName": "Delete background image",
+  "alreadyOpen": "Home \"%s\" is already open",
+  "moreRecentVersionHome": "<html><b>The home \"%s\"<br>was created with a more recent version of Sweet Home 3D.</b><br><font size=\"-2\">The information added to home in that version won't appear<br>with the version of Sweet Home 3D you use now, and could<br>be lost if this home is saved.",
+  "openError": "Can't open home\n\"%s\"",
+  "openMessage": "Reading home...",
+  "openRepairedHomeMessage": "<html><b>The data of the home \"%s\"<br>is damaged but Sweet Home 3D successfully repaired it.</b><br>You should save it now to validate the repair.",
+  "saveError": "<html>Can't save home in<br>\"%s\"<br><font size=\"-2\">%s</font>",
+  "saveMessage": "Saving home...",
+  "printError": "Can't print home",
+  "printMessage": "Printing...",
+  "printToPDFError": "Can't create PDF\n\"%s\"",
+  "printToPDFMessage": "Printing to PDF...",
+  "exportToCSVError": "Can't create CSV file\n\"%s\"",
+  "exportToCSVMessage": "Exporting furniture to CSV format...",
+  "exportToSVGError": "Can't create SVG file\n\"%s\"",
+  "exportToSVGMessage": "Exporting plan to SVG format...",
+  "exportToOBJError": "Can't create OBJ file\n\"%s\"",
+  "exportToOBJMessage": "Exporting 3D view to OBJ format...",
+  "savePreferencesError": "Can't save preferences in file system",
+  "importLanguageLibraryError": "Can't import language library\n\"%s\"",
+  "importFurnitureLibraryError": "Can't import furniture library\n\"%s\"",
+  "importedFurnitureLibraryMessage": "Furniture library \"%s\" was successfully imported.\nNew and updated models can be found in furniture catalog. ",
+  "importTexturesLibraryError": "Can't import textures library\n\"%s\"",
+  "importedTexturesLibraryMessage": "Textures library \"%s\" was successfully imported.\nNew and updated textures can be found in textures catalog. ",
+  "importPluginError": "Can't import plug-in\n\"%s\"",
+  "importedPluginMessage": "Plug-in was successfully imported. Its features will be available\nin Sweet Home 3D at its next launch. ",
+  "checkUpdatesIOError": "<html>Can't read available updates.<br>Check your Internet settings.<br><font size=\"-2\">%s</font>",
+  "checkUpdatesXMLError": "<html>Can't interpret updates information.<br><font size=\"-2\">%s</font>",
+  "checkUpdatesMessage": "Checking available updates...",
+  "noUpdateMessage": "No update is available",
+  "updatesMessageTitle": "<h1 class=\"title\">Updates are available!</h1>",
+  "applicationUpdateMessage": "<h2 class=\"update\"><b>%1$s</b> version <b>%2$s</b></h2><p class=\"releaseDateAndSize\">released on %3$s %4$s</p>",
+  "libraryUpdateMessage": "<h2 class=\"update\"><b>%1$s</b> version <b>%2$s</b></h2><p class=\"releaseDateAndSize\">released on %3$s %4$s</p>",
+  "sizeUpdateMessage": "(%s MB)",
+  "downloadUpdateMessage": "<p class=\"downloadPage\">Go to <a href=\"%1$s\">download page</a></p>",
+  "updatesMessageSeparator": "<hr width=\"25%\"/>",
+  "updatesMessageStyleSheet": "body { font-family: sans-serif; margin-left: 5px; margin-right: 5px; margin-bottom: 10px;}.title { text-align: center;} .update { text-align: center; font-weight: normal; margin-bottom: 0;} .releaseDateAndSize { font-size: 95%; text-align: center; margin-top: 0; margin-bottom: 0;} .downloadPage { text-align: center; margin-top: 2px; margin-bottom: 0;} ",
+  "updatesUrl": "http://www.sweethome3d.com/SweetHome3DUpdates.xml",
+  "defaultGroupName": "Group"
+ },
+ "HomeFurnitureController": {
+  "undoModifyFurnitureName": "Modify",
+  "textureTitle": "Furniture texture",
+  "modelMaterialsTitle": "Furniture materials"
+ },
+ "ImportedFurnitureWizardController": {
+  "undoImportFurnitureName": "Import furniture",
+  "importFurnitureWizard.title": "Furniture import wizard",
+  "modifyFurnitureWizard.title": "Furniture modification wizard"
+ },
+ "ImportedTextureWizardController": {
+  "importTextureWizard.title": "Texture import wizard",
+  "modifyTextureWizard.title": "Texture modification wizard"
+ },
+ "LabelController": {
+  "undoCreateLabelName": "Add text",
+  "undoModifyLabelsName": "Modify"
+ },
+ "LevelController": {
+  "undoModifyLevelName": "Modify"
+ },
+ "ModelMaterialsController": {
+  "textureTitle": "Material texture"
+ },
+ "PageSetupController": {
+  "undoPageSetupName": "Modify page setup"
+ },
+ "PlanController": {
+  "undoMoveSelectionName": "Move",
+  "undoDeleteSelectionName": "Delete",
+  "undoCreateWallsName": "Create walls",
+  "undoWallResizeName": "Resize wall",
+  "undoWallArcExtentName": "Modify wall curve",
+  "undoCreateDimensionLinesName": "Create dimension",
+  "undoDimensionLineResizeName": "Resize dimension",
+  "undoDimensionLineOffsetName": "Modify dimension",
+  "undoDimensionLineRotationName": "Rotate dimension",
+  "undoDimensionLineHeightResizeName": "Resize dimension",
+  "undoDimensionLineRaiseName": "Raise dimension",
+  "undoDimensionLineLowerName": "Lower dimension",
+  "undoPieceOfFurnitureRotationName": "Rotate",
+  "undoPieceOfFurnitureRaiseName": "Raise",
+  "undoPieceOfFurnitureLowerName": "Lower",
+  "undoPieceOfFurnitureHeightResizeName": "Resize",
+  "undoPieceOfFurnitureWidthAndDepthResizeName": "Resize",
+  "undoLightPowerModificationName": "Modify power",
+  "undoPieceOfFurnitureNameOffsetName": "Move text",
+  "undoPieceOfFurnitureNameRotationName": "Rotate text",
+  "undoLockBasePlan": "Lock plan",
+  "undoUnlockBasePlan": "Unlock plan",
+  "undoFlipName": "Flip",
+  "undoJoinWallsName": "Join walls",
+  "undoReverseWallsDirectionName": "Reverse walls direction",
+  "undoSplitWallName": "Split wall",
+  "undoDuplicateSelectionName": "Duplicate",
+  "undoCreateRoomsName": "Create room",
+  "undoRoomResizeName": "Resize room",
+  "undoRoomAreaOffsetName": "Move area",
+  "undoRoomAreaRotationName": "Rotate area",
+  "undoRoomNameOffsetName": "Move text",
+  "undoRoomNameRotationName": "Rotate text",
+  "undoAddRoomPointName": "Add point",
+  "undoDeleteRoomPointName": "Remove point",
+  "undoRecomputeRoomPointsName": "Recompute points",
+  "undoCreatePolylinesName": "Create polyline",
+  "undoPolylineResizeName": "Modify polyline",
+  "undoCreateLabelsName": "Add text",
+  "undoLabelRotationName": "Rotate text",
+  "undoLabelRaiseName": "Raise",
+  "undoLabelLowerName": "Lower",
+  "undoModifyTextStyleName": "Modify style",
+  "undoCompassRotationName": "Rotate compass",
+  "undoCompassResizeName": "Resize compass",
+  "undoAddLevel": "Add level",
+  "undoModifyLevelName": "Modify level",
+  "undoModifyLevelViewabilityName": "Modify level viewability",
+  "undoDeleteSelectedLevel": "Delete level",
+  "undoAddItemsName": "Add",
+  "levelName": "Level %d",
+  "rotationToolTipFeedback": "Angle: %d°",
+  "pitchRotationToolTipFeedback": "X axis rotation: %d°",
+  "rollRotationToolTipFeedback": "Y axis rotation: %d°",
+  "elevationToolTipFeedback": "Elevation: %s",
+  "heightResizeToolTipFeedback": "Height: %s",
+  "widthResizeToolTipFeedback": "Width: %s",
+  "depthResizeToolTipFeedback": "Depth: %s",
+  "lightPowerToolTipFeedback": "Power: %s%%",
+  "wallLengthToolTipFeedback": "Length: %s",
+  "wallAngleToolTipFeedback": "Angle: %d°",
+  "wallThicknessToolTipFeedback": "Thickness: %s",
+  "roomSideLengthToolTipFeedback": "Length: %s",
+  "roomDiagonalLengthToolTipFeedback": "Diagonal: %s",
+  "roomSideAngleToolTipFeedback": "Angle: %d°",
+  "polylineSegmentLengthToolTipFeedback": "Length: %s",
+  "polylineSegmentAngleToolTipFeedback": "Angle: %d°",
+  "cameraYawRotationToolTipFeedback": "Body angle: %d°",
+  "cameraPitchRotationToolTipFeedback": "Head angle: %d°",
+  "cameraElevationToolTipFeedback": "Eyes elevation: %s",
+  "observerHeightToolTipFeedback": "Visitor height: %s",
+  "diameterToolTipFeedback": "Diameter: %s",
+  "wallArcRadiusToolTipFeedback": "Radius: %s",
+  "wallArcExtentToolTipFeedback": "Arc extent: %d°"
+ },
+ "PolylineController": {
+  "undoModifyPolylinesName": "Modify"
+ },
+ "RoomController": {
+  "undoModifyRoomsName": "Modify",
+  "floorTextureTitle": "Floor texture",
+  "ceilingTextureTitle": "Ceiling texture",
+  "wallSidesTextureTitle": "Walls texture"
+ },
+ "WallController": {
+  "undoModifyWallsName": "Modify",
+  "leftSideTextureTitle": "Walls left side texture",
+  "rightSideTextureTitle": "Walls right side texture"
+ }
+}
