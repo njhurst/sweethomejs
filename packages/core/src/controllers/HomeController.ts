@@ -54,6 +54,19 @@ import type { UserPreferences } from "../model/UserPreferences.js";
 import { HomeApplication, HomeRecorder, RecorderException } from "../model/ModelInterfaces.js";
 import type { Selectable } from "../model/Selectable.js";
 import { HomeFileRecorder } from "../io/HomeFileRecorder.js";
+import { Wall } from "../model/Wall.js";
+import { Room } from "../model/Room.js";
+import { DimensionLine } from "../model/DimensionLine.js";
+import { Label } from "../model/Label.js";
+import { Polyline } from "../model/Polyline.js";
+import { WallController } from "./WallController.js";
+import { RoomController } from "./RoomController.js";
+import { DimensionLineController } from "./DimensionLineController.js";
+import { LabelController } from "./LabelController.js";
+import { PolylineController } from "./PolylineController.js";
+import { CompassController } from "./CompassController.js";
+import { Home3DAttributesController } from "./Home3DAttributesController.js";
+import { ObserverCameraController } from "./ObserverCameraController.js";
 
 export class HomeController implements Controller {
   protected readonly home: Home;
@@ -537,34 +550,44 @@ export class HomeController implements Controller {
   // ------------------------------------------------------- object dialogs (task 4.4)
 
   modifyWall(): void {
-    throw new Error("HomeController.modifyWall not ported yet (task 4.4)");
+    if (Home.getSubList(this.home.getSelectedItems(), Wall).length > 0) {
+      new WallController(this.home, this.preferences, this.viewFactory, this.undoSupport).displayView(this.getView());
+    }
   }
 
   modifyRoom(): void {
-    throw new Error("HomeController.modifyRoom not ported yet (task 4.4)");
+    if (Home.getSubList(this.home.getSelectedItems(), Room).length > 0) {
+      new RoomController(this.home, this.preferences, this.viewFactory, this.undoSupport).displayView(this.getView());
+    }
   }
 
   modifyDimensionLine(): void {
-    throw new Error("HomeController.modifyDimensionLine not ported yet (task 4.4)");
+    if (Home.getSubList(this.home.getSelectedItems(), DimensionLine).length > 0) {
+      new DimensionLineController(this.home, this.preferences, this.viewFactory, this.undoSupport).displayView(this.getView());
+    }
   }
 
   modifyLabel(): void {
-    throw new Error("HomeController.modifyLabel not ported yet (task 4.4)");
+    if (Home.getSubList(this.home.getSelectedItems(), Label).length > 0) {
+      new LabelController(this.home, this.preferences, this.viewFactory, this.undoSupport).displayView(this.getView());
+    }
   }
 
   modifyPolyline(): void {
-    throw new Error("HomeController.modifyPolyline not ported yet (task 4.4)");
+    if (Home.getSubList(this.home.getSelectedItems(), Polyline).length > 0) {
+      new PolylineController(this.home, this.preferences, this.viewFactory, this.undoSupport).displayView(this.getView());
+    }
   }
 
   modifyCompass(): void {
-    throw new Error("HomeController.modifyCompass not ported yet (task 4.4)");
+    new CompassController(this.home, this.preferences, this.viewFactory, this.undoSupport).displayView(this.getView());
   }
 
   modify3DAttributes(): void {
-    throw new Error("HomeController.modify3DAttributes not ported yet (task 4.4)");
+    new Home3DAttributesController(this.home, this.preferences, this.viewFactory, this.contentManager, this.undoSupport).displayView(this.getView());
   }
 
   modifyObserverCamera(): void {
-    throw new Error("HomeController.modifyObserverCamera not ported yet (task 4.4)");
+    new ObserverCameraController(this.home, this.preferences, this.viewFactory, this.undoSupport).displayView(this.getView());
   }
 }

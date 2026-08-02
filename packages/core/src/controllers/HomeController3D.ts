@@ -52,6 +52,7 @@ import { Room } from "../model/Room.js";
 import { Polyline } from "../model/Polyline.js";
 import { DimensionLine } from "../model/DimensionLine.js";
 import { Label } from "../model/Label.js";
+import { Home3DAttributesController } from "./Home3DAttributesController.js";
 
 export class HomeController3D implements Controller {
   readonly home: Home;
@@ -165,8 +166,7 @@ export class HomeController3D implements Controller {
   }
 
   modifyAttributes(): void {
-    // Home3DAttributesController ported in task 4.4
-    throw new Error("Home3DAttributesController not ported yet (task 4.4)");
+    new Home3DAttributesController(this.home, this.preferences, this.viewFactory, this.contentManager, this.undoSupport).displayView(this.getView());
   }
 
   setCameraState(state: CameraControllerState): void {
