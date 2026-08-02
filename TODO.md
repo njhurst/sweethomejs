@@ -107,7 +107,7 @@
 ## P5 — 3D view
 
 [ ] 6  P5 3D view: Java3D scene graph → Three.js (07-3d-view.md)
-[ ] 6.1  Object3DBase + shared attribute caches (materials/textures/outlines keyed by value)
+[@ pi-ltkr51] 6.1  Object3DBase + shared attribute caches (materials/textures/outlines keyed by value)
 [ ] 6.2  Object3D builders: Wall, Room, Furniture, DimensionLine, Label, Polyline, Ground (+ baseboards, drawing modes)
 [ ] 6.3  Camera math port + navigation (orbit/observer/top, stored cameras, go-to-point-of-view, elevation) + navigation panel
 [ ] 6.4  Lighting: sun position from Compass, light color/power, day/night, shadows; selection outlines + blue selection boxes
