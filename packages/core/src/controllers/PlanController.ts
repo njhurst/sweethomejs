@@ -114,6 +114,11 @@ export class PlanController extends FurnitureController {
     return this.planView;
   }
 
+  /** Registers an external PlanView implementation (web UI). */
+  setView(view: PlanView): void {
+    this.planView = view;
+  }
+
   /** True when the plan view has been created (Java guards enter() with getView() != null). */
   isViewCreated(): boolean {
     return this.planView !== null;

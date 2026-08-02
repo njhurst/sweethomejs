@@ -113,10 +113,10 @@ function makeSetup(): { element: FakeElement; home: Home; controller: PlanContro
 }
 
 describe("PlanInputAdapter (task 5.5)", () => {
-  it("translates pointer down into a controller press with model coordinates", () => {
+  it("translates pointer down into a controller press with pixel coordinates", () => {
     const { element, controller, viewport } = makeSetup();
     viewport.setPlanBounds({ minX: 0, minY: 0, maxX: 1000, maxY: 1000 });
-    // Model (100, 200) is at pixel (140, 240) with margin 40 and scale 1
+    // The controller expects PIXEL coordinates (it converts to model internally)
     let pressed: { x: number; y: number; clickCount: number; shiftDown: boolean; duplicationActivated: boolean } | null = null;
     const originalPress = controller.pressMouse.bind(controller);
     controller.pressMouse = ((x: number, y: number, clickCount: number, shiftDown: boolean, _alignment: boolean, duplicationActivated: boolean) => {
@@ -126,8 +126,8 @@ describe("PlanInputAdapter (task 5.5)", () => {
 
     element.fire("pointerdown", { clientX: 140, clientY: 240, pointerId: 1, pointerType: "mouse", button: 0, shiftKey: false, altKey: false, ctrlKey: false, metaKey: false });
     expect(pressed).not.toBeNull();
-    expect(pressed!.x).toBeCloseTo(100, 6);
-    expect(pressed!.y).toBeCloseTo(200, 6);
+    expect(pressed!.x).toBeCloseTo(140, 6);
+    expect(pressed!.y).toBeCloseTo(240, 6);
     expect(pressed!.clickCount).toBe(1);
     expect(pressed!.shiftDown).toBe(false);
   });

@@ -20,7 +20,7 @@
 
 import { useEffect, useState } from "react";
 import type { ReactElement } from "react";
-import { Home, UserPreferences, HomeController } from "@sweethomejs/core";
+import { Home, UserPreferences, HomeController, HomeFileRecorder } from "@sweethomejs/core";
 import { HomePane, HomeViewAdapter } from "@sweethomejs/ui";
 import "@sweethomejs/ui/theme.css";
 
@@ -29,13 +29,27 @@ import "@sweethomejs/ui/theme.css";
  * HomePane (plan + 3D editor).
  */
 export function App(): ReactElement {
-  const [session] = useState(() => createSession());
+  const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
+    void createSession().then(async (s) => {
+      setSession(s);
+      // Debug hooks for e2e
+      (globalThis as unknown as Record<string, unknown>).__homeController = s.homeController;
+      (globalThis as unknown as Record<string, unknown>).__preferences = s.preferences;
+      const { IndexedDBStore, PreferencesStore } = await import("@sweethomejs/ui");
+      const store = new IndexedDBStore();
+      (globalThis as unknown as Record<string, unknown>).__preferencesStore = new PreferencesStore(store);
+    });
     return () => {
       void session;
     };
-  }, [session]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (session === null) {
+    return <div data-testid="app-loading">Loading…</div>;
+  }
 
   return (
     <HomePane
@@ -52,9 +66,23 @@ interface Session {
   homeController: HomeController;
 }
 
-function createSession(): Session {
-  const home = new Home();
+async function createSession(): Promise<Session> {
+  // Load a fixture from ?file=<path> (relative to the server) if provided
+  const fixtureParam = new URLSearchParams(location.search).get("file");
+  let home = new Home();
   home.setName("Untitled");
+  if (fixtureParam !== null) {
+    try {
+      const response = await fetch(fixtureParam);
+      if (response.ok) {
+        const bytes = new Uint8Array(await response.arrayBuffer());
+        const result = await new HomeFileRecorder().readHomeFromZip(bytes);
+        home = result.home;
+      }
+    } catch {
+      // Fall back to an empty home
+    }
+  }
   const preferences = new UserPreferences();
   const homeViewAdapter = new HomeViewAdapter();
   const homeController = new HomeController(home, preferences, {

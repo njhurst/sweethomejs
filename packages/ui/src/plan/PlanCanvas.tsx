@@ -72,6 +72,7 @@ export function PlanCanvas(props: PlanCanvasProps): React.JSX.Element {
       observer.observe(canvas.parentElement);
     }
     view.attachInput();
+    props.controller.setView(view);
     props.onReady?.(view);
 
     // Repaint on model changes

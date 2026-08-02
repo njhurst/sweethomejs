@@ -127,8 +127,8 @@
 [x] 7.6  Help: ship existing HTML help as static assets + in-app display; wire HELP actions
 [x] 7.7  File I/O: ContentManager web impl (File System Access + download fallback + drag&drop + URL param)
 [x] 7.8  Persistence: IndexedDB schema (preferences/documents/content/recovery), PreferencesStore, autosave + recovery dialog
-[@ pi-ltkr51] 7.9  HomeStore interface + IndexedDB implementation (local documents; cloud later)
-[ ] 7.10  e2e flows (Playwright): create→save→reopen, open fixture→plan/3D render, import library, preference persistence, recovery
+[x] 7.9  HomeStore interface + IndexedDB implementation (local documents; cloud later)
+[@ pi-ltkr51] 7.10  e2e flows (Playwright): create→save→reopen, open fixture→plan/3D render, import library, preference persistence, recovery
 
 ## P7 — Photo / video / print
 

@@ -59,6 +59,9 @@ export class PlanInputAdapter {
   private clickCount = 0;
   private pointerDown = false;
   private cursorCanvas: HTMLCanvasElement | null = null;
+  /** The last press model coordinates (debug/e2e). */
+  lastPressModelX = 0;
+  lastPressModelY = 0;
 
   constructor(options: PlanInputAdapterOptions) {
     this.element = options.element;
@@ -93,14 +96,14 @@ export class PlanInputAdapter {
     this.updatePlanBounds?.();
   }
 
-  private convertX(event: { clientX: number }): number {
-    const rect = this.element.getBoundingClientRect();
-    return this.viewport.convertXPixelToModel(event.clientX - rect.left);
+  /** Returns the raw pixel x within the element (the controller converts). */
+  private pixelX(event: { clientX: number }): number {
+    return event.clientX - this.element.getBoundingClientRect().left;
   }
 
-  private convertY(event: { clientY: number }): number {
-    const rect = this.element.getBoundingClientRect();
-    return this.viewport.convertYPixelToModel(event.clientY - rect.top);
+  /** Returns the raw pixel y within the element (the controller converts). */
+  private pixelY(event: { clientY: number }): number {
+    return event.clientY - this.element.getBoundingClientRect().top;
   }
 
   private readonly onPointerDown = (event: PointerEvent): void => {
@@ -135,8 +138,10 @@ export class PlanInputAdapter {
     const magnetismToggled = shift && alt;
     const pointerType = event.pointerType === "touch" ? View.PointerType.TOUCH : View.PointerType.MOUSE;
 
+    this.lastPressModelX = this.pixelX(event);
+    this.lastPressModelY = this.pixelY(event);
     this.controller.pressMouse(
-      this.convertX(event), this.convertY(event),
+      this.lastPressModelX, this.lastPressModelY,
       this.clickCount,
       shift && !ctrl && !alt && !meta,
       alignmentActivated, duplicationActivated, magnetismToggled, pointerType,
@@ -147,14 +152,14 @@ export class PlanInputAdapter {
     this.refreshBounds();
     const x = event.clientX - this.element.getBoundingClientRect().left;
     const y = event.clientY - this.element.getBoundingClientRect().top;
-    this.lastPointerX = x;
-    this.lastPointerY = y;
-    this.controller.moveMouse(this.convertX(event), this.convertY(event));
+    this.lastPointerX = this.pixelX(event);
+    this.lastPointerY = this.pixelY(event);
+    this.controller.moveMouse(this.lastPointerX, this.lastPointerY);
   };
 
   private readonly onPointerUp = (event: PointerEvent): void => {
     this.pointerDown = false;
-    this.controller.releaseMouse(this.convertX(event), this.convertY(event));
+    this.controller.releaseMouse(this.pixelX(event), this.pixelY(event));
   };
 
   private readonly onWheel = (event: WheelEvent): void => {

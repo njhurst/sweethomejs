@@ -44,16 +44,21 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
   const [undoEnabled, setUndoEnabled] = useState(false);
   const [redoEnabled, setRedoEnabled] = useState(false);
   const [selectedCount, setSelectedCount] = useState(0);
+  const [mode, setMode] = useState<string>(props.homeController.getPlanController().getMode().toString());
 
   useEffect(() => {
     const syncSelection = (): void => setSelectedCount(home.getSelectedItems().length);
     home.addSelectionListener(syncSelection);
     const furnitureListener = { collectionChanged: syncSelection };
     home.addFurnitureListener(furnitureListener);
+    const planController = homeController.getPlanController();
+    planController.addPropertyChangeListener(PlanController.Property.MODE, {
+      propertyChange: (evt) => setMode((evt as { newValue?: unknown }).newValue?.toString() ?? mode),
+    });
     return () => {
       home.removeFurnitureListener(furnitureListener);
     };
-  }, [home]);
+  }, [home, homeController, mode]);
 
   const planController = homeController.getPlanController();
   const homeController3D = homeController.getHomeController3D();
@@ -67,10 +72,18 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
         onView3DPositionChange={setView3DPosition}
         undoEnabled={undoEnabled}
         redoEnabled={redoEnabled}
+        mode={mode}
       />
       <div className="sh-home-body">
         <div className="sh-plan">
-          <PlanCanvas home={home} preferences={preferences} controller={planController} />
+          <PlanCanvas
+            home={home}
+            preferences={preferences}
+            controller={planController}
+            onReady={(view) => {
+              (globalThis as unknown as Record<string, unknown>).__planView = view;
+            }}
+          />
         </div>
         {view3DPosition === "split" && (
           <div className="sh-view3d">
@@ -102,11 +115,12 @@ function Toolbar(props: {
   onView3DPositionChange: (position: View3DPosition) => void;
   undoEnabled: boolean;
   redoEnabled: boolean;
+  mode: string;
 }): React.JSX.Element {
-  const { home, homeController, view3DPosition, onView3DPositionChange } = props;
+  const { home, homeController, view3DPosition, onView3DPositionChange, mode } = props;
   const planController = homeController.getPlanController();
   return (
-    <div className="sh-toolbar">
+    <div className="sh-toolbar" data-mode={mode}>
       <ToolbarButton label="New" onClick={() => homeController.newHome()} />
       <ToolbarButton label="Open" onClick={() => homeController.open()} />
       <ToolbarButton label="Save" onClick={() => homeController.save()} />
@@ -114,11 +128,11 @@ function Toolbar(props: {
       <ToolbarButton label="Undo" onClick={() => homeController.undo()} />
       <ToolbarButton label="Redo" onClick={() => homeController.redo()} />
       <div className="sh-toolbar-separator" />
-      <ToolbarButton label="Select" active={planController.getMode().toString() === "SELECTION"} onClick={() => planController.setMode(PlanMode.SELECTION)} />
-      <ToolbarButton label="Wall" active={planController.getMode().toString() === "WALL_CREATION"} onClick={() => planController.setMode(PlanMode.WALL_CREATION)} />
-      <ToolbarButton label="Room" active={planController.getMode().toString() === "ROOM_CREATION"} onClick={() => planController.setMode(PlanMode.ROOM_CREATION)} />
-      <ToolbarButton label="Dim" active={planController.getMode().toString() === "DIMENSION_LINE_CREATION"} onClick={() => planController.setMode(PlanMode.DIMENSION_LINE_CREATION)} />
-      <ToolbarButton label="Label" active={planController.getMode().toString() === "LABEL_CREATION"} onClick={() => planController.setMode(PlanMode.LABEL_CREATION)} />
+      <ToolbarButton label="Select" active={mode === "SELECTION"} onClick={() => planController.setMode(PlanMode.SELECTION)} />
+      <ToolbarButton label="Wall" active={mode === "WALL_CREATION"} onClick={() => planController.setMode(PlanMode.WALL_CREATION)} />
+      <ToolbarButton label="Room" active={mode === "ROOM_CREATION"} onClick={() => planController.setMode(PlanMode.ROOM_CREATION)} />
+      <ToolbarButton label="Dim" active={mode === "DIMENSION_LINE_CREATION"} onClick={() => planController.setMode(PlanMode.DIMENSION_LINE_CREATION)} />
+      <ToolbarButton label="Label" active={mode === "LABEL_CREATION"} onClick={() => planController.setMode(PlanMode.LABEL_CREATION)} />
       <ToolbarButton label="Delete" onClick={() => planController.deleteSelection()} />
       <div className="sh-toolbar-separator" />
       <select

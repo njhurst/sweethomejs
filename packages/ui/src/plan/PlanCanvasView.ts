@@ -25,7 +25,7 @@
  * render loop. The React component mounts this on a <canvas>.
  */
 import type { Home, UserPreferences, PlanController, Selectable, HomePieceOfFurniture } from "@sweethomejs/core";
-import { PlanView } from "@sweethomejs/core";
+import { PlanView, type PlanView as PlanViewType, type View } from "@sweethomejs/core";
 import { Canvas2DPainter, PlanViewport, PlanPainterPipeline, DEFAULT_PLAN_COLORS, PlanInputAdapter, emptyToolTip, emptyAlignmentFeedback, paintToolTip, paintAlignmentFeedback, paintSelectionFeedback, type PlanColors } from "@sweethomejs/render2d";
 
 export interface PlanCanvasHost {
@@ -35,7 +35,7 @@ export interface PlanCanvasHost {
   onDirty: () => void;
 }
 
-export class PlanCanvasView {
+export class PlanCanvasView implements PlanViewType {
   private readonly home: Home;
   private readonly preferences: UserPreferences;
   private readonly controller: PlanController;
@@ -77,6 +77,8 @@ export class PlanCanvasView {
         updatePlanBounds: () => this.updatePlanBounds(),
         onScroll: (dx, dy) => this.viewport.setPan(this.viewport.getPanX() - dx, this.viewport.getPanY() - dy),
       });
+      const adapter = this.inputAdapter as unknown as { lastPressModelX?: number; lastPressModelY?: number };
+      (globalThis as unknown as Record<string, unknown>).__adapter = adapter;
     }
   }
 
@@ -98,7 +100,20 @@ export class PlanCanvasView {
     for (const piece of this.home.getFurniture()) add(piece.getPoints());
     for (const room of this.home.getRooms()) add(room.getPoints());
     if (Number.isFinite(minX)) {
+      // Anchor the view: when the bounds shift (e.g. content added), adjust the
+      // pan so existing content stays at the same screen position (Java keeps
+      // the viewport stable when the plan grows).
+      const old = this.viewport.getPlanBounds();
+      const oldMinX = old.minX;
+      const oldMinY = old.minY;
       this.viewport.setPlanBounds({ minX, minY, maxX, maxY });
+      if (oldMinX !== minX || oldMinY !== minY) {
+        const scale = this.viewport.getScale();
+        this.viewport.setPan(
+          this.viewport.getPanX() + (minX - oldMinX) * scale,
+          this.viewport.getPanY() + (minY - oldMinY) * scale,
+        );
+      }
     }
   }
 
@@ -309,12 +324,12 @@ export class PlanCanvasView {
     this.requestPaint();
   }
 
-  getHorizontalRuler(): unknown {
-    return null;
+  getHorizontalRuler(): View {
+    return {} as View;
   }
 
-  getVerticalRuler(): unknown {
-    return null;
+  getVerticalRuler(): View {
+    return {} as View;
   }
 
   canImportDraggedItems(items: Selectable[], x: number, y: number): boolean {
