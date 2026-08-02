@@ -207,11 +207,23 @@ export class PlanController extends FurnitureController {
     this.state.updateEditableProperty(editableProperty, value);
   }
 
-  pressMouse(x: number, y: number, clickCount: number, shiftDown: boolean, alignmentActivated: boolean, duplicationActivated: boolean, magnetismToggled: boolean, pointerType: View.PointerType | null = null): void {
+  pressMouse(x: number, y: number, clickCount: number, shiftDown: boolean, duplicationActivated: boolean): void;
+  pressMouse(x: number, y: number, clickCount: number, shiftDown: boolean, alignmentActivated: boolean, duplicationActivated: boolean, magnetismToggled: boolean, pointerType: View.PointerType | null): void;
+  pressMouse(x: number, y: number, clickCount: number, shiftDown: boolean, alignmentActivatedOrDuplicationActivated: boolean, duplicationActivatedOrPointerType?: boolean | View.PointerType | null, magnetismToggled?: boolean, pointerType?: View.PointerType | null): void {
+    const resolvedPointerType = pointerType ?? (typeof duplicationActivatedOrPointerType === "object" ? duplicationActivatedOrPointerType : null);
+    let alignmentActivated: boolean;
+    let duplicationActivated: boolean;
+    if (typeof duplicationActivatedOrPointerType === "boolean") {
+      alignmentActivated = alignmentActivatedOrDuplicationActivated;
+      duplicationActivated = duplicationActivatedOrPointerType;
+    } else {
+      alignmentActivated = alignmentActivatedOrDuplicationActivated;
+      duplicationActivated = false;
+    }
     this.lastMousePressX = x;
     this.lastMousePressY = y;
-    this.pointerTypeLastMousePress = pointerType;
-    this.magnetismToggledLastMousePress = magnetismToggled;
+    this.pointerTypeLastMousePress = resolvedPointerType;
+    this.magnetismToggledLastMousePress = magnetismToggled ?? false;
     this.state.pressMouse(x, y, clickCount, shiftDown, duplicationActivated);
   }
 
@@ -981,6 +993,7 @@ export abstract class AbstractWallState extends AbstractModeChangeState {
 
   protected newWall: Wall | null = null;
   protected lastWall: Wall | null = null;
+  protected createdWalls: Wall[] = [];
   protected xStart = 0;
   protected yStart = 0;
   protected wallArcExtent: number | null = null;
@@ -1000,6 +1013,7 @@ export abstract class AbstractWallState extends AbstractModeChangeState {
       this.controller.preferences.getNewWallPattern() as never,
     );
     this.controller.home.addWall(newWall);
+    this.createdWalls.push(newWall);
     if (wallStartAtStart !== null) {
       newWall.setWallAtStart(wallStartAtStart);
       wallStartAtStart.setWallAtStart(newWall);
@@ -1043,6 +1057,14 @@ export abstract class AbstractWallState extends AbstractModeChangeState {
     this.newWall = null;
     this.lastWall = null;
     this.lastWallCreationTime = -1;
+    this.createdWalls = [];
+  }
+
+  /** Selects all walls created during this drawing session. */
+  protected selectCreatedWalls(): void {
+    if (this.createdWalls.length > 0) {
+      this.controller.home.setSelectedItems(this.createdWalls);
+    }
   }
 }
 
@@ -1095,6 +1117,7 @@ export class WallDrawingState extends AbstractWallState {
         this.controller.home.deleteWall(this.newWall);
         this.newWall = null;
       }
+      this.selectCreatedWalls();
       // Return to the selection state after a double click
       this.controller.setState(this.controller.getSelectionState());
     } else if (this.newWall !== null && this.newWall.getStartPointToEndPointDistance() > 0) {
