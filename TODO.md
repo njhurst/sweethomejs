@@ -109,8 +109,8 @@
 [ ] 6  P5 3D view: Java3D scene graph → Three.js (07-3d-view.md)
 [x] 6.1  Object3DBase + shared attribute caches (materials/textures/outlines keyed by value)
 [x] 6.2  Object3D builders: Wall, Room, Furniture, DimensionLine, Label, Polyline, Ground (+ baseboards, drawing modes)
-[@ pi-ltkr51] 6.3  Camera math port + navigation (orbit/observer/top, stored cameras, go-to-point-of-view, elevation) + navigation panel
-[ ] 6.4  Lighting: sun position from Compass, light color/power, day/night, shadows; selection outlines + blue selection boxes
+[x] 6.3  Camera math port + navigation (orbit/observer/top, stored cameras, go-to-point-of-view, elevation) + navigation panel
+[@ pi-ltkr51] 6.4  Lighting: sun position from Compass, light color/power, day/night, shadows; selection outlines + blue selection boxes
 [ ] 6.5  ModelManager port: async OBJ/DAE/3DS loading in worker, model cache + waiters, placeholder→loaded swap, unit normalization
 [ ] 6.6  Offscreen top-view icon rendering pipeline (WebGL2 in worker where supported)
 [ ] 6.7  Instancing optimization for large homes + culling
