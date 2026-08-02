@@ -18,3 +18,5 @@ export { FurniturePropertiesPanel } from "./properties/FurniturePropertiesPanel.
 export type { FurniturePropertiesPanelProps } from "./properties/FurniturePropertiesPanel.js";
 export { WallDialog, RoomDialog } from "./properties/ControllerDialogs.js";
 export type { WallDialogProps, RoomDialogProps } from "./properties/ControllerDialogs.js";
+export { FurnitureWizard, TextureWizard, BackgroundImageWizard, ModelMaterialsView, BaseboardChoiceView } from "./wizards/Wizards.js";
+export type { FurnitureWizardProps, TextureWizardProps, BackgroundImageWizardProps, ModelMaterialsViewProps, BaseboardChoiceViewProps } from "./wizards/Wizards.js";
