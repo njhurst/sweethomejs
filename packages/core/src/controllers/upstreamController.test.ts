@@ -37,6 +37,7 @@ import { Wall } from "../model/Wall.js";
 import { HomePieceOfFurniture } from "../model/HomePieceOfFurniture.js";
 import { HomeFurnitureGroup } from "../model/HomeFurnitureGroup.js";
 import { PlanController } from "./PlanController.js";
+import { HomeView } from "./HomeView.js";
 import { HomeController } from "./HomeController.js";
 import { PlanView } from "./PlanView.js";
 import { UserPreferences } from "../model/UserPreferences.js";
@@ -132,7 +133,7 @@ class MockPlanView implements PlanView {
 
 const mockViewFactory: ViewFactory = {
   createPlanView: () => new MockPlanView(),
-  createHomeView: () => new (class implements import("./HomeView.js").HomeView {
+  createHomeView: () => new (class implements HomeView {
     enabled = new Map<string, boolean>();
     setEnabled(actionType: string, enabled: boolean): void { this.enabled.set(actionType, enabled); }
     setActionEnabled(actionKey: string, enabled: boolean): void {}
@@ -141,7 +142,7 @@ const mockViewFactory: ViewFactory = {
     detachView(view: View): void {}
     attachView(view: View): void {}
     showOpenDialog(): string | null { return null; }
-    confirmOpenDamagedHome(homeName: string, homeModified: boolean): import("./HomeView.js").HomeView.OpenDamagedHomeAnswer { return import("./HomeView.js").HomeView.OpenDamagedHomeAnswer.DO_NOT_OPEN_HOME; }
+    confirmOpenDamagedHome(homeName: string, homeModified: boolean): HomeView.OpenDamagedHomeAnswer { return HomeView.OpenDamagedHomeAnswer.DO_NOT_OPEN_HOME; }
     showNewHomeFromExampleDialog(): string | null { return null; }
     showImportLanguageLibraryDialog(): string | null { return null; }
     confirmReplaceLanguageLibrary(languageLibraryName: string): boolean { return false; }
@@ -151,7 +152,7 @@ const mockViewFactory: ViewFactory = {
     confirmReplaceTexturesLibrary(texturesLibraryName: string): boolean { return false; }
     confirmReplacePlugin(pluginName: string): boolean { return false; }
     showSaveDialog(homeName: string | null): string | null { return null; }
-    confirmSave(homeName: string): import("./HomeView.js").HomeView.SaveAnswer { return import("./HomeView.js").HomeView.SaveAnswer.CANCEL; }
+    confirmSave(homeName: string): HomeView.SaveAnswer { return HomeView.SaveAnswer.CANCEL; }
     confirmSaveNewerHome(homeName: string): boolean { return true; }
     confirmDeleteCatalogSelection(): boolean { return false; }
     confirmExit(): boolean { return false; }
