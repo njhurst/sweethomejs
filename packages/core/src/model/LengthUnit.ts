@@ -180,6 +180,10 @@ export class LengthUnit {
     }
   }
 
+  getMaximumElevation(): number {
+    return this.getMaximumLength() / 10;
+  }
+
   getMaximumLength(): number {
     switch (this.unit) {
       case LengthUnit.MILLIMETER:

@@ -83,8 +83,8 @@
 
 [ ] 4  P3 Controllers: port viewcontroller package (03/04 porting strategy)
 [x] 4.1  Port View/ViewFactory/Controller/ContentManager interfaces + UndoSupport + LocalizedUndoableEdit
-[@ pi-ltkr51] 4.2  Port FurnitureController + HomeController (master controller, actions, menus)
-[ ] 4.3  Port HomeController3D + Object3DFactory seam + UserPreferencesController
+[x] 4.2  Port FurnitureController + HomeController (master controller, actions, menus)
+[@ pi-ltkr51] 4.3  Port HomeController3D + Object3DFactory seam + UserPreferencesController
 [ ] 4.4  Port dialog controllers: Wall, Room, Polyline, DimensionLine, Label, Compass, Level, Home3DAttributes, ObserverCamera
 [ ] 4.5  Port wizards: ImportedFurniture, ImportedTexture, BackgroundImage + ModelMaterials + BaseboardChoice + PageSetup + PrintPreview
 [ ] 4.6  Port PlanController: Mode/EditableProperty enums, SelectionState + selection/transform tools

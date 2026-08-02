@@ -108,7 +108,7 @@ export class Home {
   private polylinesValue: Polyline[] = [];
   private dimensionLinesValue: DimensionLine[] = [];
   private labelsValue: Label[] = [];
-  private camera: Camera;
+  private camera: Camera | null = null;
   private name: string | null = null;
   private readonly wallHeight: number;
   private backgroundImage: BackgroundImage | null = null;
@@ -138,9 +138,9 @@ export class Home {
       this.furnitureValue = [...wallHeightOrFurniture];
       this.wallHeight = 250;
     }
-    this.camera = new ObserverCamera(0, 0, 175, 0, 0, Math.PI * 63 / 180);
-    this.observerCamera = new ObserverCamera(this.camera.getX(), this.camera.getY(), this.camera.getZ(),
-      this.camera.getYaw(), this.camera.getPitch(), this.camera.getFieldOfView());
+    // Java: the current camera is null and lazily defaults to the top camera;
+    // the observer camera is a separate object created upfront.
+    this.observerCamera = new ObserverCamera(0, 0, 175, 0, 0, Math.PI * 63 / 180);
     this.observerCamera.setId(Home.HOME_OBSERVER_CAMERA_ID);
     this.topCamera = new Camera(0, 0, 0, 0, 0, Math.PI * 63 / 180);
     this.topCamera.setId(Home.HOME_TOP_CAMERA_ID);
@@ -796,6 +796,10 @@ export class Home {
   }
 
   getCamera(): Camera {
+    if (this.camera === null) {
+      // Use by default the top camera
+      this.camera = this.getTopCamera();
+    }
     return this.camera;
   }
 
@@ -912,7 +916,7 @@ export class Home {
     copy.polylinesValue = this.polylinesValue;
     copy.dimensionLinesValue = this.dimensionLinesValue;
     copy.labelsValue = this.labelsValue;
-    copy.camera = this.camera.clone();
+    copy.camera = this.camera?.clone() ?? null;
     copy.name = this.name;
     copy.backgroundImage = this.backgroundImage;
     copy.observerCamera = this.observerCamera.clone();
