@@ -85,8 +85,8 @@
 [x] 4.1  Port View/ViewFactory/Controller/ContentManager interfaces + UndoSupport + LocalizedUndoableEdit
 [x] 4.2  Port FurnitureController + HomeController (master controller, actions, menus)
 [x] 4.3  Port HomeController3D + Object3DFactory seam + UserPreferencesController
-[@ pi-ltkr51] 4.4  Port dialog controllers: Wall, Room, Polyline, DimensionLine, Label, Compass, Level, Home3DAttributes, ObserverCamera
-[ ] 4.5  Port wizards: ImportedFurniture, ImportedTexture, BackgroundImage + ModelMaterials + BaseboardChoice + PageSetup + PrintPreview
+[x] 4.4  Port dialog controllers: Wall, Room, Polyline, DimensionLine, Label, Compass, Level, Home3DAttributes, ObserverCamera
+[@ pi-ltkr51] 4.5  Port wizards: ImportedFurniture, ImportedTexture, BackgroundImage + ModelMaterials + BaseboardChoice + PageSetup + PrintPreview
 [ ] 4.6  Port PlanController: Mode/EditableProperty enums, SelectionState + selection/transform tools
 [ ] 4.7  Port PlanController: WallCreation, RoomCreation, PolylineCreation, DimensionLineCreation, LabelCreation states + tool feedback
 [ ] 4.8  Port PlanController: pan/zoom, magnetism, editable-property numeric entry, keyboard nudge, actions

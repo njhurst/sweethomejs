@@ -32,6 +32,7 @@
  * (add/delete/group/ungroup/align/distribute/reset elevation/sort).
  */
 import { LocalizedUndoableEdit } from "./LocalizedUndoableEdit.js";
+import { ImportedFurnitureWizardController } from "./ImportedFurnitureWizardController.js";
 import type { Controller } from "./Controller.js";
 import type { View } from "./View.js";
 import type { ViewFactory } from "./ViewFactory.js";
@@ -396,7 +397,7 @@ export class FurnitureController implements Controller {
   /** Displays the furniture modification dialog. */
   modifySelectedFurniture(): void {
     if (Home.getFurnitureSubList(this.home.getSelectedItems()).length > 0) {
-      // HomeFurnitureController ported in task 4.4
+      // HomeFurnitureController ported in task 4.4 (furniture dialog)
       throw new Error("HomeFurnitureController not ported yet");
     }
   }
@@ -565,8 +566,11 @@ export class FurnitureController implements Controller {
 
   /** Displays the wizard that helps to import furniture to home. */
   importFurniture(modelName: string | null = null): void {
-    // ImportedFurnitureWizardController ported in task 4.5
-    throw new Error("ImportedFurnitureWizardController not ported yet");
+    if (modelName !== null) {
+      new ImportedFurnitureWizardController(this.home, modelName, this.preferences, this, this.viewFactory, this.contentManager, this.undoSupport).displayView(this.getView());
+    } else {
+      new ImportedFurnitureWizardController(this.home, null, this.preferences, this, this.viewFactory, this.contentManager, this.undoSupport).displayView(this.getView());
+    }
   }
 
   private getMovableSelectedFurniture(): HomePieceOfFurniture[] {
