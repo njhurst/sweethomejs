@@ -69,7 +69,7 @@
 
 ## P2 — File format codecs
 
-[ ] 3  P2 File format: .sh3d read/write with round-trip parity (05-file-format.md)
+[x] 3  P2 File format: .sh3d read/write with round-trip parity (05-file-format.md)
 [x] 3.1  Zip layer with fflate: read/write Home.xml + content entries; lazy content resolution by entry name
 [x] 3.2  HomeXMLHandler port (reader): all elements/attributes per 05-file-format.md §1.1, tolerant of unknown attrs
 [x] 3.3  XMLWriter + HomeXMLExporter port (writer): canonical ordering, escaping, float formatting, content-name traversal order
@@ -77,7 +77,7 @@
 [x] 3.5  ContentDigestManager + ContentDigests manifest read/write + damaged-content repair flow
 [x] 3.6  Catalog codec: read/write .sh3f furniture and .sh3t textures library bundles
 [x] 3.7  HomeFileRecorder TS API: readHomeFromZip/Xml/Serialized, writeHome (XML-only v1), detect damaged files
-[@ pi-ltkr51] 3.8  Round-trip identity tests + Java↔JS cross-read field-dump parity + XML byte parity (incl. entry-name order)
+[x] 3.8  Round-trip identity tests + Java↔JS cross-read field-dump parity + XML byte parity (incl. entry-name order)
 
 ## P3 — Controllers
 
