@@ -91,6 +91,32 @@ export function App(): ReactElement {
         renderer.dispose();
         return { progress, pixels: image.data };
       };
+      // Video hook for e2e: renders frames along the observer-camera path
+      (globalThis as unknown as Record<string, unknown>).__renderVideoFrames = async (
+        frameCount: number,
+      ): Promise<{ frames: number; colored: number }> => {
+        const { renderVideoFrames } = await import("@sweethomejs/photo");
+        const home = sessionRef.current?.home ?? s.home;
+        const camera = home.getObserverCamera();
+        const path = [
+          new (await import("@sweethomejs/core")).Camera(camera.getX(), camera.getY(), camera.getZ(), camera.getYaw(), camera.getPitch(), camera.getFieldOfView(), 0),
+          new (await import("@sweethomejs/core")).Camera(camera.getX() + 500, camera.getY(), camera.getZ(), camera.getYaw(), camera.getPitch(), camera.getFieldOfView(), 5000),
+        ];
+        const frames = await renderVideoFrames(home, s.preferences, path, {
+          width: 160,
+          height: 120,
+          fps: 12,
+          quality: 0,
+        });
+        let colored = 0;
+        const last = frames[frames.length - 1];
+        if (last !== undefined) {
+          for (let i = 0; i < last.data.length; i += 4) {
+            if (last.data[i]! < 250 || last.data[i + 1]! < 250 || last.data[i + 2]! < 250) colored++;
+          }
+        }
+        return { frames: frames.length, colored };
+      };
       const { IndexedDBStore, PreferencesStore } = await import("@sweethomejs/ui");
       const store = new IndexedDBStore();
       (globalThis as unknown as Record<string, unknown>).__preferencesStore = new PreferencesStore(store);

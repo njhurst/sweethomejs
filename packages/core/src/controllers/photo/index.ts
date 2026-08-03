@@ -20,3 +20,4 @@
 export { AbstractPhotoRenderer, PhotoQuality } from "./AbstractPhotoRenderer.js";
 export type { PhotoRendererObserver, RenderedImage } from "./AbstractPhotoRenderer.js";
 export { PhotoController, AspectRatio, PHOTO_WIDTHS, aspectRatioValue } from "./PhotoController.js";
+export { VideoController, VIDEO_FRAME_RATES, interpolateCamera, getCameraAt } from "./VideoController.js";

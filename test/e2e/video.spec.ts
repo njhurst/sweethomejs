@@ -1,5 +1,5 @@
 /*
- * index.ts
+ * video.spec.ts
  *
  * Original SweetHomeJS code, Copyright (c) 2026 SweetHomeJS contributors
  *
@@ -17,8 +17,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-export { ThreeJSPhotoRenderer, PROGRESSIVE_PASSES } from "./ThreeJSPhotoRenderer.js";
-export { PhotoQuality } from "@sweethomejs/core";
-export { renderVideoFrames, recordVideo } from "./VideoRecorder.js";
-export type { VideoFrameOptions, VideoRecordOptions } from "./VideoRecorder.js";
-export type { RenderedImage, PhotoRendererObserver } from "@sweethomejs/core";
+
+/**
+ * Video e2e (task 8.5): renders frames along the camera path (12 fps over a
+ * 5s path = 60 frames) and checks the frames contain the rendered scene.
+ */
+import { expect, test } from "@playwright/test";
+
+test("video renders frames along the camera path", async ({ page }) => {
+  await page.goto("/?file=/fixtures/walls.sh3d");
+  await expect(page.getByTestId("plan-canvas")).toBeVisible();
+  await page.waitForTimeout(3000);
+  const result = await page.evaluate(async () => {
+    const renderVideoFrames = (globalThis as any).__renderVideoFrames;
+    return renderVideoFrames(60);
+  });
+  console.log("video:", JSON.stringify(result));
+  expect(result.frames).toBeGreaterThanOrEqual(60);
+  expect(result.colored).toBeGreaterThan(1000);
+});

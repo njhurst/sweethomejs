@@ -177,6 +177,44 @@ export class ThreeJSPhotoRenderer extends AbstractPhotoRenderer {
     }
   }
 
+  /**
+   * Single-shot render: one pass at full size, no progressive display.
+   * Used by the video recorder (fast frame capture).
+   */
+  async renderFrame(image: RenderedImage, camera: Camera): Promise<void> {
+    if (this.scene === null) {
+      this.scene = buildSceneIntermediate(this.getHome(), this.preferences, {
+        addLights: true,
+        addGround: true,
+      });
+    }
+    if (this.renderer === null) {
+      this.renderer = this.createRenderer(image.width, image.height);
+    }
+    const threeCamera = new THREE.PerspectiveCamera();
+    applyModelCameraToThree(threeCamera, camera);
+    threeCamera.aspect = image.width / image.height;
+    threeCamera.updateProjectionMatrix();
+    this.renderer.setSize(image.width, image.height, false);
+    this.renderer.setViewport(0, 0, image.width, image.height);
+    this.renderer.render(this.scene.group, threeCamera);
+    const bitmap = await createImageBitmap(this.renderer.domElement);
+    const targetCanvas = typeof OffscreenCanvas !== "undefined"
+      ? new OffscreenCanvas(image.width, image.height)
+      : document.createElement("canvas");
+    targetCanvas.width = image.width;
+    targetCanvas.height = image.height;
+    const targetContext = targetCanvas.getContext("2d") as Photo2DContext | null;
+    if (targetContext === null) {
+      bitmap.close();
+      throw new Error("2D context unavailable");
+    }
+    targetContext.drawImage(bitmap, 0, 0, image.width, image.height);
+    bitmap.close();
+    const finalImage = targetContext.getImageData(0, 0, image.width, image.height);
+    image.data.set(finalImage.data);
+  }
+
   override stop(): void {
     this.stopped = true;
   }
