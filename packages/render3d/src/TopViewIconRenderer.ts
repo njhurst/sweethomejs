@@ -132,6 +132,14 @@ export class TopViewIconRenderer {
     this.renderer.render(this.scene, this.camera);
     this.scene.remove(pieceGroup);
 
+    // The WebGL renderer draws into ITS OWN canvas; copy its buffer into the
+    // target canvas immediately (a WebGL buffer without preserveDrawingBuffer
+    // is only valid until the next composite, and the plan draws this icon
+    // later). The result is a stable 2D canvas with a white background.
+    const context = (canvas as HTMLCanvasElement).getContext?.("2d") ?? null;
+    if (context !== null) {
+      context.drawImage(this.renderer.domElement, 0, 0, canvas.width, canvas.height);
+    }
     return canvas;
   }
 

@@ -281,6 +281,25 @@ export class PlanPainterPipeline {
         continue;
       }
       paintFurniturePlanIcon(painter, piece, this.colors, this.iconCache, () => this.iconReadyCallback?.());
+      // Piece outline (Java always strokes the piece shape)
+      painter.setColor(this.colors.furnitureOutline);
+      painter.setStroke(1, []);
+      painter.beginPath();
+      for (let i = 0; i < points.length; i++) {
+        if (i === 0) {
+          painter.moveTo(points[i]![0]!, points[i]![1]!);
+        } else {
+          painter.lineTo(points[i]![0]!, points[i]![1]!);
+        }
+      }
+      painter.closePath();
+      painter.strokePath();
+      // Doors and windows: draw their sash swing arcs (Java's
+      // paintDoorOrWindowSashes — only for HomeDoorOrWindow instances, which
+      // carry sash geometry; catalog door pieces don't).
+      if (piece.isDoorOrWindow() && typeof (piece as unknown as { getSashes?: unknown }).getSashes === "function") {
+        paintDoorOrWindowSashes(painter, piece, this.colors.furnitureOutline);
+      }
       void preferences;
     }
     painter.restore();
@@ -376,4 +395,65 @@ export class PlanPainterPipeline {
 function formatArea(area: number): string {
   const areaText = area >= 1000000 ? `${(area / 1000000).toFixed(2)} m²` : `${Math.round(area)} cm²`;
   return areaText;
+}
+
+/**
+ * Draws the sash swing arcs of a door/window — port of Java's
+ * PlanComponent.paintDoorOrWindowSashes / getDoorOrWindowSashShape. Each sash
+ * is a pie arc in the piece's local space, transformed by the piece's
+ * position, angle and mirroring.
+ */
+function paintDoorOrWindowSashes(painter: PlanPainter, piece: HomePieceOfFurniture, color: number): void {
+  const sashes = (piece as unknown as { getSashes(): Array<{ getXAxis(): number; getYAxis(): number; getWidth(): number; getStartAngle(): number; getEndAngle(): number }> }).getSashes();
+  if (sashes.length === 0) {
+    return;
+  }
+  const mirroredSign = (piece as unknown as { isModelMirrored(): boolean }).isModelMirrored() ? -1 : 1;
+  const width = piece.getWidth();
+  const depth = piece.getDepth();
+  const angle = piece.getAngle();
+  painter.setStroke(1, []);
+  painter.setColor(color);
+  for (const sash of sashes) {
+    const xAxis = mirroredSign * sash.getXAxis() * width;
+    const yAxis = sash.getYAxis() * depth;
+    const sashWidth = sash.getWidth() * width;
+    let startAngle = (sash.getStartAngle() * 180) / Math.PI;
+    if (piece.isModelMirrored()) {
+      startAngle = 180 - startAngle;
+    }
+    const extentAngle = mirroredSign * ((sash.getEndAngle() - sash.getStartAngle()) * 180) / Math.PI;
+    // Sample the pie outline (center → arc → center) in the piece's local space
+    const steps = Math.max(4, Math.ceil(Math.abs(extentAngle) / 15));
+    const localPoints: number[][] = [[0, 0]];
+    for (let i = 0; i <= steps; i++) {
+      const theta = ((startAngle + (extentAngle * i) / steps) * Math.PI) / 180;
+      localPoints.push([xAxis - sashWidth + 2 * sashWidth * Math.cos(theta), yAxis - sashWidth + 2 * sashWidth * Math.sin(theta)]);
+    }
+    localPoints.push([0, 0]);
+    // Transform: translate(piece.x, piece.y) · rotate(angle) · translate(mirroredSign * -width/2, -depth/2)
+    const cosA = Math.cos(angle);
+    const sinA = Math.sin(angle);
+    const tx = piece.getX();
+    const ty = piece.getY();
+    const ox = mirroredSign * (-width / 2);
+    const oy = -depth / 2;
+    painter.beginPath();
+    for (let i = 0; i < localPoints.length; i++) {
+      const localPoint = localPoints[i]!;
+      const lx = localPoint[0]!;
+      const ly = localPoint[1]!;
+      const rx = lx + ox;
+      const ry = ly + oy;
+      const worldX = tx + rx * cosA - ry * sinA;
+      const worldY = ty + rx * sinA + ry * cosA;
+      if (i === 0) {
+        painter.moveTo(worldX, worldY);
+      } else {
+        painter.lineTo(worldX, worldY);
+      }
+    }
+    painter.closePath();
+    painter.strokePath();
+  }
 }

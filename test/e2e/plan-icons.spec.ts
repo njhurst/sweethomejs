@@ -44,17 +44,24 @@ test("plan shows top-view model icons for furniture", async ({ page }) => {
     const cache = pv.pipeline.getIconCache();
     const map = (cache as any).cache as Map<string, { width: number; height: number }>;
     const sizes = [...map.values()].slice(0, 6).map((icon) => [icon.width, icon.height]);
-    // The plan must contain colored icon pixels (not just the gray placeholder)
+    // The plan must actually PAINT the icons: sample the canvas at a piece's
+    // location (the bed) — the icon block must be non-white there.
+    const home = (globalThis as any).__homeController.home;
     const canvas = document.querySelector('[data-testid="plan-canvas"]') as HTMLCanvasElement;
     const ctx = canvas.getContext("2d");
-    let colored = 0;
+    let piecePainted = 0;
     if (ctx !== null) {
-      const d = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-      for (let i = 0; i < d.length; i += 4) {
-        if (d[i]! !== 255 || d[i + 1]! !== 255 || d[i + 2]! !== 255) colored++;
+      const bed = home.getFurniture().find((f: any) => f.getName() === "Bed");
+      if (bed) {
+        const cx = pv.convertXModelToScreen(bed.getX());
+        const cy = pv.convertYModelToScreen(bed.getY());
+        const d = ctx.getImageData(Math.round(cx) - 4, Math.round(cy) - 4, 8, 8).data;
+        for (let i = 0; i < d.length; i += 4) {
+          if (d[i]! !== 255 || d[i + 1]! !== 255 || d[i + 2]! !== 255) piecePainted++;
+        }
       }
     }
-    return { cached: map.size, sizes, colored };
+    return { cached: map.size, sizes, piecePainted: piecePainted / 16 };
   });
   expect(r.cached).toBeGreaterThanOrEqual(5);
   // Icons render at 4x the plan size (crisp)
@@ -62,6 +69,7 @@ test("plan shows top-view model icons for furniture", async ({ page }) => {
     expect(w).toBeGreaterThan(20);
     expect(h).toBeGreaterThan(20);
   }
-  // The plan canvas is painted with the icons (well beyond a blank canvas)
-  expect(r.colored).toBeGreaterThan(10000);
+  // The bed's icon is actually painted at its location (regression: the icon
+  // renderer used to return a blank canvas — the WebGL buffer was never copied).
+  expect(r.piecePainted).toBeGreaterThan(0.5);
 });
