@@ -54,9 +54,39 @@ import { ObserverCamera } from "../model/ObserverCamera.js";
 import { HomePieceOfFurniture } from "../model/HomePieceOfFurniture.js";
 import type { UserPreferences } from "../model/UserPreferences.js";
 import type { Selectable } from "../model/Selectable.js";
+import { Area } from "../geom/Area.js";
+import { GeneralPath } from "../geom/GeneralPath.js";
 
 
 const PIXEL_MARGIN = 4;
+
+/** Point-in-polygon test (ray casting, even-odd). */
+function pointInRing(ring: number[][], px: number, py: number): boolean {
+  let inside = false;
+  const n = ring.length;
+  for (let i = 0, j = n - 1; i < n; j = i++) {
+    const xi = ring[i]![0]!;
+    const yi = ring[i]![1]!;
+    const xj = ring[j]![0]!;
+    const yj = ring[j]![1]!;
+    if (yi > py !== yj > py && px < ((xj - xi) * (py - yi)) / (yj - yi) + xi) {
+      inside = !inside;
+    }
+  }
+  return inside;
+}
+
+/** Signed shoelace area of a ring (positive = CCW). */
+function ringArea(ring: number[][]): number {
+  let area = 0;
+  const n = ring.length;
+  for (let i = 0; i < n; i++) {
+    const p = ring[i]!;
+    const q = ring[(i + 1) % n]!;
+    area += p[0]! * q[1]! - q[0]! * p[1]!;
+  }
+  return area / 2;
+}
 
 export class PlanController extends FurnitureController {
   private readonly propertyChangeSupport = new PropertyChangeSupport(this);
@@ -388,6 +418,58 @@ export class PlanController extends FurnitureController {
   convertXPixelToModel(x: number): number {
     const view = this.getView();
     return view.getScale() !== 0 ? (x - view.convertXModelToScreen(0)) / view.getScale() + view.convertXPixelToModel(view.convertXModelToScreen(0)) : x;
+  }
+
+  /**
+   * Returns the union area of all walls (like Java's getWallsArea).
+   * Used by the room bucket fill.
+   */
+  private getWallsArea(): Area {
+    const path = new GeneralPath();
+    for (const wall of this.home.getWalls()) {
+      const points = wall.getPoints();
+      if (points.length < 3) {
+        continue;
+      }
+      path.moveTo(points[0]![0]!, points[0]![1]!);
+      for (let i = 1; i < points.length; i++) {
+        path.lineTo(points[i]![0]!, points[i]![1]!);
+      }
+      path.closePath();
+    }
+    return new Area(path);
+  }
+
+  /**
+   * All closed rings (outer wall outline + room holes) of the walls area, like
+   * Java's getAreaPaths. The room holes are the inner boundaries of the walls.
+   */
+  private getRoomPathsFromWalls(): number[][][] {
+    return this.getWallsArea()
+      .getPolygons()
+      .flat()
+      .filter((ring) => ring.length >= 3);
+  }
+
+  /**
+   * Detects the room enclosed by walls at (x, y) — the bucket fill. Returns the
+   * innermost wall-enclosed ring containing the point (like Java's
+   * computeRoomPointsAt, which returns the room path the point falls in).
+   */
+  computeRoomPointsAt(x: number, y: number): number[][] | null {
+    let best: number[][] | null = null;
+    let bestArea = Number.POSITIVE_INFINITY;
+    for (const ring of this.getRoomPathsFromWalls()) {
+      if (!pointInRing(ring, x, y)) {
+        continue;
+      }
+      const area = Math.abs(ringArea(ring));
+      if (area < bestArea) {
+        bestArea = area;
+        best = ring;
+      }
+    }
+    return best;
   }
 
   convertYPixelToModel(y: number): number {
@@ -1183,8 +1265,12 @@ export class RoomCreationState extends AbstractModeChangeState {
 }
 
 /** Room drawing: accumulate points, double-click creates the room. */
+/** Room drawing: first click starts, moves build the polygon, double-click finishes. */
 export class RoomDrawingState extends AbstractModeChangeState {
-  private points: number[][] = [];
+  private newRoom: Room | null = null;
+  private xPreviousPoint = 0;
+  private yPreviousPoint = 0;
+  private newPointPending = false;
 
   constructor(controller: PlanController) {
     super(controller);
@@ -1198,39 +1284,105 @@ export class RoomDrawingState extends AbstractModeChangeState {
     return true;
   }
 
+  override enter(): void {
+    // Start the room at the press that entered this state (like Java, which
+    // uses getXLastMousePress).
+    this.xPreviousPoint = this.controller.convertXPixelToModel(this.controller.getXLastMousePress());
+    this.yPreviousPoint = this.controller.convertYPixelToModel(this.controller.getYLastMousePress());
+    this.newRoom = null;
+    this.newPointPending = false;
+    this.controller.home.setSelectedItems([]);
+  }
+
+  override moveMouse(x: number, y: number): void {
+    const modelX = this.controller.convertXPixelToModel(x);
+    const modelY = this.controller.convertYPixelToModel(y);
+    if (this.newRoom === null) {
+      // Create the room on first move, from the previous point to the cursor
+      const room = new Room("room", [
+        [this.xPreviousPoint, this.yPreviousPoint],
+        [modelX, modelY],
+      ]);
+      this.controller.home.addRoom(room);
+      this.controller.home.setSelectedItems([room]);
+      this.newRoom = room;
+    } else if (this.newPointPending) {
+      // A new side was started by a click: add a vertex at the cursor
+      const points = this.newRoom.getPoints();
+      this.xPreviousPoint = points[points.length - 1]![0]!;
+      this.yPreviousPoint = points[points.length - 1]![1]!;
+      this.newRoom.addPoint(modelX, modelY);
+      this.newPointPending = false;
+    } else {
+      // Otherwise update the last point (rubber-band the polygon)
+      this.newRoom.setPoint(modelX, modelY, this.newRoom.getPointCount() - 1);
+    }
+  }
+
   override pressMouse(x: number, y: number, clickCount: number, shiftDown: boolean, duplicationActivated: boolean): void {
     const modelX = this.controller.convertXPixelToModel(x);
     const modelY = this.controller.convertYPixelToModel(y);
     if (clickCount === 2) {
-      // Double-click closes the room
-      if (this.points.length >= 3) {
-        const room = new Room("room", this.points);
-        this.controller.home.addRoom(room);
-        this.controller.home.setSelectedItems([room]);
+      if (this.newRoom === null) {
+        // Bucket fill: detect the room enclosed by walls at the double-click point
+        const roomPoints = this.controller.computeRoomPointsAt(modelX, modelY);
+        if (roomPoints !== null) {
+          const room = new Room("room", roomPoints);
+          this.controller.home.addRoom(room);
+          this.controller.home.setSelectedItems([room]);
+          this.newRoom = room;
+        }
       }
-      this.points = [];
-      this.controller.setState(this.controller.getSelectionState());
+      this.validateDrawnRoom();
     } else {
-      this.points.push([modelX, modelY]);
-      this.controller.getView().setRectangleFeedback(modelX, modelY, modelX, modelY);
+      this.endRoomSide();
     }
   }
 
-  override moveMouse(x: number, y: number): void {
-    if (this.points.length > 0) {
-      const modelX = this.controller.convertXPixelToModel(x);
-      const modelY = this.controller.convertYPixelToModel(y);
-      this.controller.getView().setRectangleFeedback(this.points[this.points.length - 1]![0]!, this.points[this.points.length - 1]![1]!, modelX, modelY);
+  private endRoomSide(): void {
+    // A click commits the current side; the next move adds a new vertex.
+    // Only when the last side has a non-zero length (like Java's endRoomSide).
+    if (this.newRoom !== null) {
+      const points = this.newRoom.getPoints();
+      if (points.length >= 2) {
+        const last = points[points.length - 1]!;
+        const prev = points[points.length - 2]!;
+        const dx = last[0]! - prev[0]!;
+        const dy = last[1]! - prev[1]!;
+        if (dx * dx + dy * dy > 0) {
+          this.newPointPending = true;
+        }
+      }
+    } else {
+      // First click: the room starts on the next move from the press point.
+      this.newPointPending = true;
     }
+  }
+
+  private validateDrawnRoom(): void {
+    const room = this.newRoom;
+    if (room !== null && room.getPointCount() < 3) {
+      // Delete a room with fewer than 3 points
+      this.controller.home.deleteRoom(room);
+    }
+    this.newRoom = null;
+    this.newPointPending = false;
+    // Back to the room creation state so the user can draw another room
+    this.controller.setState(this.controller.getRoomCreationState());
   }
 
   override escape(): void {
-    this.points = [];
+    if (this.newRoom !== null) {
+      this.controller.home.deleteRoom(this.newRoom);
+    }
+    this.newRoom = null;
+    this.newPointPending = false;
     this.controller.setState(this.controller.getSelectionState());
   }
 
   override exit(): void {
-    this.points = [];
+    this.newRoom = null;
+    this.newPointPending = false;
     this.controller.getView().deleteFeedback();
   }
 }

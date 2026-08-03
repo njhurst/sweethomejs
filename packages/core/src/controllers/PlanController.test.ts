@@ -269,17 +269,43 @@ describe("PlanController (task 4.6)", () => {
     expect(wall.getXEnd()).toBeCloseTo(100, 4);
   });
 
-  it("creates a room by double-clicking after adding points", () => {
+  it("creates a room by clicking points, moving between clicks (like Java)", () => {
     const home = new Home();
     const controller = makeController(home);
     controller.getView();
     controller.setMode(PlanController.Mode.ROOM_CREATION);
-    controller.pressMouse(0, 0, 1, false, false, false, false, null);
-    controller.pressMouse(100, 0, 1, false, false, false, false, null);
-    controller.pressMouse(100, 100, 1, false, false, false, false, null);
-    controller.pressMouse(0, 0, 2, false, false, false, false, null);
+    controller.moveMouse(10, 10);
+    controller.pressMouse(10, 10, 1, false, false, false, false, null);
+    // The room is created on the first move after the press
+    controller.moveMouse(100, 10);
+    controller.pressMouse(100, 10, 1, false, false, false, false, null);
+    controller.moveMouse(100, 100);
+    controller.pressMouse(100, 100, 2, false, false, false, false, null);
     expect(home.getRooms().length).toBe(1);
     expect(home.getRooms()[0]!.getPointCount()).toBeGreaterThanOrEqual(3);
+  });
+
+  it("bucket-fills a room on double-click inside walls", () => {
+    const home = new Home();
+    // Closed box of walls
+    const box: Array<[number, number, number, number]> = [
+      [0, 0, 1000, 0],
+      [1000, 0, 1000, 600],
+      [1000, 600, 0, 600],
+      [0, 600, 0, 0],
+    ];
+    for (const [x1, y1, x2, y2] of box) {
+      home.addWall(new Wall("w", x1, y1, x2, y2, 20, 250));
+    }
+    const controller = makeController(home);
+    controller.getView();
+    controller.setMode(PlanController.Mode.ROOM_CREATION);
+    controller.moveMouse(500, 300);
+    controller.pressMouse(500, 300, 2, false, false, false, false, null);
+    expect(home.getRooms().length).toBe(1);
+    const points = home.getRooms()[0]!.getPoints();
+    const maxX = Math.max(...points.map((pt) => pt[0]!));
+    expect(maxX).toBeCloseTo(990, 0);
   });
 
   it("creates a label with a single click in label creation mode", () => {
