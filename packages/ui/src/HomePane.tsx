@@ -81,6 +81,7 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
         onSaveHome={props.onSaveHome ?? null}
       />
       <div className="sh-home-body">
+        <LeftToolbar mode={mode} homeController={homeController} />
         <div className="sh-plan">
           <PlanCanvas
             home={home}
@@ -136,11 +137,6 @@ function Toolbar(props: {
       <ToolbarButton label="Undo" onClick={() => homeController.undo()} />
       <ToolbarButton label="Redo" onClick={() => homeController.redo()} />
       <div className="sh-toolbar-separator" />
-      <ToolbarButton label="Select" active={mode === "SELECTION"} onClick={() => planController.setMode(PlanMode.SELECTION)} />
-      <ToolbarButton label="Wall" active={mode === "WALL_CREATION"} onClick={() => planController.setMode(PlanMode.WALL_CREATION)} />
-      <ToolbarButton label="Room" active={mode === "ROOM_CREATION"} onClick={() => planController.setMode(PlanMode.ROOM_CREATION)} />
-      <ToolbarButton label="Dim" active={mode === "DIMENSION_LINE_CREATION"} onClick={() => planController.setMode(PlanMode.DIMENSION_LINE_CREATION)} />
-      <ToolbarButton label="Label" active={mode === "LABEL_CREATION"} onClick={() => planController.setMode(PlanMode.LABEL_CREATION)} />
       <ToolbarButton label="Delete" onClick={() => planController.deleteSelection()} />
       <div className="sh-toolbar-separator" />
       <select
@@ -179,6 +175,36 @@ function TabbedViews(props: {
           <View3DCanvas home={props.home} preferences={props.preferences} homeController3D={props.homeController3D} />
         )}
       </div>
+    </div>
+  );
+}
+
+/** The left tools palette (like the desktop app). */
+function LeftToolbar(props: { mode: string; homeController: HomeController }): React.JSX.Element {
+  const { mode, homeController } = props;
+  const planController = homeController.getPlanController();
+  const tools: Array<{ label: string; title: string; modeName: string; onClick: () => void }> = [
+    { label: "▸", title: "Select", modeName: "SELECTION", onClick: () => planController.setMode(PlanMode.SELECTION) },
+    { label: "✥", title: "Pan", modeName: "PANNING", onClick: () => planController.setMode(PlanMode.PANNING) },
+    { label: "∥", title: "Draw walls", modeName: "WALL_CREATION", onClick: () => planController.setMode(PlanMode.WALL_CREATION) },
+    { label: "▦", title: "Draw rooms", modeName: "ROOM_CREATION", onClick: () => planController.setMode(PlanMode.ROOM_CREATION) },
+    { label: "↔", title: "Draw dimensions", modeName: "DIMENSION_LINE_CREATION", onClick: () => planController.setMode(PlanMode.DIMENSION_LINE_CREATION) },
+    { label: "🖶", title: "Add labels", modeName: "LABEL_CREATION", onClick: () => planController.setMode(PlanMode.LABEL_CREATION) },
+    { label: "⌁", title: "Draw polylines", modeName: "POLYLINE_CREATION", onClick: () => planController.setMode(PlanMode.POLYLINE_CREATION) },
+  ];
+  return (
+    <div className="sh-left-toolbar" data-testid="left-toolbar">
+      {tools.map((tool) => (
+        <button
+          key={tool.modeName}
+          className={`sh-left-tool${mode === tool.modeName ? " active" : ""}`}
+          title={tool.title}
+          aria-label={tool.title}
+          onClick={tool.onClick}
+        >
+          {tool.label}
+        </button>
+      ))}
     </div>
   );
 }

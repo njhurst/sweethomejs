@@ -84,6 +84,36 @@
   min-height: 0;
 }
 
+.sh-left-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px;
+  background: var(--sh-toolbar-bg);
+  border-right: 1px solid var(--sh-border);
+  width: 44px;
+  flex: 0 0 auto;
+}
+
+.sh-left-tool {
+  width: 36px;
+  height: 36px;
+  font-size: 18px;
+  border: 1px solid transparent;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.sh-left-tool:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.sh-left-tool.active {
+  background: var(--sh-accent);
+  color: white;
+}
+
 .sh-plan {
   flex: 1 1 60%;
   min-width: 0;

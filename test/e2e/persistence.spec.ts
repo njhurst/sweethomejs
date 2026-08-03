@@ -48,7 +48,7 @@ test("drawing a wall enables undo and undo restores", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByTestId("plan-canvas")).toBeVisible();
   const toolbar = page.locator(".sh-toolbar");
-  await toolbar.getByRole("button", { name: "Wall" }).click();
+  await page.getByTestId("left-toolbar").getByRole("button", { name: "Draw walls" }).click();
   const canvas = page.getByTestId("plan-canvas");
   const box = (await canvas.boundingBox())!;
   await page.mouse.click(box.x + box.width * 0.3, box.y + box.height * 0.4);
@@ -60,7 +60,7 @@ test("drawing a wall enables undo and undo restores", async ({ page }) => {
   // midpoint (converted from model to screen via the exposed plan view) and
   // verify the selection narrows to one item
   await page.waitForTimeout(700);
-  await toolbar.getByRole("button", { name: "Select" }).click();
+  await page.getByTestId("left-toolbar").getByRole("button", { name: "Select" }).click();
   const clickPoint = await page.evaluate(() => {
     const hc = (globalThis as any).__homeController;
     const planView = (globalThis as any).__planView;

@@ -1088,21 +1088,24 @@ export class WallDrawingState extends AbstractWallState {
   }
 
   override enter(): void {
-    this.xStart = this.controller.getXLastMouseMove();
-    this.yStart = this.controller.getYLastMouseMove();
+    // Convert the stored press/move pixels to model coordinates
+    this.xStart = this.controller.convertXPixelToModel(this.controller.getXLastMouseMove());
+    this.yStart = this.controller.convertYPixelToModel(this.controller.getYLastMouseMove());
   }
 
   override moveMouse(x: number, y: number): void {
+    const modelX = this.controller.convertXPixelToModel(x);
+    const modelY = this.controller.convertYPixelToModel(y);
     if (this.newWall === null) {
       // Create the wall on first move, joining to any wall end at the start point
       const wallEndAtStart = this.getWallEndAt(this.xStart, this.yStart);
-      this.newWall = this.createWall(this.xStart, this.yStart, x, y, null, wallEndAtStart);
+      this.newWall = this.createWall(this.xStart, this.yStart, modelX, modelY, null, wallEndAtStart);
     } else {
-      this.newWall.setXEnd(x);
-      this.newWall.setYEnd(y);
+      this.newWall.setXEnd(modelX);
+      this.newWall.setYEnd(modelY);
     }
     if (this.controller.isFeedbackDisplayed()) {
-      this.controller.getView().setAlignmentFeedback(Wall as unknown as { new (): Selectable }, x, y, 0, 0);
+      this.controller.getView().setAlignmentFeedback(Wall as unknown as { new (): Selectable }, modelX, modelY, 0, 0);
     }
   }
 
@@ -1117,6 +1120,8 @@ export class WallDrawingState extends AbstractWallState {
   }
 
   override pressMouse(x: number, y: number, clickCount: number, shiftDown: boolean, duplicationActivated: boolean): void {
+    const modelX = this.controller.convertXPixelToModel(x);
+    const modelY = this.controller.convertYPixelToModel(y);
     if (clickCount === 2) {
       // Double-click finishes the wall creation
       if (this.newWall !== null && this.newWall.getStartPointToEndPointDistance() > 0) {
@@ -1135,7 +1140,7 @@ export class WallDrawingState extends AbstractWallState {
       this.endWallCreation();
       // Create the next wall starting at the current end
       const wallEndAtStart = this.getWallEndAt(this.xStart, this.yStart);
-      this.newWall = this.createWall(this.xStart, this.yStart, x, y, null, wallEndAtStart);
+      this.newWall = this.createWall(this.xStart, this.yStart, modelX, modelY, null, wallEndAtStart);
     }
   }
 
@@ -1191,6 +1196,8 @@ export class RoomDrawingState extends AbstractModeChangeState {
   }
 
   override pressMouse(x: number, y: number, clickCount: number, shiftDown: boolean, duplicationActivated: boolean): void {
+    const modelX = this.controller.convertXPixelToModel(x);
+    const modelY = this.controller.convertYPixelToModel(y);
     if (clickCount === 2) {
       // Double-click closes the room
       if (this.points.length >= 3) {
@@ -1201,14 +1208,16 @@ export class RoomDrawingState extends AbstractModeChangeState {
       this.points = [];
       this.controller.setState(this.controller.getSelectionState());
     } else {
-      this.points.push([x, y]);
-      this.controller.getView().setRectangleFeedback(x, y, x, y);
+      this.points.push([modelX, modelY]);
+      this.controller.getView().setRectangleFeedback(modelX, modelY, modelX, modelY);
     }
   }
 
   override moveMouse(x: number, y: number): void {
     if (this.points.length > 0) {
-      this.controller.getView().setRectangleFeedback(this.points[this.points.length - 1]![0]!, this.points[this.points.length - 1]![1]!, x, y);
+      const modelX = this.controller.convertXPixelToModel(x);
+      const modelY = this.controller.convertYPixelToModel(y);
+      this.controller.getView().setRectangleFeedback(this.points[this.points.length - 1]![0]!, this.points[this.points.length - 1]![1]!, modelX, modelY);
     }
   }
 
@@ -1378,7 +1387,7 @@ export class LabelCreationState extends AbstractModeChangeState {
   }
 
   override pressMouse(x: number, y: number, clickCount: number, shiftDown: boolean, duplicationActivated: boolean): void {
-    const label = new Label("", x, y);
+    const label = new Label("", this.controller.convertXPixelToModel(x), this.controller.convertYPixelToModel(y));
     this.controller.home.addLabel(label);
     this.controller.home.setSelectedItems([label]);
     // Stay in label creation mode so the user can add several labels

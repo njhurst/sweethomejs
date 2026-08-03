@@ -36,7 +36,7 @@ test("draws a wall in wall-creation mode", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByTestId("plan-canvas")).toBeVisible();
   const toolbar = page.locator(".sh-toolbar");
-  await toolbar.getByRole("button", { name: "Wall" }).click();
+  await page.getByTestId("left-toolbar").getByRole("button", { name: "Draw walls" }).click();
   const canvas = page.getByTestId("plan-canvas");
   const box = (await canvas.boundingBox())!;
   // Click two points in the middle of the canvas to draw a wall

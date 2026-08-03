@@ -30,10 +30,10 @@ test("open fixture, switch modes and use undo/redo", async ({ page }) => {
 
   // Mode switching updates the toolbar active state
   const toolbar = page.locator(".sh-toolbar");
-  await toolbar.getByRole("button", { name: "Room" }).click();
-  await expect(toolbar.getByRole("button", { name: "Room" })).toHaveClass(/active/);
-  await toolbar.getByRole("button", { name: "Select" }).click();
-  await expect(toolbar.getByRole("button", { name: "Select" })).toHaveClass(/active/);
+  await page.getByTestId("left-toolbar").getByRole("button", { name: "Draw rooms" }).click();
+  await expect(page.getByTestId("left-toolbar").getByRole("button", { name: "Draw rooms" })).toHaveClass(/active/);
+  await page.getByTestId("left-toolbar").getByRole("button", { name: "Select" }).click();
+  await expect(page.getByTestId("left-toolbar").getByRole("button", { name: "Select" })).toHaveClass(/active/);
 
   // Status bar reflects the home name
   await expect(page.getByText("walls", { exact: false }).first()).toBeVisible();
