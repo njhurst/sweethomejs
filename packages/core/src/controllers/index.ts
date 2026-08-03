@@ -81,3 +81,5 @@ export { CompoundEdit } from "./undo/CompoundEdit.js";
 export { UndoableEditSupport } from "./undo/UndoableEditSupport.js";
 export { UndoManager } from "./undo/UndoManager.js";
 export type { UndoableEditListener, UndoSupport } from "./undo/UndoableEditSupport.js";
+
+export * from "./photo/index.js";

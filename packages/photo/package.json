@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "SweetHomeJS photo package (scaffold)",
+  "description": "SweetHomeJS photo rendering package",
   "license": "GPL-2.0-or-later",
   "exports": {
     ".": {

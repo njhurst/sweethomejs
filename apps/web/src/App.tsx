@@ -71,6 +71,26 @@ export function App(): ReactElement {
       (globalThis as unknown as Record<string, unknown>).__homeController = s.homeController;
       (globalThis as unknown as Record<string, unknown>).__preferences = s.preferences;
       (globalThis as unknown as Record<string, unknown>).__contentManager = contentManager;
+      // Photo hook for e2e: renders the current home from the observer camera
+      (globalThis as unknown as Record<string, unknown>).__renderPhoto = async (
+        width: number,
+        height: number,
+        quality: number,
+      ): Promise<{ progress: number[]; pixels: Uint8ClampedArray }> => {
+        const { ThreeJSPhotoRenderer, PhotoQuality } = await import("@sweethomejs/photo");
+        const home = sessionRef.current?.home ?? s.home;
+        const renderer = new ThreeJSPhotoRenderer(home, s.preferences, quality === 0 ? PhotoQuality.LOW : PhotoQuality.HIGH);
+        const image = { width, height, data: new Uint8ClampedArray(width * height * 4) };
+        const progress: number[] = [];
+        await renderer.render(image, home.getObserverCamera(), null, {
+          photoRenderingProgress: (p: number) => progress.push(p),
+          photoRenderingEnded: () => {},
+          photoRenderingCanceled: () => {},
+          photoRenderingFailed: () => {},
+        });
+        renderer.dispose();
+        return { progress, pixels: image.data };
+      };
       const { IndexedDBStore, PreferencesStore } = await import("@sweethomejs/ui");
       const store = new IndexedDBStore();
       (globalThis as unknown as Record<string, unknown>).__preferencesStore = new PreferencesStore(store);

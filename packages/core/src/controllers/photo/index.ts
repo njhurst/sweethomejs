@@ -18,5 +18,5 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 export { AbstractPhotoRenderer, PhotoQuality } from "./AbstractPhotoRenderer.js";
-export type { PhotoRendererObserver } from "./AbstractPhotoRenderer.js";
+export type { PhotoRendererObserver, RenderedImage } from "./AbstractPhotoRenderer.js";
 export { PhotoController, AspectRatio, PHOTO_WIDTHS, aspectRatioValue } from "./PhotoController.js";
