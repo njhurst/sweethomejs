@@ -36,6 +36,10 @@ export interface HomePaneProps {
   homeController: HomeController;
   /** Where the 3D view sits (default "split"). */
   view3DPosition?: View3DPosition;
+  /** Opens a home from a file picker (replaces the session). */
+  onOpenHome?: (() => void | Promise<void>) | null;
+  /** Saves the home to a file. */
+  onSaveHome?: (() => void | Promise<void>) | null;
 }
 
 export function HomePane(props: HomePaneProps): React.JSX.Element {
@@ -73,6 +77,8 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
         undoEnabled={undoEnabled}
         redoEnabled={redoEnabled}
         mode={mode}
+        onOpenHome={props.onOpenHome ?? null}
+        onSaveHome={props.onSaveHome ?? null}
       />
       <div className="sh-home-body">
         <div className="sh-plan">
@@ -116,14 +122,16 @@ function Toolbar(props: {
   undoEnabled: boolean;
   redoEnabled: boolean;
   mode: string;
+  onOpenHome?: (() => void | Promise<void>) | null;
+  onSaveHome?: (() => void | Promise<void>) | null;
 }): React.JSX.Element {
-  const { home, homeController, view3DPosition, onView3DPositionChange, mode } = props;
+  const { home, homeController, view3DPosition, onView3DPositionChange, mode, onOpenHome, onSaveHome } = props;
   const planController = homeController.getPlanController();
   return (
     <div className="sh-toolbar" data-mode={mode}>
       <ToolbarButton label="New" onClick={() => homeController.newHome()} />
-      <ToolbarButton label="Open" onClick={() => homeController.open()} />
-      <ToolbarButton label="Save" onClick={() => homeController.save()} />
+      <ToolbarButton label="Open" onClick={() => onOpenHome?.() ?? homeController.open()} />
+      <ToolbarButton label="Save" onClick={() => onSaveHome?.() ?? homeController.save()} />
       <div className="sh-toolbar-separator" />
       <ToolbarButton label="Undo" onClick={() => homeController.undo()} />
       <ToolbarButton label="Redo" onClick={() => homeController.redo()} />

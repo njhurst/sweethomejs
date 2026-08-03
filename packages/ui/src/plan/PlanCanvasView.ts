@@ -75,7 +75,10 @@ export class PlanCanvasView implements PlanViewType {
         viewport: this.viewport,
         controller: this.controller,
         updatePlanBounds: () => this.updatePlanBounds(),
-        onScroll: (dx, dy) => this.viewport.setPan(this.viewport.getPanX() - dx, this.viewport.getPanY() - dy),
+        onScroll: (dx, dy) => {
+          this.viewport.setPan(this.viewport.getPanX() - dx, this.viewport.getPanY() - dy);
+          this.requestPaint();
+        },
       });
       const adapter = this.inputAdapter as unknown as { lastPressModelX?: number; lastPressModelY?: number };
       (globalThis as unknown as Record<string, unknown>).__adapter = adapter;
