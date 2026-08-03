@@ -67,6 +67,13 @@ export function PlanCanvas(props: PlanCanvasProps): React.JSX.Element {
       }
     };
     resize();
+    // Zoom-to-fit the home content on first display (like Java's initial view)
+    {
+      const rect = canvas.parentElement?.getBoundingClientRect();
+      if (rect !== undefined && rect !== null) {
+        view.fitHome(rect.width, rect.height);
+      }
+    }
     const observer = new ResizeObserver(resize);
     if (canvas.parentElement !== null) {
       observer.observe(canvas.parentElement);
@@ -91,8 +98,9 @@ export function PlanCanvas(props: PlanCanvasProps): React.JSX.Element {
       props.home.removeRoomsListener(subscription);
       viewRef.current = null;
     };
+    // Re-create the view when the session's home/controller changes (Open/New).
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [props.home, props.controller, props.preferences]);
 
   return (
     <canvas

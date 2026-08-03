@@ -88,7 +88,7 @@ export function View3DCanvas(props: View3DCanvasProps): React.JSX.Element {
       sceneRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [props.home, props.homeController3D, props.preferences]);
 
   return <div ref={containerRef} style={{ width: "100%", height: "100%" }} data-testid="view3d" />;
 }

@@ -56,13 +56,17 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
     const furnitureListener = { collectionChanged: syncSelection };
     home.addFurnitureListener(furnitureListener);
     const planController = homeController.getPlanController();
-    planController.addPropertyChangeListener(PlanController.Property.MODE, {
-      propertyChange: (evt) => setMode((evt as { newValue?: unknown }).newValue?.toString() ?? mode),
-    });
+    const modeListener = {
+      propertyChange: (evt: { newValue?: unknown }): void =>
+        setMode(evt.newValue?.toString() ?? planController.getMode().toString()),
+    };
+    planController.addPropertyChangeListener(PlanController.Property.MODE, modeListener);
     return () => {
       home.removeFurnitureListener(furnitureListener);
+      home.removeSelectionListener(syncSelection);
+      planController.removePropertyChangeListener(PlanController.Property.MODE, modeListener);
     };
-  }, [home, homeController, mode]);
+  }, [home, homeController]);
 
   const planController = homeController.getPlanController();
   const homeController3D = homeController.getHomeController3D();

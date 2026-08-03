@@ -87,6 +87,51 @@ export class PlanCanvasView implements PlanViewType {
 
   /** Recomputes the plan bounds from the home content and updates the viewport. */
   updatePlanBounds(): void {
+    const bounds = this.computePlanBounds();
+    if (Number.isFinite(bounds.minX)) {
+      // Anchor the view: when the bounds shift (e.g. content added), adjust the
+      // pan so existing content stays at the same screen position (Java keeps
+      // the viewport stable when the plan grows).
+      const old = this.viewport.getPlanBounds();
+      const oldMinX = old.minX;
+      const oldMinY = old.minY;
+      this.viewport.setPlanBounds(bounds);
+      if (oldMinX !== bounds.minX || oldMinY !== bounds.minY) {
+        const scale = this.viewport.getScale();
+        this.viewport.setPan(
+          this.viewport.getPanX() + (bounds.minX - oldMinX) * scale,
+          this.viewport.getPanY() + (bounds.minY - oldMinY) * scale,
+        );
+      }
+    }
+  }
+
+  /**
+   * Fits the home content into the viewport (used the first time a home is
+   * displayed, like Java's initial zoom-to-fit). Subsequent resizes keep the
+   * user's zoom/pan.
+   */
+  fitHome(width: number, height: number): void {
+    const bounds = this.computePlanBounds();
+    if (!Number.isFinite(bounds.minX) || bounds.maxX <= bounds.minX || bounds.maxY <= bounds.minY) {
+      return;
+    }
+    const margin = 40; // cm margin, like Java's PlanComponent
+    const contentW = bounds.maxX - bounds.minX;
+    const contentH = bounds.maxY - bounds.minY;
+    const availW = Math.max(10, width - 2 * margin);
+    const availH = Math.max(10, height - 2 * margin);
+    const scale = Math.min(availW / contentW, availH / contentH, 50);
+    this.viewport.setScale(Math.max(0.01, scale));
+    const cx = (bounds.minX + bounds.maxX) / 2;
+    const cy = (bounds.minY + bounds.maxY) / 2;
+    // Center the content: screen = model * scale + pan → pan = screen - model * scale
+    this.viewport.setPan(width / 2 - cx * this.viewport.getScale(), height / 2 - cy * this.viewport.getScale());
+    this.viewport.setPlanBounds(bounds);
+  }
+
+  /** Computes the bounding box of all plan content (walls, furniture, rooms). */
+  private computePlanBounds(): { minX: number; minY: number; maxX: number; maxY: number } {
     let minX = Number.POSITIVE_INFINITY;
     let minY = Number.POSITIVE_INFINITY;
     let maxX = Number.NEGATIVE_INFINITY;
@@ -102,22 +147,13 @@ export class PlanCanvasView implements PlanViewType {
     for (const wall of this.home.getWalls()) add(wall.getPoints());
     for (const piece of this.home.getFurniture()) add(piece.getPoints());
     for (const room of this.home.getRooms()) add(room.getPoints());
-    if (Number.isFinite(minX)) {
-      // Anchor the view: when the bounds shift (e.g. content added), adjust the
-      // pan so existing content stays at the same screen position (Java keeps
-      // the viewport stable when the plan grows).
-      const old = this.viewport.getPlanBounds();
-      const oldMinX = old.minX;
-      const oldMinY = old.minY;
-      this.viewport.setPlanBounds({ minX, minY, maxX, maxY });
-      if (oldMinX !== minX || oldMinY !== minY) {
-        const scale = this.viewport.getScale();
-        this.viewport.setPan(
-          this.viewport.getPanX() + (minX - oldMinX) * scale,
-          this.viewport.getPanY() + (minY - oldMinY) * scale,
-        );
-      }
+    for (const polyline of this.home.getPolylines()) add(polyline.getPoints());
+    for (const dim of this.home.getDimensionLines()) add([[dim.getXStart(), dim.getYStart()], [dim.getXEnd(), dim.getYEnd()]]);
+    for (const label of this.home.getLabels()) add([[label.getX(), label.getY()]]);
+    if (!Number.isFinite(minX)) {
+      return { minX: 0, minY: 0, maxX: 0, maxY: 0 };
     }
+    return { minX, minY, maxX, maxY };
   }
 
   /** Sets the canvas size (with HiDPI) and installs the base transform. */
