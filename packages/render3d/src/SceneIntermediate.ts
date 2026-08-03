@@ -47,6 +47,8 @@ export interface SceneIntermediateOptions {
 }
 
 export interface SceneIntermediate {
+  /** The ground builder (resized when walls/rooms change). */
+  ground: GroundObject3D | null;
   /** The scene root group. */
   group: THREE.Group;
   /** The light rig (sun + lights from the home); null when addLights is false. */
@@ -79,10 +81,12 @@ export function buildSceneIntermediate(
   const modelManager = options.modelManager ?? new ModelManager();
   const builders: Object3DBase[] = [];
   let instancedGroup: THREE.Group | null = null;
+  let groundBuilder: GroundObject3D | null = null;
 
   // Ground
   if (options.addGround ?? true) {
     const ground = new GroundObject3D(home, preferences, materialCache, textureCache);
+    groundBuilder = ground;
     builders.push(ground);
     group.add(ground.getRoot());
   }
@@ -157,6 +161,8 @@ export function buildSceneIntermediate(
     }
     builders.length = 0;
     builders.push(...keep);
+    // Resize the ground to the new bounds
+    groundBuilder?.update();
     for (const wall of home.getWalls()) {
       const builder = new WallObject3D(wall, home, preferences, materialCache);
       builders.push(builder);
@@ -193,5 +199,5 @@ export function buildSceneIntermediate(
     textureCache.clear();
   };
 
-  return { group, lights, builders, instancedGroup, materialCache, textureCache, modelManager, rebuildStaticItems, dispose };
+  return { ground: groundBuilder, group, lights, builders, instancedGroup, materialCache, textureCache, modelManager, rebuildStaticItems, dispose };
 }

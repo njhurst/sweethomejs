@@ -386,6 +386,7 @@ export class GroundObject3D extends Object3DBase<Home> {
   private readonly materialCache: MaterialCache;
   private readonly textureCache: TextureCache;
   private mesh: THREE.Mesh | null = null;
+  private grid: THREE.LineSegments | null = null;
 
   constructor(home: Home, preferences: UserPreferences, materialCache: MaterialCache, textureCache: TextureCache, context: unknown = null) {
     super(home, home, preferences, context);
@@ -398,20 +399,57 @@ export class GroundObject3D extends Object3DBase<Home> {
     return this.root;
   }
 
+  /** The ground is bounded to the home's 2D bounds + a margin (reads as a
+   * floor under the house, not an infinite plane). */
+  private homeBounds(): { minX: number; minY: number; maxX: number; maxY: number } {
+    let minX = Number.POSITIVE_INFINITY;
+    let minY = Number.POSITIVE_INFINITY;
+    let maxX = Number.NEGATIVE_INFINITY;
+    let maxY = Number.NEGATIVE_INFINITY;
+    const add = (x: number, y: number): void => {
+      minX = Math.min(minX, x);
+      minY = Math.min(minY, y);
+      maxX = Math.max(maxX, x);
+      maxY = Math.max(maxY, y);
+    };
+    for (const wall of this.home.getWalls()) {
+      for (const p of wall.getPoints()) add(p[0]!, p[1]!);
+    }
+    for (const room of this.home.getRooms()) {
+      for (const p of room.getPoints()) add(p[0]!, p[1]!);
+    }
+    for (const piece of this.home.getFurniture()) add(piece.getX(), piece.getY());
+    if (!Number.isFinite(minX)) {
+      return { minX: -500, minY: -500, maxX: 500, maxY: 500 };
+    }
+    return { minX, minY, maxX, maxY };
+  }
+
   override update(): void {
     this.root.clear();
     if (this.mesh !== null) {
       this.mesh.geometry.dispose();
       this.mesh = null;
     }
+    if (this.grid !== null) {
+      this.grid.geometry.dispose();
+      this.grid = null;
+    }
     const environment = this.home.getEnvironment();
     if (!((environment as unknown as { isGroundVisible?(): boolean }).isGroundVisible?.() ?? true)) {
       return;
     }
-    // A large ground plane (Java Ground3D uses a big textured plane)
-    const size = 5000;
+    const bounds = this.homeBounds();
+    const extentX = Math.max(bounds.maxX - bounds.minX, 200);
+    const extentY = Math.max(bounds.maxY - bounds.minY, 200);
+    const margin = Math.max(extentX, extentY) * 0.35 + 200;
+    const size = Math.max(extentX, extentY) + 2 * margin;
+    const centerX = (bounds.minX + bounds.maxX) / 2;
+    const centerY = (bounds.minY + bounds.maxY) / 2;
+
     const geometry = new THREE.PlaneGeometry(size, size);
     geometry.rotateX(-Math.PI / 2);
+    geometry.translate(centerX, 0, centerY);
     const groundTexture = environment.getGroundTexture();
     let material: THREE.Material;
     if (groundTexture !== null) {
@@ -433,11 +471,45 @@ export class GroundObject3D extends Object3DBase<Home> {
     this.mesh = new THREE.Mesh(geometry, material);
     this.mesh.position.y = 0;
     this.root.add(this.mesh);
+
+    // A subtle grid over the home area anchors the eye (like Java's ground grid)
+    const grid = this.buildGrid(bounds, extentX, extentY);
+    if (grid !== null) {
+      this.grid = grid;
+      this.root.add(grid);
+    }
+  }
+
+  /** Line grid every 100 cm within (slightly beyond) the home bounds. */
+  private buildGrid(bounds: { minX: number; minY: number; maxX: number; maxY: number }, extentX: number, extentY: number): THREE.LineSegments | null {
+    const step = 100;
+    const pad = Math.min(400, Math.max(extentX, extentY) * 0.1);
+    const x0 = Math.floor((bounds.minX - pad) / step) * step;
+    const x1 = Math.ceil((bounds.maxX + pad) / step) * step;
+    const y0 = Math.floor((bounds.minY - pad) / step) * step;
+    const y1 = Math.ceil((bounds.maxY + pad) / step) * step;
+    const points: number[] = [];
+    for (let x = x0; x <= x1; x += step) {
+      points.push(x, 0.02, y0, x, 0.02, y1);
+    }
+    for (let y = y0; y <= y1; y += step) {
+      points.push(x0, 0.02, y, x1, 0.02, y);
+    }
+    if (points.length === 0) {
+      return null;
+    }
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute("position", new THREE.Float32BufferAttribute(points, 3));
+    const material = new THREE.LineBasicMaterial({ color: 0x808080, transparent: true, opacity: 0.35 });
+    return new THREE.LineSegments(geometry, material);
   }
 
   override destroy(): void {
     if (this.mesh !== null) {
       this.mesh.geometry.dispose();
+    }
+    if (this.grid !== null) {
+      this.grid.geometry.dispose();
     }
     super.destroy();
   }

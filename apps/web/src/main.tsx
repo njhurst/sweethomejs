@@ -21,6 +21,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./App";
+import { installDevEventHooks } from "./devEvents";
 
 const root = document.getElementById("root");
 if (root === null) {
@@ -31,6 +32,9 @@ createRoot(root).render(
     <App />
   </StrictMode>,
 );
+
+// Dev event log: boot checkpoint + global error hooks (dev builds only)
+installDevEventHooks({ rev: import.meta.env.VITE_GIT_REV });
 
 // PWA: register the service worker in production builds (offline app shell)
 if (import.meta.env.PROD && "serviceWorker" in navigator) {

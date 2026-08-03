@@ -229,7 +229,10 @@ export class ModelManager {
     const depth = piece.getDepth();
     const height = piece.getHeight();
     const scaleX = piece.isModelMirrored() ? -width : width;
-    child.scale.set(scaleX, height, depth);
+    // The clone carries the normalization scale (model fits a 1-unit box);
+    // MULTIPLY by the piece dimensions instead of overwriting, so models that
+    // are not already 1-unit-sized render at their piece size.
+    child.scale.multiply(new THREE.Vector3(scaleX, height, depth));
     target.add(child);
   }
 

@@ -43,7 +43,8 @@ test("full menus, toolbar, catalog dock and exterior 3D view", async ({ page }) 
     return { z: c.getZ(), pitch: c.getPitch() };
   });
   expect(cam.z).toBeGreaterThan(300);
-  expect(cam.pitch).toBeGreaterThan(0.3);
+  // Eye-level exterior framing: slightly looking down at the house
+  expect(cam.pitch).toBeGreaterThan(0.05);
   await page.getByTestId("menu-File").click();
   await expect(page.getByTestId("menubar").getByRole("button", { name: "Save as…" })).toBeDisabled();
 });

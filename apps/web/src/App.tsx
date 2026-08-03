@@ -23,6 +23,7 @@ import type { ReactElement } from "react";
 import { Home, UserPreferences, HomeController, HomeFileRecorder } from "@sweethomejs/core";
 import { HomePane, HomeViewAdapter, WebContentManager } from "@sweethomejs/ui";
 import "@sweethomejs/ui/theme.css";
+import { devEvent } from "./devEvents";
 
 /**
  * The SweetHomeJS app: creates a Home + HomeController and mounts the
@@ -37,6 +38,13 @@ export function App(): ReactElement {
   const replaceSession = (next: Session): void => {
     sessionRef.current = next;
     (globalThis as unknown as Record<string, unknown>).__homeController = next.homeController;
+    devEvent("state.set", {
+      path: "session",
+      home: next.home.getName(),
+      walls: next.home.getWalls().length,
+      rooms: next.home.getRooms().length,
+      furniture: next.home.getFurniture().length,
+    });
     setSession(next);
   };
 
@@ -48,8 +56,10 @@ export function App(): ReactElement {
     try {
       const result = await new HomeFileRecorder().readHomeFromZip(files[0]!.bytes);
       const next = await createSession(result.home);
+      devEvent("request", { method: "OPEN", path: files[0]!.name, status: 200 });
       replaceSession(next);
     } catch (error) {
+      devEvent("error", { where: "openHome", message: error instanceof Error ? error.message : String(error) });
       console.error("Failed to open home", error);
     }
   };
@@ -61,10 +71,12 @@ export function App(): ReactElement {
     }
     const name = current.home.getName() ?? "home.sh3d";
     const bytes = await new HomeFileRecorder().writeHome(current.home);
+    devEvent("request", { method: "SAVE", path: name, status: 200, bytes: bytes.length });
     await contentManager.saveFile(name, bytes, ".sh3d");
   };
 
   useEffect(() => {
+    (globalThis as unknown as Record<string, unknown>).__devEvent = devEvent;
     void createSession(new Home()).then(async (s) => {
       setSession(s);
       // Debug hooks for e2e

@@ -66,6 +66,11 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
   const [mode, setMode] = useState<string>(props.homeController.getPlanController().getMode().toString());
 
   useEffect(() => {
+    // Dev-mode event log hook (exposed by the web app; no-op when absent)
+    const dev = (globalThis as unknown as { __devEvent?: (type: string, fields?: Record<string, unknown>) => void }).__devEvent;
+    const emit = (type: string, fields: Record<string, unknown> = {}): void => {
+      dev?.(type, fields);
+    };
     // Keyboard shortcuts (Ctrl/⌘ + Z/Y undo/redo, Delete, Ctrl+O/S/P, +/- zoom)
     const onKeyDown = (event: KeyboardEvent): void => {
       const planController = homeController.getPlanController();
@@ -104,20 +109,34 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
     const syncUndoState = (): void => {
       setUndoEnabled(homeController.isUndoEnabled());
       setRedoEnabled(homeController.isRedoEnabled());
+      emit("state.set", { path: "undo", undoEnabled: homeController.isUndoEnabled(), redoEnabled: homeController.isRedoEnabled() });
     };
     homeController.addUndoStateListener(syncUndoState);
     const syncSelection = (): void => setSelectedCount(home.getSelectedItems().length);
     home.addSelectionListener(syncSelection);
-    const furnitureListener = { collectionChanged: syncSelection };
+    const furnitureListener = {
+      collectionChanged: (): void => {
+        syncSelection();
+        emit("state.set", { path: "home.furniture", count: home.getFurniture().length });
+      },
+    };
     home.addFurnitureListener(furnitureListener);
+    const wallsListener = {
+      collectionChanged: (): void => emit("state.set", { path: "home.walls", count: home.getWalls().length }),
+    };
+    home.addWallsListener(wallsListener);
     const planController = homeController.getPlanController();
     const modeListener = {
-      propertyChange: (evt: { newValue?: unknown }): void =>
-        setMode(evt.newValue?.toString() ?? planController.getMode().toString()),
+      propertyChange: (evt: { newValue?: unknown }): void => {
+        const next = evt.newValue?.toString() ?? planController.getMode().toString();
+        setMode(next);
+        emit("state.set", { path: "plan.mode", value: next });
+      },
     };
     planController.addPropertyChangeListener(PlanController.Property.MODE, modeListener);
     return () => {
       home.removeFurnitureListener(furnitureListener);
+      home.removeWallsListener(wallsListener);
       home.removeSelectionListener(syncSelection);
       planController.removePropertyChangeListener(PlanController.Property.MODE, modeListener);
       window.removeEventListener("keydown", onKeyDown);
