@@ -27,6 +27,7 @@
 import type { Home, UserPreferences, PlanController, Selectable, HomePieceOfFurniture } from "@sweethomejs/core";
 import { PlanView, type PlanView as PlanViewType, type View } from "@sweethomejs/core";
 import { Canvas2DPainter, PlanViewport, PlanPainterPipeline, DEFAULT_PLAN_COLORS, PlanInputAdapter, emptyToolTip, emptyAlignmentFeedback, paintToolTip, paintAlignmentFeedback, paintSelectionFeedback, type PlanColors } from "@sweethomejs/render2d";
+import { TopViewIconRenderer, ModelManager } from "@sweethomejs/render3d";
 
 export interface PlanCanvasHost {
   canvas: HTMLCanvasElement;
@@ -61,6 +62,13 @@ export class PlanCanvasView implements PlanViewType {
     this.viewport = new PlanViewport();
     this.pipeline = new PlanPainterPipeline(colors);
     this.pipeline.setIconReadyCallback(() => this.requestPaint());
+    // Real top-view furniture icons: render each piece's 3D model from above
+    // (Java generates plan icons for pieces without a catalog icon). Falls back
+    // to the placeholder when WebGL is unavailable.
+    const iconRenderer = new TopViewIconRenderer({ modelManager: new ModelManager() });
+    if (iconRenderer.isSupported()) {
+      this.pipeline.getIconCache().setRenderer(iconRenderer);
+    }
   }
 
   getViewport(): PlanViewport {

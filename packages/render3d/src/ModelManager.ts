@@ -113,6 +113,37 @@ export function detectModelFormat(url: string): string {
   return "unknown";
 }
 
+/**
+ * Sniffs the model format from the content bytes when the URL has no
+ * extension (Sweet Home 3D homes reference models as zip entries like
+ * "zip:2"). OBJ is text starting with vertices/comments; DAE is XML
+ * (COLLADA); 3DS is the binary 0x4D4D chunk.
+ */
+export function detectModelFormatFromBytes(bytes: Uint8Array): string {
+  const head = bytes.subarray(0, Math.min(bytes.length, 256));
+  // Skip UTF-8 BOM / whitespace
+  let i = 0;
+  while (i < head.length && (head[i]! === 0xef || head[i]! === 0xbb || head[i]! === 0xbf || head[i]! === 0x20 || head[i]! === 0x09 || head[i]! === 0x0a || head[i]! === 0x0d)) {
+    i++;
+  }
+  if (i < head.length) {
+    const c = head[i]!;
+    if (c === 0x76 || c === 0x23 || c === 0x6f || c === 0x6d) {
+      // 'v' / '#' / 'o' / 'm' (mtllib) — OBJ
+      return "obj";
+    }
+    if (c === 0x3c) {
+      // '<' — XML (COLLADA)
+      return "dae";
+    }
+    if (head.length >= 2 && head[0] === 0x4d && head[1] === 0x4d) {
+      // 0x4D4D — 3DS chunk
+      return "3ds";
+    }
+  }
+  return "unknown";
+}
+
 /** Computes the bounding box of a group (model units). */
 export function computeModelBounds(group: THREE.Object3D): THREE.Box3 {
   const box = new THREE.Box3();
@@ -186,10 +217,7 @@ export class ModelManager {
 
   private async loadModel(source: ModelSource, identity: string): Promise<LoadedModel | null> {
     try {
-      const format = detectModelFormat(source.getURL());
-      if (format === "unknown") {
-        return null;
-      }
+      let format = detectModelFormat(source.getURL());
       const stream = await source.openStream();
       const chunks: Uint8Array[] = [];
       const reader = stream.getReader();
@@ -206,6 +234,13 @@ export class ModelManager {
       for (const chunk of chunks) {
         bytes.set(chunk, offset);
         offset += chunk.length;
+      }
+      // Extension-less zip entries (e.g. "zip:2") are sniffed from the bytes
+      if (format === "unknown") {
+        format = detectModelFormatFromBytes(bytes);
+      }
+      if (format === "unknown") {
+        return null;
       }
       const loader = this.loaderFactory(format);
       const parsed = await loader.parse(bytes, source.getURL());
