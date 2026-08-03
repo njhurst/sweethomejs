@@ -84,6 +84,98 @@
   min-height: 0;
 }
 
+.sh-menubar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 6px;
+  background: var(--sh-toolbar-bg);
+  border-bottom: 1px solid var(--sh-border);
+  min-height: 26px;
+  position: relative;
+  z-index: 40;
+}
+
+.sh-menu {
+  position: relative;
+}
+
+.sh-menu-button {
+  border: none;
+  background: transparent;
+  padding: 3px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.sh-menu-button:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.sh-menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+}
+
+.sh-menu-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 180px;
+  background: white;
+  border: 1px solid var(--sh-border);
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 60;
+  padding: 4px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sh-menu-item {
+  border: none;
+  background: transparent;
+  text-align: left;
+  padding: 5px 14px 5px 28px;
+  font-size: 13px;
+  cursor: pointer;
+  position: relative;
+}
+
+.sh-menu-item:hover:not(.disabled) {
+  background: var(--sh-accent);
+  color: white;
+}
+
+.sh-menu-item.disabled {
+  color: #999;
+  cursor: default;
+}
+
+.sh-menu-item.checked {
+  font-weight: 600;
+}
+
+.sh-menu-check {
+  position: absolute;
+  left: 8px;
+}
+
+.sh-menu-separator {
+  height: 1px;
+  background: var(--sh-border);
+  margin: 4px 6px;
+}
+
+.sh-help-overlay {
+  position: absolute;
+  inset: 0;
+  background: white;
+  z-index: 100;
+}
+
 .sh-left-toolbar {
   display: flex;
   flex-direction: column;

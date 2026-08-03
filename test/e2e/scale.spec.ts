@@ -28,6 +28,9 @@ test("drawn wall lands at click-to-model coordinates (not pixels)", async ({ pag
   await page.goto("/");
   await expect(page.getByTestId("plan-canvas")).toBeVisible();
   await page.waitForTimeout(1500);
+  // This test asserts raw click-to-model conversion: disable magnetism so the
+  // wall end isn't snapped to a 15 degree angle or a nearby vertex.
+  await page.evaluate(() => (globalThis as any).__preferences.setMagnetismEnabled(false));
   const toolbar = page.locator(".sh-toolbar");
   await page.getByTestId("left-toolbar").getByRole("button", { name: "Draw walls" }).click();
   const canvas = page.getByTestId("plan-canvas");

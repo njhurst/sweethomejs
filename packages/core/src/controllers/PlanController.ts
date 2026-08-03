@@ -472,6 +472,200 @@ export class PlanController extends FurnitureController {
     return best;
   }
 
+  // ---------------------------------------------------------- magnetism
+
+  /**
+   * Returns the tolerance (in model units) used to snap points to walls,
+   * rooms and other objects (Java's getSelectionMargin: 4 px / scale).
+   */
+  getSelectionMargin(): number {
+    const scale = this.getView().getScale();
+    return scale !== 0 ? PIXEL_MARGIN / scale : 0;
+  }
+
+  /**
+   * The closest wall or room vertex to (x, y), within the selection margin —
+   * Java's PointMagnetizedToClosestWallOrRoomPoint.
+   */
+  pointMagnetizedToClosestWallOrRoomPoint(x: number, y: number): { x: number; y: number; magnetized: boolean } {
+    const margin = this.getSelectionMargin();
+    let smallestDistance = Number.POSITIVE_INFINITY;
+    let magnetizedX = x;
+    let magnetizedY = y;
+    const consider = (px: number, py: number): void => {
+      const dx = px - x;
+      const dy = py - y;
+      const distance = dx * dx + dy * dy;
+      if (distance < smallestDistance) {
+        smallestDistance = distance;
+        magnetizedX = px;
+        magnetizedY = py;
+      }
+    };
+    // Wall and room-path corners (the inner room rings)
+    for (const ring of this.getRoomPathsFromWalls()) {
+      for (const point of ring) {
+        consider(point[0]!, point[1]!);
+      }
+    }
+    // Room points
+    for (const room of this.home.getRooms()) {
+      for (const point of room.getPoints()) {
+        consider(point[0]!, point[1]!);
+      }
+    }
+    const magnetized = smallestDistance <= margin * margin;
+    return { x: magnetized ? magnetizedX : x, y: magnetized ? magnetizedY : y, magnetized };
+  }
+
+  /**
+   * Angle + length magnetism: snaps the line (xStart, yStart)→(x, y) to the
+   * closest 15 degree radius and to a magnetized length — Java's
+   * PointWithAngleMagnetism (CIRCLE_STEPS_15_DEG = 24).
+   */
+  pointWithAngleMagnetism(xStart: number, yStart: number, x: number, y: number): { x: number; y: number } {
+    const unit = this.preferences.getLengthUnit();
+    const maxLengthDelta = this.getView().getPixelLength();
+    if (xStart === x) {
+      const magnetizedLength = unit.getMagnetizedLength(Math.abs(yStart - y), maxLengthDelta);
+      return { x, y: yStart + magnetizedLength * Math.sign(y - yStart) };
+    }
+    if (yStart === y) {
+      const magnetizedLength = unit.getMagnetizedLength(Math.abs(xStart - x), maxLengthDelta);
+      return { x: xStart + magnetizedLength * Math.sign(x - xStart), y };
+    }
+    const angleStep = (2 * Math.PI) / 24;
+    const angle = Math.atan2(yStart - y, x - xStart);
+    const previousStepAngle = Math.floor(angle / angleStep) * angleStep;
+    let angle1: number;
+    let tanAngle1: number;
+    let angle2: number;
+    let tanAngle2: number;
+    if (Math.tan(angle) > 0) {
+      angle1 = previousStepAngle;
+      tanAngle1 = Math.tan(previousStepAngle);
+      angle2 = previousStepAngle + angleStep;
+      tanAngle2 = Math.tan(previousStepAngle + angleStep);
+    } else {
+      angle1 = previousStepAngle + angleStep;
+      tanAngle1 = Math.tan(previousStepAngle + angleStep);
+      angle2 = previousStepAngle;
+      tanAngle2 = Math.tan(previousStepAngle);
+    }
+    const firstQuarterTanAngle1 = Math.abs(tanAngle1);
+    const firstQuarterTanAngle2 = Math.abs(tanAngle2);
+    const xEnd1 = Math.abs(xStart - x);
+    const yEnd2 = Math.abs(yStart - y);
+    let xEnd2 = 0;
+    if (firstQuarterTanAngle2 > 1e-10) {
+      xEnd2 = yEnd2 / firstQuarterTanAngle2;
+    }
+    let yEnd1 = 0;
+    if (firstQuarterTanAngle1 < 1e10) {
+      yEnd1 = xEnd1 * firstQuarterTanAngle1;
+    }
+    let magnetismAngle: number;
+    let magnetizedX: number;
+    let magnetizedY: number;
+    if (Math.abs(xEnd2 - xEnd1) < Math.abs(yEnd1 - yEnd2)) {
+      magnetismAngle = angle2;
+      magnetizedX = xStart + (yStart - y) / tanAngle2;
+      magnetizedY = y;
+    } else {
+      magnetismAngle = angle1;
+      magnetizedX = x;
+      magnetizedY = yStart - (x - xStart) * tanAngle1;
+    }
+    const magnetizedLength = unit.getMagnetizedLength(
+      Math.hypot(xStart - magnetizedX, yStart - magnetizedY),
+      maxLengthDelta,
+    );
+    return {
+      x: xStart + magnetizedLength * Math.cos(magnetismAngle),
+      y: yStart - magnetizedLength * Math.sin(magnetismAngle),
+    };
+  }
+
+  /**
+   * Wall drawing magnetism: angle magnetism plus snapping the end point to the
+   * closest wall start/end vertex within a pixel margin — Java's
+   * WallPointWithAngleMagnetism.
+   */
+  wallPointWithAngleMagnetism(
+    editedWall: Wall | null,
+    xStart: number,
+    yStart: number,
+    x: number,
+    y: number,
+  ): { x: number; y: number } {
+    const point = this.pointWithAngleMagnetism(xStart, yStart, x, y);
+    const margin = PIXEL_MARGIN / this.getView().getScale();
+    let deltaXToClosestWall = Number.POSITIVE_INFINITY;
+    let deltaYToClosestWall = Number.POSITIVE_INFINITY;
+    let xClosestWall = 0;
+    let yClosestWall = 0;
+    for (const wall of this.home.getWalls()) {
+      if (wall === editedWall) {
+        continue;
+      }
+      const sameWallPoint = (px: number, py: number): boolean =>
+        editedWall !== null &&
+        ((px === editedWall.getXStart() && py === editedWall.getYStart()) ||
+          (px === editedWall.getXEnd() && py === editedWall.getYEnd()));
+      if (Math.abs(point.x - wall.getXStart()) < margin && !sameWallPoint(wall.getXStart(), wall.getYStart())) {
+        if (Math.abs(deltaYToClosestWall) > Math.abs(point.y - wall.getYStart())) {
+          xClosestWall = wall.getXStart();
+          deltaYToClosestWall = point.y - wall.getYStart();
+        }
+      } else if (Math.abs(point.x - wall.getXEnd()) < margin && !sameWallPoint(wall.getXEnd(), wall.getYEnd())) {
+        if (Math.abs(deltaYToClosestWall) > Math.abs(point.y - wall.getYEnd())) {
+          xClosestWall = wall.getXEnd();
+          deltaYToClosestWall = point.y - wall.getYEnd();
+        }
+      }
+      if (Math.abs(point.y - wall.getYStart()) < margin && !sameWallPoint(wall.getXStart(), wall.getYStart())) {
+        if (Math.abs(deltaXToClosestWall) > Math.abs(point.x - wall.getXStart())) {
+          yClosestWall = wall.getYStart();
+          deltaXToClosestWall = point.x - wall.getXStart();
+        }
+      } else if (Math.abs(point.y - wall.getYEnd()) < margin && !sameWallPoint(wall.getXEnd(), wall.getYEnd())) {
+        if (Math.abs(deltaXToClosestWall) > Math.abs(point.x - wall.getXEnd())) {
+          yClosestWall = wall.getYEnd();
+          deltaXToClosestWall = point.x - wall.getXEnd();
+        }
+      }
+    }
+    if (editedWall !== null) {
+      const alpha = -Math.tan(Math.atan2(yStart - point.y, point.x - xStart));
+      const beta = Math.abs(alpha) < 1e10 ? yStart - alpha * xStart : Number.POSITIVE_INFINITY;
+      if (deltaXToClosestWall !== Number.POSITIVE_INFINITY && Math.abs(alpha) > 1e-10) {
+        const newX = (yClosestWall - beta) / alpha;
+        if (Math.hypot(point.x - newX, point.y - yClosestWall) <= margin) {
+          return { x: newX, y: yClosestWall };
+        }
+      }
+      if (deltaYToClosestWall !== Number.POSITIVE_INFINITY && beta !== Number.POSITIVE_INFINITY) {
+        const newY = alpha * xClosestWall + beta;
+        if (Math.hypot(point.x - xClosestWall, point.y - newY) <= margin) {
+          return { x: xClosestWall, y: newY };
+        }
+      }
+    } else {
+      if (deltaXToClosestWall !== Number.POSITIVE_INFINITY) {
+        point.y = yClosestWall;
+      }
+      if (deltaYToClosestWall !== Number.POSITIVE_INFINITY) {
+        point.x = xClosestWall;
+      }
+    }
+    return { x: point.x, y: point.y };
+  }
+
+  /** True if wall magnetism is active for the current gesture (preference ^ toggle). */
+  isMagnetismEnabled(toggled: boolean): boolean {
+    return this.preferences.isMagnetismEnabled() !== toggled;
+  }
+
   convertYPixelToModel(y: number): number {
     const view = this.getView();
     return view.getScale() !== 0 ? (y - view.convertYModelToScreen(0)) / view.getScale() + view.convertYPixelToModel(view.convertYModelToScreen(0)) : y;
@@ -1184,31 +1378,59 @@ export class WallDrawingState extends AbstractWallState {
     // Convert the stored press/move pixels to model coordinates
     this.xStart = this.controller.convertXPixelToModel(this.controller.getXLastMouseMove());
     this.yStart = this.controller.convertYPixelToModel(this.controller.getYLastMouseMove());
+    // Magnetism: snap the start point to a nearby wall end/start or, when
+    // magnetism is on, to the closest wall/room vertex (Java's enter()).
+    const wallEndAtStart = this.getWallEndAt(this.xStart, this.yStart);
+    if (wallEndAtStart !== null) {
+      this.xStart = wallEndAtStart.getXEnd();
+      this.yStart = wallEndAtStart.getYEnd();
+    } else if (this.controller.isMagnetismEnabled(false)) {
+      const magnetized = this.controller.pointMagnetizedToClosestWallOrRoomPoint(this.xStart, this.yStart);
+      if (magnetized.magnetized) {
+        this.xStart = magnetized.x;
+        this.yStart = magnetized.y;
+      }
+    }
     // Create the wall immediately (zero-length) so the preview is visible right
     // after the first click; moveMouse extends it toward the cursor.
-    const wallEndAtStart = this.getWallEndAt(this.xStart, this.yStart);
     this.newWall = this.createWall(this.xStart, this.yStart, this.xStart, this.yStart, null, wallEndAtStart);
   }
 
   override moveMouse(x: number, y: number): void {
     const modelX = this.controller.convertXPixelToModel(x);
     const modelY = this.controller.convertYPixelToModel(y);
+    // Magnetism: snap the end point to a wall/room vertex and to 15 degree
+    // angles (Java's WallPointWithAngleMagnetism).
+    let xEnd = modelX;
+    let yEnd = modelY;
+    if (this.controller.isMagnetismEnabled(false)) {
+      const magnetized = this.controller.wallPointWithAngleMagnetism(this.newWall, this.xStart, this.yStart, modelX, modelY);
+      xEnd = magnetized.x;
+      yEnd = magnetized.y;
+    }
     if (this.newWall === null) {
       const wallEndAtStart = this.getWallEndAt(this.xStart, this.yStart);
-      this.newWall = this.createWall(this.xStart, this.yStart, modelX, modelY, null, wallEndAtStart);
+      this.newWall = this.createWall(this.xStart, this.yStart, xEnd, yEnd, null, wallEndAtStart);
     } else {
-      this.newWall.setXEnd(modelX);
-      this.newWall.setYEnd(modelY);
+      this.newWall.setXEnd(xEnd);
+      this.newWall.setYEnd(yEnd);
     }
     if (this.controller.isFeedbackDisplayed()) {
-      this.controller.getView().setAlignmentFeedback(Wall as unknown as { new (): Selectable }, modelX, modelY, 0, 0);
+      this.controller.getView().setAlignmentFeedback(Wall as unknown as { new (): Selectable }, xEnd, yEnd, 0, 0);
+      // Wall length tool tip (like Java's getToolTipFeedbackText)
+      const distance = this.newWall.getStartPointToEndPointDistance();
+      if (distance > 0) {
+        const text = `Length: ${this.controller.preferences.getLengthUnit().format(distance)}`;
+        this.controller.getView().setToolTipFeedback(text, modelX, modelY);
+      }
     }
   }
 
   /** Returns the wall ending at the given point (approximate). */
   private getWallEndAt(x: number, y: number): Wall | null {
+    const margin = this.controller.getSelectionMargin();
     for (const wall of this.controller.home.getWalls()) {
-      if (Math.abs(wall.getXEnd() - x) < 0.5 && Math.abs(wall.getYEnd() - y) < 0.5) {
+      if (Math.abs(wall.getXEnd() - x) < margin && Math.abs(wall.getYEnd() - y) < margin) {
         return wall;
       }
     }
@@ -1231,12 +1453,11 @@ export class WallDrawingState extends AbstractWallState {
       // Return to the selection state after a double click
       this.controller.setState(this.controller.getSelectionState());
     } else if (this.newWall !== null && this.newWall.getStartPointToEndPointDistance() > 0) {
-      // Complete the current wall and continue from its end
+      // Complete the current wall and continue from its end. The next wall is
+      // created on the following mouse move (like Java), so a finishing
+      // double-click doesn't leave a stub wall.
       this.selectItem(this.newWall);
       this.endWallCreation();
-      // Create the next wall starting at the current end
-      const wallEndAtStart = this.getWallEndAt(this.xStart, this.yStart);
-      this.newWall = this.createWall(this.xStart, this.yStart, modelX, modelY, null, wallEndAtStart);
     }
   }
 

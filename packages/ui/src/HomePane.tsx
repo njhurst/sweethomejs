@@ -27,6 +27,7 @@ import { useEffect, useState } from "react";
 import type { Home, UserPreferences, HomeController } from "@sweethomejs/core";
 import { PlanCanvas } from "./plan/PlanCanvas.js";
 import { View3DCanvas } from "./view3d/View3DCanvas.js";
+import { HelpPane } from "./help/HelpPane.js";
 
 export type View3DPosition = "tab" | "split" | "hidden";
 
@@ -48,6 +49,7 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
   const [undoEnabled, setUndoEnabled] = useState(false);
   const [redoEnabled, setRedoEnabled] = useState(false);
   const [selectedCount, setSelectedCount] = useState(0);
+  const [helpOpen, setHelpOpen] = useState(false);
   const [mode, setMode] = useState<string>(props.homeController.getPlanController().getMode().toString());
 
   useEffect(() => {
@@ -73,6 +75,19 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
 
   return (
     <div className="sh-home">
+      <MenuBar
+        home={home}
+        homeController={homeController}
+        preferences={preferences}
+        view3DPosition={view3DPosition}
+        onView3DPositionChange={setView3DPosition}
+        undoEnabled={undoEnabled}
+        redoEnabled={redoEnabled}
+        mode={mode}
+        onOpenHome={props.onOpenHome ?? null}
+        onSaveHome={props.onSaveHome ?? null}
+        onShowHelp={() => setHelpOpen(true)}
+      />
       <Toolbar
         home={home}
         homeController={homeController}
@@ -110,6 +125,11 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
           />
         )}
       </div>
+      {helpOpen && (
+        <div className="sh-help-overlay" data-testid="help-overlay">
+          <HelpPane onClose={() => setHelpOpen(false)} />
+        </div>
+      )}
       <div className="sh-statusbar">
         <span data-testid="status-selection">{selectedCount} selected</span>
         <span className="sh-statusbar-spacer" />
@@ -179,6 +199,139 @@ function TabbedViews(props: {
           <View3DCanvas home={props.home} preferences={props.preferences} homeController3D={props.homeController3D} />
         )}
       </div>
+    </div>
+  );
+}
+
+/** The menu bar (File / Edit / Plan / 3D view / Help), like the desktop app. */
+function MenuBar(props: {
+  home: Home;
+  homeController: HomeController;
+  preferences: UserPreferences;
+  view3DPosition: View3DPosition;
+  onView3DPositionChange: (position: View3DPosition) => void;
+  undoEnabled: boolean;
+  redoEnabled: boolean;
+  mode: string;
+  onOpenHome?: (() => void | Promise<void>) | null;
+  onSaveHome?: (() => void | Promise<void>) | null;
+  onShowHelp: () => void;
+}): React.JSX.Element {
+  const { home, homeController, preferences, view3DPosition, onView3DPositionChange, undoEnabled, redoEnabled, mode, onOpenHome, onSaveHome, onShowHelp } = props;
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const planController = homeController.getPlanController();
+  const homeController3D = homeController.getHomeController3D();
+  const [gridVisible, setGridVisible] = useState(preferences.isGridVisible());
+  const [rulersVisible, setRulersVisible] = useState(preferences.isRulersVisible());
+  const [magnetismEnabled, setMagnetismEnabled] = useState(preferences.isMagnetismEnabled());
+
+  const close = (): void => setOpenMenu(null);
+  const toggle = (name: string): void => setOpenMenu((current) => (current === name ? null : name));
+  const run = (action: () => void): void => {
+    action();
+    close();
+  };
+  const setMode = (planMode: PlanController.Mode): void => {
+    planController.setMode(planMode);
+    close();
+  };
+
+  const items = (
+    name: string,
+    entries: Array<
+      | { label: string; onClick: () => void; disabled?: boolean; checked?: boolean }
+      | { separator: true }
+    >,
+  ): React.JSX.Element => (
+    <div className="sh-menu">
+      <button className="sh-menu-button" data-testid={`menu-${name}`} onClick={() => toggle(name)}>
+        {name}
+      </button>
+      {openMenu === name && (
+        <>
+          <div className="sh-menu-backdrop" onClick={close} />
+          <div className="sh-menu-dropdown">
+            {entries.map((entry, index) =>
+              "separator" in entry ? (
+                <div key={index} className="sh-menu-separator" />
+              ) : (
+                <button
+                  key={index}
+                  className={`sh-menu-item${entry.disabled ? " disabled" : ""}${entry.checked ? " checked" : ""}`}
+                  disabled={entry.disabled}
+                  onClick={() => run(entry.onClick)}
+                >
+                  {entry.checked && <span className="sh-menu-check">✓</span>}
+                  {entry.label}
+                </button>
+              ),
+            )}
+          </div>
+        </>
+      )}
+    </div>
+  );
+
+  return (
+    <div className="sh-menubar" data-testid="menubar">
+      {items("File", [
+        { label: "New", onClick: () => homeController.newHome() },
+        { label: "Open…", onClick: () => onOpenHome?.() ?? homeController.open() },
+        { label: "Save", onClick: () => onSaveHome?.() ?? homeController.save() },
+        { separator: true },
+        { label: "Quit", onClick: () => close() },
+      ])}
+      {items("Edit", [
+        { label: "Undo", onClick: () => homeController.undo(), disabled: !undoEnabled },
+        { label: "Redo", onClick: () => homeController.redo(), disabled: !redoEnabled },
+        { separator: true },
+        { label: "Delete", onClick: () => planController.deleteSelection() },
+        { label: "Select all", onClick: () => homeController.selectAll() },
+      ])}
+      {items("Plan", [
+        { label: "Draw walls", onClick: () => setMode(PlanMode.WALL_CREATION), checked: mode === "WALL_CREATION" },
+        { label: "Draw rooms", onClick: () => setMode(PlanMode.ROOM_CREATION), checked: mode === "ROOM_CREATION" },
+        { label: "Draw dimensions", onClick: () => setMode(PlanMode.DIMENSION_LINE_CREATION), checked: mode === "DIMENSION_LINE_CREATION" },
+        { label: "Draw labels", onClick: () => setMode(PlanMode.LABEL_CREATION), checked: mode === "LABEL_CREATION" },
+        { label: "Draw polylines", onClick: () => setMode(PlanMode.POLYLINE_CREATION), checked: mode === "POLYLINE_CREATION" },
+        { separator: true },
+        { label: "Zoom in", onClick: () => planController.zoom(1.25) },
+        { label: "Zoom out", onClick: () => planController.zoom(0.8) },
+        { separator: true },
+        {
+          label: "Grid visible",
+          onClick: () => {
+            preferences.setGridVisible(!preferences.isGridVisible());
+            setGridVisible(!preferences.isGridVisible());
+          },
+          checked: gridVisible,
+        },
+        {
+          label: "Rulers visible",
+          onClick: () => {
+            preferences.setRulersVisible(!preferences.isRulersVisible());
+            setRulersVisible(!preferences.isRulersVisible());
+          },
+          checked: rulersVisible,
+        },
+        {
+          label: "Magnetism",
+          onClick: () => {
+            preferences.setMagnetismEnabled(!preferences.isMagnetismEnabled());
+            setMagnetismEnabled(!preferences.isMagnetismEnabled());
+          },
+          checked: magnetismEnabled,
+        },
+      ])}
+      {items("3D view", [
+        { label: "Split view", onClick: () => onView3DPositionChange("split"), checked: view3DPosition === "split" },
+        { label: "Tab view", onClick: () => onView3DPositionChange("tab"), checked: view3DPosition === "tab" },
+        { label: "Hidden", onClick: () => onView3DPositionChange("hidden"), checked: view3DPosition === "hidden" },
+        { separator: true },
+        { label: "Store camera", onClick: () => homeController3D.storeCamera("Camera 1") },
+        { label: "Go to camera", onClick: () => homeController3D.goToCamera(home.getObserverCamera()) },
+      ])}
+      {items("Help", [{ label: "Help…", onClick: onShowHelp }])}
     </div>
   );
 }

@@ -82,7 +82,7 @@ export class UserPreferences {
   private editingIn3DViewEnabled = true;
   private aerialViewCenteredOnSelectionEnabled = false;
   private observerCameraSelectedAtChange = false;
-  private magnetismEnabled = false;
+  private magnetismEnabled = true;
   private rulersVisible = true;
   private gridVisible = true;
   private drawingModeEnabled = false;
