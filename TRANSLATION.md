@@ -59,3 +59,16 @@ visual differences).*
   not yet distinguished from same-direction rings (a JDK divergence; the
   model only uses single-ring areas, so it is unreachable in practice).
 - **(none yet)**
+
+## j3d → packages/photo (photo/video rendering)
+
+| Java | TS | Status | Notes |
+|---|---|---|---|
+| `j3d/AbstractPhotoRenderer.java` | `core/controllers/photo/AbstractPhotoRenderer.ts` | ported | PhotoQuality + observer protocol |
+| `j3d/PhotoRenderer.java` (Sunflow) | `photo/ThreeJSPhotoRenderer.ts` | ported (different engine) | option C from docs/09 |
+| `viewcontroller/AbstractPhotoController.java` | `core/controllers/photo/PhotoController.ts` | ported | aspect/size/quality presets |
+| `viewcontroller/PhotoController.java` | `core/controllers/photo/PhotoController.ts` | merged | time/lens/renderer |
+| `viewcontroller/VideoController.java` | `core/controllers/photo/VideoController.ts` | ported | camera-path interpolation |
+| `swing/VideoPanel.java` / `JPEGImagesToVideo.java` | `photo/VideoRecorder.ts` | ported | MediaRecorder WebM |
+| `swing/HomePDFPrinter.java` | `export/PDFExporter.ts` + `PDFPainter.ts` | ported | vector via pdf-lib |
+| `swing/FurnitureTable.java` exportToCSV | `export/CSVExporter.ts` | ported | tab-separated, Java formats |

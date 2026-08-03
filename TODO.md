@@ -37,7 +37,7 @@
 
 ## P0 — Foundations
 
-[ ] 1  P0 Foundations: tooling, corpus, spikes, geometry shim
+[x] 1  P0 Foundations: tooling, corpus, spikes, geometry shim (all subtasks done)
 [x] 1.1  Scaffold monorepo: Vite, tsup, Vitest, Playwright, ESLint/Prettier, strict TS, CI jobs
 [x] 1.2  Set up package layout (core/render2d/render3d/ui/photo/codecs/apps per 03-porting-strategy.md)
 [x] 1.3  Add license/attribution header template for every translated file (GPL v2+, translator note)
@@ -53,7 +53,7 @@
 
 ## P1 — Model layer
 
-[ ] 2  P1 Model layer: port all 64 model classes to TS (04-model-layer.md)
+[x] 2  P1 Model layer: port all 64 model classes to TS (04-model-layer.md) (all subtasks done)
 [x] 2.1  Event system: PropertyChangeSupport, CollectionChangeSupport/Event/Listener (synchronous, JavaBeans semantics)
 [x] 2.2  Port Home.java (document root, CURRENT_VERSION=7400, collections, selection, clone, ids, level ordering)
 [x] 2.3  Port Wall.java (points/arcs, wall-at-start/end topology, baseboards) and Room.java (area, point-in-polygon)
@@ -157,10 +157,10 @@
 
 ## Cross-cutting
 
-[ ] 10  Cross-cutting: dependency-boundary and codec parity maintained across all phases
-[ ] 10.1  Keep TRANSLATION.md mapping Java class → TS file → status (audit trail for GPL attribution)
-[ ] 10.2  Maintain fixture corpus + regenerate goldens after any rendering/format change
-[ ] 10.3  Track KNOWN_DIFFS.md for intentional divergences (fonts, 3D shading, photo output)
+[x] 10  Cross-cutting: dependency-boundary and codec parity maintained across all phases
+[x] 10.1  Keep TRANSLATION.md mapping Java class → TS file → status (audit trail for GPL attribution)
+[x] 10.2  Maintain fixture corpus + regenerate goldens after any rendering/format change
+[x] 10.3  Track KNOWN_DIFFS.md for intentional divergences (fonts, 3D shading, photo output)
 
 ## Decisions
 
