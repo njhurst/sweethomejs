@@ -16,3 +16,6 @@ export type { SelectionFeedbackColors } from "./SelectionFeedbackPainter.js";
 export { emptyToolTip, paintToolTip, emptyAlignmentFeedback, paintAlignmentFeedback, EditablePropertyInput, commitEditableProperty } from "./ToolFeedback.js";
 export type { ToolTipState, AlignmentFeedbackState, EditablePropertyInputOptions } from "./ToolFeedback.js";
 export { SVGPainter } from "./SVGPainter.js";
+
+export { PAPER_FORMATS, PRINT_DPI, PX_PER_CM, computePlanBounds, getPrintedPlanScale, paperSize, paintPlanForPrint } from "./PrintLayout.js";
+export type { PrintBounds, PrintPaperSize } from "./PrintLayout.js";

@@ -28,6 +28,7 @@ import type { Home, UserPreferences, HomeController } from "@sweethomejs/core";
 import { PlanCanvas } from "./plan/PlanCanvas.js";
 import { View3DCanvas } from "./view3d/View3DCanvas.js";
 import { HelpPane } from "./help/HelpPane.js";
+import { PrintPreviewView } from "./print/PrintPreviewView.js";
 
 export type View3DPosition = "tab" | "split" | "hidden";
 
@@ -50,6 +51,7 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
   const [redoEnabled, setRedoEnabled] = useState(false);
   const [selectedCount, setSelectedCount] = useState(0);
   const [helpOpen, setHelpOpen] = useState(false);
+  const [printOpen, setPrintOpen] = useState(false);
   const [mode, setMode] = useState<string>(props.homeController.getPlanController().getMode().toString());
 
   useEffect(() => {
@@ -87,6 +89,7 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
         onOpenHome={props.onOpenHome ?? null}
         onSaveHome={props.onSaveHome ?? null}
         onShowHelp={() => setHelpOpen(true)}
+        onShowPrint={() => setPrintOpen(true)}
       />
       <Toolbar
         home={home}
@@ -128,6 +131,11 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
       {helpOpen && (
         <div className="sh-help-overlay" data-testid="help-overlay">
           <HelpPane onClose={() => setHelpOpen(false)} />
+        </div>
+      )}
+      {printOpen && (
+        <div className="sh-help-overlay" data-testid="print-preview-overlay">
+          <PrintPreviewView home={home} preferences={preferences} onClose={() => setPrintOpen(false)} />
         </div>
       )}
       <div className="sh-statusbar">
@@ -216,8 +224,9 @@ function MenuBar(props: {
   onOpenHome?: (() => void | Promise<void>) | null;
   onSaveHome?: (() => void | Promise<void>) | null;
   onShowHelp: () => void;
+  onShowPrint: () => void;
 }): React.JSX.Element {
-  const { home, homeController, preferences, view3DPosition, onView3DPositionChange, undoEnabled, redoEnabled, mode, onOpenHome, onSaveHome, onShowHelp } = props;
+  const { home, homeController, preferences, view3DPosition, onView3DPositionChange, undoEnabled, redoEnabled, mode, onOpenHome, onSaveHome, onShowHelp, onShowPrint } = props;
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const planController = homeController.getPlanController();
   const homeController3D = homeController.getHomeController3D();
@@ -279,6 +288,7 @@ function MenuBar(props: {
         { label: "Open…", onClick: () => onOpenHome?.() ?? homeController.open() },
         { label: "Save", onClick: () => onSaveHome?.() ?? homeController.save() },
         { separator: true },
+        { label: "Print…", onClick: () => props.onShowPrint() },
         { label: "Quit", onClick: () => close() },
       ])}
       {items("Edit", [

@@ -138,7 +138,7 @@
 [x] 8.3  Photo renderer v1: Three.js-based (physical materials, env lighting, postprocessing) in a worker
 [x] 8.4  Photo renderer v2 (stretch): DEFERRED — Three.js renderer (8.3) ships as the photo engine; a WebGPU path tracer needs a separate engineering effort and is explicitly a stretch milestone (docs/09 §1.2 option B). The scene intermediate (8.2) is the ready-made feed when it lands.
 [x] 8.5  Video: camera-path interpolation, WebCodecs/MediaRecorder encoding, format presets, progress/cancel
-[ ] 8.6  Print preview + browser print at paper size/orientation/margins (HomePrint) + scale fitting
+[x] 8.6  Print preview + browser print at paper size/orientation/margins (HomePrint) + scale fitting
 [ ] 8.7  PDF export via pdf-lib (vector plan) + font subsetting; compare with Java HomePDFPrinter output
 [ ] 8.8  CSV export of furniture list (locale-aware delimiters; compare to examples/ls_2819.csv)
 [ ] 8.9  Perceptual photo parity tests vs Sunflow references (SSIM/LPIPS, tolerance-based)

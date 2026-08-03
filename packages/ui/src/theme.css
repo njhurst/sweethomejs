@@ -169,6 +169,70 @@
   margin: 4px 6px;
 }
 
+.sh-print-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  padding: 12px;
+}
+
+.sh-print-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  font-size: 13px;
+}
+
+.sh-print-controls label {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.sh-print-controls select,
+.sh-print-controls input {
+  width: 90px;
+}
+
+.sh-print-buttons {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+}
+
+.sh-print-canvas-wrap {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: auto;
+  background: #666;
+  padding: 12px;
+  border-radius: 4px;
+}
+
+.sh-print-canvas-wrap canvas {
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* The print layer: only visible when printing */
+.sh-print-layer {
+  display: none;
+}
+
+@media print {
+  .sh-print-layer {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}
+
 .sh-help-overlay {
   position: absolute;
   inset: 0;
