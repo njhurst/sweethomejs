@@ -148,3 +148,6 @@ export class Autosaver {
     await this.store.delete("sh-recovery", name);
   }
 }
+
+export { CloudHomeStore } from "./CloudHomeStore.js";
+export type { CloudHomeStoreOptions } from "./CloudHomeStore.js";

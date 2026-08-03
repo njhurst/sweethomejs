@@ -56,6 +56,41 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
   const [mode, setMode] = useState<string>(props.homeController.getPlanController().getMode().toString());
 
   useEffect(() => {
+    // Keyboard shortcuts (Ctrl/⌘ + Z/Y undo/redo, Delete, Ctrl+O/S/P, +/- zoom)
+    const onKeyDown = (event: KeyboardEvent): void => {
+      const planController = homeController.getPlanController();
+      const target = event.target as HTMLElement | null;
+      if (target !== null && (target.tagName === "INPUT" || target.tagName === "SELECT" || target.tagName === "TEXTAREA")) {
+        return;
+      }
+      const mod = event.ctrlKey || event.metaKey;
+      if (mod && event.key.toLowerCase() === "z") {
+        event.preventDefault();
+        if (event.shiftKey) homeController.redo();
+        else homeController.undo();
+      } else if (mod && event.key.toLowerCase() === "y") {
+        event.preventDefault();
+        homeController.redo();
+      } else if (mod && event.key.toLowerCase() === "o") {
+        event.preventDefault();
+        void (props.onOpenHome?.() ?? homeController.open());
+      } else if (mod && event.key.toLowerCase() === "s") {
+        event.preventDefault();
+        void (props.onSaveHome?.() ?? homeController.save());
+      } else if (mod && event.key.toLowerCase() === "p") {
+        event.preventDefault();
+        setPrintOpen(true);
+      } else if (event.key === "Delete" || event.key === "Backspace") {
+        planController.deleteSelection();
+      } else if (event.key === "+" || event.key === "=") {
+        planController.zoom(1.25);
+      } else if (event.key === "-") {
+        planController.zoom(0.8);
+      } else if (event.key === "Escape") {
+        planController.setMode(PlanMode.SELECTION);
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
     const syncSelection = (): void => setSelectedCount(home.getSelectedItems().length);
     home.addSelectionListener(syncSelection);
     const furnitureListener = { collectionChanged: syncSelection };
@@ -70,6 +105,7 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
       home.removeFurnitureListener(furnitureListener);
       home.removeSelectionListener(syncSelection);
       planController.removePropertyChangeListener(PlanController.Property.MODE, modeListener);
+      window.removeEventListener("keydown", onKeyDown);
     };
   }, [home, homeController]);
 
@@ -162,7 +198,7 @@ function Toolbar(props: {
   const { home, homeController, view3DPosition, onView3DPositionChange, mode, onOpenHome, onSaveHome } = props;
   const planController = homeController.getPlanController();
   return (
-    <div className="sh-toolbar" data-mode={mode}>
+    <div className="sh-toolbar" data-mode={mode} role="toolbar" aria-label="Tools">
       <ToolbarButton label="New" onClick={() => homeController.newHome()} />
       <ToolbarButton label="Open" onClick={() => onOpenHome?.() ?? homeController.open()} />
       <ToolbarButton label="Save" onClick={() => onSaveHome?.() ?? homeController.save()} />
@@ -283,7 +319,7 @@ function MenuBar(props: {
   );
 
   return (
-    <div className="sh-menubar" data-testid="menubar">
+    <div className="sh-menubar" data-testid="menubar" role="menubar">
       {items("File", [
         { label: "New", onClick: () => homeController.newHome() },
         { label: "Open…", onClick: () => onOpenHome?.() ?? homeController.open() },
@@ -388,13 +424,14 @@ function LeftToolbar(props: { mode: string; homeController: HomeController }): R
     { label: "⌁", title: "Draw polylines", modeName: "POLYLINE_CREATION", onClick: () => planController.setMode(PlanMode.POLYLINE_CREATION) },
   ];
   return (
-    <div className="sh-left-toolbar" data-testid="left-toolbar">
+    <div className="sh-left-toolbar" data-testid="left-toolbar" role="toolbar" aria-label="Drawing tools">
       {tools.map((tool) => (
         <button
           key={tool.modeName}
           className={`sh-left-tool${mode === tool.modeName ? " active" : ""}`}
           title={tool.title}
           aria-label={tool.title}
+          aria-pressed={mode === tool.modeName}
           onClick={tool.onClick}
         >
           {tool.label}

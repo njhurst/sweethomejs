@@ -53,7 +53,7 @@ class FakeElement {
   fire(type: string, event: Record<string, unknown>): void {
     const handler = this.handlers.get(type);
     if (handler !== undefined) {
-      handler(event as never);
+      handler({ preventDefault: () => {}, stopPropagation: () => {}, ...event } as never);
     }
   }
 }
@@ -198,5 +198,30 @@ describe("PlanInputAdapter (task 5.5)", () => {
     expect(PlanInputAdapter.cursorToCss("DRAW")).toBe("crosshair");
     expect(PlanInputAdapter.cursorToCss("PANNING")).toBe("grab");
     expect(PlanInputAdapter.cursorToCss("SELECTION")).toBe("default");
+  });
+  it("pans the plan with a one-finger touch drag (tap still selects)", () => {
+    const { element, viewport, adapter } = makeSetup();
+    viewport.setScale(0.5);
+    viewport.setPan(100, 200);
+    element.fire("pointerdown", { clientX: 50, clientY: 60, pointerId: 1, pointerType: "touch", button: 0, shiftKey: false, altKey: false, ctrlKey: false, metaKey: false });
+    // Move beyond the 10px threshold → pan
+    element.fire("pointermove", { clientX: 90, clientY: 100, pointerId: 1, pointerType: "touch" });
+    element.fire("pointermove", { clientX: 110, clientY: 120, pointerId: 1, pointerType: "touch" });
+    expect(viewport.getPanX()).not.toBe(100);
+    expect(viewport.getPanY()).not.toBe(200);
+    // Release after a pan must not trigger a selection release (no crash)
+    element.fire("pointerup", { clientX: 110, clientY: 120, pointerId: 1 });
+  });
+
+  it("pinch zooms the plan with two fingers", () => {
+    const { element, viewport, adapter } = makeSetup();
+    viewport.setScale(0.5);
+    element.fire("pointerdown", { clientX: 100, clientY: 100, pointerId: 1, pointerType: "touch", button: 0, shiftKey: false, altKey: false, ctrlKey: false, metaKey: false });
+    element.fire("pointerdown", { clientX: 200, clientY: 100, pointerId: 2, pointerType: "touch", button: 0, shiftKey: false, altKey: false, ctrlKey: false, metaKey: false });
+    const before = viewport.getScale();
+    // Spread the fingers → zoom in
+    element.fire("pointermove", { clientX: 100, clientY: 100, pointerId: 1, pointerType: "touch" });
+    element.fire("pointermove", { clientX: 400, clientY: 100, pointerId: 2, pointerType: "touch" });
+    expect(viewport.getScale()).toBeGreaterThan(before);
   });
 });

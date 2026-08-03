@@ -51,6 +51,12 @@ export class PlanInputAdapter {
   private readonly onScroll: ((dx: number, dy: number) => void) | null;
   private readonly cursorRenderer: ((cursor: string, ctx: CanvasRenderingContext2D, width: number, height: number) => void) | null;
   private readonly updatePlanBounds: (() => void) | null;
+  /** Active pointers for touch gestures (pinch zoom / one-finger pan). */
+  private readonly activePointers = new Map<number, { x: number; y: number }>();
+  private pinchDistance = 0;
+  private pinchMode = false;
+  /** True while a touch one-finger drag is panning the plan (suppresses selection release). */
+  private touchPanning = false;
   private lastPointerX = 0;
   private lastPointerY = 0;
   private lastPressTime = 0;
@@ -114,6 +120,21 @@ export class PlanInputAdapter {
     this.element.setPointerCapture?.(event.pointerId);
     const x = event.clientX - this.element.getBoundingClientRect().left;
     const y = event.clientY - this.element.getBoundingClientRect().top;
+    // Track touch pointers for pinch/pan gestures
+    this.activePointers.set(event.pointerId, { x, y });
+    if (event.pointerType === "touch") {
+      if (this.activePointers.size >= 2) {
+        // Second finger: enter pinch mode, cancel the current drag gesture
+        this.pinchMode = true;
+        this.touchPanning = false;
+        const [a, b] = [...this.activePointers.values()];
+        this.pinchDistance = Math.hypot(a!.x - b!.x, a!.y - b!.y) || 1;
+        event.preventDefault();
+        return;
+      }
+    } else if (this.activePointers.size >= 2) {
+      return;
+    }
     // Click-count detection (double click within 500 ms and 10 px)
     const now = Date.now();
     if (now - this.lastPressTime < 500 && Math.abs(x - this.lastPressX) < 10 && Math.abs(y - this.lastPressY) < 10) {
@@ -152,13 +173,54 @@ export class PlanInputAdapter {
     this.refreshBounds();
     const x = event.clientX - this.element.getBoundingClientRect().left;
     const y = event.clientY - this.element.getBoundingClientRect().top;
+    const previous = this.activePointers.get(event.pointerId);
+    this.activePointers.set(event.pointerId, { x, y });
+
+    if (this.pinchMode && this.activePointers.size >= 2) {
+      // Pinch zoom around the two-finger midpoint
+      const [a, b] = [...this.activePointers.values()];
+      const distance = Math.hypot(a!.x - b!.x, a!.y - b!.y) || 1;
+      const factor = distance / (this.pinchDistance || 1);
+      if (factor > 0.2 && factor < 5) {
+        const midX = (a!.x + b!.x) / 2;
+        const midY = (a!.y + b!.y) / 2;
+        this.viewport.zoomAt(factor, midX, midY);
+      }
+      this.pinchDistance = distance;
+      event.preventDefault();
+      return;
+    }
+
+    if (event.pointerType === "touch" && this.activePointers.size === 1 && this.pointerDown) {
+      const dx = x - (previous?.x ?? x);
+      const dy = y - (previous?.y ?? y);
+      if (this.touchPanning || Math.hypot(x - this.lastPressX, y - this.lastPressY) > 10) {
+        this.touchPanning = true;
+        // One-finger drag pans the plan (tap still selects via press/release)
+        this.viewport.moveView(dx, dy);
+        event.preventDefault();
+        return;
+      }
+    }
     this.lastPointerX = this.pixelX(event);
     this.lastPointerY = this.pixelY(event);
     this.controller.moveMouse(this.lastPointerX, this.lastPointerY);
   };
 
   private readonly onPointerUp = (event: PointerEvent): void => {
-    this.pointerDown = false;
+    this.activePointers.delete(event.pointerId);
+    if (this.activePointers.size < 2) {
+      this.pinchMode = false;
+    }
+    this.pointerDown = this.activePointers.size > 0;
+    if (this.touchPanning) {
+      // A pan consumed the drag: suppress the controller's selection release
+      this.touchPanning = false;
+      return;
+    }
+    if (this.pinchMode) {
+      return;
+    }
     this.controller.releaseMouse(this.pixelX(event), this.pixelY(event));
   };
 
