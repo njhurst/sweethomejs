@@ -19,7 +19,9 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@sweethomejs/core": "0.1.0"
+    "@sweethomejs/core": "0.1.0",
+    "@sweethomejs/render3d": "0.1.0",
+    "three": "^0.185.1"
   },
   "devDependencies": {
     "tsup": "^8.3.5",

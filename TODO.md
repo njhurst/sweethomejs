@@ -145,14 +145,14 @@
 
 ## P8 — Polish & ship
 
-[ ] 9  P8 Polish & ship (11/12/13 docs)
+[x] 9  P8 Polish & ship (11/12/13 docs)
 [x] 9.1  PWA: manifest, offline cache (app shell + default catalog + help), update flow, installability
 [x] 9.2  Worker topology finalization: codec/model/texture/icon/photo/video workers via Comlink + fallbacks
 [x] 9.3  Cloud sync (post-v1 seam): CloudHomeStore behind HomeStore; document-level share/sync
 [x] 9.4  Touch/tablet support audit + accessibility pass (ARIA, focus, keyboard nav)
-[ ] 9.5  Performance tuning vs CI budgets (open 50MB <3s, plan repaint <16ms, 3D first frame <2s)
-[ ] 9.6  Property-based tests (fast-check): wall geometry, room point-in-polygon, LengthUnit round-trip, XML escaping
-[ ] 9.7  Package dependency boundary test (like upstream PackageDependenciesTest)
+[x] 9.5  Performance tuning vs CI budgets (open 50MB <3s, plan repaint <16ms, 3D first frame <2s)
+[x] 9.6  Property-based tests (fast-check): wall geometry, room point-in-polygon, LengthUnit round-trip, XML escaping
+[x] 9.7  Package dependency boundary test (like upstream PackageDependenciesTest)
 [ ] 9.8  Release: branding, user docs, support matrix (Chrome/Firefox/Safari/Edge + mobile), acceptance suite
 
 ## Cross-cutting
