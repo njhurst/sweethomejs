@@ -28,10 +28,12 @@ import type { Home, UserPreferences, HomeController } from "@sweethomejs/core";
 import { PlanCanvas } from "./plan/PlanCanvas.js";
 import { FurnitureCatalogPanel } from "./catalog/FurnitureCatalogPanel.js";
 import { buildBuiltinFurnitureCatalog } from "./catalog/BuiltinFurnitureCatalog.js";
-import { FurnitureCatalogController } from "@sweethomejs/core";
+import { FurnitureCatalogController, WallController, RoomController, HomePieceOfFurniture, Wall as WallModel, Room as RoomModel } from "@sweethomejs/core";
 import { View3DCanvas } from "./view3d/View3DCanvas.js";
 import { HelpPane } from "./help/HelpPane.js";
 import { PrintPreviewView } from "./print/PrintPreviewView.js";
+import { FurniturePropertiesPanel } from "./properties/FurniturePropertiesPanel.js";
+import { WallDialog, RoomDialog } from "./properties/ControllerDialogs.js";
 import { exportPlanToPdf, exportFurnitureCsv } from "@sweethomejs/export";
 
 export type View3DPosition = "tab" | "split" | "hidden";
@@ -61,6 +63,9 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
   ));
   const [helpOpen, setHelpOpen] = useState(false);
   const [printOpen, setPrintOpen] = useState(false);
+  const [modifyDialog, setModifyDialog] = useState<"furniture" | "wall" | "room" | null>(null);
+  const [wallController, setWallController] = useState<WallController | null>(null);
+  const [roomController, setRoomController] = useState<RoomController | null>(null);
   const [undoEnabled, setUndoEnabled] = useState(homeController.isUndoEnabled());
   const [redoEnabled, setRedoEnabled] = useState(homeController.isRedoEnabled());
   const [mode, setMode] = useState<string>(props.homeController.getPlanController().getMode().toString());
@@ -126,6 +131,22 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
     };
     home.addWallsListener(wallsListener);
     const planController = homeController.getPlanController();
+    planController.setModifyItemCallback(() => {
+      const selected = home.getSelectedItems();
+      if (selected.length !== 1) {
+        return;
+      }
+      const item = selected[0]!;
+      if (item instanceof HomePieceOfFurniture) {
+        setModifyDialog("furniture");
+      } else if (item instanceof WallModel) {
+        setWallController(new WallController(home, preferences, {} as never, null));
+        setModifyDialog("wall");
+      } else if (item instanceof RoomModel) {
+        setRoomController(new RoomController(home, preferences, {} as never, null));
+        setModifyDialog("room");
+      }
+    });
     const modeListener = {
       propertyChange: (evt: { newValue?: unknown }): void => {
         const next = evt.newValue?.toString() ?? planController.getMode().toString();
@@ -223,8 +244,32 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
           <PrintPreviewView home={home} preferences={preferences} onClose={() => setPrintOpen(false)} />
         </div>
       )}
+      {modifyDialog === "furniture" && (
+        <div className="sh-help-overlay" data-testid="furniture-dialog">
+          <div className="sh-dialog-card">
+            <FurniturePropertiesPanel home={home} planController={planController} />
+            <div className="sh-dialog-buttons">
+              <button className="sh-toolbar-button" onClick={() => setModifyDialog(null)}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
+      {modifyDialog === "wall" && wallController !== null && (
+        <div className="sh-help-overlay" data-testid="wall-dialog">
+          <div className="sh-dialog-card">
+            <WallDialog controller={wallController} onClose={() => setModifyDialog(null)} />
+          </div>
+        </div>
+      )}
+      {modifyDialog === "room" && roomController !== null && (
+        <div className="sh-help-overlay" data-testid="room-dialog">
+          <div className="sh-dialog-card">
+            <RoomDialog controller={roomController} onClose={() => setModifyDialog(null)} />
+          </div>
+        </div>
+      )}
       <div className="sh-statusbar">
-        <span data-testid="status-selection">{selectedCount} selected</span>
+        <span data-testid="status-selection">{selectionDescription(home)}</span>
         <span className="sh-statusbar-spacer" />
         <span data-testid="status-mode">{planController.getMode().toString()}</span>
       </div>
@@ -501,6 +546,31 @@ function MenuBar(props: {
       ])}
     </div>
   );
+}
+
+/** A human description of the current selection (name + location/size). */
+function selectionDescription(home: import("@sweethomejs/core").Home): string {
+  const selected = home.getSelectedItems();
+  if (selected.length === 0) {
+    return "Nothing selected";
+  }
+  if (selected.length > 1) {
+    return `${selected.length} items selected`;
+  }
+  const item = selected[0]!;
+  if (item instanceof HomePieceOfFurniture) {
+    const unit = "cm";
+    const size = `${Math.round(item.getWidth())} × ${Math.round(item.getDepth())} × ${Math.round(item.getHeight())} ${unit}`;
+    return `${item.getName() ?? "Furniture"} — ${Math.round(item.getX())}, ${Math.round(item.getY())} · ${size}`;
+  }
+  if (item instanceof WallModel) {
+    const length = Math.hypot(item.getXEnd() - item.getXStart(), item.getYEnd() - item.getYStart());
+    return `Wall — ${length.toFixed(1)} cm`;
+  }
+  if (item instanceof RoomModel) {
+    return `Room — ${Math.round(item.getArea())} cm²`;
+  }
+  return "Item selected";
 }
 
 /** Triggers a browser download of the given bytes. */

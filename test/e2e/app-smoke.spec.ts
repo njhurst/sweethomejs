@@ -29,7 +29,7 @@ test("boots the HomePane with toolbar, plan canvas and status bar", async ({ pag
   await expect(page.getByTestId("app-loading")).toBeHidden({ timeout: 15_000 }).catch(() => {});
   await expect(page.locator(".sh-toolbar")).toBeVisible();
   await expect(page.getByTestId("plan-canvas")).toBeVisible();
-  await expect(page.getByTestId("status-selection")).toContainText("0 selected");
+  await expect(page.getByTestId("status-selection")).toContainText("Nothing selected");
 });
 
 test("draws a wall in wall-creation mode", async ({ page }) => {

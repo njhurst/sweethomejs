@@ -233,6 +233,24 @@
   }
 }
 
+.sh-dialog-card {
+  background: white;
+  border: 1px solid var(--sh-border);
+  border-radius: 6px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+  padding: 14px;
+  max-width: 480px;
+  width: 90%;
+  margin: 40px auto;
+}
+
+.sh-dialog-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+}
+
 .sh-help-overlay {
   position: absolute;
   inset: 0;

@@ -75,5 +75,5 @@ test("drawing a wall enables undo and undo restores", async ({ page }) => {
   });
   const box2 = (await page.getByTestId("plan-canvas").boundingBox())!;
   await page.mouse.click(box2.x + (clickPoint.x - box2.x) + 0, box2.y + (clickPoint.y - box2.y) + 0);
-  await expect(page.getByTestId("status-selection")).toContainText("1 selected");
+  await expect(page.getByTestId("status-selection")).toContainText("Wall");
 });

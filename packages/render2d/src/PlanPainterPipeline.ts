@@ -423,14 +423,17 @@ function paintDoorOrWindowSashes(painter: PlanPainter, piece: HomePieceOfFurnitu
       startAngle = 180 - startAngle;
     }
     const extentAngle = mirroredSign * ((sash.getEndAngle() - sash.getStartAngle()) * 180) / Math.PI;
-    // Sample the pie outline (center → arc → center) in the piece's local space
+    // Sample the pie outline (oval center → arc → oval center) in the piece's
+    // local space, like Java's Arc2D.Float(..., PIE): the pie includes the
+    // oval center (xAxis, yAxis).
     const steps = Math.max(4, Math.ceil(Math.abs(extentAngle) / 15));
-    const localPoints: number[][] = [[0, 0]];
+    const localPoints: number[][] = [[xAxis, yAxis]];
     for (let i = 0; i <= steps; i++) {
+      // Point on the oval boundary: center (xAxis, yAxis), radius sashWidth
       const theta = ((startAngle + (extentAngle * i) / steps) * Math.PI) / 180;
-      localPoints.push([xAxis - sashWidth + 2 * sashWidth * Math.cos(theta), yAxis - sashWidth + 2 * sashWidth * Math.sin(theta)]);
+      localPoints.push([xAxis + sashWidth * Math.cos(theta), yAxis + sashWidth * Math.sin(theta)]);
     }
-    localPoints.push([0, 0]);
+    localPoints.push([xAxis, yAxis]);
     // Transform: translate(piece.x, piece.y) · rotate(angle) · translate(mirroredSign * -width/2, -depth/2)
     const cosA = Math.cos(angle);
     const sinA = Math.sin(angle);

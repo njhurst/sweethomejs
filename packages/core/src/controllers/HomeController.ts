@@ -70,6 +70,11 @@ import { ObserverCameraController } from "./ObserverCameraController.js";
 
 export class HomeController implements Controller {
   protected readonly home: Home;
+
+  /** The home managed by this controller. */
+  getHome(): Home {
+    return this.home;
+  }
   protected readonly preferences: UserPreferences;
   protected readonly viewFactory: ViewFactory;
   protected readonly contentManager: ContentManager | null;

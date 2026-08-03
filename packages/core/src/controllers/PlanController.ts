@@ -277,6 +277,14 @@ export class PlanController extends FurnitureController {
     this.state.zoom(factor);
   }
 
+  private modifyItemCallback: (() => void) | null = null;
+
+  /** Sets a callback invoked when the user double-clicks a selectable item
+   * (Java's PlanController.modifySelectedItem — opens the item's dialog). */
+  setModifyItemCallback(callback: (() => void) | null): void {
+    this.modifyItemCallback = callback;
+  }
+
   setFeedbackDisplayed(displayed: boolean): void {
     this.feedbackDisplayed = displayed;
   }
@@ -407,13 +415,31 @@ export class PlanController extends FurnitureController {
       }
       return null;
     };
-    return at(home.getWalls())
-      ?? at(home.getFurniture())
-      ?? at(home.getRooms())
+    // Java's priority: labels, dimension lines, polylines, FURNITURE (reverse
+    // order, highest elevation wins), walls, rooms — furniture beats walls so
+    // doors and windows are selectable through their wall.
+    return at(home.getLabels())
       ?? at(home.getDimensionLines())
-      ?? at(home.getLabels())
-      ?? at(home.getPolylines())
+      ?? at([...home.getPolylines()].reverse())
+      ?? this.furnitureAt(modelX, modelY, margin)
+      ?? at(home.getWalls())
+      ?? at([...home.getRooms()].reverse())
       ?? at([home.getCompass()]);
+  }
+
+  /** The furniture at (x, y): reverse order, highest elevation wins. */
+  private furnitureAt(x: number, y: number, margin: number): Selectable | null {
+    let found: HomePieceOfFurniture | null = null;
+    const furniture = this.home.getFurniture();
+    for (let i = furniture.length - 1; i >= 0; i--) {
+      const piece = furniture[i]!;
+      if (piece.getPoints().length > 0 && piece.containsPoint(x, y, margin)) {
+        if (found === null || piece.getGroundElevation() > found.getGroundElevation()) {
+          found = piece;
+        }
+      }
+    }
+    return found;
   }
 
   convertXPixelToModel(x: number): number {
@@ -698,7 +724,10 @@ export class PlanController extends FurnitureController {
     const selectedItems = this.home.getSelectedItems();
     if (selectedItems.length > 0) {
       const item = selectedItems[0]!;
-      if (item instanceof Wall) {
+      if (item instanceof HomePieceOfFurniture) {
+        // Furniture modification dialog (wired by the app)
+        this.modifyItemCallback?.();
+      } else if (item instanceof Wall) {
         this.modifySelectedWalls();
       } else if (item instanceof Room) {
         this.modifySelectedRooms();
@@ -713,23 +742,24 @@ export class PlanController extends FurnitureController {
   }
 
   modifySelectedWalls(): void {
-    throw new Error("PlanController.modifySelectedWalls not ported yet (task 4.4 dialog)");
+    // The app wires the dialog via setModifyItemCallback
+    this.modifyItemCallback?.();
   }
 
   modifySelectedRooms(): void {
-    throw new Error("PlanController.modifySelectedRooms not ported yet");
+    this.modifyItemCallback?.();
   }
 
   modifySelectedDimensionLines(): void {
-    throw new Error("PlanController.modifySelectedDimensionLines not ported yet");
+    this.modifyItemCallback?.();
   }
 
   modifySelectedLabels(): void {
-    throw new Error("PlanController.modifySelectedLabels not ported yet");
+    this.modifyItemCallback?.();
   }
 
   modifySelectedPolylines(): void {
-    throw new Error("PlanController.modifySelectedPolylines not ported yet");
+    this.modifyItemCallback?.();
   }
 
   lockBasePlan(): void {
@@ -907,6 +937,14 @@ export class SelectionState extends AbstractModeChangeState {
   override pressMouse(x: number, y: number, clickCount: number, shiftDown: boolean, duplicationActivated: boolean): void {
     this.selectedItemsBeforePress = this.controller.home.getSelectedItems();
     const clickedItem = this.controller.getClosestSelectableItemAt(x, y);
+    if (clickCount === 2 && clickedItem !== null && !shiftDown) {
+      // Double-click on an item modifies it (Java's modifySelectedItem)
+      if (!this.controller.home.getSelectedItems().includes(clickedItem)) {
+        this.controller.home.setSelectedItems([clickedItem]);
+      }
+      this.controller.modifySelectedItem();
+      return;
+    }
     if (clickedItem !== null) {
       const selectedItems = this.controller.home.getSelectedItems();
       if (shiftDown) {
@@ -1081,6 +1119,14 @@ export class SelectionMoveState extends AbstractModeChangeState {
   override pressMouse(x: number, y: number, clickCount: number, shiftDown: boolean, duplicationActivated: boolean): void {
     this.xLastMouseMove = x;
     this.yLastMouseMove = y;
+    if (clickCount === 2) {
+      // The second click of a double-click (the first one entered this state):
+      // modify the selected item (Java's SelectionState double-click).
+      if (this.controller.getClosestSelectableItemAt(x, y) !== null) {
+        this.controller.modifySelectedItem();
+      }
+      this.controller.setState(this.controller.getSelectionState());
+    }
   }
 
   override moveMouse(x: number, y: number): void {

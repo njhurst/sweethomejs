@@ -107,7 +107,37 @@ export function FurnitureCatalogPanel(props: FurnitureCatalogPanelProps): React.
     const piece = catalog.getPieceOfFurnitureWithId(pieceId);
     if (piece !== null) {
       const homePiece = homeController.getFurnitureController().createHomePieceOfFurniture(piece as unknown as import("@sweethomejs/core").CatalogPieceOfFurniture as never);
-      homeController.getFurnitureController().addFurniture([homePiece as HomePieceOfFurniture]);
+      // Place the piece at the visible plan center and select it so the user
+      // sees where it landed and can move it.
+      try {
+        const home = homeController.getHome();
+        // Place at the home content center (visible after the initial fit)
+        let minX = Infinity;
+        let minY = Infinity;
+        let maxX = -Infinity;
+        let maxY = -Infinity;
+        const add = (points: number[][]): void => {
+          for (const p of points) {
+            minX = Math.min(minX, p[0]!);
+            minY = Math.min(minY, p[1]!);
+            maxX = Math.max(maxX, p[0]!);
+            maxY = Math.max(maxY, p[1]!);
+          }
+        };
+        for (const wall of home.getWalls()) add(wall.getPoints());
+        for (const piece of home.getFurniture()) {
+          if (piece !== homePiece) add(piece.getPoints());
+        }
+        if (Number.isFinite(minX)) {
+          homePiece.setX(minX + (maxX - minX) / 2);
+          homePiece.setY(minY + (maxY - minY) / 2);
+        }
+      } catch {
+        // Keep the default position
+      }
+      const furnitureController = homeController.getFurnitureController();
+      furnitureController.addFurniture([homePiece as HomePieceOfFurniture]);
+      homeController.getHome().setSelectedItems([homePiece as HomePieceOfFurniture]);
     }
   };
 

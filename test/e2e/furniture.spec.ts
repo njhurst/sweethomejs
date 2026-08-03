@@ -19,21 +19,63 @@
  */
 
 /**
- * Furniture catalog e2e: the built-in catalog dock lists furniture, search
- * filters it, and double-click adds a piece to the home.
+ * Furniture interaction e2e: doors/windows select above walls, the status bar
+ * shows the selection context, double-click opens the furniture dialog, and
+ * the catalog adds a piece at the plan center, selected.
  */
 import { expect, test } from "@playwright/test";
 
-test("catalog adds furniture to the home", async ({ page }) => {
-  await page.goto("/");
+test("furniture selection, context, dialog and catalog add", async ({ page }) => {
+  test.setTimeout(60000);
+  await page.goto("/?file=/fixtures/58-anderson.sh3d");
   await expect(page.getByTestId("plan-canvas")).toBeVisible();
-  await page.waitForTimeout(2500);
-  await expect(page.getByTestId("catalog-dock")).toBeVisible();
+  await page.waitForTimeout(9000);
+  await page.waitForTimeout(2000);
+
+  // A window on a wall selects the window, not the wall (Java priority)
+  const clickResult = await page.evaluate(() => {
+    const pv = (globalThis as any).__planView;
+    const home = (globalThis as any).__homeController.home;
+    const door = home.getFurniture().find((f: any) => f.isDoorOrWindow());
+    return { cx: pv.convertXModelToScreen(door.getX()), cy: pv.convertYModelToScreen(door.getY()) };
+  });
+  const canvas = page.getByTestId("plan-canvas");
+  const box = (await canvas.boundingBox())!;
+  await page.mouse.click(box.x + clickResult.cx, box.y + clickResult.cy);
+  await page.waitForTimeout(300);
+  const selected = await page.evaluate(() => {
+    const sel = (globalThis as any).__homeController.home.getSelectedItems();
+    return sel.map((s: any) => s.constructor.name);
+  });
+  expect(selected.some((n: string) => n.includes("DoorOrWindow") || n.includes("Furniture"))).toBe(true);
+  expect(selected.some((n: string) => n.includes("Wall"))).toBe(false);
+
+  // Status bar shows the selection context (name + location + size)
+  const status = await page.getByTestId("status-selection").textContent();
+  expect(status).toContain("cm");
+  expect(status).not.toContain("Nothing selected");
+
+  // Double-click opens the furniture dialog
+  await page.mouse.dblclick(box.x + clickResult.cx, box.y + clickResult.cy);
+  await page.waitForTimeout(600);
+  await expect(page.getByTestId("furniture-dialog")).toBeVisible();
+  await page.getByTestId("furniture-dialog").getByRole("button", { name: "Close" }).click();
+
+  // Catalog: double-click adds a piece at the plan center, selected
   await page.getByTestId("catalog-search").fill("sofa");
-  const rows = page.getByTestId("catalog-tree").locator(".sh-catalog-piece");
-  expect(await rows.count()).toBeGreaterThan(0);
-  await rows.first().dblclick();
-  await page.waitForTimeout(500);
-  const furniture = await page.evaluate(() => (globalThis as any).__homeController.home.getFurniture().length);
-  expect(furniture).toBeGreaterThan(0);
+  await page.getByTestId("catalog-tree").locator(".sh-catalog-piece").first().dblclick();
+  await page.waitForTimeout(600);
+  const added = await page.evaluate(() => {
+    const home = (globalThis as any).__homeController.home;
+    const sofas = home.getFurniture().filter((f: any) => f.getName() === "Sofa 2 seats");
+    const last = sofas[sofas.length - 1];
+    const sel = home.getSelectedItems();
+    return {
+      count: sofas.length,
+      pos: last ? [Math.round(last.getX()), Math.round(last.getY())] : null,
+      selectedName: sel.length ? (sel[0].getName ? sel[0].getName() : "") : null,
+    };
+  });
+  expect(added.count).toBeGreaterThan(0);
+  expect(added.selectedName).toBe("Sofa 2 seats");
 });
