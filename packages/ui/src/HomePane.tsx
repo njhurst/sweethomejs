@@ -48,11 +48,11 @@ export interface HomePaneProps {
 export function HomePane(props: HomePaneProps): React.JSX.Element {
   const { home, preferences, homeController } = props;
   const [view3DPosition, setView3DPosition] = useState<View3DPosition>(props.view3DPosition ?? "split");
-  const [undoEnabled, setUndoEnabled] = useState(false);
-  const [redoEnabled, setRedoEnabled] = useState(false);
   const [selectedCount, setSelectedCount] = useState(0);
   const [helpOpen, setHelpOpen] = useState(false);
   const [printOpen, setPrintOpen] = useState(false);
+  const [undoEnabled, setUndoEnabled] = useState(homeController.isUndoEnabled());
+  const [redoEnabled, setRedoEnabled] = useState(homeController.isRedoEnabled());
   const [mode, setMode] = useState<string>(props.homeController.getPlanController().getMode().toString());
 
   useEffect(() => {
@@ -91,6 +91,11 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
       }
     };
     window.addEventListener("keydown", onKeyDown);
+    const syncUndoState = (): void => {
+      setUndoEnabled(homeController.isUndoEnabled());
+      setRedoEnabled(homeController.isRedoEnabled());
+    };
+    homeController.addUndoStateListener(syncUndoState);
     const syncSelection = (): void => setSelectedCount(home.getSelectedItems().length);
     home.addSelectionListener(syncSelection);
     const furnitureListener = { collectionChanged: syncSelection };
@@ -106,6 +111,7 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
       home.removeSelectionListener(syncSelection);
       planController.removePropertyChangeListener(PlanController.Property.MODE, modeListener);
       window.removeEventListener("keydown", onKeyDown);
+      homeController.removeUndoStateListener(syncUndoState);
     };
   }, [home, homeController]);
 

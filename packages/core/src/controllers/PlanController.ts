@@ -39,6 +39,7 @@ import type { View } from "./View.js";
 import type { ViewFactory } from "./ViewFactory.js";
 import type { ContentManager } from "./ContentManager.js";
 import { UndoableEditSupport } from "./undo/UndoableEditSupport.js";
+import { AbstractUndoableEdit } from "./undo/AbstractUndoableEdit.js";
 import { FurnitureController } from "./FurnitureController.js";
 import { LocalizedUndoableEdit } from "./LocalizedUndoableEdit.js";
 import { PropertyChangeSupport, type PropertyChangeListener } from "../events/PropertyChangeSupport.js";
@@ -1357,6 +1358,35 @@ export abstract class AbstractWallState extends AbstractModeChangeState {
   }
 
   /** Selects all walls created during this drawing session. */
+  /** Posts an undoable edit for the walls created during the drawing gesture. */
+  protected postCreatedWallsEdit(): void {
+    if (this.createdWalls.length > 0 && this.controller.undoSupport !== null) {
+      const walls = [...this.createdWalls];
+      const home = this.controller.home;
+      this.controller.undoSupport.postEdit(
+        new (class extends AbstractUndoableEdit {
+          override undo(): void {
+            for (const wall of walls) {
+              home.deleteWall(wall);
+            }
+            super.undo();
+          }
+
+          override redo(): void {
+            for (const wall of walls) {
+              home.addWall(wall);
+            }
+            super.redo();
+          }
+
+          override getPresentationName(): string {
+            return "Add walls";
+          }
+        })(),
+      );
+    }
+  }
+
   protected selectCreatedWalls(): void {
     if (this.createdWalls.length > 0) {
       this.controller.home.setSelectedItems(this.createdWalls);
@@ -1449,6 +1479,7 @@ export class WallDrawingState extends AbstractWallState {
         this.controller.home.deleteWall(this.newWall);
         this.newWall = null;
       }
+      this.postCreatedWallsEdit();
       this.selectCreatedWalls();
       // Return to the selection state after a double click
       this.controller.setState(this.controller.getSelectionState());

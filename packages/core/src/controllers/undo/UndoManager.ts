@@ -5,15 +5,37 @@
 import type { UndoableEdit } from "./UndoableEdit.js";
 import type { UndoableEditListener } from "./UndoableEditSupport.js";
 
+export type UndoStateListener = () => void;
+
 export class UndoManager implements UndoableEditListener {
   private readonly edits: UndoableEdit[] = [];
   private indexOfNextAdd = 0;
+  private readonly stateListeners: UndoStateListener[] = [];
+
+  /** Notifies when the undo/redo availability may have changed. */
+  addStateListener(listener: UndoStateListener): void {
+    this.stateListeners.push(listener);
+  }
+
+  removeStateListener(listener: UndoStateListener): void {
+    const index = this.stateListeners.indexOf(listener);
+    if (index >= 0) {
+      this.stateListeners.splice(index, 1);
+    }
+  }
+
+  private notifyStateChanged(): void {
+    for (const listener of this.stateListeners) {
+      listener();
+    }
+  }
 
   undoableEditHappened(edit: UndoableEdit): void {
     // Discard edits after the current position (redo branch)
     this.edits.length = this.indexOfNextAdd;
     this.edits.push(edit);
     this.indexOfNextAdd = this.edits.length;
+    this.notifyStateChanged();
   }
 
   canUndo(): boolean {

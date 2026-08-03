@@ -321,6 +321,23 @@ export class HomeController implements Controller {
 
   // ------------------------------------------------------------------ undo
 
+  isUndoEnabled(): boolean {
+    return this.undoManager.canUndo();
+  }
+
+  isRedoEnabled(): boolean {
+    return this.undoManager.canRedo();
+  }
+
+  /** Listens for undo/redo availability changes. */
+  addUndoStateListener(listener: () => void): void {
+    this.undoManager.addStateListener(listener);
+  }
+
+  removeUndoStateListener(listener: () => void): void {
+    this.undoManager.removeStateListener(listener);
+  }
+
   undo(): void {
     this.undoManager.undo();
     const view = this.getView();

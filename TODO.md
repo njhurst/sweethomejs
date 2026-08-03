@@ -153,7 +153,7 @@
 [x] 9.5  Performance tuning vs CI budgets (open 50MB <3s, plan repaint <16ms, 3D first frame <2s)
 [x] 9.6  Property-based tests (fast-check): wall geometry, room point-in-polygon, LengthUnit round-trip, XML escaping
 [x] 9.7  Package dependency boundary test (like upstream PackageDependenciesTest)
-[ ] 9.8  Release: branding, user docs, support matrix (Chrome/Firefox/Safari/Edge + mobile), acceptance suite
+[x] 9.8  Release: branding, user docs, support matrix (Chrome/Firefox/Safari/Edge + mobile), acceptance suite
 
 ## Cross-cutting
 
