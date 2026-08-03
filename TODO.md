@@ -132,8 +132,8 @@
 
 ## P7 — Photo / video / print
 
-[ ] 8  P7 Photo/video/print (09-photo-video-print.md)
-[ ] 8.1  PhotoRenderer interface + PhotoController port (cameras, quality presets, progressive display, cancel)
+[@ pi-ltkr51] 8  P7 Photo/video/print (09-photo-video-print.md)
+[x] 8.1  PhotoRenderer interface + PhotoController port (cameras, quality presets, progressive display, cancel)
 [ ] 8.2  Scene intermediate shared by 3D view and photo (meshes/materials/lights/camera)
 [ ] 8.3  Photo renderer v1: Three.js-based (physical materials, env lighting, postprocessing) in a worker
 [ ] 8.4  Photo renderer v2 (stretch): WebGPU path tracer fed by scene intermediate; WASM perf spike first
