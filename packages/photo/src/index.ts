@@ -22,3 +22,5 @@ export { PhotoQuality } from "@sweethomejs/core";
 export { renderVideoFrames, recordVideo } from "./VideoRecorder.js";
 export type { VideoFrameOptions, VideoRecordOptions } from "./VideoRecorder.js";
 export type { RenderedImage, PhotoRendererObserver } from "@sweethomejs/core";
+export { ssim } from "./ssim.js";
+export type { PhotoBuffer } from "./ssim.js";

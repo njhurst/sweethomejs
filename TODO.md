@@ -132,7 +132,7 @@
 
 ## P7 — Photo / video / print
 
-[@ pi-ltkr51] 8  P7 Photo/video/print (09-photo-video-print.md)
+[x] 8  P7 Photo/video/print (09-photo-video-print.md)
 [x] 8.1  PhotoRenderer interface + PhotoController port (cameras, quality presets, progressive display, cancel)
 [x] 8.2  Scene intermediate shared by 3D view and photo (meshes/materials/lights/camera)
 [x] 8.3  Photo renderer v1: Three.js-based (physical materials, env lighting, postprocessing) in a worker
@@ -141,7 +141,7 @@
 [x] 8.6  Print preview + browser print at paper size/orientation/margins (HomePrint) + scale fitting
 [x] 8.7  PDF export via pdf-lib (vector plan) + font subsetting; compare with Java HomePDFPrinter output
 [x] 8.8  CSV export of furniture list (locale-aware delimiters; compare to examples/ls_2819.csv)
-[ ] 8.9  Perceptual photo parity tests vs Sunflow references (SSIM/LPIPS, tolerance-based)
+[x] 8.9  Perceptual photo parity tests vs Sunflow references (SSIM/LPIPS, tolerance-based)
 
 ## P8 — Polish & ship
 

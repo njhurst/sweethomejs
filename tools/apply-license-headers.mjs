@@ -26,6 +26,11 @@ let skipped = 0;
 
 for (const target of targets) {
   const abs = resolve(target);
+  // JSON files must not receive C-style headers (package.json etc.)
+  if (abs.endsWith(".json")) {
+    skipped++;
+    continue;
+  }
   const content = await readFile(abs, "utf8");
   if (content.includes("GNU General Public License")) {
     skipped++;
