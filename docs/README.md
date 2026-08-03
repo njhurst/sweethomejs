@@ -52,3 +52,4 @@ This directory contains the full port plan.
   Any derived code must remain GPL-compatible (or be a clean rewrite of the
   protected expression; the algorithms/schema are not copyrightable, but we
   should keep the project GPL to be safe — see [01-overview.md](01-overview.md#license)).
+- [14-worker-topology.md](14-worker-topology.md) — final worker/threading topology

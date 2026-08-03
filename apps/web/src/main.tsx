@@ -31,3 +31,12 @@ createRoot(root).render(
     <App />
   </StrictMode>,
 );
+
+// PWA: register the service worker in production builds (offline app shell)
+if (import.meta.env.PROD && "serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    void navigator.serviceWorker.register("/sw.js").catch((error) => {
+      console.warn("Service worker registration failed", error);
+    });
+  });
+}
