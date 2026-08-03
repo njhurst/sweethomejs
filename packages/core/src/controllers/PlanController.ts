@@ -1091,13 +1091,16 @@ export class WallDrawingState extends AbstractWallState {
     // Convert the stored press/move pixels to model coordinates
     this.xStart = this.controller.convertXPixelToModel(this.controller.getXLastMouseMove());
     this.yStart = this.controller.convertYPixelToModel(this.controller.getYLastMouseMove());
+    // Create the wall immediately (zero-length) so the preview is visible right
+    // after the first click; moveMouse extends it toward the cursor.
+    const wallEndAtStart = this.getWallEndAt(this.xStart, this.yStart);
+    this.newWall = this.createWall(this.xStart, this.yStart, this.xStart, this.yStart, null, wallEndAtStart);
   }
 
   override moveMouse(x: number, y: number): void {
     const modelX = this.controller.convertXPixelToModel(x);
     const modelY = this.controller.convertYPixelToModel(y);
     if (this.newWall === null) {
-      // Create the wall on first move, joining to any wall end at the start point
       const wallEndAtStart = this.getWallEndAt(this.xStart, this.yStart);
       this.newWall = this.createWall(this.xStart, this.yStart, modelX, modelY, null, wallEndAtStart);
     } else {
