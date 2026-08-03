@@ -29,6 +29,7 @@ import { PlanCanvas } from "./plan/PlanCanvas.js";
 import { View3DCanvas } from "./view3d/View3DCanvas.js";
 import { HelpPane } from "./help/HelpPane.js";
 import { PrintPreviewView } from "./print/PrintPreviewView.js";
+import { exportPlanToPdf, exportFurnitureCsv } from "@sweethomejs/export";
 
 export type View3DPosition = "tab" | "split" | "hidden";
 
@@ -289,6 +290,22 @@ function MenuBar(props: {
         { label: "Save", onClick: () => onSaveHome?.() ?? homeController.save() },
         { separator: true },
         { label: "Print…", onClick: () => props.onShowPrint() },
+        { separator: true },
+        {
+          label: "Export to PDF…",
+          onClick: () => {
+            void exportPlanToPdf(home, preferences, {}).then((bytes: Uint8Array) => {
+              downloadBytes(bytes, `${home.getName() ?? "home"}.pdf`, "application/pdf");
+            });
+          },
+        },
+        {
+          label: "Export to CSV…",
+          onClick: () => {
+            const csv = exportFurnitureCsv(home, preferences);
+            downloadBytes(new TextEncoder().encode(csv), `${home.getName() ?? "home"}.csv`, "text/csv");
+          },
+        },
         { label: "Quit", onClick: () => close() },
       ])}
       {items("Edit", [
@@ -344,6 +361,17 @@ function MenuBar(props: {
       {items("Help", [{ label: "Help…", onClick: onShowHelp }])}
     </div>
   );
+}
+
+/** Triggers a browser download of the given bytes. */
+function downloadBytes(bytes: Uint8Array, fileName: string, mimeType: string): void {
+  const blob = new Blob([bytes as unknown as BlobPart], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = fileName;
+  anchor.click();
+  URL.revokeObjectURL(url);
 }
 
 /** The left tools palette (like the desktop app). */
