@@ -29,11 +29,10 @@ import type { Home, UserPreferences } from "@sweethomejs/core";
 import { Object3DBase } from "./Object3DBase.js";
 import { MaterialCache, TextureCache } from "./AttributeCaches.js";
 import { ModelManager } from "./ModelManager.js";
-import { WallObject3D } from "./builders/WallObject3D.js";
-import { RoomObject3D, FurnitureObject3D, DimensionLineObject3D, PolylineObject3D, LabelObject3D, GroundObject3D } from "./builders/objectBuilders.js";
+import { buildSceneIntermediate, type SceneIntermediate } from "./SceneIntermediate.js";
 import { SceneLights } from "./SceneLights.js";
 import { SelectionBoxes3D } from "./SelectionBoxes3D.js";
-import { InstancedFurniture } from "./InstancedFurniture.js";
+import type { InstancedFurniture } from "./InstancedFurniture.js";
 
 export interface HomeScene3DOptions {
   home: Home;
@@ -52,13 +51,15 @@ export interface HomeScene3DOptions {
 
 export class HomeScene3D extends Object3DBase<Home> {
   private readonly root = new THREE.Group();
+  private readonly intermediate: SceneIntermediate;
   private readonly materialCache: MaterialCache;
   private readonly textureCache: TextureCache;
   private readonly modelManager: ModelManager;
   private readonly lights: SceneLights | null = null;
   private readonly selectionBoxes: SelectionBoxes3D;
-  private readonly builders: Object3DBase[] = [];
   private readonly instancedFurniture: InstancedFurniture | null = null;
+  private readonly builders: Object3DBase[] = [];
+  private disposed = false;
 
   constructor(options: HomeScene3DOptions) {
     super(options.home, options.home, options.preferences, null);
@@ -66,77 +67,23 @@ export class HomeScene3D extends Object3DBase<Home> {
     this.textureCache = options.textureCache ?? new TextureCache();
     this.modelManager = options.modelManager ?? new ModelManager();
 
-    // Ground
-    if (options.addGround ?? true) {
-      const ground = new GroundObject3D(options.home, options.preferences, this.materialCache, this.textureCache);
-      this.builders.push(ground);
-      this.root.add(ground.getRoot());
-    }
+    // The shared scene intermediate (task 8.2): the same scene graph the
+    // photo renderer consumes.
+    this.intermediate = buildSceneIntermediate(options.home, options.preferences, {
+      addGround: options.addGround ?? true,
+      addLights: options.addLights ?? true,
+      instancedFurniture: options.instancedFurniture ?? true,
+      materialCache: this.materialCache,
+      textureCache: this.textureCache,
+      modelManager: this.modelManager,
+    });
+    this.root.add(this.intermediate.group);
+    this.lights = this.intermediate.lights;
+    this.builders.push(...this.intermediate.builders);
 
-    // Walls
-    for (const wall of options.home.getWalls()) {
-      const builder = new WallObject3D(wall, options.home, options.preferences, this.materialCache);
-      this.builders.push(builder);
-      this.root.add(builder.getRoot());
-    }
-    // Rooms
-    for (const room of options.home.getRooms()) {
-      const builder = new RoomObject3D(room, options.home, options.preferences, this.materialCache, this.textureCache);
-      this.builders.push(builder);
-      this.root.add(builder.getRoot());
-    }
-    // Furniture: instanced placeholders for model-less pieces + individual
-    // builders for pieces with models
-    if (options.instancedFurniture ?? true) {
-      this.instancedFurniture = new InstancedFurniture(options.home, this.materialCache);
-      this.root.add(this.instancedFurniture.getGroup());
-    }
-    for (const piece of options.home.getFurniture()) {
-      if (piece.getModel() !== null) {
-        const builder = new FurnitureObject3D(piece, options.home, options.preferences, this.materialCache, this.modelManager);
-        this.builders.push(builder);
-        this.root.add(builder.getRoot());
-      }
-    }
-    // Dimension lines
-    for (const line of options.home.getDimensionLines()) {
-      const builder = new DimensionLineObject3D(line, options.home, options.preferences, this.materialCache);
-      this.builders.push(builder);
-      this.root.add(builder.getRoot());
-    }
-    // Polylines
-    for (const polyline of options.home.getPolylines()) {
-      const builder = new PolylineObject3D(polyline, options.home, options.preferences);
-      this.builders.push(builder);
-      this.root.add(builder.getRoot());
-    }
-    // Labels
-    for (const label of options.home.getLabels()) {
-      const builder = new LabelObject3D(label, options.home, options.preferences);
-      this.builders.push(builder);
-      this.root.add(builder.getRoot());
-    }
     // Selection boxes
     this.selectionBoxes = new SelectionBoxes3D(options.home);
     this.root.add(this.selectionBoxes.getGroup());
-
-    // Lights
-    if (options.addLights ?? true) {
-      this.lights = new SceneLights({ home: options.home });
-      for (const light of this.lights.getLights()) {
-        this.root.add(light);
-      }
-      this.root.add(this.lights.getSunLight().target);
-    }
-
-    // Rebuild walls/rooms when the home collection changes (add/delete)
-    const collectionListener = { collectionChanged: () => this.rebuildStaticItems() };
-    this.home.addWallsListener(collectionListener);
-    this.home.addRoomsListener(collectionListener);
-    this.onDispose(() => {
-      this.home.removeWallsListener(collectionListener);
-      this.home.removeRoomsListener(collectionListener);
-    });
   }
 
   override getRoot(): THREE.Object3D {
@@ -170,28 +117,11 @@ export class HomeScene3D extends Object3DBase<Home> {
 
   /** Rebuilds walls + rooms from the model (used on collection changes). */
   private rebuildStaticItems(): void {
-    // Remove old wall/room builders
-    const keep: Object3DBase[] = [];
-    for (const builder of this.builders) {
-      if (builder instanceof WallObject3D || builder instanceof RoomObject3D) {
-        this.root.remove(builder.getRoot());
-        builder.destroy();
-      } else {
-        keep.push(builder);
-      }
-    }
+    this.intermediate.rebuildStaticItems();
+    // Rebuild the builders array (the intermediate replaced its wall/room
+    // builders; the rest are shared).
     this.builders.length = 0;
-    this.builders.push(...keep);
-    for (const wall of this.home.getWalls()) {
-      const builder = new WallObject3D(wall, this.home, this.preferences, this.materialCache);
-      this.builders.push(builder);
-      this.root.add(builder.getRoot());
-    }
-    for (const room of this.home.getRooms()) {
-      const builder = new RoomObject3D(room, this.home, this.preferences, this.materialCache, this.textureCache);
-      this.builders.push(builder);
-      this.root.add(builder.getRoot());
-    }
+    this.builders.push(...this.intermediate.builders);
   }
 
   /** The scene's bounding sphere (for culling/camera framing). */
@@ -202,15 +132,13 @@ export class HomeScene3D extends Object3DBase<Home> {
   }
 
   override destroy(): void {
-    for (const builder of this.builders) {
-      builder.destroy();
+    if (this.disposed) {
+      return;
     }
+    this.disposed = true;
     this.builders.length = 0;
-    this.instancedFurniture?.destroy();
     this.selectionBoxes.destroy();
-    this.lights?.destroy();
-    this.materialCache.clear();
-    this.textureCache.clear();
+    this.intermediate.dispose();
     super.destroy();
   }
 }

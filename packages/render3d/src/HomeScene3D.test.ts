@@ -74,10 +74,12 @@ describe("HomeScene3D golden structure (task 6.8)", () => {
     const home = buildTestHome();
     const scene = new HomeScene3D({ home, preferences: new UserPreferences() });
     const root = scene.getRoot();
-    // Ground plane + 3 wall prisms + 1 room + 1 instanced furniture mesh +
-    // lights (5) + sun target + selection-box group
-    const groups = root.children.length;
-    expect(groups).toBeGreaterThanOrEqual(10);
+    // The root now contains the shared scene-intermediate group (task 8.2)
+    // plus the selection-box group. The intermediate holds ground, walls,
+    // rooms, furniture, dimension lines, polylines, labels, lights + sun target.
+    expect(root.children.length).toBeGreaterThanOrEqual(2);
+    const intermediate = root.children[0]!;
+    expect(intermediate.children.length).toBeGreaterThanOrEqual(10);
     const meshes = countMeshes(root);
     expect(meshes).toBeGreaterThanOrEqual(3 + 1); // walls + room
     const box = new THREE.Box3().setFromObject(root);
