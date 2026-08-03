@@ -52,6 +52,7 @@ class MockPlanView implements PlanView {
   feedback: number[] | null = null;
   resizeIndicatorVisible = false;
 
+  repaint(): void {}
   setRectangleFeedback(x0: number, y0: number, x1: number, y1: number): void {
     this.feedback = [x0, y0, x1, y1];
   }

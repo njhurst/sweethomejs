@@ -93,7 +93,7 @@ export class PlanController extends FurnitureController {
   private planView: PlanView | null = null;
   private state: ControllerState;
   private previousState: ControllerState | null = null;
-  private feedbackDisplayed = false;
+  private feedbackDisplayed = true;
   private lastMousePressX = 0;
   private lastMousePressY = 0;
   private lastMouseMoveX = 0;
@@ -943,13 +943,24 @@ export class RectangleSelectionState extends AbstractModeChangeState {
     this.xEnd = x;
     this.yEnd = y;
     this.shiftDown = false;
-    this.controller.getView().setRectangleFeedback(x, y, x, y);
+    // The rectangle feedback is painted in model space: convert the pixels
+    this.controller.getView().setRectangleFeedback(
+      this.controller.convertXPixelToModel(x),
+      this.controller.convertYPixelToModel(y),
+      this.controller.convertXPixelToModel(x),
+      this.controller.convertYPixelToModel(y),
+    );
   }
 
   override moveMouse(x: number, y: number): void {
     this.xEnd = x;
     this.yEnd = y;
-    this.controller.getView().setRectangleFeedback(this.xStart, this.yStart, this.xEnd, this.yEnd);
+    this.controller.getView().setRectangleFeedback(
+      this.controller.convertXPixelToModel(this.xStart),
+      this.controller.convertYPixelToModel(this.yStart),
+      this.controller.convertXPixelToModel(x),
+      this.controller.convertYPixelToModel(y),
+    );
   }
 
   override releaseMouse(x: number, y: number): void {
@@ -1317,6 +1328,7 @@ export class RoomDrawingState extends AbstractModeChangeState {
       // Otherwise update the last point (rubber-band the polygon)
       this.newRoom.setPoint(modelX, modelY, this.newRoom.getPointCount() - 1);
     }
+    this.controller.getView().repaint();
   }
 
   override pressMouse(x: number, y: number, clickCount: number, shiftDown: boolean, duplicationActivated: boolean): void {
@@ -1413,7 +1425,10 @@ export class PolylineCreationState extends AbstractModeChangeState {
 
 /** Polyline drawing: accumulate points, double-click creates the polyline. */
 export class PolylineDrawingState extends AbstractModeChangeState {
-  private points: number[][] = [];
+  private newPolyline: Polyline | null = null;
+  private xStart = 0;
+  private yStart = 0;
+  private newPointPending = false;
 
   constructor(controller: PlanController) {
     super(controller);
@@ -1427,31 +1442,74 @@ export class PolylineDrawingState extends AbstractModeChangeState {
     return true;
   }
 
+  override enter(): void {
+    // The polyline starts at the press that entered this state
+    this.xStart = this.controller.convertXPixelToModel(this.controller.getXLastMousePress());
+    this.yStart = this.controller.convertYPixelToModel(this.controller.getYLastMousePress());
+    this.newPolyline = null;
+    this.newPointPending = false;
+  }
+
+  override moveMouse(x: number, y: number): void {
+    const modelX = this.controller.convertXPixelToModel(x);
+    const modelY = this.controller.convertYPixelToModel(y);
+    if (this.newPolyline === null) {
+      // Create the polyline on the first move (live rubber-band)
+      const polyline = this.createPolyline([
+        [this.xStart, this.yStart],
+        [modelX, modelY],
+      ]);
+      this.controller.home.addPolyline(polyline);
+      this.controller.home.setSelectedItems([polyline]);
+      this.newPolyline = polyline;
+    } else if (this.newPointPending) {
+      this.newPolyline.addPoint(modelX, modelY);
+      this.newPointPending = false;
+    } else {
+      this.newPolyline.setPoint(modelX, modelY, this.newPolyline.getPointCount() - 1);
+    }
+    this.controller.getView().repaint();
+  }
+
   override pressMouse(x: number, y: number, clickCount: number, shiftDown: boolean, duplicationActivated: boolean): void {
     if (clickCount === 2) {
-      if (this.points.length >= 2) {
-        const polyline = new Polyline(
-          "polyline", this.points, this.controller.preferences.getNewWallThickness(),
-          Polyline.CapStyle.SQUARE, Polyline.JoinStyle.MITER, Polyline.DashStyle.SOLID, 0,
-          Polyline.ArrowStyle.NONE, Polyline.ArrowStyle.NONE, false, 0,
-        );
-        this.controller.home.addPolyline(polyline);
-        this.controller.home.setSelectedItems([polyline]);
+      // Double-click finishes the polyline
+      if (this.newPolyline !== null && this.newPolyline.getPointCount() >= 2) {
+        this.controller.home.setSelectedItems([this.newPolyline]);
+      } else if (this.newPolyline !== null) {
+        this.controller.home.deletePolyline(this.newPolyline);
       }
-      this.points = [];
-      this.controller.setState(this.controller.getSelectionState());
+      this.newPolyline = null;
+      this.newPointPending = false;
+      this.controller.setState(this.controller.getPolylineCreationState());
+    } else if (this.newPolyline !== null) {
+      // Commit the current side; the next move adds a vertex
+      this.newPointPending = true;
     } else {
-      this.points.push([x, y]);
+      this.newPointPending = true;
     }
   }
 
+  private createPolyline(points: number[][]): Polyline {
+    return new Polyline(
+      "polyline", points, this.controller.preferences.getNewWallThickness(),
+      Polyline.CapStyle.SQUARE, Polyline.JoinStyle.MITER, Polyline.DashStyle.SOLID, 0,
+      Polyline.ArrowStyle.NONE, Polyline.ArrowStyle.NONE, false, 0,
+    );
+  }
+
   override escape(): void {
-    this.points = [];
+    if (this.newPolyline !== null) {
+      this.controller.home.deletePolyline(this.newPolyline);
+    }
+    this.newPolyline = null;
+    this.newPointPending = false;
     this.controller.setState(this.controller.getSelectionState());
   }
 
   override exit(): void {
-    this.points = [];
+    this.newPolyline = null;
+    this.newPointPending = false;
   }
 }
 
@@ -1481,7 +1539,9 @@ export class DimensionLineCreationState extends AbstractModeChangeState {
 
 /** Dimension line drawing: two clicks (start, end) create the line. */
 export class DimensionLineDrawingState extends AbstractModeChangeState {
-  private startPoint: number[] | null = null;
+  private newLine: DimensionLine | null = null;
+  private xStart = 0;
+  private yStart = 0;
 
   constructor(controller: PlanController) {
     super(controller);
@@ -1495,34 +1555,51 @@ export class DimensionLineDrawingState extends AbstractModeChangeState {
     return true;
   }
 
-  override pressMouse(x: number, y: number, clickCount: number, shiftDown: boolean, duplicationActivated: boolean): void {
-    if (this.startPoint === null) {
-      this.startPoint = [x, y];
-    } else {
+  override enter(): void {
+    // The line starts at the press that entered this state
+    this.xStart = this.controller.convertXPixelToModel(this.controller.getXLastMousePress());
+    this.yStart = this.controller.convertYPixelToModel(this.controller.getYLastMousePress());
+    this.newLine = null;
+  }
+
+  override moveMouse(x: number, y: number): void {
+    const modelX = this.controller.convertXPixelToModel(x);
+    const modelY = this.controller.convertYPixelToModel(y);
+    if (this.newLine === null) {
+      // Create the dimension line on the first move (live rubber-band)
       const line = new DimensionLine(
-        this.startPoint[0]!, this.startPoint[1]!, 0, x, y, 0,
+        "dimensionLine", this.xStart, this.yStart, modelX, modelY,
         this.controller.preferences.getNewWallThickness(),
       );
       this.controller.home.addDimensionLine(line);
       this.controller.home.setSelectedItems([line]);
-      this.startPoint = null;
+      this.newLine = line;
+    } else {
+      this.newLine.setXEnd(modelX);
+      this.newLine.setYEnd(modelY);
+    }
+    this.controller.getView().repaint();
+  }
+
+  override pressMouse(x: number, y: number, clickCount: number, shiftDown: boolean, duplicationActivated: boolean): void {
+    if (this.newLine !== null) {
+      // Second click finalizes the line (it is already in the home)
+      this.controller.home.setSelectedItems([this.newLine]);
+      this.newLine = null;
       this.controller.setState(this.controller.getSelectionState());
     }
   }
 
-  override moveMouse(x: number, y: number): void {
-    if (this.startPoint !== null) {
-      this.controller.getView().setRectangleFeedback(this.startPoint[0]!, this.startPoint[1]!, x, y);
-    }
-  }
-
   override escape(): void {
-    this.startPoint = null;
+    if (this.newLine !== null) {
+      this.controller.home.deleteDimensionLine(this.newLine);
+    }
+    this.newLine = null;
     this.controller.setState(this.controller.getSelectionState());
   }
 
   override exit(): void {
-    this.startPoint = null;
+    this.newLine = null;
     this.controller.getView().deleteFeedback();
   }
 }

@@ -58,6 +58,8 @@ export interface EditablePropertyLike {
 }
 
 export interface PlanView extends TransferableView, ExportableView {
+  /** Requests a repaint of the plan view (model mutated outside a collection change). */
+  repaint(): void;
   setRectangleFeedback(x0: number, y0: number, x1: number, y1: number): void;
   makeSelectionVisible(): void;
   makePointVisible(x: number, y: number): void;

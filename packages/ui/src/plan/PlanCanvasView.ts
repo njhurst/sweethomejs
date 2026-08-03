@@ -255,6 +255,10 @@ export class PlanCanvasView implements PlanViewType {
 
   // ------------------------------------------------------------- PlanView
 
+  repaint(): void {
+    this.requestPaint();
+  }
+
   setRectangleFeedback(x0: number, y0: number, x1: number, y1: number): void {
     this.feedback = [x0, y0, x1, y1];
     this.requestPaint();

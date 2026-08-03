@@ -89,6 +89,7 @@ class FakePlanView {
   }
   setResizeIndicatorVisible(_visible: boolean): void {}
   setCursor(_cursor: unknown): void {}
+  repaint(): void {}
   setRectangleFeedback(): void {}
   deleteFeedback(): void {}
   setAlignmentFeedback(): void {}
