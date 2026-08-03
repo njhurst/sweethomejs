@@ -120,13 +120,19 @@ export class UserPreferences {
     // no-op in the abstract base
   }
 
+  // The PropertyChangeSupport expects listener objects ({propertyChange}),
+  // while this API exposes plain functions — wrap/unwrap transparently.
+  private readonly listenerWrappers = new Map<(evt: unknown) => void, { propertyChange: (evt: unknown) => void }>();
+
   addPropertyChangeListener(listener: (evt: unknown) => void): void;
   addPropertyChangeListener(property: string, listener: (evt: unknown) => void): void;
   addPropertyChangeListener(propertyOrListener: string | ((evt: unknown) => void), listener?: (evt: unknown) => void): void {
     if (typeof propertyOrListener === "string") {
-      this.propertyChangeSupport.addPropertyChangeListener(propertyOrListener, listener as never);
+      this.propertyChangeSupport.addPropertyChangeListener(propertyOrListener, { propertyChange: (evt: unknown) => listener?.(evt) } as never);
     } else {
-      this.propertyChangeSupport.addPropertyChangeListener(propertyOrListener as never);
+      const wrapper = { propertyChange: (evt: unknown) => propertyOrListener(evt) };
+      this.listenerWrappers.set(propertyOrListener, wrapper);
+      this.propertyChangeSupport.addPropertyChangeListener(wrapper as never);
     }
   }
 
@@ -134,9 +140,13 @@ export class UserPreferences {
   removePropertyChangeListener(property: string, listener: (evt: unknown) => void): void;
   removePropertyChangeListener(propertyOrListener: string | ((evt: unknown) => void), listener?: (evt: unknown) => void): void {
     if (typeof propertyOrListener === "string") {
-      this.propertyChangeSupport.removePropertyChangeListener(propertyOrListener, listener as never);
+      this.propertyChangeSupport.removePropertyChangeListener(propertyOrListener, { propertyChange: (evt: unknown) => listener?.(evt) } as never);
     } else {
-      this.propertyChangeSupport.removePropertyChangeListener(propertyOrListener as never);
+      const wrapper = this.listenerWrappers.get(propertyOrListener);
+      if (wrapper !== undefined) {
+        this.propertyChangeSupport.removePropertyChangeListener(wrapper as never);
+        this.listenerWrappers.delete(propertyOrListener);
+      }
     }
   }
 

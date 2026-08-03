@@ -240,6 +240,31 @@
   z-index: 100;
 }
 
+.sh-catalog-dock {
+  width: 240px;
+  flex: 0 0 auto;
+  border-right: 1px solid var(--sh-border);
+  background: var(--sh-toolbar-bg);
+  overflow: auto;
+  min-height: 0;
+}
+
+.sh-catalog-dock .sh-catalog {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.sh-catalog-dock .sh-catalog-search {
+  margin: 6px;
+}
+
+.sh-catalog-dock .sh-catalog-tree {
+  flex: 1 1 auto;
+  overflow: auto;
+  padding: 0 6px 6px;
+}
+
 .sh-left-toolbar {
   display: flex;
   flex-direction: column;

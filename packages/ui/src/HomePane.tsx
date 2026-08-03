@@ -26,6 +26,9 @@
 import { useEffect, useState } from "react";
 import type { Home, UserPreferences, HomeController } from "@sweethomejs/core";
 import { PlanCanvas } from "./plan/PlanCanvas.js";
+import { FurnitureCatalogPanel } from "./catalog/FurnitureCatalogPanel.js";
+import { buildBuiltinFurnitureCatalog } from "./catalog/BuiltinFurnitureCatalog.js";
+import { FurnitureCatalogController } from "@sweethomejs/core";
 import { View3DCanvas } from "./view3d/View3DCanvas.js";
 import { HelpPane } from "./help/HelpPane.js";
 import { PrintPreviewView } from "./print/PrintPreviewView.js";
@@ -49,6 +52,13 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
   const { home, preferences, homeController } = props;
   const [view3DPosition, setView3DPosition] = useState<View3DPosition>(props.view3DPosition ?? "split");
   const [selectedCount, setSelectedCount] = useState(0);
+  const [catalogOpen, setCatalogOpen] = useState(true);
+  const [catalogController] = useState(() => new FurnitureCatalogController(
+    buildBuiltinFurnitureCatalog(),
+    preferences,
+    {} as never,
+    null,
+  ));
   const [helpOpen, setHelpOpen] = useState(false);
   const [printOpen, setPrintOpen] = useState(false);
   const [undoEnabled, setUndoEnabled] = useState(homeController.isUndoEnabled());
@@ -133,6 +143,8 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
         onSaveHome={props.onSaveHome ?? null}
         onShowHelp={() => setHelpOpen(true)}
         onShowPrint={() => setPrintOpen(true)}
+        catalogOpen={catalogOpen}
+        onToggleCatalog={() => setCatalogOpen((open) => !open)}
       />
       <Toolbar
         home={home}
@@ -144,9 +156,20 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
         mode={mode}
         onOpenHome={props.onOpenHome ?? null}
         onSaveHome={props.onSaveHome ?? null}
+        catalogOpen={catalogOpen}
+        onToggleCatalog={() => setCatalogOpen((open) => !open)}
       />
       <div className="sh-home-body">
         <LeftToolbar mode={mode} homeController={homeController} />
+        {catalogOpen && (
+          <div className="sh-catalog-dock" data-testid="catalog-dock">
+            <FurnitureCatalogPanel
+              catalog={catalogController.catalog_}
+              catalogController={catalogController}
+              homeController={homeController}
+            />
+          </div>
+        )}
         <div className="sh-plan">
           <PlanCanvas
             home={home}
@@ -198,10 +221,12 @@ function Toolbar(props: {
   undoEnabled: boolean;
   redoEnabled: boolean;
   mode: string;
+  catalogOpen: boolean;
+  onToggleCatalog: () => void;
   onOpenHome?: (() => void | Promise<void>) | null;
   onSaveHome?: (() => void | Promise<void>) | null;
 }): React.JSX.Element {
-  const { home, homeController, view3DPosition, onView3DPositionChange, mode, onOpenHome, onSaveHome } = props;
+  const { home, homeController, view3DPosition, onView3DPositionChange, undoEnabled, redoEnabled, mode, catalogOpen, onToggleCatalog, onOpenHome, onSaveHome } = props;
   const planController = homeController.getPlanController();
   return (
     <div className="sh-toolbar" data-mode={mode} role="toolbar" aria-label="Tools">
@@ -209,11 +234,20 @@ function Toolbar(props: {
       <ToolbarButton label="Open" onClick={() => onOpenHome?.() ?? homeController.open()} />
       <ToolbarButton label="Save" onClick={() => onSaveHome?.() ?? homeController.save()} />
       <div className="sh-toolbar-separator" />
-      <ToolbarButton label="Undo" onClick={() => homeController.undo()} />
-      <ToolbarButton label="Redo" onClick={() => homeController.redo()} />
+      <ToolbarButton label="Undo" onClick={() => homeController.undo()} disabled={!undoEnabled} />
+      <ToolbarButton label="Redo" onClick={() => homeController.redo()} disabled={!redoEnabled} />
+      <div className="sh-toolbar-separator" />
+      <ToolbarButton label="Cut" onClick={() => homeController.cut(home.getSelectedItems())} disabled={home.getSelectedItems().length === 0} />
+      <ToolbarButton label="Copy" onClick={() => {}} disabled title="Copy (not ported yet)" />
+      <ToolbarButton label="Paste" onClick={() => {}} disabled title="Paste (not ported yet)" />
       <div className="sh-toolbar-separator" />
       <ToolbarButton label="Delete" onClick={() => planController.deleteSelection()} />
+      <ToolbarButton label="Select all" onClick={() => homeController.selectAll()} />
       <div className="sh-toolbar-separator" />
+      <ToolbarButton label="＋" title="Zoom in" onClick={() => planController.zoom(1.25)} />
+      <ToolbarButton label="－" title="Zoom out" onClick={() => planController.zoom(0.8)} />
+      <div className="sh-toolbar-separator" />
+      <ToolbarButton label="Catalog" onClick={onToggleCatalog} active={catalogOpen} />
       <select
         className="sh-view3d-select"
         value={view3DPosition}
@@ -268,8 +302,10 @@ function MenuBar(props: {
   onSaveHome?: (() => void | Promise<void>) | null;
   onShowHelp: () => void;
   onShowPrint: () => void;
+  catalogOpen: boolean;
+  onToggleCatalog: () => void;
 }): React.JSX.Element {
-  const { home, homeController, preferences, view3DPosition, onView3DPositionChange, undoEnabled, redoEnabled, mode, onOpenHome, onSaveHome, onShowHelp, onShowPrint } = props;
+  const { home, homeController, preferences, view3DPosition, onView3DPositionChange, undoEnabled, redoEnabled, mode, onOpenHome, onSaveHome, onShowHelp, onShowPrint, catalogOpen, onToggleCatalog } = props;
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const planController = homeController.getPlanController();
   const homeController3D = homeController.getHomeController3D();
@@ -291,7 +327,7 @@ function MenuBar(props: {
   const items = (
     name: string,
     entries: Array<
-      | { label: string; onClick: () => void; disabled?: boolean; checked?: boolean }
+      | { label: string; onClick: () => void; disabled?: boolean; checked?: boolean; title?: string }
       | { separator: true }
     >,
   ): React.JSX.Element => (
@@ -311,6 +347,7 @@ function MenuBar(props: {
                   key={index}
                   className={`sh-menu-item${entry.disabled ? " disabled" : ""}${entry.checked ? " checked" : ""}`}
                   disabled={entry.disabled}
+                  title={entry.title}
                   onClick={() => run(entry.onClick)}
                 >
                   {entry.checked && <span className="sh-menu-check">✓</span>}
@@ -329,33 +366,50 @@ function MenuBar(props: {
       {items("File", [
         { label: "New", onClick: () => homeController.newHome() },
         { label: "Open…", onClick: () => onOpenHome?.() ?? homeController.open() },
+        { label: "Open recent", onClick: () => {}, disabled: true, title: "Open recent" },
         { label: "Save", onClick: () => onSaveHome?.() ?? homeController.save() },
+        { label: "Save as…", onClick: () => {}, disabled: true, title: "Save as…" },
         { separator: true },
-        { label: "Print…", onClick: () => props.onShowPrint() },
-        { separator: true },
-        {
-          label: "Export to PDF…",
-          onClick: () => {
+        { label: "Export to SVG…", onClick: () => {}, disabled: true, title: "Export to SVG…" },
+        { label: "Export to PDF…", onClick: () => {
             void exportPlanToPdf(home, preferences, {}).then((bytes: Uint8Array) => {
               downloadBytes(bytes, `${home.getName() ?? "home"}.pdf`, "application/pdf");
             });
-          },
-        },
-        {
-          label: "Export to CSV…",
-          onClick: () => {
+          } },
+        { label: "Export to CSV…", onClick: () => {
             const csv = exportFurnitureCsv(home, preferences);
             downloadBytes(new TextEncoder().encode(csv), `${home.getName() ?? "home"}.csv`, "text/csv");
-          },
-        },
-        { label: "Quit", onClick: () => close() },
+          } },
+        { label: "Export to OBJ…", onClick: () => {}, disabled: true, title: "Export to OBJ…" },
+        { label: "Export to Photos…", onClick: () => {}, disabled: true, title: "Export to Photos…" },
+        { separator: true },
+        { label: "Print…", onClick: props.onShowPrint },
+        { separator: true },
+        { label: "Quit", onClick: close },
       ])}
       {items("Edit", [
         { label: "Undo", onClick: () => homeController.undo(), disabled: !undoEnabled },
         { label: "Redo", onClick: () => homeController.redo(), disabled: !redoEnabled },
         { separator: true },
+        { label: "Cut", onClick: () => homeController.cut(home.getSelectedItems()), disabled: home.getSelectedItems().length === 0 },
+        { label: "Copy", onClick: () => {}, disabled: true, title: "Copy (not ported yet)" },
+        { label: "Paste", onClick: () => {}, disabled: true, title: "Paste (not ported yet)" },
+        { label: "Duplicate", onClick: () => {}, disabled: true, title: "Duplicate (not ported yet)" },
+        { separator: true },
         { label: "Delete", onClick: () => planController.deleteSelection() },
         { label: "Select all", onClick: () => homeController.selectAll() },
+        { separator: true },
+        { label: "Modify…", onClick: () => {}, disabled: true, title: "Modify…" },
+      ])}
+      {items("Furniture", [
+        { label: "Add from catalog…", onClick: () => {}, disabled: true, title: "Add from catalog…" },
+        { label: "Import…", onClick: () => {}, disabled: true, title: "Import furniture…" },
+        { separator: true },
+        { label: "Sort…", onClick: () => {}, disabled: true, title: "Sort…" },
+        { separator: true },
+        { label: "Delete", onClick: () => planController.deleteSelection() },
+        { label: "Modify…", onClick: () => {}, disabled: true, title: "Modify furniture…" },
+        { label: "Copy…", onClick: () => {}, disabled: true, title: "Copy furniture…" },
       ])}
       {items("Plan", [
         { label: "Draw walls", onClick: () => setMode(PlanMode.WALL_CREATION), checked: mode === "WALL_CREATION" },
@@ -364,9 +418,12 @@ function MenuBar(props: {
         { label: "Draw labels", onClick: () => setMode(PlanMode.LABEL_CREATION), checked: mode === "LABEL_CREATION" },
         { label: "Draw polylines", onClick: () => setMode(PlanMode.POLYLINE_CREATION), checked: mode === "POLYLINE_CREATION" },
         { separator: true },
+        { label: "Modify walls…", onClick: () => {}, disabled: true, title: "Modify walls…" },
+        { separator: true },
         { label: "Zoom in", onClick: () => planController.zoom(1.25) },
         { label: "Zoom out", onClick: () => planController.zoom(0.8) },
         { separator: true },
+        { label: "Select all", onClick: () => homeController.selectAll() },
         {
           label: "Grid visible",
           onClick: () => {
@@ -391,16 +448,38 @@ function MenuBar(props: {
           },
           checked: magnetismEnabled,
         },
+        { separator: true },
+        { label: "Lock base plan", onClick: () => {}, disabled: true, title: "Lock base plan" },
       ])}
       {items("3D view", [
+        { label: "Modify…", onClick: () => {}, disabled: true, title: "Modify 3D view…" },
+        { separator: true },
+        { label: "Store camera", onClick: () => homeController3D.storeCamera("Camera 1") },
+        { label: "Go to camera", onClick: () => homeController3D.goToCamera(home.getObserverCamera()) },
+        { label: "Top view", onClick: () => homeController3D.viewFromTop() },
+        { label: "Observer view", onClick: () => homeController3D.viewFromObserver() },
+        { separator: true },
         { label: "Split view", onClick: () => onView3DPositionChange("split"), checked: view3DPosition === "split" },
         { label: "Tab view", onClick: () => onView3DPositionChange("tab"), checked: view3DPosition === "tab" },
         { label: "Hidden", onClick: () => onView3DPositionChange("hidden"), checked: view3DPosition === "hidden" },
         { separator: true },
-        { label: "Store camera", onClick: () => homeController3D.storeCamera("Camera 1") },
-        { label: "Go to camera", onClick: () => homeController3D.goToCamera(home.getObserverCamera()) },
+        { label: "Toggle ceilings visibility", onClick: () => {}, disabled: true, title: "Toggle ceilings visibility" },
+        { label: "Toggle floors visibility", onClick: () => {}, disabled: true, title: "Toggle floors visibility" },
       ])}
-      {items("Help", [{ label: "Help…", onClick: onShowHelp }])}
+      {items("Tools", [
+        { label: "Languages…", onClick: () => {}, disabled: true, title: "Languages…" },
+        { label: "Preferences…", onClick: () => {}, disabled: true, title: "Preferences…" },
+        { separator: true },
+        { label: "Import textures…", onClick: () => {}, disabled: true, title: "Import textures…" },
+      ])}
+      {items("Catalog", [
+        { label: "View furniture", onClick: onToggleCatalog, checked: catalogOpen },
+        { label: "Import catalog…", onClick: () => {}, disabled: true, title: "Import catalog…" },
+      ])}
+      {items("Help", [
+        { label: "Help…", onClick: onShowHelp },
+        { label: "About…", onClick: () => {}, disabled: true, title: "About…" },
+      ])}
     </div>
   );
 }
@@ -447,9 +526,15 @@ function LeftToolbar(props: { mode: string; homeController: HomeController }): R
   );
 }
 
-function ToolbarButton(props: { label: string; onClick: () => void; active?: boolean }): React.JSX.Element {
+function ToolbarButton(props: { label: string; onClick: () => void; active?: boolean; disabled?: boolean; title?: string }): React.JSX.Element {
   return (
-    <button className={`sh-toolbar-button${props.active ? " active" : ""}`} onClick={props.onClick}>
+    <button
+      className={`sh-toolbar-button${props.active ? " active" : ""}${props.disabled ? " disabled" : ""}`}
+      onClick={props.onClick}
+      disabled={props.disabled}
+      title={props.title ?? props.label}
+      aria-label={props.title ?? props.label}
+    >
       {props.label}
     </button>
   );
