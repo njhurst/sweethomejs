@@ -79,3 +79,34 @@ test("furniture selection, context, dialog and catalog add", async ({ page }) =>
   expect(added.count).toBeGreaterThan(0);
   expect(added.selectedName).toBe("Sofa 2 seats");
 });
+
+test("furniture dialog shows lengths in the current unit and parses unit input", async ({ page }) => {
+  test.setTimeout(60000);
+  await page.goto("/?file=/fixtures/58-anderson.sh3d");
+  await expect(page.getByTestId("plan-canvas")).toBeVisible();
+  await page.waitForTimeout(9000);
+  await page.waitForTimeout(2000);
+  const bedPos = await page.evaluate(() => {
+    const pv = (globalThis as any).__planView;
+    const home = (globalThis as any).__homeController.home;
+    const bed = home.getFurniture().find((f: any) => f.getName() === "Bed");
+    return { cx: pv.convertXModelToScreen(bed.getX()), cy: pv.convertYModelToScreen(bed.getY()) };
+  });
+  const canvas = page.getByTestId("plan-canvas");
+  const box = (await canvas.boundingBox())!;
+  await page.mouse.dblclick(box.x + bedPos.cx, box.y + bedPos.cy);
+  await page.waitForTimeout(500);
+  await expect(page.getByTestId("furniture-dialog")).toBeVisible();
+  const widthField = page.getByTestId("furniture-dialog").getByLabel("Width");
+  const widthValue = await widthField.inputValue();
+  expect(widthValue).toMatch(/cm|m|"|ft/);
+  await widthField.fill("2.5 m");
+  await widthField.blur();
+  await page.waitForTimeout(400);
+  const newWidth = await page.evaluate(() => {
+    const home = (globalThis as any).__homeController.home;
+    const bed = home.getFurniture().find((f: any) => f.getName() === "Bed");
+    return bed.getWidth();
+  });
+  expect(Math.abs(newWidth - 250)).toBeLessThan(2);
+});

@@ -1046,6 +1046,26 @@ export class SelectionState extends AbstractModeChangeState {
         }
         break;
       }
+      case PlanController.EditableProperty.WIDTH:
+      case PlanController.EditableProperty.DEPTH:
+      case PlanController.EditableProperty.HEIGHT:
+      case PlanController.EditableProperty.ELEVATION: {
+        for (const item of selectedItems) {
+          if (item instanceof HomePieceOfFurniture) {
+            const property = (editableProperty as string).toString();
+            if (property === "WIDTH") {
+              item.setWidth(Math.max(0.1, numberValue));
+            } else if (property === "DEPTH") {
+              item.setDepth(Math.max(0.1, numberValue));
+            } else if (property === "HEIGHT") {
+              item.setHeight(Math.max(0.1, numberValue));
+            } else if (property === "ELEVATION") {
+              item.setElevation(Math.max(0, numberValue));
+            }
+          }
+        }
+        break;
+      }
       case PlanController.EditableProperty.THICKNESS: {
         for (const wall of this.controller.home.getWalls()) {
           if (selectedItems.includes(wall)) {
@@ -1969,6 +1989,10 @@ export namespace PlanController {
     LENGTH = "LENGTH",
     DIAGONAL = "DIAGONAL",
     ANGLE = "ANGLE",
+    WIDTH = "WIDTH",
+    DEPTH = "DEPTH",
+    HEIGHT = "HEIGHT",
+    ELEVATION = "ELEVATION",
     THICKNESS = "THICKNESS",
     OFFSET = "OFFSET",
     ARC_EXTENT = "ARC_EXTENT",

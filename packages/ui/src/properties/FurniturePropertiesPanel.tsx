@@ -25,12 +25,15 @@
  * the piece setters.
  */
 import { useEffect, useState } from "react";
-import { Home, HomePieceOfFurniture } from "@sweethomejs/core";
+import { Home, HomePieceOfFurniture, UserPreferences } from "@sweethomejs/core";
 import type { PlanController } from "@sweethomejs/core";
+import { formatLengthValue, parseLengthValue } from "../units.js";
 
 export interface FurniturePropertiesPanelProps {
   home: Home;
   planController: PlanController;
+  /** The user preferences carrying the current length unit. */
+  preferences?: UserPreferences;
 }
 
 interface EditableFields {
@@ -46,6 +49,7 @@ interface EditableFields {
 
 export function FurniturePropertiesPanel(props: FurniturePropertiesPanelProps): React.JSX.Element {
   const { home, planController } = props;
+  const unit = props.preferences?.getLengthUnit() ?? new UserPreferences().getLengthUnit();
   const [piece, setPiece] = useState<HomePieceOfFurniture | null>(null);
   const [fields, setFields] = useState<EditableFields | null>(null);
 
@@ -54,7 +58,7 @@ export function FurniturePropertiesPanel(props: FurniturePropertiesPanelProps): 
       const selected = home.getSelectedItems().filter((item) => item instanceof HomePieceOfFurniture);
       const selectedPiece = selected.length === 1 ? (selected[0] as HomePieceOfFurniture) : null;
       setPiece(selectedPiece);
-      setFields(selectedPiece === null ? null : fieldsFromPiece(selectedPiece));
+      setFields(selectedPiece === null ? null : fieldsFromPiece(selectedPiece, unit));
     };
     syncSelection();
     home.addSelectionListener(syncSelection);
@@ -76,10 +80,11 @@ export function FurniturePropertiesPanel(props: FurniturePropertiesPanelProps): 
 
   /** Commits a numeric field through the controller (undoable). */
   const commitNumeric = (field: keyof EditableFields, property: string): void => {
-    const value = parseFloat(fields[field]);
-    if (!Number.isNaN(value)) {
+    const text = fields[field];
+    const value = property === "ANGLE" ? parseFloat(text) : parseLengthValue(text, unit);
+    if (value !== null && !Number.isNaN(value)) {
       planController.updateEditableProperty(property as never, value);
-      setFields(fieldsFromPiece(piece));
+      setFields(fieldsFromPiece(piece, unit));
     }
   };
 
@@ -93,25 +98,25 @@ export function FurniturePropertiesPanel(props: FurniturePropertiesPanelProps): 
       <PropertyField label="Name" value={fields.name} onChange={(v) => update("name", v)} onCommit={commitName} />
       <PropertyField label="X" value={fields.x} onChange={(v) => update("x", v)} onCommit={() => commitNumeric("x", "X")} />
       <PropertyField label="Y" value={fields.y} onChange={(v) => update("y", v)} onCommit={() => commitNumeric("y", "Y")} />
-      <PropertyField label="Elevation" value={fields.elevation} onChange={(v) => update("elevation", v)} />
+      <PropertyField label="Elevation" value={fields.elevation} onChange={(v) => update("elevation", v)} onCommit={() => commitNumeric("elevation", "ELEVATION")} />
       <PropertyField label="Angle (°)" value={fields.angle} onChange={(v) => update("angle", v)} onCommit={() => commitNumeric("angle", "ANGLE")} />
-      <PropertyField label="Width" value={fields.width} onChange={(v) => update("width", v)} />
-      <PropertyField label="Depth" value={fields.depth} onChange={(v) => update("depth", v)} />
-      <PropertyField label="Height" value={fields.height} onChange={(v) => update("height", v)} />
+      <PropertyField label="Width" value={fields.width} onChange={(v) => update("width", v)} onCommit={() => commitNumeric("width", "WIDTH")} />
+      <PropertyField label="Depth" value={fields.depth} onChange={(v) => update("depth", v)} onCommit={() => commitNumeric("depth", "DEPTH")} />
+      <PropertyField label="Height" value={fields.height} onChange={(v) => update("height", v)} onCommit={() => commitNumeric("height", "HEIGHT")} />
     </div>
   );
 }
 
-function fieldsFromPiece(piece: HomePieceOfFurniture): EditableFields {
+function fieldsFromPiece(piece: HomePieceOfFurniture, unit: import("@sweethomejs/core").LengthUnit): EditableFields {
   return {
     name: piece.getName() ?? "",
-    x: formatNumber(piece.getX()),
-    y: formatNumber(piece.getY()),
-    elevation: formatNumber(piece.getElevation()),
+    x: formatLengthValue(piece.getX(), unit),
+    y: formatLengthValue(piece.getY(), unit),
+    elevation: formatLengthValue(piece.getElevation(), unit),
     angle: formatNumber((piece.getAngle() * 180) / Math.PI),
-    width: formatNumber(piece.getWidth()),
-    depth: formatNumber(piece.getDepth()),
-    height: formatNumber(piece.getHeight()),
+    width: formatLengthValue(piece.getWidth(), unit),
+    depth: formatLengthValue(piece.getDepth(), unit),
+    height: formatLengthValue(piece.getHeight(), unit),
   };
 }
 

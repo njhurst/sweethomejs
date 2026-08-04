@@ -247,7 +247,7 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
       {modifyDialog === "furniture" && (
         <div className="sh-help-overlay" data-testid="furniture-dialog">
           <div className="sh-dialog-card">
-            <FurniturePropertiesPanel home={home} planController={planController} />
+            <FurniturePropertiesPanel home={home} planController={planController} preferences={preferences} />
             <div className="sh-dialog-buttons">
               <button className="sh-toolbar-button" onClick={() => setModifyDialog(null)}>Close</button>
             </div>
