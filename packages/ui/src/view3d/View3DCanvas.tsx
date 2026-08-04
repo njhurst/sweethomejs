@@ -99,6 +99,11 @@ export function View3DCanvas(props: View3DCanvasProps): React.JSX.Element {
     }
     renderer.setPixelRatio(window.devicePixelRatio || 1);
     renderer.shadowMap.enabled = false;
+    // The canvas must fit its container regardless of devicePixelRatio:
+    // setSize(_, _, false) only sets the drawing buffer, so pin the CSS size.
+    renderer.domElement.style.width = "100%";
+    renderer.domElement.style.height = "100%";
+    renderer.domElement.style.display = "block";
     container.appendChild(renderer.domElement);
 
     const scene = new HomeScene3D({ home: props.home, preferences: props.preferences });
@@ -107,6 +112,17 @@ export function View3DCanvas(props: View3DCanvasProps): React.JSX.Element {
     // clear color is overridden elsewhere.
     (scene.getRoot() as unknown as THREE.Scene).background = new THREE.Color(0xcfe4f2);
     renderer.setClearColor(0xcfe4f2, 1);
+    // Camera-change logging to the dev event log (in-the-app mode)
+    const observer = props.home.getObserverCamera();
+    observer.addPropertyChangeListener(() => {
+      const dev = (globalThis as unknown as { __devEvent?: (type: string, fields: Record<string, unknown>) => void }).__devEvent;
+      dev?.("state.set", {
+        path: "3d.camera",
+        x: Math.round(observer.getX()), y: Math.round(observer.getY()), z: Math.round(observer.getZ()),
+        yaw: +observer.getYaw().toFixed(3), pitch: +observer.getPitch().toFixed(3),
+        active: props.home.getCamera() === observer ? "observer" : "other",
+      });
+    });
     const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 20000);
     camera.position.set(0, 2000, 0);
     camera.lookAt(0, 0, 0);
@@ -136,9 +152,11 @@ export function View3DCanvas(props: View3DCanvasProps): React.JSX.Element {
       const vfovHalf = THREE.MathUtils.degToRad(camera.fov / 2);
       const hfovHalf = Math.atan(Math.tan(vfovHalf) * aspect);
       const distance = halfWidth / Math.tan(hfovHalf);
-      const camElevation = Math.max(houseHeight * 1.4, 250);
-      const yaw = Math.PI / 4; // 45°
-      const pitch = Math.atan2(camElevation - centerZ, distance);
+      // A natural 3/4 exterior view: 40° around, 22° down, camera at 1.8x the
+      // house height — the house reads clearly against the sky and ground.
+      const yaw = Math.PI * 0.22; // 40°
+      const pitch = 0.38; // ~22° looking down
+      const camElevation = centerZ + Math.sin(pitch) * distance * 1.05;
       setEyeLevelExterior(props.home, centerX, centerY, centerZ, yaw, pitch, distance, camElevation);
     };
 
