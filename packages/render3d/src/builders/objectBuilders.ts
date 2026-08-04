@@ -469,7 +469,9 @@ export class GroundObject3D extends Object3DBase<Home> {
       material = this.materialCache.getMaterial({ diffuseColor: environment.getGroundColor(), ambientColor: 0x000000, shininess: 0, opacity: 1, doubleSided: false });
     }
     this.mesh = new THREE.Mesh(geometry, material);
-    this.mesh.position.y = 0;
+    // Java puts the ground slightly BELOW the floor level (HomeComponent3D
+    // translates Ground3D by (0, -0.2, 0)) so room floors don't z-fight it.
+    this.mesh.position.y = -0.2;
     this.root.add(this.mesh);
 
     // A subtle grid over the home area anchors the eye (like Java's ground grid)

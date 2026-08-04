@@ -25,7 +25,9 @@
  * and commits through the modify* method (which posts the undoable edit).
  */
 import { useEffect, useState } from "react";
-import type { WallController, RoomController } from "@sweethomejs/core";
+import { UserPreferences } from "@sweethomejs/core";
+import type { WallController, RoomController, LengthUnit as LengthUnitType } from "@sweethomejs/core";
+import { formatLengthValue, parseLengthValue } from "../units.js";
 
 // ---------------------------------------------------------------------------
 // Wall dialog
@@ -33,6 +35,7 @@ import type { WallController, RoomController } from "@sweethomejs/core";
 export interface WallDialogProps {
   controller: WallController;
   onClose: () => void;
+  preferences?: UserPreferences;
 }
 
 interface WallFields {
@@ -44,41 +47,43 @@ interface WallFields {
   height: string;
 }
 
-function wallFieldsFrom(controller: WallController): WallFields {
-  return {
-    xStart: num(controller.getXStart() ?? 0),
-    yStart: num(controller.getYStart() ?? 0),
-    xEnd: num(controller.getXEnd() ?? 0),
-    yEnd: num(controller.getYEnd() ?? 0),
-    thickness: num(controller.getThickness() ?? 0),
-    height: num(controller.getRectangularWallHeight() ?? 0),
-  };
-}
-
 function num(value: number): string {
   return Number.isInteger(value) ? String(value) : value.toFixed(2);
 }
 
+function wallFieldsFrom(controller: WallController, unit: LengthUnitType): WallFields {
+  return {
+    xStart: formatLengthValue(controller.getXStart() ?? 0, unit),
+    yStart: formatLengthValue(controller.getYStart() ?? 0, unit),
+    xEnd: formatLengthValue(controller.getXEnd() ?? 0, unit),
+    yEnd: formatLengthValue(controller.getYEnd() ?? 0, unit),
+    thickness: formatLengthValue(controller.getThickness() ?? 0, unit),
+    height: formatLengthValue(controller.getRectangularWallHeight() ?? 0, unit),
+  };
+}
+
 export function WallDialog(props: WallDialogProps): React.JSX.Element {
   const { controller, onClose } = props;
-  const [fields, setFields] = useState<WallFields>(() => wallFieldsFrom(controller));
+  const unit = props.preferences?.getLengthUnit() ?? new UserPreferences().getLengthUnit();
+  const [fields, setFields] = useState<WallFields>(() => wallFieldsFrom(controller, unit));
 
   useEffect(() => {
-    setFields(wallFieldsFrom(controller));
-  }, [controller]);
+    setFields(wallFieldsFrom(controller, unit));
+  }, [controller, unit]);
 
   const set = (field: keyof WallFields, value: string): void => {
     setFields({ ...fields, [field]: value });
   };
 
+  const parseLen = (text: string, fallback: number): number => parseLengthValue(text, unit) ?? fallback;
+
   const apply = (): void => {
-    const f = parseFloat;
-    controller.setXStart(f(fields.xStart));
-    controller.setYStart(f(fields.yStart));
-    controller.setXEnd(f(fields.xEnd));
-    controller.setYEnd(f(fields.yEnd));
-    controller.setThickness(f(fields.thickness));
-    controller.setRectangularWallHeight(f(fields.height));
+    controller.setXStart(parseLen(fields.xStart, 0));
+    controller.setYStart(parseLen(fields.yStart, 0));
+    controller.setXEnd(parseLen(fields.xEnd, 0));
+    controller.setYEnd(parseLen(fields.yEnd, 0));
+    controller.setThickness(parseLen(fields.thickness, 10));
+    controller.setRectangularWallHeight(parseLen(fields.height, 250));
     controller.modifyWalls();
     onClose();
   };

@@ -46,6 +46,18 @@ describe("unit-aware edit fields", () => {
     expect(parseLengthValue("100 mm", cm)).toBeCloseTo(10, 6);
   });
 
+  it("parses feet + inches and mixed formats (Sweet Home 3D grammar)", () => {
+    expect(parseLengthValue("2' 8\"", cm)).toBeCloseTo(81.28, 0);
+    expect(parseLengthValue("2'8\"", cm)).toBeCloseTo(81.28, 0);
+    expect(parseLengthValue("2' 8", cm)).toBeCloseTo(81.28, 0);
+    expect(parseLengthValue("96\"", cm)).toBeCloseTo(243.84, 0);
+    expect(parseLengthValue("96in", cm)).toBeCloseTo(243.84, 0);
+    expect(parseLengthValue("2.5'", cm)).toBeCloseTo(76.2, 0);
+    expect(parseLengthValue("2.5' 4\"", cm)).toBeCloseTo(86.36, 0);
+    expect(parseLengthValue("5 ft 4 in", cm)).toBeCloseTo(162.56, 0);
+    expect(parseLengthValue("900mm", cm)).toBeCloseTo(90, 0);
+  });
+
   it("rejects invalid input", () => {
     expect(parseLengthValue("abc", cm)).toBeNull();
     expect(parseLengthValue("", cm)).toBeNull();

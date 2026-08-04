@@ -32,8 +32,10 @@ import { FurnitureCatalogController, WallController, RoomController, HomePieceOf
 import { View3DCanvas } from "./view3d/View3DCanvas.js";
 import { HelpPane } from "./help/HelpPane.js";
 import { PrintPreviewView } from "./print/PrintPreviewView.js";
+import { formatLengthValue } from "./units.js";
 import { FurniturePropertiesPanel } from "./properties/FurniturePropertiesPanel.js";
 import { WallDialog, RoomDialog } from "./properties/ControllerDialogs.js";
+import { PreferencesView } from "./properties/PreferencesView.js";
 import { exportPlanToPdf, exportFurnitureCsv } from "@sweethomejs/export";
 
 export type View3DPosition = "tab" | "split" | "hidden";
@@ -64,6 +66,7 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
   const [helpOpen, setHelpOpen] = useState(false);
   const [printOpen, setPrintOpen] = useState(false);
   const [modifyDialog, setModifyDialog] = useState<"furniture" | "wall" | "room" | null>(null);
+  const [preferencesOpen, setPreferencesOpen] = useState(false);
   const [wallController, setWallController] = useState<WallController | null>(null);
   const [roomController, setRoomController] = useState<RoomController | null>(null);
   const [undoEnabled, setUndoEnabled] = useState(homeController.isUndoEnabled());
@@ -183,6 +186,7 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
         onSaveHome={props.onSaveHome ?? null}
         onShowHelp={() => setHelpOpen(true)}
         onShowPrint={() => setPrintOpen(true)}
+        onShowPreferences={() => setPreferencesOpen(true)}
         catalogOpen={catalogOpen}
         onToggleCatalog={() => setCatalogOpen((open) => !open)}
       />
@@ -244,6 +248,13 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
           <PrintPreviewView home={home} preferences={preferences} onClose={() => setPrintOpen(false)} />
         </div>
       )}
+      {preferencesOpen && (
+        <div className="sh-help-overlay" data-testid="preferences-overlay">
+          <div className="sh-dialog-card">
+            <PreferencesView preferences={preferences} onClose={() => setPreferencesOpen(false)} />
+          </div>
+        </div>
+      )}
       {modifyDialog === "furniture" && (
         <div className="sh-help-overlay" data-testid="furniture-dialog">
           <div className="sh-dialog-card">
@@ -257,7 +268,7 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
       {modifyDialog === "wall" && wallController !== null && (
         <div className="sh-help-overlay" data-testid="wall-dialog">
           <div className="sh-dialog-card">
-            <WallDialog controller={wallController} onClose={() => setModifyDialog(null)} />
+            <WallDialog controller={wallController} onClose={() => setModifyDialog(null)} preferences={preferences} />
           </div>
         </div>
       )}
@@ -269,7 +280,7 @@ export function HomePane(props: HomePaneProps): React.JSX.Element {
         </div>
       )}
       <div className="sh-statusbar">
-        <span data-testid="status-selection">{selectionDescription(home)}</span>
+        <span data-testid="status-selection">{selectionDescription(home, preferences)}</span>
         <span className="sh-statusbar-spacer" />
         <span data-testid="status-mode">{planController.getMode().toString()}</span>
       </div>
@@ -366,10 +377,11 @@ function MenuBar(props: {
   onSaveHome?: (() => void | Promise<void>) | null;
   onShowHelp: () => void;
   onShowPrint: () => void;
+  onShowPreferences: () => void;
   catalogOpen: boolean;
   onToggleCatalog: () => void;
 }): React.JSX.Element {
-  const { home, homeController, preferences, view3DPosition, onView3DPositionChange, undoEnabled, redoEnabled, mode, onOpenHome, onSaveHome, onShowHelp, onShowPrint, catalogOpen, onToggleCatalog } = props;
+  const { home, homeController, preferences, view3DPosition, onView3DPositionChange, undoEnabled, redoEnabled, mode, onOpenHome, onSaveHome, onShowHelp, onShowPrint, onShowPreferences, catalogOpen, onToggleCatalog } = props;
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const planController = homeController.getPlanController();
   const homeController3D = homeController.getHomeController3D();
@@ -532,7 +544,7 @@ function MenuBar(props: {
       ])}
       {items("Tools", [
         { label: "Languages…", onClick: () => {}, disabled: true, title: "Languages…" },
-        { label: "Preferences…", onClick: () => {}, disabled: true, title: "Preferences…" },
+        { label: "Preferences…", onClick: onShowPreferences },
         { separator: true },
         { label: "Import textures…", onClick: () => {}, disabled: true, title: "Import textures…" },
       ])}
@@ -549,7 +561,8 @@ function MenuBar(props: {
 }
 
 /** A human description of the current selection (name + location/size). */
-function selectionDescription(home: import("@sweethomejs/core").Home): string {
+function selectionDescription(home: import("@sweethomejs/core").Home, preferences: UserPreferences): string {
+  const unit = preferences.getLengthUnit();
   const selected = home.getSelectedItems();
   if (selected.length === 0) {
     return "Nothing selected";
@@ -559,13 +572,12 @@ function selectionDescription(home: import("@sweethomejs/core").Home): string {
   }
   const item = selected[0]!;
   if (item instanceof HomePieceOfFurniture) {
-    const unit = "cm";
-    const size = `${Math.round(item.getWidth())} × ${Math.round(item.getDepth())} × ${Math.round(item.getHeight())} ${unit}`;
-    return `${item.getName() ?? "Furniture"} — ${Math.round(item.getX())}, ${Math.round(item.getY())} · ${size}`;
+    const size = `${formatLengthValue(item.getWidth(), unit)} × ${formatLengthValue(item.getDepth(), unit)} × ${formatLengthValue(item.getHeight(), unit)}`;
+    return `${item.getName() ?? "Furniture"} — ${formatLengthValue(item.getX(), unit)}, ${formatLengthValue(item.getY(), unit)} · ${size}`;
   }
   if (item instanceof WallModel) {
     const length = Math.hypot(item.getXEnd() - item.getXStart(), item.getYEnd() - item.getYStart());
-    return `Wall — ${length.toFixed(1)} cm`;
+    return `Wall — ${formatLengthValue(length, unit)}`;
   }
   if (item instanceof RoomModel) {
     return `Room — ${Math.round(item.getArea())} cm²`;

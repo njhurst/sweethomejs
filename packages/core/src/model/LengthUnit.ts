@@ -122,6 +122,11 @@ export class LengthUnit {
     return this.unitName;
   }
 
+  /** The unit constant (MILLIMETER, CENTIMETER, …). */
+  getUnit(): string {
+    return this.unit;
+  }
+
   isMetric(): boolean {
     return this.unit === LengthUnit.MILLIMETER || this.unit === LengthUnit.CENTIMETER || this.unit === LengthUnit.METER;
   }

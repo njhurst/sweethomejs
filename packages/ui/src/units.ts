@@ -33,38 +33,50 @@ export function formatLengthValue(centimeters: number, unit: LengthUnit): string
   return unit.format(centimeters);
 }
 
+const NUMBER = "([+-]?[0-9]+(?:[.,][0-9]+)?)";
+
 /**
- * Parses user input into centimeters. Accepts bare numbers (current unit)
- * or numbers with an explicit unit suffix (cm, mm, m, ft/', in/"). Returns
- * null when the text isn't a valid length.
+ * Parses user input into centimeters, handling the full Sweet Home 3D grammar:
+ *   - feet + inches: "2' 8\"", "2'8\"", "2.5' 4\"" (also "ft"/"in" words)
+ *   - inches: "96\"", "96 in"
+ *   - metric: "900mm", "90cm", "1.5m"
+ *   - bare numbers: interpreted in the current unit
+ * Returns null when the text isn't a valid length.
  */
 export function parseLengthValue(text: string, unit: LengthUnit): number | null {
-  const trimmed = text.trim().replace(/ /g, "");
-  const match = /^(-?[0-9.,]+)([a-zA-Z"'']*)$/.exec(trimmed);
-  if (match === null) {
+  const t = text.trim();
+  if (t.length === 0) {
     return null;
   }
-  const number = parseFloat(match[1]!.replace(",", "."));
-  if (!Number.isFinite(number)) {
-    return null;
+  // Metric with an explicit unit suffix
+  const metric = new RegExp(`^${NUMBER}\\s*(mm|cm|m)$`, "i").exec(t);
+  if (metric !== null) {
+    const value = toNumber(metric[1]!);
+    const suffix = metric[2]!.toLowerCase();
+    if (suffix === "mm") return value / 10;
+    if (suffix === "cm") return value;
+    return value * 100; // m
   }
-  const suffix = (match[2] ?? "").toLowerCase();
-  switch (suffix) {
-    case "mm":
-      return number / 10;
-    case "cm":
-      return number;
-    case "m":
-      return number * 100;
-    case "ft":
-    case "'":
-      return LengthUnit.footToCentimeter(number);
-    case "in":
-    case "inch":
-    case '"':
-      return LengthUnit.inchToCentimeter(number);
-    default:
-      // Bare number: interpreted in the current unit
-      return unit.unitToCentimeter(number);
+  // Feet and/or inches: "2' 8\"", "2.5' 4\"", "2'8\"", "96\"", "2.5'", "5 ft 4 in"
+  const feetInches = /^([+-]?[0-9]+(?:[.,][0-9]+)?)\s*(?:'|ft)\s*(?:([0-9]+(?:[.,][0-9]+)?)\s*(?:\"|in)?)?$/i.exec(t);
+  if (feetInches !== null) {
+    const feet = toNumber(feetInches[1]!);
+    const inches = feetInches[2] !== undefined ? toNumber(feetInches[2]!) : 0;
+    return LengthUnit.footToCentimeter(feet) + LengthUnit.inchToCentimeter(inches);
   }
+  // Bare inches: "96\"", "96in"
+  const inchesOnly = new RegExp(`^${NUMBER}\\s*(?:\\"|in|inch)$`, "i").exec(t);
+  if (inchesOnly !== null) {
+    return LengthUnit.inchToCentimeter(toNumber(inchesOnly[1]!));
+  }
+  // Bare number: interpreted in the current unit
+  const bare = new RegExp(`^${NUMBER}$`).exec(t);
+  if (bare !== null) {
+    return unit.unitToCentimeter(toNumber(bare[1]!));
+  }
+  return null;
+}
+
+function toNumber(text: string): number {
+  return parseFloat(text.replace(",", "."));
 }
