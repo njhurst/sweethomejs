@@ -151,16 +151,23 @@ export function computeModelBounds(group: THREE.Object3D): THREE.Box3 {
   return box;
 }
 
-/** Normalizes a loaded group to fit a 1-unit box (Java getScaleTransform). */
+/**
+ * Normalizes a loaded group per-axis to a 1×1×1 cube — Java's
+ * ModelManager.getNormalizedTransform (width reference 1, scaled per axis).
+ * The piece transform then stretches each axis to the piece's nominal
+ * width/height/depth, so furniture fills its catalog box (matching Java).
+ */
 export function normalizeModel(group: THREE.Group, bounds: THREE.Box3): [number, number, number] {
   const minSize = 1e-5;
   const size = bounds.getSize(new THREE.Vector3());
   const realSize: [number, number, number] = [size.x, size.y, size.z];
-  const scale = 1 / Math.max(minSize, Math.max(size.x, size.y, size.z));
-  group.scale.setScalar(scale);
+  const scaleX = 1 / Math.max(minSize, size.x);
+  const scaleY = 1 / Math.max(minSize, size.y);
+  const scaleZ = 1 / Math.max(minSize, size.z);
+  group.scale.set(scaleX, scaleY, scaleZ);
   // Center the model at the origin
   const center = bounds.getCenter(new THREE.Vector3());
-  group.position.set(-center.x * scale, -center.y * scale, -center.z * scale);
+  group.position.set(-center.x * scaleX, -center.y * scaleY, -center.z * scaleZ);
   return realSize;
 }
 

@@ -110,15 +110,15 @@ describe("ModelManager (task 6.5)", () => {
     expect(loaded).not.toBeNull();
     const target = new THREE.Group();
     manager.applyPieceTransform(loaded!, piece, target);
-    // Java semantics: the model is uniformly normalized to a 1-unit box, then
-    // scaled per-axis by the piece dimensions — the model's aspect ratio is
-    // preserved. The fixture box is 10×20×30, max 30 → normalized per-axis
-    // (1/3, 2/3, 1) → scaled by (100, 30, 50).
+    // Java semantics: the model is normalized PER-AXIS to a 1×1×1 cube, then
+    // stretched per-axis by the piece dimensions — furniture fills its catalog
+    // box exactly. The fixture box is 10×20×30 → normalized (1,1,1) → scaled
+    // by the piece (100, 30, 50).
     const worldBox = new THREE.Box3().setFromObject(target);
     const worldSize = worldBox.getSize(new THREE.Vector3());
-    expect(worldSize.x).toBeCloseTo(100 * (10 / 30), 2);
-    expect(worldSize.y).toBeCloseTo(30 * (20 / 30), 2);
-    expect(worldSize.z).toBeCloseTo(50 * (30 / 30), 2);
+    expect(worldSize.x).toBeCloseTo(100, 2);
+    expect(worldSize.y).toBeCloseTo(30, 2);
+    expect(worldSize.z).toBeCloseTo(50, 2);
   });
 });
 
