@@ -155,6 +155,17 @@
 [x] 9.7  Package dependency boundary test (like upstream PackageDependenciesTest)
 [x] 9.8  Release: branding, user docs, support matrix (Chrome/Firefox/Safari/Edge + mobile), acceptance suite
 
+## P9 — Blender output
+
+[ ] 11  P9 Blender output: 3D export for Blender (glTF/GLB primary, OBJ parity, .blend stretch) — see docs/15-blender-output.md
+[x] 11.1  Design doc: investigate Blender-output options (glTF/GLB, OBJ parity, .blend writer, USD, Blender add-on) and write docs/15-blender-output.md
+[ ] 11.2  GltfExporter: scene intermediate → GLB/glTF (cm→m units, object naming, materials/textures, KHR_texture_transform, KHR_lights_punctual)
+[ ] 11.3  Model preload for export: await ModelManager loads, placeholder fallback + warning, progress/cancel
+[ ] 11.4  Export options dialog + UI wiring (File ▸ Export 3D view to Blender…), i18n keys, download via WebContentManager
+[ ] 11.5  OBJWriter TS port (docs/08 §5): selection/all export, ground, MTL + sidecar textures — Java OBJWriter parity
+[ ] 11.6  Export tests: GLB parse + round-trip via GLTFLoader, gltf-validator CI gate, optional headless-Blender smoke test
+[ ] 11.7  Stretch: minimal .blend writer spike OR Blender add-on that imports .sh3d directly
+
 ## Cross-cutting
 
 [x] 10  Cross-cutting: dependency-boundary and codec parity maintained across all phases

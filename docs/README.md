@@ -23,6 +23,8 @@ This directory contains the full port plan.
 | [11-web-platform-services.md](11-web-platform-services.md) | Browser APIs: File System Access, IndexedDB, Web Workers, WASM, PWA, cloud persistence              |
 | [12-testing-and-parity.md](12-testing-and-parity.md)       | Unit tests, golden-image parity, file-format round-trips, property-based tests                      |
 | [13-roadmap.md](13-roadmap.md)                             | Phased roadmap, milestones, effort estimates, risks and mitigations                                 |
+| [14-worker-topology.md](14-worker-topology.md)             | Final worker/threading topology (codec/model/texture/icon/photo/video workers)                       |
+| [15-blender-output.md](15-blender-output.md)               | 3D export for Blender: glTF/GLB (primary), OBJ parity, .blend stretch                                |
 
 ## TL;DR
 
@@ -53,3 +55,4 @@ This directory contains the full port plan.
   protected expression; the algorithms/schema are not copyrightable, but we
   should keep the project GPL to be safe — see [01-overview.md](01-overview.md#license)).
 - [14-worker-topology.md](14-worker-topology.md) — final worker/threading topology
+- [15-blender-output.md](15-blender-output.md) — 3D export for Blender (glTF/GLB primary, OBJ parity, .blend stretch)
