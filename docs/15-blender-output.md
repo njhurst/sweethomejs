@@ -241,7 +241,7 @@ exact rule for parity).
   model-preload step), writing **cm/Y-up as Java does** so
   `ls_2819.obj`-equivalent output is reproducible. Output zipped
   (OBJ+MTL+textures) like Java's `writeNodeInZIPFile`.
-- This is the format to compare against the Java oracle (§7) and the
+- This is the format to compare against the Java oracle (§8) and the
   documented fallback for workflows that must byte-match the desktop app.
 
 ## 6. Stretch options (tracked, not committed)
@@ -278,7 +278,107 @@ expansion and `isAllLevelsSelection` handling. Small, defer to v2.
   rendered scene; add-on = structure). Same effort class as 6.2; decide
   together.
 
-## 7. Testing and parity
+## 7. Browser-side rendering: nicer surfaces + GI (and the Blender bake round-trip)
+
+This section answers: how much of the *rendering* can happen in the browser,
+and can we get Eevee-level quality? Short answer: **yes for the features that
+matter to architecture** (better surfaces + global illumination) — Eevee is
+rasterization + screen-space tricks + baked light probes, and every one of
+those techniques has a browser equivalent. Three quality tiers:
+
+### 7.1 Tier 1 — WebGL2 today, no baking (what the app has + cheap upgrades)
+
+The app already renders the scene intermediate with `MeshStandardMaterial`
+PBR, ACES tone mapping and PCF-soft shadow maps (photo renderer task 8.3).
+All of the following ship inside the existing three 0.185.1 and run on the
+current WebGL2 support matrix:
+
+| Effect | three r185 module | Eevee equivalent | Cost |
+| --- | --- | --- | --- |
+| Image-based bounce light (interior) | `PMREMGenerator` + `RoomEnvironment` | Eevee's world/env lighting | one-time PMREM, cheap |
+| Image-based bounce light (exterior) | `GroundedSkybox` / `Sky` | sky + sun setup | cheap |
+| Ambient occlusion | `GTAOPass` (Activision ground-truth AO — the same algorithm family Eevee uses) / `SSAOPass` | GTAO | medium |
+| Screen-space reflections | `SSRPass` (WebGL2) / `SSRNode` (WebGPU) | SSR | medium–heavy |
+| Nicer surfaces | `MeshPhysicalMaterial`: clearcoat (kitchen counters, car paint), transmission (glass, water), sheen (fabrics), iridescence, anisotropy | Eevee Principled BSDF | free at runtime |
+| Diffuse GI per room (baked in-browser) | `LightProbe` + `LightProbeGenerator.fromCubeRenderTarget()` | Eevee irradiance light probes | one cube render per room at load/probe-dirty |
+| Bloom / DOF / grading | `UnrealBloomPass`, `BokehPass`, `LUTPass` | Eevee viewport compositor | cheap–medium |
+
+- The scene intermediate is shared by the 3D view *and* the photo renderer, so
+  these upgrades land in both with one change to `MaterialCache`/the render
+  pipeline.
+- **Limits**: screen-space effects are frame-dependent (miss off-screen
+  geometry — Eevee has the same artifact); `LightProbe` gives one irradiance
+  per probe (fine for per-room architecture); no full-range specular GI.
+
+### 7.2 Tier 2 — the Blender bake round-trip (the architectural-preview sweet spot)
+
+The user-facing workflow this enables:
+
+```
+SweetHomeJS ──GLB export (§4)──▶ Blender
+                                   │ import, set up sun/world
+                                   │ bake GI lightmaps + AO (Cycles or Eevee)
+                                   │ bake reflection env cubemap
+                                   │ export GLB (Blender ≥ 4.1 writes KHR_materials_lightmap)
+SweetHomeJS ◀────GLB import───────┘
+   ▶ interactive preview with baked GI at full frame rate, any device
+```
+
+Baked GI costs nothing at runtime — this is exactly what architectural-vis
+firms ship (lightmap + env map + AO), and it works on the WebGL2 path and
+mobile, not just WebGPU desktops. "Bake once in Blender, preview anywhere in
+the browser."
+
+Implementation notes (verified against r185):
+
+- three's `GLTFLoader` does **not** read `KHR_materials_lightmap` (no support
+  in r185). Two options: (a) small loader patch — the extension is simple
+  (lightmap texture + strength, applied like an AO/emissive term); (b) map
+  the lightmap into the `emissiveMap` slot on import — a baked lightmap is
+  unlit by definition, so `emissiveMap` renders it identically and needs no
+  loader change. Recommend (b) for v1.
+- The app needs a **GLB import path**: `ModelManager` currently loads
+  obj/dae/3ds only; add a `gltf` loader (three's `GLTFLoader` + `DRACOLoader`
+  optional) and an "import rendered scene" mode that swaps the home's 3D
+  representation for the imported one (keep the plan 2D + model as source of
+  truth; the imported scene is a preview artifact).
+- Reflection env: bake one HDR cubemap in Blender → `PMREMGenerator` in three.
+  Fallback without Blender: `RoomEnvironment` (Tier 1).
+- **Limits**: lighting is baked (static — re-bake on major edits); this is a
+  preview/visualization mode, not a live-lighting editor.
+
+### 7.3 Tier 3 — WebGPU: in-browser Eevee-Next and Cycles-class stills
+
+- three 0.185.1 ships the `three/webgpu` build + TSL node system with the
+  full real-time stack: `SSGINode` (screen-space GI), `SSRNode`, `GTAONode`,
+  `TileShadowNode`, `ClusteredLightsNode`, `TAAUNode`/`FSR1Node` upscaling,
+  `RecurrentDenoiseNode` denoiser, `ImportanceSampledEnvironment`. That is an
+  Eevee-Next-class pipeline once WebGPU is universal (Chrome/Edge stable,
+  Firefox preview, Safari 26+). Gate on `navigator.gpu` with the Tier-1
+  WebGL2 fallback (the support matrix demands it).
+- For **photo-quality stills**: `three-gpu-pathtracer` (npm 0.0.24, peer
+  `three >= 0.180` — compatible with the repo's 0.185.1) is a real in-browser
+  Cycles-style path tracer (BVH + `xatlas-web` lightmap UV unwrap +
+  denoiser). It is the ready-made engine for the deferred WebGPU path tracer
+  milestone (task 8.4 / docs/09 §1.2 option B).
+
+### 7.4 Recommendation
+
+1. **Short term (no baking)**: IBL environment (`RoomEnvironment`/
+   `GroundedSkybox`) + `GTAOPass` + `MeshPhysicalMaterial` upgrade in the
+   shared scene intermediate — the biggest visual win per engineering hour
+   for both the 3D view and the photo renderer.
+2. **Flagship "architectural preview"**: the Tier-2 bake round-trip (GLB
+   export → Blender bake → GLB import with lightmap→emissive mapping). It is
+   the missing half of this doc's export story and the compelling demo.
+3. **Medium term**: Tier-3 WebGPU SSGI pipeline behind a capability probe.
+4. **Photo**: adopt `three-gpu-pathtracer` when task 8.4 lands.
+
+Honest framing: browser real-time GI (Tiers 1/3) is **good architectural
+preview** — viz-final quality is the **baked** Tier-2 path. Both are cheap to
+reach because they consume the same scene intermediate.
+
+## 8. Testing and parity
 
 | Test | Method | Gate |
 | --- | --- | --- |
@@ -294,7 +394,7 @@ Known divergences to record in `KNOWN_DIFFS.md`: texture-rotation center vs
 KHR origin; `polygonOffset` dropped; ambient light skipped; cm→m scale (a
 deliberate spec compliance, not a diff).
 
-## 8. Deliverables checklist
+## 9. Deliverables checklist
 
 - [ ] `packages/export/src/GltfExporter.ts` — scene → GLB/glTF (units, names,
       materials, textures, lights, cameras), private scene + dispose
@@ -306,13 +406,17 @@ deliberate spec compliance, not a diff).
 - [ ] UI: enable File ▸ Export 3D view to Blender… (+ OBJ), options dialog,
       `downloadBytes`/`WebContentManager.saveFile` path, i18n keys in all
       8 locale files
+- [ ] GLB import path (ModelManager `gltf` loader) + "import rendered scene"
+      preview mode + lightmap→emissive mapping (Tier-2 round-trip, §7.2)
+- [ ] Shared render upgrade: IBL env + GTAO + MeshPhysicalMaterial in the
+      scene intermediate (Tier-1, §7.1) — benefits 3D view and photo renderer
 - [ ] Tests: unit structure, GLB round-trip, gltf-validator CI gate, Java
       OBJ parity, golden snapshot for `ls_2819.sh3d`
 - [ ] Docs: this doc's status flip to implemented; `KNOWN_DIFFS.md` entries;
       docs/README.md index
 - [ ] Stretch spikes (11.7) evaluated with a written verdict
 
-## 9. Open questions
+## 10. Open questions
 
 1. GLB with `EXT_mesh_gpu_instancing` (placeholder furniture) — confirm
    import quality in Blender 3.6+ vs 4.x; else bake instances to real meshes
