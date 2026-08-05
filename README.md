@@ -4,6 +4,8 @@ A browser port of [Sweet Home 3D](https://sweethome3d.com) 7.5 to
 TypeScript/JavaScript — plan your home in 2D, view it in 3D, render photos,
 export PDF/CSV, and print — all in the browser, GPL v2+.
 
+![SweetHomeJS](docs/screenshots/beauty-shot.png)
+
 ## Features
 
 - **2D plan**: draw walls (with 15° magnetism and vertex snapping), rooms
