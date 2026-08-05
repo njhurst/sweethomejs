@@ -19,16 +19,15 @@
  */
 
 /**
- * Performance budgets e2e (task 9.5): the real 58-anderson home (2.5 MB, 54
- * walls, 28 furniture) must paint the plan and render the 3D view within
- * generous CI budgets.
+ * Performance budgets e2e (task 9.5): the generated test home must paint
+ * the plan and render the 3D view within generous CI budgets.
  */
 import { expect, test } from "@playwright/test";
 
 test("opens a real home within budget (plan paint + 3D first frame)", async ({ page }) => {
   test.setTimeout(60000);
   const start = Date.now();
-  await page.goto("/?file=/fixtures/58-anderson.sh3d");
+  await page.goto("/?file=/fixtures/example-home.sh3d");
   await expect(page.getByTestId("plan-canvas")).toBeVisible({ timeout: 20000 });
   // Wait for the plan to paint (pixels appear)
   await page.waitForFunction(() => {

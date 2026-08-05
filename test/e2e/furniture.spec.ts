@@ -27,7 +27,7 @@ import { expect, test } from "@playwright/test";
 
 test("furniture selection, context, dialog and catalog add", async ({ page }) => {
   test.setTimeout(60000);
-  await page.goto("/?file=/fixtures/58-anderson.sh3d");
+  await page.goto("/?file=/fixtures/example-home.sh3d");
   await expect(page.getByTestId("plan-canvas")).toBeVisible();
   await page.waitForTimeout(9000);
   await page.waitForTimeout(2000);
@@ -82,7 +82,7 @@ test("furniture selection, context, dialog and catalog add", async ({ page }) =>
 
 test("furniture dialog shows lengths in the current unit and parses unit input", async ({ page }) => {
   test.setTimeout(60000);
-  await page.goto("/?file=/fixtures/58-anderson.sh3d");
+  await page.goto("/?file=/fixtures/example-home.sh3d");
   await expect(page.getByTestId("plan-canvas")).toBeVisible();
   await page.waitForTimeout(9000);
   await page.waitForTimeout(2000);

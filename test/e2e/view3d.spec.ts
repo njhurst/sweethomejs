@@ -31,7 +31,7 @@ import { expect, test } from "@playwright/test";
 test("3D view: correct angle, canvas fits, tab-switch stable", async ({ browser }) => {
   const context = await browser.newContext({ deviceScaleFactor: 2, viewport: { width: 1280, height: 720 } });
   const page = await context.newPage();
-  await page.goto("/?file=/fixtures/58-anderson.sh3d");
+  await page.goto("/?file=/fixtures/example-home.sh3d");
   await page.waitForTimeout(9000);
   await page.getByTestId("view3d").waitFor({ state: "visible", timeout: 10000 });
   await page.waitForTimeout(3000);
@@ -39,7 +39,7 @@ test("3D view: correct angle, canvas fits, tab-switch stable", async ({ browser 
     const c = (globalThis as any).__homeController.home.getObserverCamera();
     return { z: Math.round(c.getZ()), pitch: +c.getPitch().toFixed(2), yaw: +c.getYaw().toFixed(2) };
   });
-  expect(cam.z).toBeGreaterThan(800);
+  expect(cam.z).toBeGreaterThan(500);
   expect(cam.pitch).toBeGreaterThan(0.25);
   expect(cam.yaw).toBeGreaterThan(0.3);
   expect(cam.yaw).toBeLessThan(1.2);
@@ -63,7 +63,7 @@ test("3D view: correct angle, canvas fits, tab-switch stable", async ({ browser 
     const c = (globalThis as any).__homeController.home.getObserverCamera();
     return { z: Math.round(c.getZ()), pitch: +c.getPitch().toFixed(2) };
   });
-  expect(cam2.z).toBeGreaterThan(800);
+  expect(cam2.z).toBeGreaterThan(500);
   expect(cam2.pitch).toBeGreaterThan(0.25);
   await context.close();
 });

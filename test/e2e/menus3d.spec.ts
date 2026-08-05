@@ -26,7 +26,7 @@
 import { expect, test } from "@playwright/test";
 
 test("full menus, toolbar, catalog dock and exterior 3D view", async ({ page }) => {
-  await page.goto("/?file=/fixtures/58-anderson.sh3d");
+  await page.goto("/?file=/fixtures/example-home.sh3d");
   await page.waitForTimeout(4000);
   for (const name of ["File", "Edit", "Furniture", "Plan", "3D view", "Tools", "Catalog", "Help"]) {
     await expect(page.getByTestId(`menu-${name}`)).toBeVisible();

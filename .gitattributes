@@ -1,0 +1,7 @@
+# The SweetHome3D-7.5 Java source is bundled only as a GPL reference/parity
+# oracle for the port; exclude it from GitHub's language statistics.
+src/** linguist-vendored
+src/** linguist-generated=false
+
+# The Java harness (tools/java-harness) compiles against the bundled source.
+tools/java-harness/** linguist-vendored

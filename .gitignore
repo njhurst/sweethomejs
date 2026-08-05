@@ -26,3 +26,7 @@ test/unit/fixtures/float-corpus.txt
 
 # dev event log + shared debugging context (in-the-app skill)
 .pi/in-the-app/
+
+# someone else's real home — must not be committed
+apps/web/public/fixtures/58-anderson.sh3d
+apps/web/dist/fixtures/58-anderson.sh3d

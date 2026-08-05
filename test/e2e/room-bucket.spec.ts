@@ -26,7 +26,7 @@
 import { expect, test } from "@playwright/test";
 
 test("double-click inside walls bucket-fills the room", async ({ page }) => {
-  await page.goto("/?file=/fixtures/58-anderson.sh3d");
+  await page.goto("/?file=/fixtures/example-home.sh3d");
   await expect(page.getByTestId("plan-canvas")).toBeVisible();
   await page.waitForTimeout(5000);
   const before = await page.evaluate(() => (globalThis as any).__homeController.home.getRooms().length);

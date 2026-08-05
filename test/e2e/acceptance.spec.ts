@@ -27,7 +27,7 @@ import { expect, test } from "@playwright/test";
 
 test("acceptance: full editing workflow on a real home", async ({ page }) => {
   test.setTimeout(120000);
-  await page.goto("/?file=/fixtures/58-anderson.sh3d");
+  await page.goto("/?file=/fixtures/example-home.sh3d");
   await expect(page.getByTestId("plan-canvas")).toBeVisible();
   await page.waitForTimeout(4000);
 
