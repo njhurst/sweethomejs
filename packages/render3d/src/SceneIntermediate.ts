@@ -48,6 +48,13 @@ export interface SceneIntermediateOptions {
   addLights?: boolean;
   /** Add a PointLight per furniture light source (Design style; default false). */
   addLightSources?: boolean;
+  /**
+   * Use MeshPhysicalMaterial for all surfaces (Design style; default false —
+   * off keeps the Technical look and golden renders).
+   */
+  physicalMaterials?: boolean;
+  /** Enable sun shadow maps (Design style; default false). */
+  shadows?: boolean;
   /** Use a single InstancedMesh for model-less furniture (default true). */
   instancedFurniture?: boolean;
   materialCache?: MaterialCache;
@@ -86,6 +93,7 @@ export function buildSceneIntermediate(
 ): SceneIntermediate {
   const group = new THREE.Group();
   const materialCache = options.materialCache ?? new MaterialCache();
+  materialCache.physical = options.physicalMaterials ?? false;
   const textureCache = options.textureCache ?? new TextureCache();
   const modelManager = options.modelManager ?? new ModelManager();
   const builders: Object3DBase[] = [];
@@ -146,7 +154,11 @@ export function buildSceneIntermediate(
   // Lights
   let lights: SceneLights | null = null;
   if (options.addLights ?? true) {
-    lights = new SceneLights({ home, addLightSources: options.addLightSources ?? false });
+    lights = new SceneLights({
+      home,
+      addLightSources: options.addLightSources ?? false,
+      shadows: options.shadows ?? false,
+    });
     for (const light of lights.getLights()) {
       group.add(light);
     }

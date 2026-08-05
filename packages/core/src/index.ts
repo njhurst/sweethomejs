@@ -34,8 +34,17 @@
  *   src/util/        — shared helpers (f32/formatFloat, ...)
  */
 export { f32, formatFloat } from "./util/f32.js";
-export { readFurnitureCatalog, readFurnitureCatalogWithLocale, readTexturesCatalog, loadBundle } from "./io/CatalogReader.js";
-export { HomeFileRecorder, DamagedHomeRecorderException, RecorderException } from "./io/HomeFileRecorder.js";
+export {
+  readFurnitureCatalog,
+  readFurnitureCatalogWithLocale,
+  readTexturesCatalog,
+  loadBundle,
+} from "./io/CatalogReader.js";
+export {
+  HomeFileRecorder,
+  DamagedHomeRecorderException,
+  RecorderException,
+} from "./io/HomeFileRecorder.js";
 export { parseJavaProperties } from "./io/JavaProperties.js";
 export * from "./controllers/index.js";
 export { Home } from "./model/Home.js";
@@ -52,7 +61,7 @@ export { HomeLight } from "./model/HomeLight.js";
 export { HomeShelfUnit } from "./model/HomeShelfUnit.js";
 export { HomeFurnitureGroup } from "./model/HomeFurnitureGroup.js";
 export { UserPreferences, setMessageRegistry } from "./model/UserPreferences.js";
-export type { MessageRegistry } from "./model/UserPreferences.js";
+export type { MessageRegistry, View3DStyle } from "./model/UserPreferences.js";
 export { HomeEnvironment } from "./model/HomeEnvironment.js";
 export { Camera } from "./model/Camera.js";
 export { ObserverCamera } from "./model/ObserverCamera.js";
@@ -64,5 +73,17 @@ export { LengthUnit } from "./model/LengthUnit.js";
 export { TextStyle } from "./model/TextStyle.js";
 export type { Selectable } from "./model/Selectable.js";
 export type { Content } from "./model/Content.js";
-export { FurnitureCatalog, FurnitureCategory, TexturesCatalog, TexturesCategory, PatternsCatalog } from "./model/Catalogs.js";
-export { CatalogPieceOfFurniture, CatalogDoorOrWindow, CatalogLight, CatalogShelfUnit, CatalogTexture } from "./io/CatalogClasses.js";
+export {
+  FurnitureCatalog,
+  FurnitureCategory,
+  TexturesCatalog,
+  TexturesCategory,
+  PatternsCatalog,
+} from "./model/Catalogs.js";
+export {
+  CatalogPieceOfFurniture,
+  CatalogDoorOrWindow,
+  CatalogLight,
+  CatalogShelfUnit,
+  CatalogTexture,
+} from "./io/CatalogClasses.js";

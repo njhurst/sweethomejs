@@ -28,7 +28,12 @@ import "fake-indexeddb/auto";
 import { Home, UserPreferences } from "@sweethomejs/core";
 import { IndexedDBStore } from "./IndexedDBStore.js";
 import { InMemoryHomeStore, IndexedDBHomeStore } from "./HomeStore.js";
-import { PreferencesStore, HomeDocumentStore, Autosaver, snapshotPreferences } from "./Persistence.js";
+import {
+  PreferencesStore,
+  HomeDocumentStore,
+  Autosaver,
+  snapshotPreferences,
+} from "./Persistence.js";
 
 describe("IndexedDBStore (task 7.8)", () => {
   it("puts, gets and deletes values across stores", async () => {
@@ -68,9 +73,22 @@ describe("PreferencesStore (task 7.8)", () => {
   it("snapshotPreferences captures the persistable fields", () => {
     const preferences = new UserPreferences();
     preferences.setLanguage("fr");
+    preferences.setView3DStyle("design");
     const snapshot = snapshotPreferences(preferences);
     expect(snapshot.language).toBe("fr");
+    expect(snapshot.view3DStyle).toBe("design");
     expect(typeof snapshot.savedAt).toBe("number");
+  });
+
+  it("persists the 3D view style across save/load", async () => {
+    const store = new IndexedDBStore("test-prefs-style");
+    const preferences = new UserPreferences();
+    preferences.setView3DStyle("design");
+    const prefsStore = new PreferencesStore(store);
+    await prefsStore.save(preferences);
+    const snapshot = await prefsStore.load();
+    expect(snapshot?.view3DStyle).toBe("design");
+    await store.close();
   });
 });
 

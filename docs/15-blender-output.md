@@ -27,7 +27,7 @@ natively** (File ▸ Import or drag & drop). The bar we want to clear:
 4. **Cheap to implement** — reuses the existing Three.js scene description
    instead of writing a second exporter stack.
 
-What we explicitly do **not** promise: an editable *parametric* home (walls as
+What we explicitly do **not** promise: an editable _parametric_ home (walls as
 extruded curves, rooms as floor plans) — that is the Blender add-on route
 (§6.3), tracked separately as a stretch.
 
@@ -43,7 +43,7 @@ extruded curves, rooms as floor plans) — that is the Blender add-on route
     MTL as PNG/JPG.
   - **Y-up coordinates, centimeter units** — ground at `y=0`, wall tops at
     `y≈236`. Confirmed in `examples/dream_house.obj` (`v 84.63287 589.38
-    -11.502183` is a wall on an upper level; `mtllib dream_house.mtl`).
+-11.502183` is a wall on an upper level; `mtllib dream_house.mtl`).
   - "Export all vs selection" confirm dialog (mirrors `confirmExportAllToOBJ`).
   - `writeNodeInZIPFile` bundles OBJ+MTL+textures into a zip.
 - `examples/dream_house.obj.blend` (66 MB) is a **Blender 2.79** file
@@ -54,20 +54,20 @@ extruded curves, rooms as floor plans) — that is the Blender add-on route
 
 ### 2.2 What SweetHomeJS has today
 
-| Piece | State | Relevance |
-| --- | --- | --- |
-| `packages/export` | PDF + CSV only (`PDFExporter`, `CSVExporter`) | Home for the new exporter |
-| File menu | `Export to OBJ…` is a **disabled placeholder** (`HomePane.tsx`) | The wiring point |
-| Scene intermediate | `render3d` `buildSceneIntermediate` → `THREE.Group` with walls, rooms, furniture, ground, dimension lines, labels, lights | **The export input** — the same graph the 3D view and photo renderer consume |
-| Units/axis in the scene | plan `(x,y)` → three `(x,z)`, elevation → three `y` → **already Y-up, centimeters** | glTF is Y-up meters → only a scale change needed |
-| Materials | `MaterialCache` → `MeshStandardMaterial` (PBR: color, emissive=ambient, roughness from shininess, opacity, double-sided) | Maps 1:1 onto glTF metallic-roughness |
-| Textures | `TextureCache` → `THREE.CanvasTexture`, sRGB, repeat/offset/rotation via `applyHomeTextureAttributes` | GLTFExporter embeds canvas textures as PNG (verified in three r185 source) |
-| Model loading | `ModelManager` async (`getModel` + waiters), models normalized to a 1-unit box, scaled by piece dimensions | Export must **await loads** or fall back to placeholders |
-| Furniture without models | `InstancedFurniture` `InstancedMesh` | GLTFExporter handles `InstancedMesh` → `EXT_mesh_gpu_instancing` (Blender ≥ 3.6; older importers get the base mesh) |
-| Lights | `SceneLights`: sun + rig `DirectionalLight`s + `AmbientLight` | GLTFExporter → `KHR_lights_punctual` (directional/point/spot; ambient not representable) |
-| Cameras | `View3DCamera.applyModelCameraToThree` (`position.set(x, z, y)`) | GLTFExporter writes `PerspectiveCamera`s |
-| three.js | **0.185.1**, ships `examples/jsm/exporters/{GLTFExporter,OBJExporter,USDZExporter,STLExporter,PLYExporter}` | `GLTFExporter` is the primary tool; no new dependency needed for v1 |
-| Download | `WebContentManager.saveFile` (FSA + download fallback); `downloadBytes` helper in `HomePane` | Output path |
+| Piece                    | State                                                                                                                     | Relevance                                                                                                           |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `packages/export`        | PDF + CSV only (`PDFExporter`, `CSVExporter`)                                                                             | Home for the new exporter                                                                                           |
+| File menu                | `Export to OBJ…` is a **disabled placeholder** (`HomePane.tsx`)                                                           | The wiring point                                                                                                    |
+| Scene intermediate       | `render3d` `buildSceneIntermediate` → `THREE.Group` with walls, rooms, furniture, ground, dimension lines, labels, lights | **The export input** — the same graph the 3D view and photo renderer consume                                        |
+| Units/axis in the scene  | plan `(x,y)` → three `(x,z)`, elevation → three `y` → **already Y-up, centimeters**                                       | glTF is Y-up meters → only a scale change needed                                                                    |
+| Materials                | `MaterialCache` → `MeshStandardMaterial` (PBR: color, emissive=ambient, roughness from shininess, opacity, double-sided)  | Maps 1:1 onto glTF metallic-roughness                                                                               |
+| Textures                 | `TextureCache` → `THREE.CanvasTexture`, sRGB, repeat/offset/rotation via `applyHomeTextureAttributes`                     | GLTFExporter embeds canvas textures as PNG (verified in three r185 source)                                          |
+| Model loading            | `ModelManager` async (`getModel` + waiters), models normalized to a 1-unit box, scaled by piece dimensions                | Export must **await loads** or fall back to placeholders                                                            |
+| Furniture without models | `InstancedFurniture` `InstancedMesh`                                                                                      | GLTFExporter handles `InstancedMesh` → `EXT_mesh_gpu_instancing` (Blender ≥ 3.6; older importers get the base mesh) |
+| Lights                   | `SceneLights`: sun + rig `DirectionalLight`s + `AmbientLight`                                                             | GLTFExporter → `KHR_lights_punctual` (directional/point/spot; ambient not representable)                            |
+| Cameras                  | `View3DCamera.applyModelCameraToThree` (`position.set(x, z, y)`)                                                          | GLTFExporter writes `PerspectiveCamera`s                                                                            |
+| three.js                 | **0.185.1**, ships `examples/jsm/exporters/{GLTFExporter,OBJExporter,USDZExporter,STLExporter,PLYExporter}`               | `GLTFExporter` is the primary tool; no new dependency needed for v1                                                 |
+| Download                 | `WebContentManager.saveFile` (FSA + download fallback); `downloadBytes` helper in `HomePane`                              | Output path                                                                                                         |
 
 ### 2.3 Ecosystem facts (checked)
 
@@ -89,13 +89,13 @@ extruded curves, rooms as floor plans) — that is the Blender add-on route
 
 ## 3. Format options
 
-| Format | Blender open | Units/axis | Fidelity | Effort | Verdict |
-| --- | --- | --- | --- | --- | --- |
-| **glTF / GLB** | native, ≥ 2.80, drag & drop | meters, Y-up (exact match after cm→m scale) | materials+textures embedded, objects named, cameras/lights | **Low** — `GLTFExporter` on the existing scene | **Primary** |
-| **OBJ + MTL + textures** | native, all versions | cm, Y-up (as Java) | groups/usemtl; textures sidecar | Low–med — port `OBJWriter` (already planned in [08 §5](08-model-loaders.md#5-exporters)) | **Parity/fallback** (matches Java exactly) |
-| **.blend (native)** | instant | — | full editable scene | **High** — SDNA/DNA1 writer, version-pinned, no JS lib | Stretch only (§6.2) |
-| **USD / USDZ** | ≥ 3.0 | meters, Y-up | limited by three's exporter (AR-oriented) | Med | Defer |
-| **Blender add-on** (Python, imports `.sh3d`) | via add-on | — | parametric (walls→curves, levels→collections) | Med | Complementary stretch (§6.3) |
+| Format                                       | Blender open                | Units/axis                                  | Fidelity                                                   | Effort                                                                                   | Verdict                                    |
+| -------------------------------------------- | --------------------------- | ------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------ |
+| **glTF / GLB**                               | native, ≥ 2.80, drag & drop | meters, Y-up (exact match after cm→m scale) | materials+textures embedded, objects named, cameras/lights | **Low** — `GLTFExporter` on the existing scene                                           | **Primary**                                |
+| **OBJ + MTL + textures**                     | native, all versions        | cm, Y-up (as Java)                          | groups/usemtl; textures sidecar                            | Low–med — port `OBJWriter` (already planned in [08 §5](08-model-loaders.md#5-exporters)) | **Parity/fallback** (matches Java exactly) |
+| **.blend (native)**                          | instant                     | —                                           | full editable scene                                        | **High** — SDNA/DNA1 writer, version-pinned, no JS lib                                   | Stretch only (§6.2)                        |
+| **USD / USDZ**                               | ≥ 3.0                       | meters, Y-up                                | limited by three's exporter (AR-oriented)                  | Med                                                                                      | Defer                                      |
+| **Blender add-on** (Python, imports `.sh3d`) | via add-on                  | —                                           | parametric (walls→curves, levels→collections)              | Med                                                                                      | Complementary stretch (§6.3)               |
 
 **Recommendation**: ship **glTF/GLB as the Blender output** (single-file GLB
 default), port the **OBJ writer for Java parity** as the documented fallback,
@@ -152,16 +152,16 @@ WebContentManager.saveFile → FSA or download       [packages/ui]
 builders currently produce generic names, so the exporter assigns names from
 the model before serializing (walking the intermediate's `builders`):
 
-| Model item | Exported name | Notes |
-| --- | --- | --- |
-| Wall | `wall_<id>` (e.g. `wall_3`) | sanitized to `[A-Za-z0-9_]`-ish, deduped with counter |
-| Room | `room_<id>` | |
-| Furniture (model) | `<name>_<id>` | mirrors Java's `name + "_" + shapeIndex` |
-| Furniture (no model) | `<name>_<id>` (placeholder box) | warn on export |
-| Ground | `ground` | optional |
-| Level | top-level group per level (`level_<id>`) when exporting all levels | v1 may export the visible level set only |
-| Cameras | `camera_<observer|stored_<n>>` | optional |
-| Lights | `sun`, `light_<name>` | optional, via `KHR_lights_punctual` |
+| Model item           | Exported name                                                      | Notes                                                 |
+| -------------------- | ------------------------------------------------------------------ | ----------------------------------------------------- |
+| Wall                 | `wall_<id>` (e.g. `wall_3`)                                        | sanitized to `[A-Za-z0-9_]`-ish, deduped with counter |
+| Room                 | `room_<id>`                                                        |                                                       |
+| Furniture (model)    | `<name>_<id>`                                                      | mirrors Java's `name + "_" + shapeIndex`              |
+| Furniture (no model) | `<name>_<id>` (placeholder box)                                    | warn on export                                        |
+| Ground               | `ground`                                                           | optional                                              |
+| Level                | top-level group per level (`level_<id>`) when exporting all levels | v1 may export the visible level set only              |
+| Cameras              | `camera_<observer                                                  | stored_<n>>`                                          | optional |
+| Lights               | `sun`, `light_<name>`                                              | optional, via `KHR_lights_punctual`                   |
 
 Names go through a single sanitizer shared with the future OBJ writer
 (Java's `OBJWriter.accept` allows only letters/digits/underscores — port that
@@ -280,7 +280,7 @@ expansion and `isAllLevelsSelection` handling. Small, defer to v2.
 
 ## 7. Browser-side rendering: nicer surfaces + GI (and the Blender bake round-trip)
 
-This section answers: how much of the *rendering* can happen in the browser,
+This section answers: how much of the _rendering_ can happen in the browser,
 and can we get Eevee-level quality? Short answer: **yes for the features that
 matter to architecture** (better surfaces + global illumination) — Eevee is
 rasterization + screen-space tricks + baked light probes, and every one of
@@ -293,17 +293,17 @@ PBR, ACES tone mapping and PCF-soft shadow maps (photo renderer task 8.3).
 All of the following ship inside the existing three 0.185.1 and run on the
 current WebGL2 support matrix:
 
-| Effect | three r185 module | Eevee equivalent | Cost |
-| --- | --- | --- | --- |
-| Image-based bounce light (interior) | `PMREMGenerator` + `RoomEnvironment` | Eevee's world/env lighting | one-time PMREM, cheap |
-| Image-based bounce light (exterior) | `GroundedSkybox` / `Sky` | sky + sun setup | cheap |
-| Ambient occlusion | `GTAOPass` (Activision ground-truth AO — the same algorithm family Eevee uses) / `SSAOPass` | GTAO | medium |
-| Screen-space reflections | `SSRPass` (WebGL2) / `SSRNode` (WebGPU) | SSR | medium–heavy |
-| Nicer surfaces | `MeshPhysicalMaterial`: clearcoat (kitchen counters, car paint), transmission (glass, water), sheen (fabrics), iridescence, anisotropy | Eevee Principled BSDF | free at runtime |
-| Diffuse GI per room (baked in-browser) | `LightProbe` + `LightProbeGenerator.fromCubeRenderTarget()` | Eevee irradiance light probes | one cube render per room at load/probe-dirty |
-| Bloom / DOF / grading | `UnrealBloomPass`, `BokehPass`, `LUTPass` | Eevee viewport compositor | cheap–medium |
+| Effect                                 | three r185 module                                                                                                                      | Eevee equivalent              | Cost                                         |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- | -------------------------------------------- |
+| Image-based bounce light (interior)    | `PMREMGenerator` + `RoomEnvironment`                                                                                                   | Eevee's world/env lighting    | one-time PMREM, cheap                        |
+| Image-based bounce light (exterior)    | `GroundedSkybox` / `Sky`                                                                                                               | sky + sun setup               | cheap                                        |
+| Ambient occlusion                      | `GTAOPass` (Activision ground-truth AO — the same algorithm family Eevee uses) / `SSAOPass`                                            | GTAO                          | medium                                       |
+| Screen-space reflections               | `SSRPass` (WebGL2) / `SSRNode` (WebGPU)                                                                                                | SSR                           | medium–heavy                                 |
+| Nicer surfaces                         | `MeshPhysicalMaterial`: clearcoat (kitchen counters, car paint), transmission (glass, water), sheen (fabrics), iridescence, anisotropy | Eevee Principled BSDF         | free at runtime                              |
+| Diffuse GI per room (baked in-browser) | `LightProbe` + `LightProbeGenerator.fromCubeRenderTarget()`                                                                            | Eevee irradiance light probes | one cube render per room at load/probe-dirty |
+| Bloom / DOF / grading                  | `UnrealBloomPass`, `BokehPass`, `LUTPass`                                                                                              | Eevee viewport compositor     | cheap–medium                                 |
 
-- The scene intermediate is shared by the 3D view *and* the photo renderer, so
+- The scene intermediate is shared by the 3D view _and_ the photo renderer, so
   these upgrades land in both with one change to `MaterialCache`/the render
   pipeline.
 - **Limits**: screen-space effects are frame-dependent (miss off-screen
@@ -393,10 +393,10 @@ reach because they consume the same scene intermediate.
 Two styles, not more — the interaction→presentation spectrum for an
 architectural tool is covered by:
 
-| Style | Purpose | Pipeline | Perf target (typical browser) |
-| --- | --- | --- | --- |
-| **Technical** (default) | floor planning, layout checks, editing | the *current* renderer: basic PBR materials + textures, sun shadows, ACES tone mapping — no GI/AO/post | 60 fps on any device; already inside the task-9.5 budget |
-| **Design** | material/lighting evaluation, presentation | `MeshPhysicalMaterial` + IBL env + per-room `LightProbe` GI + `GTAO` (+ optional SSR/bloom; WebGPU SSGI where available) | 30–60 fps on integrated GPUs at 1080p with quality knobs; full SSGI targets discrete GPUs |
+| Style                   | Purpose                                    | Pipeline                                                                                                                 | Perf target (typical browser)                                                             |
+| ----------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
+| **Technical** (default) | floor planning, layout checks, editing     | the _current_ renderer: basic PBR materials + textures, sun shadows, ACES tone mapping — no GI/AO/post                   | 60 fps on any device; already inside the task-9.5 budget                                  |
+| **Design**              | material/lighting evaluation, presentation | `MeshPhysicalMaterial` + IBL env + per-room `LightProbe` GI + `GTAO` (+ optional SSR/bloom; WebGPU SSGI where available) | 30–60 fps on integrated GPUs at 1080p with quality knobs; full SSGI targets discrete GPUs |
 
 - **Default = Technical** keeps the Java golden-parity 3D tests (task 6.8)
   intact; Design is additive and gets its own tolerance tests.
@@ -408,7 +408,7 @@ architectural tool is covered by:
 - **No third style needed**: the photo renderer (stills) already covers
   "final image" beyond the interactive view, and the 2D plan covers pure
   drafting.
-- **UI**: 3D view menu → *View style* (Technical / Design), persisted in
+- **UI**: 3D view menu → _View style_ (Technical / Design), persisted in
   `UserPreferences` like grid/rulers; quick toggles within a style (sky /
   ground / textures / lights — matching SH3D's 3D-view toggles).
 - **Both styles consume the same geometry** (shared scene intermediate): the
@@ -425,21 +425,31 @@ the knobs keep it usable on integrated parts.
 
 ## 8. Testing and parity
 
-| Test | Method | Gate |
-| --- | --- | --- |
-| Unit — structure | Export fixture home → parse GLB with three `GLTFLoader` → assert node names/counts, meters positions, material/texture counts, camera presence | unit |
-| Round-trip | export → `GLTFLoader` import → vertex/normal/bounds compare vs source scene (tolerance) | unit |
-| Validator | `gltf-validator` on every exported GLB (npm dev dep) | CI |
-| Java parity (OBJ) | TS OBJ output vs `tools/java-harness` dump of Java `OBJWriter` on the same fixture: group names, vertex counts, bounds, MTL lines | CI |
-| Golden | `examples/dream_house.sh3d` → GLB; commit hash + size + node-count snapshot; regenerate per [10.2](TODO.md) workflow | CI |
-| Blender smoke (optional) | CI job: install headless Blender, `blender -b -P import_and_dump.py scene.glb`, assert imported object/mesh counts | CI (separate, can be allowed to fail on infra) |
-| Perf | export 500-furniture home < budget (e.g. 15 s incl. model load) | CI |
+| Test                     | Method                                                                                                                                         | Gate                                           |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| Unit — structure         | Export fixture home → parse GLB with three `GLTFLoader` → assert node names/counts, meters positions, material/texture counts, camera presence | unit                                           |
+| Round-trip               | export → `GLTFLoader` import → vertex/normal/bounds compare vs source scene (tolerance)                                                        | unit                                           |
+| Validator                | `gltf-validator` on every exported GLB (npm dev dep)                                                                                           | CI                                             |
+| Java parity (OBJ)        | TS OBJ output vs `tools/java-harness` dump of Java `OBJWriter` on the same fixture: group names, vertex counts, bounds, MTL lines              | CI                                             |
+| Golden                   | `examples/dream_house.sh3d` → GLB; commit hash + size + node-count snapshot; regenerate per [10.2](TODO.md) workflow                           | CI                                             |
+| Blender smoke (optional) | CI job: install headless Blender, `blender -b -P import_and_dump.py scene.glb`, assert imported object/mesh counts                             | CI (separate, can be allowed to fail on infra) |
+| Perf                     | export 500-furniture home < budget (e.g. 15 s incl. model load)                                                                                | CI                                             |
 
 Known divergences to record in `KNOWN_DIFFS.md`: texture-rotation center vs
 KHR origin; `polygonOffset` dropped; ambient light skipped; cm→m scale (a
 deliberate spec compliance, not a diff).
 
 ## 9. Deliverables checklist
+
+- [x] Design style v1 (task 11.11): `MeshPhysicalMaterial` mode + furniture
+      light sources + scene-capture IBL env + GTAO composer, wired into the
+      3D view via a style menu (3D view ▸ Technical / Design view (GI)),
+      persisted in `UserPreferences`; e2e coverage in
+      `test/e2e/design-style.spec.ts`; KNOWN_DIFFS §2 updated
+- [ ] Quality knobs within Design (GI mode env-only→probes→SSGI, resolution
+      scale, shadow size) — task 11.14
+- [ ] Per-room `LightProbe` GI (upgrade over the single scene-capture env)
+      — task 11.13
 
 - [ ] `packages/export/src/GltfExporter.ts` — scene → GLB/glTF (units, names,
       materials, textures, lights, cameras), private scene + dispose

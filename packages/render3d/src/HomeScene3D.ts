@@ -45,6 +45,10 @@ export interface HomeScene3DOptions {
   addLights?: boolean;
   /** Add a PointLight per furniture light source (Design style; default false). */
   addLightSources?: boolean;
+  /** Use MeshPhysicalMaterial for all surfaces (Design style; default false). */
+  physicalMaterials?: boolean;
+  /** Enable sun shadow maps (Design style; default false). */
+  shadows?: boolean;
   /** Add the ground plane (default true). */
   addGround?: boolean;
   /** Use the instanced placeholder path for model-less furniture (default true). */
@@ -75,6 +79,8 @@ export class HomeScene3D extends Object3DBase<Home> {
       addGround: options.addGround ?? true,
       addLights: options.addLights ?? true,
       addLightSources: options.addLightSources ?? false,
+      physicalMaterials: options.physicalMaterials ?? false,
+      shadows: options.shadows ?? false,
       instancedFurniture: options.instancedFurniture ?? true,
       materialCache: this.materialCache,
       textureCache: this.textureCache,

@@ -100,4 +100,25 @@ describe("design-showcase fixture (task 11.8)", () => {
 
     scene.dispose();
   });
+
+  it("wires Design-style options: physical materials, shadows, light sources", async () => {
+    const bytes = new Uint8Array(readFileSync(FIXTURE));
+    const { home } = await new HomeFileRecorder().readHomeFromZip(bytes);
+    const modelManager = new ModelManager(() => ({ parse: async () => new THREE.Group() }));
+    const scene = buildSceneIntermediate(home, new UserPreferences(), {
+      physicalMaterials: true,
+      shadows: true,
+      addLightSources: true,
+      modelManager,
+    });
+    expect(scene.materialCache.physical).toBe(true);
+    expect(scene.lights?.getSunLight().castShadow).toBe(true);
+    const pointLights = scene.group.children.filter(
+      (child) =>
+        (child as THREE.Light).isLight === true &&
+        (child as THREE.PointLight).isPointLight === true,
+    );
+    expect(pointLights.length).toBe(3);
+    scene.dispose();
+  });
 });

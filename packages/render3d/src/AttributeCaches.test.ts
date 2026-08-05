@@ -32,7 +32,13 @@ import { Object3DBase } from "./Object3DBase.js";
 describe("MaterialCache (task 6.1)", () => {
   it("shares materials for identical value keys", () => {
     const cache = new MaterialCache();
-    const key = { diffuseColor: 0xa0522d, ambientColor: 0x000000, shininess: 0.2, opacity: 1, doubleSided: false };
+    const key = {
+      diffuseColor: 0xa0522d,
+      ambientColor: 0x000000,
+      shininess: 0.2,
+      opacity: 1,
+      doubleSided: false,
+    };
     expect(cache.getMaterial(key)).toBe(cache.getMaterial(key));
     // Different color → different material
     expect(cache.getMaterial({ ...key, diffuseColor: 0xffffff })).not.toBe(cache.getMaterial(key));
@@ -40,9 +46,39 @@ describe("MaterialCache (task 6.1)", () => {
 
   it("creates transparent materials for 0xAARRGGBB colors", () => {
     const cache = new MaterialCache();
-    const material = cache.getMaterial({ diffuseColor: 0x80a0522d, ambientColor: 0, shininess: 0, opacity: 1, doubleSided: false });
+    const material = cache.getMaterial({
+      diffuseColor: 0x80a0522d,
+      ambientColor: 0,
+      shininess: 0,
+      opacity: 1,
+      doubleSided: false,
+    });
     expect(material.transparent).toBe(true);
     expect(material.opacity).toBeCloseTo(0x80 / 255, 4);
+  });
+
+  it("returns MeshPhysicalMaterial in physical mode (Design style)", () => {
+    const cache = new MaterialCache();
+    expect(cache.physical).toBe(false);
+    const standard = cache.getMaterial({
+      diffuseColor: 0xffffff,
+      ambientColor: 0,
+      shininess: 20,
+      opacity: 1,
+      doubleSided: false,
+    });
+    expect(standard).toBeInstanceOf(THREE.MeshStandardMaterial);
+    expect(standard).not.toBeInstanceOf(THREE.MeshPhysicalMaterial);
+    cache.physical = true;
+    const physical = cache.getMaterial({
+      diffuseColor: 0xffffff,
+      ambientColor: 0,
+      shininess: 20,
+      opacity: 1,
+      doubleSided: false,
+    });
+    expect(physical).toBeInstanceOf(THREE.MeshPhysicalMaterial);
+    expect(physical.roughness).toBeCloseTo(1 - 20 / 128, 4);
   });
 
   it("converts 0xRRGGBB colors to THREE.Color", () => {
@@ -59,19 +95,25 @@ describe("TextureCache (task 6.1)", () => {
     const originalCreateImageBitmap = globalThis.createImageBitmap;
     globalThis.createImageBitmap = (() => Promise.resolve({ width: 2, height: 2 })) as never;
     try {
-      const cache = new TextureCache(() => ({ width: 2, height: 2, getContext: () => null }) as never);
+      const cache = new TextureCache(
+        () => ({ width: 2, height: 2, getContext: () => null }) as never,
+      );
       const source = {
         openStream: async () => new Blob([new Uint8Array([1, 2, 3])]).stream(),
         getURL: () => "zip:0/texture.png",
       };
       let loaded: THREE.Texture | null | undefined;
-      const first = cache.getTexture(source, (t) => { loaded = t; });
+      const first = cache.getTexture(source, (t) => {
+        loaded = t;
+      });
       expect(first).toBeNull(); // not loaded yet
       await new Promise((resolve) => setTimeout(resolve, 20));
       expect(loaded).not.toBeNull();
       // Second request reuses the cache without reloading
       let secondLoaded: THREE.Texture | null | undefined;
-      const second = cache.getTexture(source, (t) => { secondLoaded = t; });
+      const second = cache.getTexture(source, (t) => {
+        secondLoaded = t;
+      });
       expect(second).not.toBeNull();
       expect(second).toBe(loaded);
       expect(secondLoaded).toBeUndefined();

@@ -20,6 +20,9 @@ export interface MessageRegistry {
   getString(bundleName: string, key: string): string | null;
 }
 
+/** The 3D view rendering style (docs/15 §7.5). */
+export type View3DStyle = "technical" | "design";
+
 let messageRegistry: MessageRegistry | null = null;
 
 export function setMessageRegistry(registry: MessageRegistry | null): void {
@@ -44,6 +47,7 @@ export class UserPreferences {
     DRAWING_MODE_ENABLED: "DRAWING_MODE_ENABLED",
     DEFAULT_FONT_NAME: "DEFAULT_FONT_NAME",
     FURNITURE_VIEWED_FROM_TOP: "FURNITURE_VIEWED_FROM_TOP",
+    VIEW_3D_STYLE: "VIEW_3D_STYLE",
     FURNITURE_MODEL_ICON_SIZE: "FURNITURE_MODEL_ICON_SIZE",
     ROOM_FLOOR_COLORED_OR_TEXTURED: "ROOM_FLOOR_COLORED_OR_TEXTURED",
     WALL_PATTERN: "WALL_PATTERN",
@@ -88,6 +92,8 @@ export class UserPreferences {
   private drawingModeEnabled = false;
   private defaultFontName = TextStyle.DEFAULT_FONT_NAME;
   private furnitureViewedFromTop = false;
+  /** 3D view style: "technical" (default) or "design" (PBR + GI). */
+  private view3DStyle: View3DStyle = "technical";
   private furnitureModelIconSize = 128;
   private roomFloorColoredOrTextured = true;
   private wallPattern: TextureImage | null = null;
@@ -122,13 +128,21 @@ export class UserPreferences {
 
   // The PropertyChangeSupport expects listener objects ({propertyChange}),
   // while this API exposes plain functions — wrap/unwrap transparently.
-  private readonly listenerWrappers = new Map<(evt: unknown) => void, { propertyChange: (evt: unknown) => void }>();
+  private readonly listenerWrappers = new Map<
+    (evt: unknown) => void,
+    { propertyChange: (evt: unknown) => void }
+  >();
 
   addPropertyChangeListener(listener: (evt: unknown) => void): void;
   addPropertyChangeListener(property: string, listener: (evt: unknown) => void): void;
-  addPropertyChangeListener(propertyOrListener: string | ((evt: unknown) => void), listener?: (evt: unknown) => void): void {
+  addPropertyChangeListener(
+    propertyOrListener: string | ((evt: unknown) => void),
+    listener?: (evt: unknown) => void,
+  ): void {
     if (typeof propertyOrListener === "string") {
-      this.propertyChangeSupport.addPropertyChangeListener(propertyOrListener, { propertyChange: (evt: unknown) => listener?.(evt) } as never);
+      this.propertyChangeSupport.addPropertyChangeListener(propertyOrListener, {
+        propertyChange: (evt: unknown) => listener?.(evt),
+      } as never);
     } else {
       const wrapper = { propertyChange: (evt: unknown) => propertyOrListener(evt) };
       this.listenerWrappers.set(propertyOrListener, wrapper);
@@ -138,9 +152,14 @@ export class UserPreferences {
 
   removePropertyChangeListener(listener: (evt: unknown) => void): void;
   removePropertyChangeListener(property: string, listener: (evt: unknown) => void): void;
-  removePropertyChangeListener(propertyOrListener: string | ((evt: unknown) => void), listener?: (evt: unknown) => void): void {
+  removePropertyChangeListener(
+    propertyOrListener: string | ((evt: unknown) => void),
+    listener?: (evt: unknown) => void,
+  ): void {
     if (typeof propertyOrListener === "string") {
-      this.propertyChangeSupport.removePropertyChangeListener(propertyOrListener, { propertyChange: (evt: unknown) => listener?.(evt) } as never);
+      this.propertyChangeSupport.removePropertyChangeListener(propertyOrListener, {
+        propertyChange: (evt: unknown) => listener?.(evt),
+      } as never);
     } else {
       const wrapper = this.listenerWrappers.get(propertyOrListener);
       if (wrapper !== undefined) {
@@ -195,7 +214,35 @@ export class UserPreferences {
   }
 
   getDefaultSupportedLanguages(): string[] {
-    return ["en", "fr", "de", "es", "it", "pt", "nl", "sv", "pl", "cs", "ru", "ja", "zh_CN", "zh_TW", "tr", "el", "hu", "ro", "bg", "uk", "hr", "fi", "nb", "da", "ko", "vi", "ar"];
+    return [
+      "en",
+      "fr",
+      "de",
+      "es",
+      "it",
+      "pt",
+      "nl",
+      "sv",
+      "pl",
+      "cs",
+      "ru",
+      "ja",
+      "zh_CN",
+      "zh_TW",
+      "tr",
+      "el",
+      "hu",
+      "ro",
+      "bg",
+      "uk",
+      "hr",
+      "fi",
+      "nb",
+      "da",
+      "ko",
+      "vi",
+      "ar",
+    ];
   }
 
   getSupportedLanguages(): string[] {
@@ -206,7 +253,11 @@ export class UserPreferences {
     if (supportedLanguages !== this.supportedLanguages) {
       const oldSupportedLanguages = this.supportedLanguages;
       this.supportedLanguages = [...supportedLanguages];
-      this.fire(UserPreferences.Property.SUPPORTED_LANGUAGES, oldSupportedLanguages, supportedLanguages);
+      this.fire(
+        UserPreferences.Property.SUPPORTED_LANGUAGES,
+        oldSupportedLanguages,
+        supportedLanguages,
+      );
     }
   }
 
@@ -266,7 +317,11 @@ export class UserPreferences {
     if (valueAddedTaxPercentage !== this.defaultValueAddedTaxPercentage) {
       const oldValue = this.defaultValueAddedTaxPercentage;
       this.defaultValueAddedTaxPercentage = valueAddedTaxPercentage;
-      this.fire(UserPreferences.Property.DEFAULT_VALUE_ADDED_TAX_PERCENTAGE, oldValue, valueAddedTaxPercentage);
+      this.fire(
+        UserPreferences.Property.DEFAULT_VALUE_ADDED_TAX_PERCENTAGE,
+        oldValue,
+        valueAddedTaxPercentage,
+      );
     }
   }
 
@@ -278,7 +333,11 @@ export class UserPreferences {
     if (furnitureCatalogViewedInTree !== this.furnitureCatalogViewedInTree) {
       const oldValue = this.furnitureCatalogViewedInTree;
       this.furnitureCatalogViewedInTree = furnitureCatalogViewedInTree;
-      this.fire(UserPreferences.Property.FURNITURE_CATALOG_VIEWED_IN_TREE, oldValue, furnitureCatalogViewedInTree);
+      this.fire(
+        UserPreferences.Property.FURNITURE_CATALOG_VIEWED_IN_TREE,
+        oldValue,
+        furnitureCatalogViewedInTree,
+      );
     }
   }
 
@@ -290,7 +349,11 @@ export class UserPreferences {
     if (navigationPanelVisible !== this.navigationPanelVisible) {
       const oldValue = this.navigationPanelVisible;
       this.navigationPanelVisible = navigationPanelVisible;
-      this.fire(UserPreferences.Property.NAVIGATION_PANEL_VISIBLE, oldValue, navigationPanelVisible);
+      this.fire(
+        UserPreferences.Property.NAVIGATION_PANEL_VISIBLE,
+        oldValue,
+        navigationPanelVisible,
+      );
     }
   }
 
@@ -310,7 +373,11 @@ export class UserPreferences {
     if (enabled !== this.aerialViewCenteredOnSelectionEnabled) {
       const oldValue = this.aerialViewCenteredOnSelectionEnabled;
       this.aerialViewCenteredOnSelectionEnabled = enabled;
-      this.fire(UserPreferences.Property.AERIAL_VIEW_CENTERED_ON_SELECTION_ENABLED, oldValue, enabled);
+      this.fire(
+        UserPreferences.Property.AERIAL_VIEW_CENTERED_ON_SELECTION_ENABLED,
+        oldValue,
+        enabled,
+      );
     }
   }
 
@@ -380,6 +447,18 @@ export class UserPreferences {
 
   setFurnitureViewedFromTop(furnitureViewedFromTop: boolean): void {
     this.furnitureViewedFromTop = furnitureViewedFromTop;
+  }
+
+  getView3DStyle(): View3DStyle {
+    return this.view3DStyle;
+  }
+
+  setView3DStyle(view3DStyle: View3DStyle): void {
+    if (view3DStyle !== this.view3DStyle) {
+      const oldValue = this.view3DStyle;
+      this.view3DStyle = view3DStyle;
+      this.fire(UserPreferences.Property.VIEW_3D_STYLE, oldValue, view3DStyle);
+    }
   }
 
   getFurnitureModelIconSize(): number {

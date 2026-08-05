@@ -58,25 +58,48 @@ export function colorToThree(color: number | null): THREE.Color {
 export class MaterialCache {
   private readonly materials = new Map<string, THREE.Material>();
 
+  /**
+   * When true, getMaterial returns MeshPhysicalMaterial (Design style): a
+   * physically-based GGX BRDF with energy-conserving specular and the base
+   * class for clearcoat/transmission/sheen surfaces. Default false keeps the
+   * Technical look (and the Java golden renders) unchanged.
+   */
+  physical = false;
+
   /** Returns a shared material for the given key (Java getMaterial). */
   getMaterial(key: MaterialKey): THREE.MeshStandardMaterial {
-    const id = materialKeyString(key);
+    const id = (this.physical ? "physical|" : "standard|") + materialKeyString(key);
     let material = this.materials.get(id) as THREE.MeshStandardMaterial | undefined;
     if (material === undefined) {
-      const hasAlpha = key.diffuseColor !== null && (key.diffuseColor >>> 0) > 0xffffff;
+      const hasAlpha = key.diffuseColor !== null && key.diffuseColor >>> 0 > 0xffffff;
       const alpha = hasAlpha ? ((key.diffuseColor! >>> 24) & 0xff) / 255 : 1;
-      material = new THREE.MeshStandardMaterial({
-        color: colorToThree(key.diffuseColor),
-        emissive: colorToThree(key.ambientColor),
-        roughness: key.shininess === 0 ? 1 : Math.max(0, 1 - key.shininess / 128),
-        metalness: 0,
-        transparent: alpha < 1 || key.opacity < 1,
-        opacity: Math.min(alpha, key.opacity),
-        side: key.doubleSided ? THREE.DoubleSide : THREE.FrontSide,
-        polygonOffset: key.polygonOffset !== undefined,
-        polygonOffsetFactor: key.polygonOffset ?? 0,
-        polygonOffsetUnits: key.polygonOffset ?? 0,
-      });
+      if (this.physical) {
+        material = new THREE.MeshPhysicalMaterial({
+          color: colorToThree(key.diffuseColor),
+          emissive: colorToThree(key.ambientColor),
+          roughness: key.shininess === 0 ? 1 : Math.max(0, 1 - key.shininess / 128),
+          metalness: 0,
+          transparent: alpha < 1 || key.opacity < 1,
+          opacity: Math.min(alpha, key.opacity),
+          side: key.doubleSided ? THREE.DoubleSide : THREE.FrontSide,
+          polygonOffset: key.polygonOffset !== undefined,
+          polygonOffsetFactor: key.polygonOffset ?? 0,
+          polygonOffsetUnits: key.polygonOffset ?? 0,
+        });
+      } else {
+        material = new THREE.MeshStandardMaterial({
+          color: colorToThree(key.diffuseColor),
+          emissive: colorToThree(key.ambientColor),
+          roughness: key.shininess === 0 ? 1 : Math.max(0, 1 - key.shininess / 128),
+          metalness: 0,
+          transparent: alpha < 1 || key.opacity < 1,
+          opacity: Math.min(alpha, key.opacity),
+          side: key.doubleSided ? THREE.DoubleSide : THREE.FrontSide,
+          polygonOffset: key.polygonOffset !== undefined,
+          polygonOffsetFactor: key.polygonOffset ?? 0,
+          polygonOffsetUnits: key.polygonOffset ?? 0,
+        });
+      }
       this.materials.set(id, material);
     }
     return material;
@@ -151,22 +174,24 @@ export class TextureCache {
     if (!this.loading.has(url)) {
       const promise = this.loadTexture(source);
       this.loading.set(url, promise);
-      promise.then((texture) => {
-        this.loading.delete(url);
-        if (texture !== null) {
-          this.textures.set(url, texture);
-        }
-        const set = this.observers.get(url);
-        if (set !== undefined) {
-          for (const observer of set) {
-            observer(texture);
+      promise
+        .then((texture) => {
+          this.loading.delete(url);
+          if (texture !== null) {
+            this.textures.set(url, texture);
           }
-          set.clear();
-          this.observers.delete(url);
-        }
-      }).catch(() => {
-        this.loading.delete(url);
-      });
+          const set = this.observers.get(url);
+          if (set !== undefined) {
+            for (const observer of set) {
+              observer(texture);
+            }
+            set.clear();
+            this.observers.delete(url);
+          }
+        })
+        .catch(() => {
+          this.loading.delete(url);
+        });
     }
     let set = this.observers.get(url);
     if (set === undefined) {
@@ -217,7 +242,10 @@ export class TextureCache {
   }
 }
 
-function bitmapToCanvas(bitmap: ImageBitmap, canvasFactory: () => HTMLCanvasElement): HTMLCanvasElement {
+function bitmapToCanvas(
+  bitmap: ImageBitmap,
+  canvasFactory: () => HTMLCanvasElement,
+): HTMLCanvasElement {
   const canvas = canvasFactory();
   canvas.width = bitmap.width;
   canvas.height = bitmap.height;
@@ -240,7 +268,12 @@ export interface HomeTextureAttributes {
 }
 
 /** Applies a HomeTexture's transform to a Three.js texture (Java TextureAttributes). */
-export function applyHomeTextureAttributes(texture: THREE.Texture, homeTexture: HomeTexture, width: number, depth: number): void {
+export function applyHomeTextureAttributes(
+  texture: THREE.Texture,
+  homeTexture: HomeTexture,
+  width: number,
+  depth: number,
+): void {
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
   const scale = homeTexture.getScale();

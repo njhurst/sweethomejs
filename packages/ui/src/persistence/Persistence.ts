@@ -23,7 +23,7 @@
  * for preferences, home documents and autosave recovery on top of
  * IndexedDBStore.
  */
-import type { UserPreferences, LengthUnit } from "@sweethomejs/core";
+import type { UserPreferences, LengthUnit, View3DStyle } from "@sweethomejs/core";
 import { IndexedDBStore, type DocumentRecord, type RecoveryRecord } from "./IndexedDBStore.js";
 
 export interface PreferencesSnapshot {
@@ -33,6 +33,7 @@ export interface PreferencesSnapshot {
   rulersVisible: boolean;
   gridVisible: boolean;
   furnitureViewedFromTop: boolean;
+  view3DStyle: View3DStyle;
   savedAt: number;
 }
 
@@ -45,6 +46,7 @@ export function snapshotPreferences(preferences: UserPreferences): PreferencesSn
     rulersVisible: preferences.isRulersVisible(),
     gridVisible: preferences.isGridVisible(),
     furnitureViewedFromTop: preferences.isFurnitureViewedFromTop(),
+    view3DStyle: preferences.getView3DStyle(),
     savedAt: Date.now(),
   };
 }
