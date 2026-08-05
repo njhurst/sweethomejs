@@ -30,3 +30,8 @@ test/unit/fixtures/float-corpus.txt
 # someone else's real home — must not be committed
 apps/web/public/fixtures/58-anderson.sh3d
 apps/web/dist/fixtures/58-anderson.sh3d
+
+# SRE skill artifacts (local diagnostics, not project source)
+SRE.md
+DESIGN_REVIEW.md
+sre/
