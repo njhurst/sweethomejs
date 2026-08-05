@@ -388,6 +388,41 @@ Honest framing: browser real-time GI (Tiers 1/3) is **good architectural
 preview** — viz-final quality is the **baked** Tier-2 path. Both are cheap to
 reach because they consume the same scene intermediate.
 
+### 7.5 3D view styles (user-facing design decision)
+
+Two styles, not more — the interaction→presentation spectrum for an
+architectural tool is covered by:
+
+| Style | Purpose | Pipeline | Perf target (typical browser) |
+| --- | --- | --- | --- |
+| **Technical** (default) | floor planning, layout checks, editing | the *current* renderer: basic PBR materials + textures, sun shadows, ACES tone mapping — no GI/AO/post | 60 fps on any device; already inside the task-9.5 budget |
+| **Design** | material/lighting evaluation, presentation | `MeshPhysicalMaterial` + IBL env + per-room `LightProbe` GI + `GTAO` (+ optional SSR/bloom; WebGPU SSGI where available) | 30–60 fps on integrated GPUs at 1080p with quality knobs; full SSGI targets discrete GPUs |
+
+- **Default = Technical** keeps the Java golden-parity 3D tests (task 6.8)
+  intact; Design is additive and gets its own tolerance tests.
+- **Knobs, not more styles**: within Design, a small quality set — resolution
+  scale, shadow size, GI mode (env-only → per-room probes → SSGI), post
+  on/off — adapts to the device. This is the same continuum the photo
+  renderer already models (`PhotoQuality` LOW/HIGH), and it is what makes
+  "high speed in typical browsers" honest rather than aspirational.
+- **No third style needed**: the photo renderer (stills) already covers
+  "final image" beyond the interactive view, and the 2D plan covers pure
+  drafting.
+- **UI**: 3D view menu → *View style* (Technical / Design), persisted in
+  `UserPreferences` like grid/rulers; quick toggles within a style (sky /
+  ground / textures / lights — matching SH3D's 3D-view toggles).
+- **Both styles consume the same geometry** (shared scene intermediate): the
+  switch is a pipeline reconfiguration (material-cache variant + lights +
+  composer), not a rebuild — instant, and the photo renderer can reuse either
+  style's pipeline (Design by default for photos).
+
+Perf reality-check on integrated GPUs (Intel Iris / Apple M1 / mid Android):
+Technical is trivial; Design-at-medium costs roughly one-time PMREM + 4–8
+light probes (one cube render each, async at load, progressive reveal) +
+GTAO at half-res + 1024px shadows — on the order of 2–4 ms/frame over
+Technical. Design-at-full (SSGI + SSR on WebGPU) is discrete-GPU territory;
+the knobs keep it usable on integrated parts.
+
 ## 8. Testing and parity
 
 | Test | Method | Gate |
