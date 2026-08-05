@@ -1,0 +1,25 @@
+#Produced by Art of Illusion 2.7.1, Tue Jun 01 12:20:55 EDT 2010
+newmtl wood1
+Kd 1 1 1
+map_Kd 2DoorUpperCabinet3.jpg
+Ks 0 0 0
+Ka 0 0 0
+illum 1
+newmtl Woodenhandle
+Kd 1 1 1
+map_Kd 2DoorUpperCabinet1.jpg
+Ks 0 0 0
+Ka 0 0 0
+illum 1
+newmtl brass
+Kd 0.756 0.66286 0.42336
+Ks 0.5 0.466 0.4
+Ka 0 0 0
+illum 2
+Ns 103
+newmtl wood
+Kd 1 1 1
+map_Kd 2DoorUpperCabinet2.jpg
+Ks 0 0 0
+Ka 0 0 0
+illum 1

@@ -13,7 +13,7 @@ function fixtureBytes(rel: string): Uint8Array {
 
 describe("Sh3dContainer (task 3.1)", () => {
   it("opens the 2019 user home and sees its entries", async () => {
-    const container = await Sh3dContainer.open(fixtureBytes("examples/ls_2819.sh3d"));
+    const container = await Sh3dContainer.open(fixtureBytes("test/fixtures/dream_house.sh3d"));
     expect(container.hasEntry(HOME_ENTRY)).toBe(true);
     expect(container.hasEntry(HOME_XML_ENTRY)).toBe(true);
     expect(container.hasEntry(CONTENT_DIGESTS_ENTRY)).toBe(true);
@@ -26,13 +26,13 @@ describe("Sh3dContainer (task 3.1)", () => {
   });
 
   it("inflates entries byte-identically to the stored bytes", async () => {
-    const container = await Sh3dContainer.open(fixtureBytes("examples/ls_2819.sh3d"));
+    const container = await Sh3dContainer.open(fixtureBytes("test/fixtures/dream_house.sh3d"));
     const homeXml = await container.getEntry(HOME_XML_ENTRY);
     const home = await container.getEntry(HOME_ENTRY);
     const digests = await container.getEntry(CONTENT_DIGESTS_ENTRY);
     expect(homeXml).toBeDefined();
-    expect(homeXml!.length).toBe(98557);
-    expect(home!.length).toBe(98804);
+    expect(homeXml!.length).toBe(96558);
+    expect(home!.length).toBe(98808);
     expect(digests!.length).toBe(6979);
     // Content entries inflate too.
     const model = await container.getEntry("3/window-01.obj");
@@ -41,9 +41,9 @@ describe("Sh3dContainer (task 3.1)", () => {
   });
 
   it("lazy container does not decompress entries until asked", async () => {
-    const container = await Sh3dContainer.open(fixtureBytes("examples/ls_2819.sh3d"));
+    const container = await Sh3dContainer.open(fixtureBytes("test/fixtures/dream_house.sh3d"));
     // Opening must not have inflated any entry (sizes known, bytes deferred).
-    expect(container.getEntrySize("Home.xml")).toBe(98557);
+    expect(container.getEntrySize("Home.xml")).toBe(96558);
     expect(container.getEntrySize("11/water.obj")).toBe(913153);
   });
 

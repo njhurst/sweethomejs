@@ -20,7 +20,7 @@
 
 /**
  * CSV export (task 8.8): the furniture list as a delimited table matching
- * the format of Java's export (see examples/ls_2819.csv — tab-separated
+ * the format of Java's export (see test/fixtures/dream_house.csv — tab-separated
  * Name, Width, Depth, Height, Visible; sizes formatted in the length unit
  * with up to 3 decimals like Java's DECIMALS formats).
  */
@@ -66,7 +66,7 @@ export function escapeCsvField(field: string, separator: string): string {
 
 /**
  * Exports the home's furniture list as a delimited table. The default
- * separator is a tab (matching examples/ls_2819.csv); the header is
+ * separator is a tab (matching test/fixtures/dream_house.csv); the header is
  * Name, Width, Depth, Height, Visible.
  */
 export function exportFurnitureCsv(

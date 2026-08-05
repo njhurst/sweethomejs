@@ -147,7 +147,7 @@ describe("Perf budget (task 6.8)", () => {
     const path = await import("node:path");
     const __dirname = path.dirname(new URL(import.meta.url).pathname);
     const recorder = new HomeFileRecorder();
-    const { home } = await recorder.readHomeFromZip(new Uint8Array(fs.readFileSync(path.join(__dirname, "../../../examples/ls_2819.sh3d"))));
+    const { home } = await recorder.readHomeFromZip(new Uint8Array(fs.readFileSync(path.join(__dirname, "../../../test/fixtures/dream_house.sh3d"))));
     home.setSelectedLevel(null);
     const start = performance.now();
     // A stub loader avoids network/ProgressEvent in the Node test env

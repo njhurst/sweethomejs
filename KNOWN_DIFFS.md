@@ -47,7 +47,7 @@ font metrics; golden plan tests mask text regions (docs/12-testing-and-parity.md
 
 ## Golden plan image (task 5.7)
 
-- Our pipeline renders the ls_2819 plan with a **~19% pixel-diff ratio** vs the
+- Our pipeline renders the dream_house plan with a **~19% pixel-diff ratio** vs the
   Java golden PNG (tolerance 35%). The delta is expected:
   - furniture top-view icons render as placeholders (3D icon rendering lands
     with render3d, P5);

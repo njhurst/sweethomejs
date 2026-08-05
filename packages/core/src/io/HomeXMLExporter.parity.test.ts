@@ -1,6 +1,6 @@
 /**
  * HomeXMLExporter round-trip parity (task 3.3): reads the Java-written
- * ls_2819 Home.xml, writes it back with the exporter, and verifies the
+ * dream_house Home.xml, writes it back with the exporter, and verifies the
  * structure matches the original (modulo the version bump Java also applies
  * on save).
  */
@@ -78,7 +78,7 @@ function xmlString(xml: string): string {
 
 describe("HomeXMLExporter round-trip (task 3.3)", () => {
   it("round-trips the 2019 user home stably (read→write→read is a fixpoint)", async () => {
-    const container = Sh3dContainer.open(fixtureBytes("examples/ls_2819.sh3d"));
+    const container = Sh3dContainer.open(fixtureBytes("test/fixtures/dream_house.sh3d"));
     const originalXml = new TextDecoder().decode((await container.getEntry("Home.xml"))!);
     const home = readHomeXml(originalXml, null, new HomeContentContext(container));
     const written = writeHome(home, container);

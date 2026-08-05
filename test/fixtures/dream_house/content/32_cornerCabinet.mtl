@@ -1,0 +1,13 @@
+#Produced by Art of Illusion 2.7.1, Wed Jun 02 14:41:00 EDT 2010
+newmtl marble2
+Kd 1 1 1
+map_Kd cornerCabinet2.jpg
+Ks 0 0 0
+Ka 0 0 0
+illum 1
+newmtl wood
+Kd 1 1 1
+map_Kd cornerCabinet1.jpg
+Ks 0 0 0
+Ka 0 0 0
+illum 1

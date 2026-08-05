@@ -88,7 +88,7 @@ function readFixtureHome(fixtureRel: string): Home {
 }
 
 const FIELD_FIXTURES: Array<{ sh3d: string; dump: string }> = [
-  { sh3d: "examples/ls_2819.sh3d", dump: "test/fixtures/ls_2819/home.dump.json" },
+  { sh3d: "test/fixtures/dream_house.sh3d", dump: "test/fixtures/dream_house/home.dump.json" },
   { sh3d: "test/fixtures/generated/walls.sh3d", dump: "test/fixtures/dumps/walls/home.dump.json" },
   { sh3d: "test/fixtures/generated/rooms.sh3d", dump: "test/fixtures/dumps/rooms/home.dump.json" },
   { sh3d: "test/fixtures/generated/furniture.sh3d", dump: "test/fixtures/dumps/furniture/home.dump.json" },
@@ -347,7 +347,7 @@ describe("Round-trip identity across fixtures (task 3.8)", () => {
     "test/fixtures/generated/dimensions-labels.sh3d",
     "test/fixtures/generated/cameras.sh3d",
     "test/fixtures/generated/environment.sh3d",
-    "examples/ls_2819.sh3d",
+    "test/fixtures/dream_house.sh3d",
   ];
 
   it("preserves wall/furniture/level geometry and counts after read→write→read", async () => {
@@ -395,7 +395,7 @@ describe("Round-trip identity across fixtures (task 3.8)", () => {
 describe("writeHome entry-name order (task 3.8)", () => {
   it("writes Home.xml, ContentDigests, then content entries (Java order)", async () => {
     const recorder = new HomeFileRecorder();
-    const home = readFixtureHome("examples/ls_2819.sh3d");
+    const home = readFixtureHome("test/fixtures/dream_house.sh3d");
     const written = await recorder.writeHome(home);
     const container = Sh3dContainer.open(written);
     const names = container.getEntryNames();

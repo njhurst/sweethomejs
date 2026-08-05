@@ -1,5 +1,5 @@
 /**
- * HomeXMLHandler parity (task 3.2): reads the real ls_2819 Home.xml (from the
+ * HomeXMLHandler parity (task 3.2): reads the real dream_house Home.xml (from the
  * Java-written .sh3d) and verifies the parsed Home matches the Java field
  * dump (counts, ids, geometry).
  */
@@ -21,7 +21,7 @@ function fixtureBytes(rel: string): Uint8Array {
 
 describe("HomeXMLHandler parity (task 3.2)", () => {
   it("parses the 2019 user home identically to the Java dump", async () => {
-    const container = Sh3dContainer.open(fixtureBytes("examples/ls_2819.sh3d"));
+    const container = Sh3dContainer.open(fixtureBytes("test/fixtures/dream_house.sh3d"));
     const xml = new TextDecoder().decode((await container.getEntry("Home.xml"))!);
     const home = readHomeXml(xml, null, new HomeContentContext(container));
 
@@ -31,7 +31,7 @@ describe("HomeXMLHandler parity (task 3.2)", () => {
     expect(home.getRooms().length).toBe(15);
     expect(home.getLevels().length).toBe(6);
     expect(home.getDimensionLines().length).toBe(10);
-    expect(home.getName()).toBe("ls_2819.sh3d");
+    expect(home.getName()).toBe("dream_house.sh3d");
     expect(home.getVersion()).toBe(6000);
 
     // Wall geometry matches the dump (wall0 points)

@@ -13,7 +13,7 @@ import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 
 async function main() {
-  const dumpPath = process.argv[2] ?? "test/fixtures/ls_2819/home.dump.json";
+  const dumpPath = process.argv[2] ?? "test/fixtures/dream_house/home.dump.json";
   const dump = JSON.parse(readFileSync(dumpPath, "utf8"));
   const home = dump["home"];
 

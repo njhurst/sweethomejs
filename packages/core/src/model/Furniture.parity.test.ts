@@ -125,7 +125,7 @@ function assertFurnitureParity(dumpPath: string): void {
 
 describe("Furniture parity (task 2.4)", () => {
   it("matches Java getPoints() for the 2019 user home furniture (152 pieces incl. doors/windows)", () => {
-    assertFurnitureParity("test/fixtures/ls_2819/home.dump.json");
+    assertFurnitureParity("test/fixtures/dream_house/home.dump.json");
   });
 
   it("matches Java getPoints() for the generated furniture fixture (rotated/mirrored pieces + group)", () => {

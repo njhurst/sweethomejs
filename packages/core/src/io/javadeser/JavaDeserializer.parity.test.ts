@@ -24,7 +24,7 @@ function fixtureBytes(rel: string): Uint8Array {
 
 describe("Legacy serialized Home deserializer (task 3.4)", () => {
   it("decodes the 2019 user home's serialized Home entry", async () => {
-    const container = Sh3dContainer.open(fixtureBytes("examples/ls_2819.sh3d"));
+    const container = Sh3dContainer.open(fixtureBytes("test/fixtures/dream_house.sh3d"));
     const homeEntry = (await container.getEntry("Home"))!;
     const { root } = new JavaObjectDecoder(homeEntry).decode();
     const home = new HomeDecoder().decodeHome(root);
@@ -34,7 +34,7 @@ describe("Legacy serialized Home deserializer (task 3.4)", () => {
     expect(home.getRooms().length).toBe(15);
     expect(home.getLevels().length).toBe(6);
     expect(home.getDimensionLines().length).toBe(10);
-    expect(home.getName()).toBe("ls_2819.sh3d");
+    expect(home.getName()).toBe("dream_house.sh3d");
     expect(home.getVersion()).toBe(6000);
 
     // Walls carry UUID ids (serialized entry) with connections resolved

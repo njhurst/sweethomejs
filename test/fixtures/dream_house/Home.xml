@@ -1,0 +1,733 @@
+<?xml version='1.0'?>
+<home version='6000' name='ls_2819.sh3d' camera='observerCamera' selectedLevel='level3' wallHeight='236.22' basePlanLocked='true' furnitureSortedProperty='NAME'>
+  <property name='com.eteks.sweethome3d.SweetHome3D.CatalogPaneDividerLocation' value='1311'/>
+  <property name='com.eteks.sweethome3d.SweetHome3D.ColumnWidths' value='15,15,15,15,15'/>
+  <property name='com.eteks.sweethome3d.SweetHome3D.ExpandedGroups' value=''/>
+  <property name='com.eteks.sweethome3d.SweetHome3D.FrameHeight' value='1130'/>
+  <property name='com.eteks.sweethome3d.SweetHome3D.FrameMaximized' value='true'/>
+  <property name='com.eteks.sweethome3d.SweetHome3D.FrameWidth' value='1689'/>
+  <property name='com.eteks.sweethome3d.SweetHome3D.FrameX' value='132'/>
+  <property name='com.eteks.sweethome3d.SweetHome3D.FrameY' value='147'/>
+  <property name='com.eteks.sweethome3d.SweetHome3D.FurnitureViewportY' value='0'/>
+  <property name='com.eteks.sweethome3d.SweetHome3D.MainPaneDividerLocation' value='151'/>
+  <property name='com.eteks.sweethome3d.SweetHome3D.PlanPaneDividerLocation' value='541'/>
+  <property name='com.eteks.sweethome3d.SweetHome3D.PlanScale' value='1.0817966'/>
+  <property name='com.eteks.sweethome3d.SweetHome3D.PlanViewportX' value='57'/>
+  <property name='com.eteks.sweethome3d.SweetHome3D.PlanViewportY' value='258'/>
+  <property name='com.eteks.sweethome3d.SweetHome3D.ScreenHeight' value='1413'/>
+  <property name='com.eteks.sweethome3d.SweetHome3D.ScreenWidth' value='2488'/>
+  <property name='com.eteks.sweethome3d.swing.HomeComponent3D.detachedView' value='false'/>
+  <property name='com.eteks.sweethome3d.swing.HomeComponent3D.detachedViewDividerLocation' value='0.6475038'/>
+  <property name='com.eteks.sweethome3d.swing.HomeComponent3D.detachedViewHeight' value='1251'/>
+  <property name='com.eteks.sweethome3d.swing.HomeComponent3D.detachedViewWidth' value='1889'/>
+  <property name='com.eteks.sweethome3d.swing.HomeComponent3D.detachedViewX' value='242'/>
+  <property name='com.eteks.sweethome3d.swing.HomeComponent3D.detachedViewY' value='189'/>
+  <property name='com.eteks.sweethome3d.swing.PhotoPanel.PhotoDialogX' value='1928'/>
+  <property name='com.eteks.sweethome3d.swing.PhotoPanel.PhotoDialogY' value='297'/>
+  <furnitureVisibleProperty name='NAME'/>
+  <furnitureVisibleProperty name='WIDTH'/>
+  <furnitureVisibleProperty name='DEPTH'/>
+  <furnitureVisibleProperty name='HEIGHT'/>
+  <furnitureVisibleProperty name='VISIBLE'/>
+  <environment groundColor='00A8A8A8' skyColor='00CCE4FC' lightColor='00D0D0D0' allLevelsVisible='true' ceillingLightColor='00000000' photoWidth='1024' photoHeight='576' photoAspectRatio='RATIO_16_9' photoQuality='3' videoWidth='320' videoAspectRatio='RATIO_4_3' videoQuality='0' videoFrameRate='25'/>
+  <compass x='-100.0' y='50.0' diameter='100.0' northDirection='0.0' longitude='-2.149082' latitude='0.82030475' timeZone='America/Vancouver'/>
+  <observerCamera attribute='observerCamera' lens='PINHOLE' x='314.90588' y='290.638' z='430.2443' yaw='29.893436' pitch='0.075796805' fieldOfView='1.5707964' time='1575720000147' fixedSize='true'/>
+  <camera attribute='topCamera' lens='PINHOLE' x='-2568.5066' y='1305.3171' z='459.49243' yaw='-14.393593' pitch='0.005' fieldOfView='1.0995575' time='1370174400167'/>
+  <level id='level0' name='basement' elevation='0.0' floorThickness='12.0' height='304.8' elevationIndex='1'/>
+  <level id='level1' name='crawlspace' elevation='0.0' floorThickness='12.0' height='152.4' elevationIndex='2'/>
+  <level id='level2' name='greenhouse' elevation='152.4' floorThickness='20.32' height='457.19998' elevationIndex='0'/>
+  <level id='level3' name='main' elevation='304.8' floorThickness='30.48' height='284.48' elevationIndex='0'/>
+  <level id='level4' name='top' elevation='609.6' floorThickness='20.32' height='236.22' elevationIndex='0'/>
+  <level id='level5' name='attic' elevation='855.98' floorThickness='12.0' height='60.96' elevationIndex='0'/>
+  <doorOrWindow level='level4' catalogId='eTeks#doorFrame' name='Door frame' model='1' icon='0' x='483.69727' y='341.81726' angle='3.1415927' width='91.44' depth='16.086916' height='208.5975' modelSize='1775' movable='false' wallThickness='0.7894737' wallDistance='0.10526316' cutOutShape='M0,0 v1 h1 v-1 z'/>
+  <doorOrWindow level='level4' catalogId='eTeks#doorFrame' name='Door frame' model='1' icon='0' x='601.9216' y='342.8279' angle='3.1415927' width='76.2' depth='16.087416' height='208.5975' modelSize='1775' movable='false' wallThickness='0.7894737' wallDistance='0.10526316' cutOutShape='M0,0 v1 h1 v-1 z'/>
+  <doorOrWindow level='level4' catalogId='eTeks#doorFrame' name='Door frame' model='1' icon='0' x='568.9059' y='449.371' angle='1.7484555E-7' width='91.44' depth='14.478749' height='208.5975' modelSize='1775' movable='false' wallThickness='0.7894737' wallDistance='0.10526316' cutOutShape='M0,0 v1 h1 v-1 z'/>
+  <doorOrWindow level='level4' catalogId='Kator Legaz#window-01' name='Double-hung window' model='3/window-01.obj' icon='2' x='590.7581' y='718.7478' elevation='93.0275' angle='3.1415927' width='55.245' depth='12.70025' height='127.9525' modelSize='21181' movable='false' cutOutShape='M0,0 v1 h1 v-1 z'/>
+  <doorOrWindow level='level4' catalogId='Kator Legaz#window-01' name='Double-hung window' model='3/window-01.obj' icon='2' x='880.28076' y='517.89795' elevation='93.0275' angle='1.5707964' width='55.245' depth='12.70025' height='127.9525' modelSize='21181' movable='false' cutOutShape='M0,0 v1 h1 v-1 z'/>
+  <doorOrWindow level='level4' catalogId='Kator Legaz#window-01' name='Double-hung window' model='3/window-01.obj' icon='2' x='709.5502' y='-5.152183' elevation='93.0275' width='55.245' depth='12.70025' height='127.9525' modelSize='21181' movable='false' cutOutShape='M0,0 v1 h1 v-1 z'/>
+  <doorOrWindow level='level4' catalogId='Kator Legaz#window-01' name='Double-hung window' model='3/window-01.obj' icon='2' x='880.28076' y='247.43391' elevation='93.0275' angle='1.5707964' width='55.245' depth='12.70025' height='127.9525' modelSize='21181' movable='false' cutOutShape='M0,0 v1 h1 v-1 z'/>
+  <doorOrWindow level='level4' catalogId='eTeks#fixedWindow85x123' name='Fixed window' model='5' icon='4' x='325.7009' y='-5.152183' elevation='143.51' width='152.4' depth='12.70025' height='76.2' modelSize='19161' movable='false' cutOutShape='M0,0 v1 h1 v-1 z'/>
+  <doorOrWindow level='level4' catalogId='Kator Legaz#window-01' name='Double-hung window' model='3/window-01.obj' icon='2' x='-90.59955' y='201.99142' elevation='93.0275' angle='4.712389' width='55.245' depth='12.70025' height='127.9525' modelSize='21181' movable='false' cutOutShape='M0,0 v1 h1 v-1 z'/>
+  <doorOrWindow level='level4' catalogId='eTeks#sliderWindow126x200' name='Slider window' model='7' icon='6' x='-90.09154' y='543.74036' elevation='91.44' angle='4.712389' width='132.08' depth='13.716249' height='121.92' modelSize='20685' movable='false' wallThickness='0.9259259' cutOutShape='M0,0 v1 h1 v-1 z'/>
+  <doorOrWindow level='level4' catalogId='Kator Legaz#window-01' name='Double-hung window' model='3/window-01.obj' icon='2' x='421.0552' y='718.7478' elevation='93.0275' angle='3.1415927' width='55.245' depth='12.70025' height='127.9525' modelSize='21181' movable='false' cutOutShape='M0,0 v1 h1 v-1 z'/>
+  <pieceOfFurniture level='level4' catalogId='eTeks#fittedBath' name='Fitted bath' model='9' icon='8' x='408.1259' y='673.8216' angle='3.1415927' width='178.1175' depth='77.1525' height='72.0725' modelRotation='0 0 -1 0 1 0 1 0 0' modelCenteredAtOrigin='false' modelSize='173063' movable='false'/>
+  <pieceOfFurniture level='level4' catalogId='LucaPresidente#water' name='Toilet unit' model='11/water.obj' icon='10' x='343.0847' y='593.66187' angle='4.712389' width='35.8775' depth='55.879997' height='45.4025' modelSize='913279'/>
+  <pieceOfFurniture level='level4' catalogId='eTeks#bed140x190' name='Bed 140x190' creator='eTeks' model='13' icon='12' x='663.59406' y='122.9373' angle='4.712389' width='158.11499' depth='207.9625' height='69.85' modelSize='285325'/>
+  <pieceOfFurniture level='level4' catalogId='eTeks#chest' name='Chest' creator='eTeks' model='15' icon='14' x='846.46704' y='51.20404' angle='1.5707964' width='100.0125' depth='54.927498' height='80.01' modelSize='84080'/>
+  <pieceOfFurniture level='level4' catalogId='eTeks#clothesWasher' name='Clothes washer' creator='eTeks' model='17' icon='16' x='346.57718' y='474.29483' angle='4.712389' width='60.0075' depth='62.864998' height='85.09' modelSize='47658'/>
+  <light level='level4' catalogId='eTeks#halogenLightSource' name='Halogen light source' creator='eTeks' model='19' icon='18' planIcon='20' x='589.16254' y='33.71051' elevation='220.0275' width='9.8425' depth='9.8425' height='9.8425' modelSize='1189' deformable='false' texturable='false' power='0.5'>
+    <lightSource x='0.5' y='0.5' z='0.5' color='00BBAF96' diameter='1.0'/>
+  </light>
+  <light level='level4' catalogId='eTeks#halogenLightSource' name='Halogen light source' creator='eTeks' model='19' icon='18' planIcon='20' x='591.4125' y='214.26729' elevation='220.0275' width='9.8425' depth='9.8425' height='9.8425' modelSize='1189' deformable='false' texturable='false' power='0.5'>
+    <lightSource x='0.5' y='0.5' z='0.5' color='00BBAF96' diameter='1.0'/>
+  </light>
+  <pieceOfFurniture level='level4' catalogId='GdB#armchair2' name='Armchair' creator='GdB' model='22' icon='21' x='409.96497' y='71.66112' width='67.945' depth='82.8675' height='100.0125' modelRotation='0 -1 0 0 0 1 -1 0 0' modelCenteredAtOrigin='false' modelSize='55696'/>
+  <pieceOfFurniture level='level4' catalogId='eTeks#bedsideTable' name='Bedside table' creator='eTeks' model='24' icon='23' x='578.6628' y='24.599972' angle='4.712389' width='38.1' depth='38.1' height='49.8475' modelSize='3953'/>
+  <pieceOfFurniture level='level4' catalogId='eTeks#bedsideTable' name='Bedside table' creator='eTeks' model='24' icon='23' x='578.6628' y='223.97884' angle='4.712389' width='38.1' depth='38.1' height='49.8475' modelSize='3953'/>
+  <pieceOfFurniture level='level4' catalogId='Icybones#armoire' name='Wardrobe' creator='Icybones' model='26' icon='25' x='847.5783' y='155.66154' angle='1.5707964' width='108.9025' depth='52.704998' height='200.3425' modelSize='34973'/>
+  <pieceOfFurniture level='level3' catalogId='Pencilart#3DrawerCabinet' name='Wood drawer cabinet' creator='Pencilart' model='28/3DrawerCabinet.obj' icon='27' x='844.4632' y='421.94525' angle='1.570796' width='52.704998' depth='64.135' height='86.042496' modelSize='283743'/>
+  <pieceOfFurniture level='level3' catalogId='Pencilart#3DrawerCabinet' name='Wood drawer cabinet' creator='Pencilart' model='28/3DrawerCabinet.obj' icon='27' x='844.4632' y='474.65027' angle='1.5707964' width='52.704998' depth='64.135' height='86.042496' modelSize='283743'/>
+  <pieceOfFurniture level='level3' catalogId='Pencilart#stove1' name='Stove' model='30/stove1.obj' icon='29' x='842.3237' y='538.46783' angle='1.5707964' width='74.93' depth='57.149998' depthInPlan='57.14999' height='104.14' modelSize='244633'/>
+  <pieceOfFurniture level='level3' catalogId='Pencilart#3DrawerCabinet' name='Wood drawer cabinet' creator='Pencilart' model='28/3DrawerCabinet.obj' icon='27' x='838.83124' y='602.28534' angle='1.5707964' width='52.704998' depth='64.135' height='86.042496' modelSize='283743'/>
+  <pieceOfFurniture level='level3' catalogId='Pencilart#cornerCabinet' name='Wood corner cabinet' creator='Pencilart' model='32/cornerCabinet.obj' icon='31' x='831.36993' y='669.47455' angle='3.1415927' width='79.057495' depth='78.104996' height='86.042496' modelSize='24741'/>
+  <pieceOfFurniture level='level3' catalogId='Pencilart#3DrawerCabinet' name='Wood drawer cabinet' creator='Pencilart' model='28/3DrawerCabinet.obj' icon='27' x='765.4887' y='677.2983' angle='3.1415927' width='52.704998' depth='64.135' height='86.042496' modelSize='283743'/>
+  <pieceOfFurniture level='level3' catalogId='eTeks#sink' name='Sink' model='34' icon='33' x='685.7962' y='677.2983' angle='3.1415927' width='106.68' depth='64.135' height='106.045' modelSize='597388' movable='false'/>
+  <pieceOfFurniture level='level3' catalogId='Pencilart#refridgerator' name='Refridgerator' model='36/refridgerator.obj' icon='35' x='838.355' y='357.33398' angle='1.5707964' width='76.5175' depth='65.0875' height='167.005' modelSize='16847'/>
+  <pieceOfFurniture level='level3' catalogId='Kator Legaz#filing-cabinet' name='Filing cabinet' creator='Kator Legaz' model='38/filing-cabinet.obj' icon='37' x='839.0' y='295.69476' angle='1.5707964' width='38.735' depth='63.5' height='198.12001' modelSize='18538'/>
+  <pieceOfFurniture level='level3' catalogId='Kator Legaz#filing-cabinet' name='Filing cabinet' creator='Kator Legaz' model='38/filing-cabinet.obj' icon='37' x='839.0' y='256.95975' angle='1.5707964' width='38.735' depth='63.5' height='198.12001' modelSize='18538'/>
+  <pieceOfFurniture level='level3' catalogId='Kator Legaz#filing-cabinet' name='Filing cabinet' creator='Kator Legaz' model='38/filing-cabinet.obj' icon='37' x='839.0' y='218.22475' angle='1.5707964' width='38.735' depth='63.5' height='198.12001' modelSize='18538'/>
+  <pieceOfFurniture level='level3' catalogId='Kator Legaz#filing-cabinet' name='Filing cabinet' creator='Kator Legaz' model='38/filing-cabinet.obj' icon='37' x='1295.7333' y='182.57834' angle='1.5707964' width='38.735' depth='52.704998' height='137.16' modelSize='18538'/>
+  <pieceOfFurniture level='level3' catalogId='Kator Legaz#filing-cabinet' name='Filing cabinet' creator='Kator Legaz' model='38/filing-cabinet.obj' icon='37' x='844.54626' y='23.597313' angle='1.5707964' width='38.735' depth='52.704998' height='68.58' modelSize='18538'/>
+  <pieceOfFurniture level='level3' catalogId='Kator Legaz#filing-cabinet' name='Filing cabinet' creator='Kator Legaz' model='38/filing-cabinet.obj' icon='37' x='1147.7456' y='13.336433' angle='1.5707964' width='53.34' depth='52.704998' height='182.88' modelSize='18538'/>
+  <doorOrWindow level='level3' catalogId='PeterSmolik#doorGlassPanels' name='Door glass' creator='Peter Smolik' model='40/doorGlassPanels.obj' icon='39' x='253.43658' y='-11.402183' angle='3.1415927' width='77.1525' depth='20.00075' height='205.73999' modelSize='1771301' dropOnTopElevation='-0.004861449' wallThickness='0.375' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'>
+    <sash xAxis='0.0' yAxis='0.0' width='1.0' startAngle='0.0' endAngle='-1.5707964'/>
+  </doorOrWindow>
+  <doorOrWindow level='level3' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='654.81006' y='-5.152183' elevation='78.74' angle='3.1415927' width='213.35999' depth='7.50075' height='152.4' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'/>
+  <doorOrWindow level='level3' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='75.228714' y='719.5716' elevation='25.4' angle='6.2865794E-8' width='91.44' depth='7.50075' height='203.20001' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'/>
+  <doorOrWindow level='level3' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='177.58086' y='719.5716' elevation='25.4' angle='6.2865794E-8' width='91.44' depth='7.50075' height='203.20001' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'/>
+  <doorOrWindow level='level3' catalogId='PeterSmolik#doorGlassPanels' name='Door glass' creator='Peter Smolik' model='40/doorGlassPanels.obj' icon='39' x='-28.294418' y='724.99774' angle='6.2865794E-8' width='77.1525' depth='20.00075' height='205.73999' modelSize='1771301' dropOnTopElevation='-0.004861449' wallThickness='0.375' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'>
+    <sash xAxis='0.0' yAxis='0.0' width='1.0' startAngle='0.0' endAngle='-1.5707964'/>
+  </doorOrWindow>
+  <doorOrWindow level='level4' catalogId='PeterSmolik#doorGlassPanels' name='Door glass' creator='Peter Smolik' model='40/doorGlassPanels.obj' icon='39' x='-28.294418' y='724.99774' angle='6.2865794E-8' width='91.44' depth='20.00075' height='205.73999' modelSize='1771301' dropOnTopElevation='-0.004861449' wallThickness='0.375' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'>
+    <sash xAxis='0.0' yAxis='0.0' width='1.0' startAngle='0.0' endAngle='-1.5707964'/>
+  </doorOrWindow>
+  <doorOrWindow level='level4' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='81.24434' y='718.7478' elevation='22.86' angle='3.1415927' width='91.44' depth='12.700749' height='203.20001' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'/>
+  <doorOrWindow level='level4' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='177.19466' y='718.7478' elevation='22.86' angle='3.1415927' width='91.44' depth='12.700749' height='203.20001' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'/>
+  <pieceOfFurniture level='level3' catalogId='eTeks#chair' name='Chair' creator='eTeks' model='43' icon='42' x='269.8141' y='665.91583' angle='3.1415932' width='40.005' depth='41.91' height='89.8525' modelSize='5576'/>
+  <pieceOfFurniture level='level3' catalogId='eTeks#chair' name='Chair' creator='eTeks' model='43' icon='42' x='209.13342' y='667.36053' angle='3.1415932' width='40.005' depth='41.91' height='89.8525' modelSize='5576'/>
+  <pieceOfFurniture level='level3' catalogId='eTeks#chair' name='Chair' creator='eTeks' model='43' icon='42' x='207.68866' y='569.1159' angle='1.335144E-5' width='40.005' depth='41.91' height='89.8525' modelSize='5576'/>
+  <pieceOfFurniture level='level3' catalogId='eTeks#chair' name='Chair' creator='eTeks' model='43' icon='42' x='266.92468' y='569.11615' angle='1.335144E-5' width='40.005' depth='41.91' height='89.8525' modelSize='5576'/>
+  <pieceOfFurniture level='level3' catalogId='Infernal-quack#tableCuisine' name='Table' creator='Infernal-quack' model='45' icon='44' x='227.12183' y='620.9865' angle='1.335144E-5' width='152.4' depth='91.44' height='87.9475' modelRotation='0 0 -1 0 1 0 1 0 0' modelCenteredAtOrigin='false' modelSize='357550'/>
+  <doorOrWindow level='level4' catalogId='Kator Legaz#window-01' name='Double-hung window' model='3/window-01.obj' icon='2' x='-90.599525' y='378.02704' elevation='93.0275' angle='1.5707964' width='55.245' depth='12.700749' height='127.9525' modelSize='21181' movable='false' cutOutShape='M0,0 v1 h1 v-1 z'/>
+  <doorOrWindow level='level4' catalogId='Kator Legaz#window-01' name='Double-hung window' model='3/window-01.obj' icon='2' x='-13.485627' y='-5.152183' elevation='93.0275' angle='3.1415927' width='55.245' depth='12.700749' height='127.9525' modelSize='21181' movable='false' cutOutShape='M0,0 v1 h1 v-1 z'/>
+  <pieceOfFurniture level='level3' catalogId='eTeks#toiletUnit' name='Toilet unit' creator='eTeks' model='47' icon='46' x='-15.368412' y='58.96662' angle='4.712389' width='40.005' depth='80.01' height='61.9125' modelSize='125874' movable='false' dropOnTopElevation='0.983871'/>
+  <pieceOfFurniture level='level3' catalogId='GdB#armchair2' name='Armchair' creator='GdB' model='22' icon='21' x='654.501' y='192.15933' angle='1.5707964' width='67.945' depth='82.8675' height='100.0125' modelRotation='0 -1 0 0 0 1 -1 0 0' modelCenteredAtOrigin='false' modelSize='55696'/>
+  <pieceOfFurniture level='level3' catalogId='GdB#armchair2' name='Armchair' creator='GdB' model='22' icon='21' x='670.33136' y='75.30974' angle='1.3089969' width='67.945' depth='82.8675' height='100.0125' modelRotation='0 -1 0 0 0 1 -1 0 0' modelCenteredAtOrigin='false' modelSize='55696'/>
+  <pieceOfFurniture level='level3' catalogId='GdB#armchair2' name='Armchair' creator='GdB' model='22' icon='21' x='422.74017' y='57.550087' angle='5.497787' width='67.945' depth='82.8675' height='100.0125' modelRotation='0 -1 0 0 0 1 -1 0 0' modelCenteredAtOrigin='false' modelSize='55696'/>
+  <pieceOfFurniture level='level3' catalogId='GdB#armchair2' name='Armchair' creator='GdB' model='22' icon='21' x='426.27408' y='201.29277' angle='4.4505897' width='67.945' depth='82.8675' height='100.0125' modelRotation='0 -1 0 0 0 1 -1 0 0' modelCenteredAtOrigin='false' modelSize='55696'/>
+  <pieceOfFurniture level='level3' catalogId='Pencilart#2DoorUpperCabinet' name='Wood upper cabinet' creator='Pencilart' model='49/2DoorUpperCabinet.obj' icon='48' x='845.54626' y='51.172325' elevation='182.88' angle='1.5707964' width='95.885' depth='52.704998' height='91.44' modelSize='185992'/>
+  <pieceOfFurniture level='level3' catalogId='Pencilart#2DoorUpperCabinet' name='Wood upper cabinet' creator='Pencilart' model='49/2DoorUpperCabinet.obj' icon='48' x='845.54626' y='147.05733' elevation='182.88' angle='1.5707964' width='95.885' depth='52.704998' height='91.44' modelSize='185992'/>
+  <pieceOfFurniture level='level3' catalogId='Pencilart#2DoorUpperCabinet' name='Wood upper cabinet' creator='Pencilart' model='49/2DoorUpperCabinet.obj' icon='48' x='1018.40686' y='-53.415833' elevation='137.16' angle='1.5707964' width='66.04' depth='52.704998' height='157.48' modelSize='185992'/>
+  <doorOrWindow level='level3' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='429.54352' y='718.7478' elevation='72.39' angle='3.1415927' width='121.92' depth='16.76475' height='152.4' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'/>
+  <furnitureGroup level='level2' name='Group -1-' x='124.26768' y='939.1016' elevation='20.32' angle='4.712389' width='420.23303' depth='437.2352' height='203.20001' movable='false' dropOnTopElevation='-0.10492125'>
+    <doorOrWindow level='level2' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='339.13492' y='776.14996' elevation='20.32' angle='4.712389' width='91.44' depth='7.50075' height='203.20001' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'/>
+    <doorOrWindow level='level2' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='339.13492' y='878.7289' elevation='20.32' angle='4.712389' width='91.44' depth='7.50075' height='203.20001' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'/>
+    <doorOrWindow level='level2' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='339.13495' y='982.7527' elevation='20.32' angle='4.712389' width='91.44' depth='7.50075' height='203.20001' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'/>
+    <doorOrWindow level='level2' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='339.13495' y='1083.8868' elevation='20.32' angle='4.712389' width='91.44' depth='7.50075' height='203.20001' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'/>
+    <doorOrWindow level='level2' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='287.61047' y='1145.4678' elevation='20.32' width='91.44' depth='7.50075' height='203.20001' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'/>
+    <doorOrWindow level='level2' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='189.36586' y='1145.4678' elevation='20.32' width='91.44' depth='7.50075' height='203.20001' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'/>
+    <doorOrWindow level='level2' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='86.78685' y='1145.4678' elevation='20.32' width='91.44' depth='7.50075' height='203.20001' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'/>
+    <doorOrWindow level='level2' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='-30.239868' y='1145.4678' elevation='20.32' angle='3.1415927' width='91.44' depth='7.50075' height='203.20001' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'/>
+    <doorOrWindow level='level2' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='-90.599556' y='1080.9973' elevation='20.32' angle='4.712389' width='91.44' depth='7.50075' height='203.20001' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'/>
+    <doorOrWindow level='level2' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='-90.599556' y='978.41833' elevation='20.32' angle='4.712389' width='91.44' depth='7.50075' height='203.20001' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'/>
+    <doorOrWindow level='level2' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='-90.599556' y='878.7289' elevation='20.32' angle='4.712389' width='91.44' depth='7.50075' height='203.20001' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'/>
+    <doorOrWindow level='level2' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='-90.599556' y='774.70514' elevation='20.32' angle='4.712389' width='91.44' depth='7.50075' height='203.20001' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'/>
+  </furnitureGroup>
+  <furnitureGroup level='level2' name='Group -1-' x='120.52262' y='939.8899' elevation='236.22' angle='4.712389' width='420.23315' depth='437.23566' height='203.20001' movable='false' dropOnTopElevation='-1.1674212'>
+    <doorOrWindow level='level2' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='335.38904' y='776.93896' elevation='236.22' angle='4.712389' width='91.44' depth='7.50075' height='203.20001' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true' boundToWall='false'/>
+    <doorOrWindow level='level2' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='335.38956' y='879.5163' elevation='236.22' angle='4.712389' width='91.44' depth='7.50075' height='203.20001' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true' boundToWall='false'/>
+    <doorOrWindow level='level2' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='335.38956' y='983.54016' elevation='236.22' angle='4.712389' width='91.44' depth='7.50075' height='203.20001' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true' boundToWall='false'/>
+    <doorOrWindow level='level2' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='335.39008' y='1084.6748' elevation='236.22' angle='4.712389' width='91.44' depth='7.50075' height='203.20001' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true' boundToWall='false'/>
+    <doorOrWindow level='level2' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='283.86563' y='1146.2556' elevation='236.22' angle='6.283185' width='91.44' depth='7.50075' height='203.20001' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true' boundToWall='false'/>
+    <doorOrWindow level='level2' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='185.6219' y='1146.2556' elevation='236.22' angle='6.283185' width='91.44' depth='7.50075' height='203.20001' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true' boundToWall='false'/>
+    <doorOrWindow level='level2' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='83.04411' y='1146.2556' elevation='236.22' angle='6.283185' width='91.44' depth='7.50075' height='203.20001' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true' boundToWall='false'/>
+    <doorOrWindow level='level2' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='-33.984215' y='1146.2559' elevation='236.22' angle='3.141588' width='91.44' depth='7.50075' height='203.20001' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true' boundToWall='false'/>
+    <doorOrWindow level='level2' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='-94.34385' y='1081.7854' elevation='236.22' angle='4.712389' width='91.44' depth='7.50075' height='203.20001' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true' boundToWall='false'/>
+    <doorOrWindow level='level2' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='-94.34457' y='979.20667' elevation='236.22' angle='4.712389' width='91.44' depth='7.50075' height='203.20001' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true' boundToWall='false'/>
+    <doorOrWindow level='level2' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='-94.34455' y='879.518' elevation='236.22' angle='4.712389' width='91.44' depth='7.50075' height='203.20001' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true' boundToWall='false'/>
+    <doorOrWindow level='level2' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='-94.34484' y='775.4933' elevation='236.22' angle='4.712389' width='91.44' depth='7.50075' height='203.20001' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true' boundToWall='false'/>
+  </furnitureGroup>
+  <pieceOfFurniture level='level3' catalogId='OlaKristianHoff#staircase_180_landing' name='Half landing staircase' creator='Ola-Kristian Hoff' model='51/staircase_180_landing.obj' icon='50' x='20.65243' y='285.78845' width='205.73999' widthInPlan='205.74' depth='306.07' height='407.66998' modelMirrored='true' modelSize='126177' movable='false' staircaseCutOutShape='M0,0 v0.9 h0.5 v0.1 h0.5 v-1 z' dropOnTopElevation='-0.0028653296'/>
+  <pieceOfFurniture level='level0' catalogId='OlaKristianHoff#staircase_180_landing' name='Half landing staircase' creator='Ola-Kristian Hoff' model='51/staircase_180_landing.obj' icon='50' x='20.652428' y='285.78845' width='205.73999' widthInPlan='205.74' depth='306.07' height='407.66998' modelMirrored='true' modelSize='126177' movable='false' staircaseCutOutShape='M0,0 v0.9 h0.5 v0.1 h0.5 v-1 z' dropOnTopElevation='-0.0028653296'/>
+  <pieceOfFurniture level='level2' catalogId='eTeks#staircase' name='Staircase' creator='eTeks' model='53' icon='52' x='-36.49755' y='932.3782' width='91.44' depth='221.9325' height='213.35999' modelSize='13928' movable='false' staircaseCutOutShape='M0,0 v1 h1 v-1 z' dropOnTopElevation='-0.002762431'/>
+  <pieceOfFurniture level='level3' catalogId='Blend Swap CC-BY#kitchenIsland' name='Island' creator='Jay-Artist' model='55/kitchenIsland.obj' icon='54' x='612.63965' y='506.9571' width='182.88' depth='69.85' height='83.185' modelSize='322482'/>
+  <pieceOfFurniture level='level3' catalogId='Pencilart#3DrawerCabinet' name='Wood drawer cabinet' creator='Pencilart' model='28/3DrawerCabinet.obj' icon='27' x='546.0962' y='677.2983' angle='3.1415927' width='52.704998' depth='64.135' height='86.042496' modelSize='283743'/>
+  <doorOrWindow level='level3' catalogId='eTeks#doubleFrenchWindow126x200' name='Double French window' creator='eTeks' model='57' icon='56' x='687.98663' y='721.76526' elevation='102.869995' angle='6.2865794E-8' width='132.08' depth='22.79979' height='121.92' modelSize='13346' movable='false' dropOnTopElevation='-0.004761905' wallThickness='0.7352941' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'>
+    <sash xAxis='0.015151516' yAxis='0.7352941' width='0.4810606' startAngle='0.0' endAngle='-1.5707964'/>
+    <sash xAxis='0.9848485' yAxis='0.7352941' width='0.4810606' startAngle='3.1415927' endAngle='4.712389'/>
+  </doorOrWindow>
+  <doorOrWindow level='level3' catalogId='Kator Legaz#window-01' name='Double-hung window' model='3/window-01.obj' icon='2' x='880.2807' y='441.00714' elevation='93.0275' angle='4.712389' width='55.245' depth='16.76475' height='127.9525' modelSize='21181' movable='false' cutOutShape='M0,0 v1 h1 v-1 z'/>
+  <furnitureGroup level='level4' name='Group -3-' x='276.54074' y='465.35764' angle='1.5707964' width='45.571777' depth='48.260025' height='236.21999'>
+    <pieceOfFurniture level='level4' catalogId='Pencilart#1DoorUpperCabinet' name='Wood upper cabinet' creator='Pencilart' model='59/1DoorUpperCabinet.obj' icon='58' x='276.54074' y='465.11426' angle='1.5707964' width='45.085' depth='48.260006' height='118.109985' modelSize='96808'/>
+    <pieceOfFurniture level='level4' catalogId='Pencilart#1DoorUpperCabinet' name='Wood upper cabinet' creator='Pencilart' model='59/1DoorUpperCabinet.obj' icon='58' x='276.54074' y='465.601' elevation='118.109985' angle='1.5707964' width='45.085' depth='48.260006' height='118.11' modelSize='96808'/>
+  </furnitureGroup>
+  <pieceOfFurniture level='level4' catalogId='Blend Swap CC-0#bookcase' name='Bookcase' creator='Michtek' model='61/bookcase.obj' icon='60' x='189.71921' y='342.40402' width='91.7575' depth='25.4' height='213.35999' modelSize='157596' dropOnTopElevation='0.51834244'/>
+  <furnitureGroup level='level4' name='Group -3-' x='276.54074' y='556.9016' angle='1.5707964' width='46.372253' depth='48.26001' height='236.22'>
+    <pieceOfFurniture level='level4' catalogId='Pencilart#1DoorUpperCabinet' name='Wood upper cabinet' creator='Pencilart' model='59/1DoorUpperCabinet.obj' icon='58' x='276.54074' y='557.54517' angle='1.5707964' width='45.085' depth='48.260006' height='81.28' modelSize='96808'/>
+    <pieceOfFurniture level='level4' catalogId='Pencilart#1DoorUpperCabinet' name='Wood upper cabinet' creator='Pencilart' model='59/1DoorUpperCabinet.obj' icon='58' x='276.54074' y='556.25793' elevation='175.26' angle='1.5707964' width='45.085' depth='48.260006' height='60.96' modelSize='96808'/>
+  </furnitureGroup>
+  <furnitureGroup level='level4' name='Group -3-' x='276.54074' y='597.375' angle='1.5707964' width='46.372253' depth='48.26001' height='236.22'>
+    <pieceOfFurniture level='level4' catalogId='Pencilart#1DoorUpperCabinet' name='Wood upper cabinet' creator='Pencilart' model='59/1DoorUpperCabinet.obj' icon='58' x='276.54074' y='598.01855' angle='1.5707964' width='45.085' depth='48.260006' height='81.28' modelSize='96808'/>
+    <pieceOfFurniture level='level4' catalogId='Pencilart#1DoorUpperCabinet' name='Wood upper cabinet' creator='Pencilart' model='59/1DoorUpperCabinet.obj' icon='58' x='276.54074' y='596.7313' elevation='175.26' angle='1.5707964' width='45.085' depth='48.260006' height='60.96' modelSize='96808'/>
+  </furnitureGroup>
+  <light level='level4' catalogId='Scopia#ceiling-lamp' name='Ceiling lamp' creator='Scopia' model='63/ceiling-lamp.obj' icon='62' x='2.805542' y='546.3401' elevation='231.13998' width='29.845' depth='29.845' height='5.3975' modelSize='96982' dropOnTopElevation='-0.18518518' power='0.3'>
+    <lightSource x='0.5' y='0.5' z='0.18518518' color='00CCCCCC' diameter='0.23333333'/>
+  </light>
+  <light level='level4' catalogId='Scopia#ceiling-lamp' name='Ceiling lamp' creator='Scopia' model='63/ceiling-lamp.obj' icon='62' x='178.42493' y='549.001' elevation='231.13998' width='29.845' depth='29.845' height='5.3975' modelSize='96982' dropOnTopElevation='-0.18518518' power='0.3'>
+    <lightSource x='0.5' y='0.5' z='0.18518518' color='00CCCCCC' diameter='0.23333333'/>
+  </light>
+  <light level='level4' catalogId='Scopia#ceiling-lamp' name='Ceiling lamp' creator='Scopia' model='63/ceiling-lamp.obj' icon='62' x='440.9671' y='172.92719' elevation='231.13998' width='29.845' depth='29.845' height='5.3975' modelSize='96982' dropOnTopElevation='-0.18518518' power='0.5'>
+    <lightSource x='0.5' y='0.5' z='0.18518518' color='00CCCCCC' diameter='0.23333333'/>
+  </light>
+  <light level='level4' catalogId='Scopia#ceiling-lamp' name='Ceiling lamp' creator='Scopia' model='63/ceiling-lamp.obj' icon='62' x='241.3996' y='172.92715' elevation='231.13998' width='29.845' depth='29.845' height='5.3975' modelSize='96982' dropOnTopElevation='-0.18518518' power='0.5'>
+    <lightSource x='0.5' y='0.5' z='0.18518518' color='00CCCCCC' diameter='0.23333333'/>
+  </light>
+  <light level='level4' catalogId='Scopia#ceiling-lamp' name='Ceiling lamp' creator='Scopia' model='63/ceiling-lamp.obj' icon='62' x='713.2658' y='172.04019' elevation='231.13998' width='29.845' depth='29.845' height='5.3975' modelSize='96982' dropOnTopElevation='-0.18518518' power='0.5'>
+    <lightSource x='0.5' y='0.5' z='0.18518518' color='00CCCCCC' diameter='0.23333333'/>
+  </light>
+  <light level='level4' catalogId='Scopia#ceiling-lamp' name='Ceiling lamp' creator='Scopia' model='63/ceiling-lamp.obj' icon='62' x='707.94403' y='551.66187' elevation='231.13998' width='29.845' depth='29.845' height='5.3975' modelSize='96982' dropOnTopElevation='-0.18518518' power='0.5'>
+    <lightSource x='0.5' y='0.5' z='0.18518518' color='00CCCCCC' diameter='0.23333333'/>
+  </light>
+  <light level='level4' catalogId='Scopia#ceiling-lamp' name='Ceiling lamp' creator='Scopia' model='63/ceiling-lamp.obj' icon='62' x='28.527588' y='64.71724' elevation='231.13998' width='29.845' depth='29.845' height='5.3975' modelSize='96982' dropOnTopElevation='-0.18518518' power='0.5'>
+    <lightSource x='0.5' y='0.5' z='0.18518518' color='00CCCCCC' diameter='0.23333333'/>
+  </light>
+  <light level='level4' catalogId='Scopia#ceiling-lamp' name='Ceiling lamp' creator='Scopia' model='63/ceiling-lamp.obj' icon='62' x='337.19196' y='392.0079' elevation='231.13998' width='10.16' depth='10.16' height='5.3975' modelSize='96982' dropOnTopElevation='-0.18518518' power='0.5'>
+    <lightSource x='0.5' y='0.5' z='0.18518518' color='00CCCCCC' diameter='0.23333333'/>
+  </light>
+  <light level='level4' catalogId='Scopia#ceiling-lamp' name='Ceiling lamp' creator='Scopia' model='63/ceiling-lamp.obj' icon='62' x='546.5161' y='395.55582' elevation='231.13998' width='10.16' depth='10.16' height='5.3975' modelSize='96982' dropOnTopElevation='-0.18518518' power='0.5'>
+    <lightSource x='0.5' y='0.5' z='0.18518518' color='00CCCCCC' diameter='0.23333333'/>
+  </light>
+  <doorOrWindow level='level3' catalogId='Scopia#puerta' name='Door' creator='Scopia' model='65/puerta.obj' icon='64' x='136.7424' y='55.072693' angle='1.5707964' width='86.994995' depth='13.70075' height='209.8675' modelSize='154116' movable='false' dropOnTopElevation='-0.004761905' wallThickness='0.54744524' wallDistance='0.11678833' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'>
+    <sash xAxis='0.09195402' yAxis='0.6642336' width='0.81609195' startAngle='0.0' endAngle='-1.5707964'/>
+  </doorOrWindow>
+  <pieceOfFurniture level='level3' catalogId='Scopia#small_lavatory' name='Small lavatory' creator='Scopia' model='67/small_lavatory.obj' icon='66' x='69.01315' y='103.92446' elevation='49.8475' angle='3.1415927' width='53.34' depth='24.13' height='34.29' modelSize='581724' dropOnTopElevation='0.5755814'/>
+  <light level='level3' catalogId='Scopia#ceiling-lamp' name='Ceiling lamp' creator='Scopia' model='63/ceiling-lamp.obj' icon='62' x='288.4088' y='252.75415' elevation='279.4' width='29.845' depth='29.845' height='5.3975' modelSize='96982' dropOnTopElevation='-0.18518518' power='0.2'>
+    <lightSource x='0.5' y='0.5' z='0.18518518' color='00CCCCCC' diameter='0.23333333'/>
+  </light>
+  <light level='level3' catalogId='Scopia#ceiling-lamp' name='Ceiling lamp' creator='Scopia' model='63/ceiling-lamp.obj' icon='62' x='614.81256' y='255.41507' elevation='279.4' width='29.845' depth='29.845' height='5.3975' modelSize='96982' dropOnTopElevation='-0.18518518' power='0.2'>
+    <lightSource x='0.5' y='0.5' z='0.18518518' color='00CCCCCC' diameter='0.23333333'/>
+  </light>
+  <light level='level3' catalogId='Scopia#ceiling-lamp' name='Ceiling lamp' creator='Scopia' model='63/ceiling-lamp.obj' icon='62' x='289.29578' y='493.1221' elevation='279.4' width='29.845' depth='29.845' height='5.3975' modelSize='96982' dropOnTopElevation='-0.18518518' power='0.2'>
+    <lightSource x='0.5' y='0.5' z='0.18518518' color='00CCCCCC' diameter='0.23333333'/>
+  </light>
+  <light level='level3' catalogId='Scopia#ceiling-lamp' name='Ceiling lamp' creator='Scopia' model='63/ceiling-lamp.obj' icon='62' x='613.9256' y='480.70456' elevation='279.4' width='29.845' depth='29.845' height='5.3975' modelSize='96982' dropOnTopElevation='-0.18518518' power='0.2'>
+    <lightSource x='0.5' y='0.5' z='0.18518518' color='00CCCCCC' diameter='0.23333333'/>
+  </light>
+  <pieceOfFurniture level='level4' catalogId='OlaKristianHoff#window_flat_roof_skylight_bubble' name='Flat roof skylight bubble' creator='Ola-Kristian Hoff' model='69/window_flat_roof_skylight_bubble.obj' icon='68' x='412.50397' y='584.88794' elevation='233.67998' width='100.0125' depth='100.0125' height='45.085' modelSize='7797' movable='false' staircaseCutOutShape='M0,0 v1 h1 v-1 z' dropOnTopElevation='-0.022222223'/>
+  <light level='level4' catalogId='Scopia#ceiling-lamp' name='Ceiling lamp' creator='Scopia' model='63/ceiling-lamp.obj' icon='62' x='27.15216' y='168.49234' elevation='231.13998' width='29.845' depth='29.845' height='5.3975' modelSize='96982' dropOnTopElevation='-0.18518518' power='0.5'>
+    <lightSource x='0.5' y='0.5' z='0.18518518' color='00CCCCCC' diameter='0.23333333'/>
+  </light>
+  <pieceOfFurniture level='level4' catalogId='OlaKristianHoff#staircase_samba_265x150x85' name='Staircase samba' creator='Ola-Kristian Hoff' model='71/staircase_samba_265x150x85.obj' icon='70' x='86.62545' y='358.22717' angle='1.7484555E-7' width='85.09' depth='149.86' height='261.9375' modelSize='67532' movable='false' staircaseCutOutShape='M0,0 v1 h1 v-1 z' dropOnTopElevation='-0.003816794'/>
+  <doorOrWindow level='level4' catalogId='eTeks#doorFrame' name='Door frame' creator='eTeks' model='72' icon='0' x='81.79028' y='437.94113' angle='3.1415927' width='91.44' depth='9.50075' height='208.5975' modelSize='1281' movable='false' dropOnTopElevation='-0.004796163' wallThickness='0.7894737' wallDistance='0.10526316' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'/>
+  <doorOrWindow level='level1' catalogId='Scopia#door' name='Door' creator='Scopia' model='74/door.obj' icon='73' x='250.70944' y='721.2063' angle='6.2865794E-8' width='95.885' depth='39.116753' height='137.16' modelSize='146530' movable='false' dropOnTopElevation='-0.004761905' wallThickness='0.42857143' wallDistance='0.22285715' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'>
+    <sash xAxis='0.9166667' yAxis='0.6514285' width='0.8333333' startAngle='3.1415927' endAngle='4.712389'/>
+  </doorOrWindow>
+  <doorOrWindow level='level3' catalogId='OlaKristianHoff#door_window_thick_double' name='Double door window' creator='Ola-Kristian Hoff' model='76/door_window_thick_double.obj' icon='75' x='-92.10402' y='560.9924' elevation='102.552505' angle='1.5707964' width='160.02' depth='19.773674' height='121.92' modelSize='18336' movable='false' dropOnTopElevation='-0.004761905' wallThickness='0.84782606' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'>
+    <sash xAxis='0.01875' yAxis='0.84782606' width='0.4625' startAngle='0.0' endAngle='-1.5707964'/>
+    <sash xAxis='0.98125' yAxis='0.84782606' width='0.4625' startAngle='3.1415927' endAngle='4.712389'/>
+  </doorOrWindow>
+  <pieceOfFurniture level='level0' catalogId='Blend Swap CC-0#poolTable' name='Pool table' creator='Jeffie' model='78/poolTable.obj' icon='77' x='596.63354' y='264.0551' width='255.905' depth='139.065' height='82.2325' modelSize='2155927' dropOnTopElevation='0.9769137'/>
+  <doorOrWindow level='level1' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='250.67957' y='718.74774' elevation='133.34999' angle='6.2865794E-8' width='91.1225' depth='16.76475' height='133.985' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'/>
+  <pieceOfFurniture level='level1' catalogId='Pencilart#electricOutlet2' name='Electric outlet 2' creator='Pencilart' model='80' icon='79' x='701.8265' y='710.20703' elevation='20.0025' angle='3.1415927' width='2.8575' depth='0.3175' height='4.4449997' modelSize='34672' movable='false' dropOnTopElevation='-0.22727272'/>
+  <pieceOfFurniture level='level1' catalogId='Pencilart#electricOutlet2' name='Electric outlet 2' creator='Pencilart' model='80' icon='79' x='43.876625' y='132.91222' elevation='20.0025' width='2.8575' depth='0.3175' height='4.4449997' modelSize='34672' movable='false' dropOnTopElevation='-0.22727272'/>
+  <pieceOfFurniture level='level0' catalogId='Scopia#electric_water_heater_big' name='Electric water heater' creator='Scopia' model='82/electric_water_heater_big.obj' icon='81' x='84.62857' y='170.94388' width='45.72' depth='46.0375' height='100.6475' modelSize='259875' movable='false'/>
+  <pieceOfFurniture level='level0' catalogId='Sheep#tableauElectrique' name='Switchboard' creator='Sheep' model='84' icon='83' x='392.65402' y='8.468567' elevation='121.92' width='25.0825' depth='10.4775' height='60.96' modelSize='47395' movable='false'/>
+  <doorOrWindow level='level0' catalogId='eTeks#openDoor' name='Open door' creator='eTeks' model='86' icon='85' x='768.13477' y='752.60876' angle='6.2865794E-8' width='91.44' depth='67.945' height='208.5975' modelSize='14055' movable='false' dropOnTopElevation='-0.004796163' wallThickness='0.11029412' wallDistance='0.014705882' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true' widthDepthDeformable='false'>
+    <sash xAxis='0.05464481' yAxis='0.125' width='0.89071035' startAngle='0.0' endAngle='-1.5707964'/>
+  </doorOrWindow>
+  <doorOrWindow level='level0' catalogId='eTeks#fixedWindow85x123' name='Fixed window' creator='eTeks' model='41' icon='4' x='416.46332' y='718.7478' elevation='86.994995' angle='3.1415927' width='91.1225' depth='16.76475' height='133.985' modelSize='2198' movable='false' dropOnTopElevation='-0.0074626864' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'/>
+  <pieceOfFurniture level='level0' catalogId='Sheep#tableauElectrique' name='Switchboard' creator='Sheep' model='84' icon='83' x='354.11972' y='8.468567' elevation='121.92' width='25.0825' depth='10.4775' height='60.96' modelSize='47395' movable='false'/>
+  <light level='level4' catalogId='Kator Legaz#porch-light' name='Porch light' creator='Kator Legaz' model='88/porch-light.obj' icon='87' x='26.315584' y='733.6703' elevation='180.02249' angle='1.7484555E-7' width='17.779999' depth='17.145' height='32.0675' modelSize='176895' movable='false' dropOnTopElevation='-0.03125' power='0.5'>
+    <lightSource x='0.5' y='0.45882353' z='0.34375' color='00888888' diameter='0.28248587'/>
+  </light>
+  <pieceOfFurniture level='level4' catalogId='Pencilart#electricOutlet2' name='Electric outlet 2' creator='Pencilart' model='80' icon='79' x='24.039692' y='725.25653' elevation='20.0025' angle='1.7484555E-7' width='2.8575' depth='0.3175' height='4.4449997' modelSize='34672' movable='false' dropOnTopElevation='-0.22727272'/>
+  <pieceOfFurniture level='level3' catalogId='Pencilart#electricOutlet2' name='Electric outlet 2' creator='Pencilart' model='80' icon='79' x='393.96353' y='3.388567' elevation='20.0025' width='2.8575' depth='0.3175' height='4.4449997' modelSize='34672' movable='false' dropOnTopElevation='-0.22727272'/>
+  <pieceOfFurniture level='level3' catalogId='Pencilart#electricOutlet2' name='Electric outlet 2' creator='Pencilart' model='80' icon='79' x='790.25165' y='3.388567' elevation='20.0025' width='2.8575' depth='0.3175' height='4.4449997' modelSize='34672' movable='false' dropOnTopElevation='-0.22727272'/>
+  <pieceOfFurniture level='level3' catalogId='Pencilart#electricOutlet2' name='Electric outlet 2' creator='Pencilart' model='80' icon='79' x='871.74' y='107.72268' elevation='20.0025' angle='1.5707964' width='2.8575' depth='0.3175' height='4.4449997' modelSize='34672' movable='false' dropOnTopElevation='-0.22727272'/>
+  <pieceOfFurniture level='level3' catalogId='Pencilart#electricOutlet2' name='Electric outlet 2' creator='Pencilart' model='80' icon='79' x='871.7399' y='407.61636' elevation='20.0025' angle='1.5707964' width='2.8575' depth='0.3175' height='4.4449997' modelSize='34672' movable='false' dropOnTopElevation='-0.22727272'/>
+  <pieceOfFurniture level='level3' catalogId='Pencilart#electricOutlet2' name='Electric outlet 2' creator='Pencilart' model='80' icon='79' x='141.46123' y='304.13535' elevation='20.0025' angle='4.712389' width='2.8575' depth='0.3175' height='4.4449997' modelSize='34672' movable='false' dropOnTopElevation='-0.22727272'/>
+  <pieceOfFurniture level='level3' catalogId='Pencilart#electricOutlet2' name='Electric outlet 2' creator='Pencilart' model='80' icon='79' x='-82.05881' y='462.32108' elevation='20.0025' angle='4.712389' width='2.8575' depth='0.3175' height='4.4449997' modelSize='34672' movable='false' dropOnTopElevation='-0.22727272'/>
+  <pieceOfFurniture level='level3' catalogId='Pencilart#electricOutlet2' name='Electric outlet 2' creator='Pencilart' model='80' icon='79' x='14.97698' y='710.207' elevation='20.0025' angle='3.1415927' width='2.8575' depth='0.3175' height='4.4449997' modelSize='34672' movable='false' dropOnTopElevation='-0.22727272'/>
+  <pieceOfFurniture level='level3' catalogId='Pencilart#electricOutlet2' name='Electric outlet 2' creator='Pencilart' model='80' icon='79' x='17.83448' y='710.207' elevation='20.0025' angle='3.1415927' width='2.8575' depth='0.3175' height='4.4449997' modelSize='34672' movable='false' dropOnTopElevation='-0.22727272'/>
+  <pieceOfFurniture level='level3' catalogId='Pencilart#electricOutlet2' name='Electric outlet 2' creator='Pencilart' model='80' icon='79' x='19.920277' y='728.82635' elevation='20.0025' angle='6.2865794E-8' width='2.8575' depth='0.3175' height='4.4449997' modelSize='34672' movable='false' dropOnTopElevation='-0.22727272'/>
+  <light level='level3' catalogId='Kator Legaz#porch-light' name='Porch light' creator='Kator Legaz' model='88/porch-light.obj' icon='87' x='19.17183' y='735.7023' elevation='180.02249' angle='6.2865794E-8' width='17.779999' depth='17.145' height='32.0675' modelSize='176895' movable='false' dropOnTopElevation='-0.03125' power='0.5'>
+    <lightSource x='0.5' y='0.45882353' z='0.34375' color='00888888' diameter='0.28248587'/>
+  </light>
+  <pieceOfFurniture level='level3' catalogId='Sheep#interrupteur' name='Switch' creator='Sheep' model='90' icon='89' x='19.162247' y='709.7307' elevation='114.935' angle='3.1415927' width='7.9375' depth='1.27' height='7.9375' modelSize='2500' movable='false' dropOnTopElevation='-0.125'/>
+  <doorOrWindow level='level0' catalogId='PeterSmolik#door1' name='Door' creator='Peter Smolik' model='92/door1.obj' icon='91' x='301.62714' y='69.15323' angle='1.5707963' width='91.44' depth='9.766821' height='213.67749' modelRotation='-1 0 0 0 1 0 0 0 -1' modelSize='1857741' movable='false' dropOnTopElevation='-0.0046794573' wallThickness='0.7679649' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true'>
+    <sash xAxis='0.068678916' yAxis='0.3527153' width='0.8519248' startAngle='0.0' endAngle='-1.5707964'/>
+  </doorOrWindow>
+  <pieceOfFurniture level='level0' catalogId='LucaPresidente#doccia' name='Shower cabin' creator='LucaPresidente' model='94/doccia.obj' icon='93' x='1.7765806' y='60.88783' angle='4.712389' width='111.759995' widthInPlan='111.76001' depth='114.299995' depthInPlan='114.29999' height='200.025' heightInPlan='200.02501' modelRotation='-1 0 0 0 1 0 0 0 -1' modelSize='152895' dropOnTopElevation='0.021'/>
+  <pieceOfFurniture level='level0' catalogId='Blend Swap CC-0#toiletsUnit' name='Toilets unit' creator='Nhumrod' model='96/toiletsUnit.obj' icon='95' x='175.90997' y='157.19336' angle='4.712389' width='35.2425' depth='69.215' height='77.1525' modelSize='547702' movable='false' dropOnTopElevation='0.99740934'/>
+  <pieceOfFurniture level='level0' catalogId='Scopia#bathroom4' name='Washbasin' creator='Scopia' model='98/bathroom4.obj' icon='97' x='172.09998' y='247.79596' elevation='46.0375' angle='4.712389' width='61.594997' depth='61.594997' height='49.8475' modelSize='517114' movable='false' dropOnTopElevation='0.66199994'/>
+  <pieceOfFurniture level='level0' catalogId='Scopia#clothes_washing_machine' name='Clothes washing machine' creator='Scopia' model='100/clothes_washing_machine.obj' icon='99' x='264.76358' y='350.2402' width='59.055' depth='60.0075' height='84.1375' modelSize='94793'/>
+  <pieceOfFurniture level='level3' catalogId='eTeks#texturableBox' name='Box' creator='eTeks' model='102/texturableBox.obj' icon='101' x='507.06253' y='361.7926' elevation='254.0' width='731.52' depth='30.48' height='30.48' modelSize='1661'/>
+  <pieceOfFurniture level='level3' catalogId='eTeks#texturableBox' name='Box' creator='eTeks' model='102/texturableBox.obj' icon='101' x='132.56534' y='361.7926' angle='4.712389' width='8.889999' depth='8.889999' height='254.0' modelSize='1661'/>
+  <light level='level3' catalogId='Scopia#ceiling-lamp' name='Ceiling lamp' creator='Scopia' model='63/ceiling-lamp.obj' icon='62' x='34.942444' y='551.02075' elevation='279.4' width='29.845' depth='29.845' height='5.3975' modelSize='96982' dropOnTopElevation='-0.18518518' power='0.2'>
+    <lightSource x='0.5' y='0.5' z='0.18518518' color='00CCCCCC' diameter='0.23333333'/>
+  </light>
+  <light level='level0' catalogId='Scopia#ceiling-lamp' name='Ceiling lamp' creator='Scopia' model='63/ceiling-lamp.obj' icon='62' x='492.42358' y='170.25467' elevation='269.24' width='29.845' depth='29.845' height='5.3975' modelSize='96982' dropOnTopElevation='-0.18518518' power='0.5'>
+    <lightSource x='0.5' y='0.5' z='0.18518518' color='00CCCCCC' diameter='0.23333333'/>
+  </light>
+  <light level='level0' catalogId='Scopia#ceiling-lamp' name='Ceiling lamp' creator='Scopia' model='63/ceiling-lamp.obj' icon='62' x='727.23047' y='168.6069' elevation='269.24' width='29.845' depth='29.845' height='5.3975' modelSize='96982' dropOnTopElevation='-0.18518518' power='0.5'>
+    <lightSource x='0.5' y='0.5' z='0.18518518' color='00CCCCCC' diameter='0.23333333'/>
+  </light>
+  <light level='level0' catalogId='Scopia#ceiling-lamp' name='Ceiling lamp' creator='Scopia' model='63/ceiling-lamp.obj' icon='62' x='737.11707' y='478.3872' elevation='269.24' width='29.845' depth='29.845' height='5.3975' modelSize='96982' dropOnTopElevation='-0.18518518' power='0.5'>
+    <lightSource x='0.5' y='0.5' z='0.18518518' color='00CCCCCC' diameter='0.23333333'/>
+  </light>
+  <light level='level0' catalogId='Scopia#ceiling-lamp' name='Ceiling lamp' creator='Scopia' model='63/ceiling-lamp.obj' icon='62' x='479.2414' y='476.73944' elevation='269.24' width='29.845' depth='29.845' height='5.3975' modelSize='96982' dropOnTopElevation='-0.18518518' power='0.5'>
+    <lightSource x='0.5' y='0.5' z='0.18518518' color='00CCCCCC' diameter='0.23333333'/>
+  </light>
+  <light level='level0' catalogId='Scopia#ceiling-lamp' name='Ceiling lamp' creator='Scopia' model='63/ceiling-lamp.obj' icon='62' x='40.11136' y='519.5814' elevation='269.24' width='29.845' depth='29.845' height='5.3975' modelSize='96982' dropOnTopElevation='-0.18518518' power='0.5'>
+    <lightSource x='0.5' y='0.5' z='0.18518518' color='00CCCCCC' diameter='0.23333333'/>
+  </light>
+  <pieceOfFurniture level='level0' catalogId='eTeks#texturableBox' name='Box' creator='eTeks' model='102/texturableBox.obj' icon='101' x='507.06253' y='361.7926' elevation='245.11' width='731.52' depth='30.48' height='30.48' modelSize='1661'/>
+  <pieceOfFurniture level='level0' catalogId='Scopia#dryer_machine' name='Dryer machine' creator='Scopia' model='104/dryer_machine.obj' icon='103' x='265.6127' y='351.1927' elevation='87.63' width='59.055' depth='61.9125' height='84.1375' modelSize='67783'/>
+  <light level='level0' catalogId='MineaCristian#ceiling_lamp_globo_feria' name='Ceiling lamp' creator='MineaCristian' model='106/ceiling_lamp_globo_feria.obj' icon='105' x='203.70268' y='332.19824' elevation='269.24' width='17.779999' depth='17.779999' height='4.4449997' modelSize='110058' dropOnTopElevation='-0.09090909' power='0.1'>
+    <lightSource x='0.5' y='0.5' z='0.45454547' color='00AAAAAA' diameter='0.2173913'/>
+  </light>
+  <pieceOfFurniture level='level0' catalogId='eTeks#washbasinWithCabinet' name='Washbasin with cabinet' creator='eTeks' model='108' icon='107' x='169.87747' y='351.1927' angle='4.712389' width='61.9125' depth='57.149998' height='97.155' modelSize='66142' movable='false' dropOnTopElevation='0.7762887'/>
+  <light level='level0' catalogId='Scopia#ceiling-lamp' name='Ceiling lamp' creator='Scopia' model='63/ceiling-lamp.obj' icon='62' x='219.36197' y='56.547302' elevation='259.715' width='29.845' depth='29.845' height='5.3975' modelSize='96982' dropOnTopElevation='-0.18518518' power='0.3'>
+    <lightSource x='0.5' y='0.5' z='0.18518518' color='00CCCCCC' diameter='0.23333333'/>
+  </light>
+  <light level='level0' catalogId='eTeks#wallUplight' name='Wall uplight' creator='eTeks' model='110' icon='109' x='147.33498' y='211.63773' elevation='165.09999' angle='4.712389' width='24.13' depth='12.065' height='26.035' modelSize='5211' dropOnTopElevation='-0.03846154' power='0.1'>
+    <lightSource x='0.5' y='0.6666667' z='0.7307692' color='00998764' diameter='0.29166666'/>
+  </light>
+  <light level='level0' catalogId='eTeks#wallUplight' name='Wall uplight' creator='eTeks' model='110' icon='109' x='147.33498' y='283.60425' elevation='165.09999' angle='4.712389' width='24.13' depth='12.065' height='26.035' modelSize='5211' dropOnTopElevation='-0.03846154' power='0.1'>
+    <lightSource x='0.5' y='0.6666667' z='0.7307692' color='00998764' diameter='0.29166666'/>
+  </light>
+  <pieceOfFurniture level='level3' catalogId='Blend Swap CC-BY#piano' name='Upright piano' creator='LVlittering' model='112/piano.obj' icon='111' x='843.7525' y='123.59161' angle='1.5707964' width='141.28749' depth='54.2925' height='138.43' modelSize='2612035'/>
+  <furnitureGroup level='level4' name='Group -3-' x='276.54074' y='510.92944' angle='1.5707964' width='45.57187' depth='48.260025' height='236.21999'>
+    <pieceOfFurniture level='level4' catalogId='Pencilart#1DoorUpperCabinet' name='Wood upper cabinet' creator='Pencilart' model='59/1DoorUpperCabinet.obj' icon='58' x='276.54074' y='510.68604' angle='1.5707965' width='45.085' depth='48.260006' height='118.109985' modelSize='96808'/>
+    <pieceOfFurniture level='level4' catalogId='Pencilart#1DoorUpperCabinet' name='Wood upper cabinet' creator='Pencilart' model='59/1DoorUpperCabinet.obj' icon='58' x='276.54074' y='511.17285' elevation='118.109985' angle='1.5707965' width='45.085' depth='48.260006' height='118.11' modelSize='96808'/>
+  </furnitureGroup>
+  <furnitureGroup level='level4' name='Group -3-' x='276.54074' y='687.39905' angle='1.5707964' width='46.372253' depth='48.26001' height='236.22'>
+    <pieceOfFurniture level='level4' catalogId='Pencilart#1DoorUpperCabinet' name='Wood upper cabinet' creator='Pencilart' model='59/1DoorUpperCabinet.obj' icon='58' x='276.54074' y='688.0426' angle='1.5707964' width='45.085' depth='48.260006' height='81.28' modelSize='96808'/>
+    <pieceOfFurniture level='level4' catalogId='Pencilart#1DoorUpperCabinet' name='Wood upper cabinet' creator='Pencilart' model='59/1DoorUpperCabinet.obj' icon='58' x='276.54074' y='686.7554' elevation='175.26' angle='1.5707964' width='45.085' depth='48.260006' height='60.96' modelSize='96808'/>
+  </furnitureGroup>
+  <furnitureGroup level='level4' name='Group -3-' x='276.54074' y='641.02673' angle='1.5707964' width='46.372253' depth='48.26001' height='236.22'>
+    <pieceOfFurniture level='level4' catalogId='Pencilart#1DoorUpperCabinet' name='Wood upper cabinet' creator='Pencilart' model='59/1DoorUpperCabinet.obj' icon='58' x='276.54074' y='641.67035' angle='1.5707964' width='45.085' depth='48.260006' height='81.28' modelSize='96808'/>
+    <pieceOfFurniture level='level4' catalogId='Pencilart#1DoorUpperCabinet' name='Wood upper cabinet' creator='Pencilart' model='59/1DoorUpperCabinet.obj' icon='58' x='276.54074' y='640.3831' elevation='175.26' angle='1.5707964' width='45.085' depth='48.260006' height='60.96' modelSize='96808'/>
+  </furnitureGroup>
+  <pieceOfFurniture level='level4' catalogId='LucaPresidente#lavello' name='Sink' creator='LucaPresidente' model='114/lavello.obj' icon='113' x='277.17575' y='606.8232' angle='1.5707964' width='71.119995' depth='46.989998' height='99.06' modelSize='970849' dropOnTopElevation='0.8213362'/>
+  <pieceOfFurniture level='level4' catalogId='LucaPresidente#mobilettoLavaboWenge' name='Washbasin with cabinet' creator='LucaPresidente' model='116/mobilettoLavaboWenge.obj' icon='115' x='483.84967' y='569.25867' angle='1.5707964' width='60.96' depth='26.67' height='93.345' modelSize='352939' dropOnTopElevation='0.8588351'/>
+  <doorOrWindow level='level4' catalogId='eTeks#openDoor' name='Open door' creator='eTeks' model='86' icon='85' x='436.45703' y='480.56506' angle='1.7484555E-7' width='91.44' depth='67.945' height='208.5975' modelMirrored='true' modelSize='14055' movable='false' dropOnTopElevation='-0.004796163' wallThickness='0.11029412' wallDistance='0.014705882' cutOutShape='M0,0 v1 h1 v-1 z' wallCutOutOnBothSides='true' widthDepthDeformable='false'>
+    <sash xAxis='0.05464481' yAxis='0.125' width='0.89071035' startAngle='0.0' endAngle='-1.5707964'/>
+  </doorOrWindow>
+  <pieceOfFurniture level='level3' catalogId='Pencilart#2DoorUpperCabinet' name='Wood upper cabinet' creator='Pencilart' model='49/2DoorUpperCabinet.obj' icon='48' x='845.5462' y='225.47983' elevation='198.12001' angle='1.5707964' width='60.96' depth='52.704998' height='76.2' modelSize='185992'/>
+  <pieceOfFurniture level='level3' catalogId='Pencilart#2DoorUpperCabinet' name='Wood upper cabinet' creator='Pencilart' model='49/2DoorUpperCabinet.obj' icon='48' x='845.54626' y='286.43982' elevation='198.12' angle='1.5707964' width='60.96' depth='52.704998' height='76.2' modelSize='185992'/>
+  <pieceOfFurniture level='level3' catalogId='Pencilart#2DoorUpperCabinet' name='Wood upper cabinet' creator='Pencilart' model='49/2DoorUpperCabinet.obj' icon='48' x='845.8637' y='355.0198' elevation='198.12' angle='1.5707964' width='76.2' depth='52.07' height='76.2' modelSize='185992'/>
+  <furnitureGroup level='level3' name='Group -10-' x='845.54626' y='596.7007' elevation='198.12' angle='1.5707964' width='227.33011' depth='52.705017' height='76.20001'>
+    <pieceOfFurniture level='level3' catalogId='Pencilart#2DoorUpperCabinet' name='Wood upper cabinet' creator='Pencilart' model='49/2DoorUpperCabinet.obj' icon='48' x='845.5462' y='681.94946' elevation='198.12' angle='1.5707965' width='56.832508' depth='52.704967' height='76.20002' modelSize='185992'/>
+    <pieceOfFurniture level='level3' catalogId='Pencilart#2DoorUpperCabinet' name='Wood upper cabinet' creator='Pencilart' model='49/2DoorUpperCabinet.obj' icon='48' x='845.5462' y='625.117' elevation='198.12' angle='1.5707965' width='56.832508' depth='52.704967' height='76.20002' modelSize='185992'/>
+    <pieceOfFurniture level='level3' catalogId='Pencilart#2DoorUpperCabinet' name='Wood upper cabinet' creator='Pencilart' model='49/2DoorUpperCabinet.obj' icon='48' x='845.5462' y='568.2843' elevation='198.12' angle='1.5707965' width='56.832508' depth='52.704967' height='76.20002' modelSize='185992'/>
+    <pieceOfFurniture level='level3' catalogId='Pencilart#2DoorUpperCabinet' name='Wood upper cabinet' creator='Pencilart' model='49/2DoorUpperCabinet.obj' icon='48' x='845.5462' y='511.45184' elevation='198.12' angle='1.5707965' width='56.832508' depth='52.704967' height='76.20002' modelSize='185992'/>
+  </furnitureGroup>
+  <pieceOfFurniture level='level3' catalogId='Kator Legaz#filing-cabinet' name='Filing cabinet' creator='Kator Legaz' model='38/filing-cabinet.obj' icon='37' x='844.54626' y='23.597319' elevation='68.58' angle='1.5707964' width='38.735' depth='52.704998' height='68.58' modelSize='18538'/>
+  <pieceOfFurniture level='level3' catalogId='Kator Legaz#filing-cabinet' name='Filing cabinet' creator='Kator Legaz' model='38/filing-cabinet.obj' icon='37' x='845.54626' y='22.59732' elevation='137.16' angle='1.5707964' width='38.735' depth='52.704998' height='68.58' modelSize='18538'/>
+  <furnitureGroup level='level3' name='Group -9-' x='845.54626' y='355.0198' elevation='167.64001' angle='1.5707964' width='76.19998' depth='52.70508' height='35.559998'>
+    <pieceOfFurniture level='level3' catalogId='Pencilart#2DoorUpperCabinet' name='Wood upper cabinet' creator='Pencilart' model='49/2DoorUpperCabinet.obj' icon='48' x='845.54626' y='335.96982' elevation='167.64001' angle='1.5707964' width='38.1' depth='52.704998' height='35.559998' modelSize='185992'/>
+    <pieceOfFurniture level='level3' catalogId='Pencilart#2DoorUpperCabinet' name='Wood upper cabinet' creator='Pencilart' model='49/2DoorUpperCabinet.obj' icon='48' x='845.5462' y='374.06982' elevation='167.64001' angle='1.5707964' width='38.1' depth='52.704998' height='35.559998' modelSize='185992'/>
+  </furnitureGroup>
+  <furnitureGroup level='level3' name='Group -11-' x='852.37244' y='596.06573' elevation='137.16' angle='1.5707964' width='228.60007' depth='39.05255' height='70.80249'>
+    <pieceOfFurniture level='level3' catalogId='Pencilart#1DoorUpperCabinet' name='Wood upper cabinet' creator='Pencilart' model='59/1DoorUpperCabinet.obj' icon='58' x='852.37244' y='681.79083' elevation='137.16' angle='1.5707965' width='57.149918' depth='39.052433' height='70.8025' modelSize='96808'/>
+    <pieceOfFurniture level='level3' catalogId='Pencilart#1DoorUpperCabinet' name='Wood upper cabinet' creator='Pencilart' model='59/1DoorUpperCabinet.obj' icon='58' x='852.37244' y='624.6407' elevation='137.16' angle='1.5707965' width='57.149918' depth='39.052433' height='70.8025' modelSize='96808'/>
+    <pieceOfFurniture level='level3' catalogId='Pencilart#1DoorUpperCabinet' name='Wood upper cabinet' creator='Pencilart' model='59/1DoorUpperCabinet.obj' icon='58' x='852.37244' y='567.4906' elevation='137.16' angle='1.5707965' width='57.149918' depth='39.052433' height='70.8025' modelSize='96808'/>
+    <pieceOfFurniture level='level3' catalogId='Pencilart#1DoorUpperCabinet' name='Wood upper cabinet' creator='Pencilart' model='59/1DoorUpperCabinet.obj' icon='58' x='852.37244' y='510.34064' elevation='137.16' angle='1.5707965' width='57.149918' depth='39.052433' height='70.8025' modelSize='96808'/>
+  </furnitureGroup>
+  <pieceOfFurniture level='level3' catalogId='eTeks#dishwasher' name='Dishwasher' creator='eTeks' model='118' icon='117' x='602.45245' y='676.822' width='60.0075' depth='65.0875' height='85.09' modelSize='7169'/>
+  <wall id='wall0' level='level4' wallAtEnd='wall1' xStart='84.63287' yStart='-5.152183' xEnd='553.2628' yEnd='-5.152183' height='236.22' thickness='12.7' pattern='hatchUp'>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall1' level='level4' wallAtStart='wall0' wallAtEnd='wall2' xStart='553.2628' yStart='-5.152183' xEnd='553.2628' yEnd='342.82782' height='236.22' thickness='12.7' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall2' level='level4' wallAtStart='wall1' xStart='553.2628' yStart='342.82782' xEnd='132.92047' yEnd='342.8278' height='236.22' thickness='12.7' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall3' level='level4' wallAtEnd='wall4' xStart='553.2628' yStart='-5.152183' xEnd='880.28076' yEnd='-5.152183' height='236.22' thickness='12.7' pattern='hatchUp'>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall4' level='level4' wallAtStart='wall3' xStart='880.28076' yStart='-5.152183' xEnd='880.28076' yEnd='342.82785' height='236.22' thickness='12.7' pattern='hatchUp'>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall5' level='level4' xStart='503.53467' yStart='449.37106' xEnd='503.53467' yEnd='718.7478' height='236.22' thickness='12.7' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall6' level='level4' wallAtStart='wall63' wallAtEnd='wall8' xStart='880.28076' yStart='718.7478' xEnd='503.53467' yEnd='718.7478' height='236.22' thickness='12.7' pattern='hatchUp'>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall7' level='level4' wallAtEnd='wall67' xStart='307.02075' yStart='717.30304' xEnd='307.02075' yEnd='449.37106' height='236.22' thickness='12.7' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall8' level='level4' wallAtStart='wall6' wallAtEnd='wall64' xStart='503.53467' yStart='718.7478' xEnd='339.13495' yEnd='718.7478' height='236.22' thickness='12.7' pattern='hatchUp'>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall9' level='level4' xStart='650.4886' yStart='342.82782' xEnd='553.2628' yEnd='342.82782' height='236.22' thickness='12.7' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall10' level='level4' wallAtEnd='wall11' xStart='409.1899' yStart='341.81723' xEnd='553.2628' yEnd='341.81723' height='236.22' thickness='12.7' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall11' level='level4' wallAtStart='wall10' wallAtEnd='wall60' xStart='553.2628' yStart='341.81723' xEnd='650.4886' yEnd='341.81723' height='236.22' thickness='12.7' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall12' level='level4' wallAtStart='wall14' wallAtEnd='wall52' xStart='-90.599525' yStart='124.371475' xEnd='-90.599556' yEnd='-5.152183' height='236.22' thickness='12.7' pattern='hatchUp'>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall13' level='level4' wallAtStart='wall15' wallAtEnd='wall14' xStart='-90.599525' yStart='718.7478' xEnd='-90.599525' yEnd='349.22787' height='236.22' thickness='12.7' pattern='hatchUp'>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall14' level='level4' wallAtStart='wall13' wallAtEnd='wall12' xStart='-90.599525' yStart='349.22787' xEnd='-90.599525' yEnd='124.371475' height='236.22' thickness='12.7' pattern='hatchUp'/>
+  <wall id='wall15' level='level4' wallAtStart='wall65' wallAtEnd='wall13' xStart='280.24048' yStart='718.7478' xEnd='-90.599525' yEnd='718.7478' height='236.22' thickness='12.7' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall16' level='level3' wallAtStart='wall47' wallAtEnd='wall17' xStart='880.28076' yStart='-5.152183' xEnd='880.2807' yEnd='718.7478' height='304.8' thickness='16.764' pattern='hatchUp'>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall17' level='level3' wallAtStart='wall16' wallAtEnd='wall18' xStart='880.2807' yStart='718.7478' xEnd='-90.599556' yEnd='718.74774' height='304.8' thickness='16.764' pattern='hatchUp'>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall18' level='level3' wallAtStart='wall17' wallAtEnd='wall50' xStart='-90.599556' yStart='718.74774' xEnd='-90.599556' yEnd='-5.152183' height='304.8' thickness='16.764' pattern='hatchUp'>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall19' level='level3' wallAtEnd='wall20' xStart='183.10155' yStart='-92.6447' xEnd='368.52155' yEnd='-92.6447' height='121.92' thickness='7.5' pattern='hatchUp'/>
+  <wall id='wall20' level='level3' wallAtStart='wall19' xStart='368.52155' yStart='-92.6447' xEnd='368.52155' yEnd='-5.152183' height='121.92' thickness='7.5' pattern='hatchUp'/>
+  <wall id='wall21' level='level4' wallAtEnd='wall22' xStart='-90.599556' yStart='718.7478' xEnd='-90.599556' yEnd='1145.4678' height='121.92' thickness='7.5' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall22' level='level4' wallAtStart='wall21' wallAtEnd='wall23' xStart='-90.599556' yStart='1145.4678' xEnd='339.13495' yEnd='1145.4678' height='121.92' thickness='7.5' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall23' level='level4' wallAtStart='wall22' xStart='339.13495' yStart='1145.4678' xEnd='339.13492' yEnd='718.7478' height='121.92' thickness='7.5' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall24' level='level4' xStart='650.4886' yStart='391.3547' xEnd='880.2807' yEnd='391.3547' height='250.0' thickness='7.5' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall25' level='level0' wallAtStart='wall26' wallAtEnd='wall69' xStart='880.2807' yStart='718.7478' xEnd='-90.599556' yEnd='718.74774' height='304.8' thickness='20.32' pattern='hatchUp'>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall26' level='level0' wallAtStart='wall68' wallAtEnd='wall25' xStart='880.28076' yStart='-5.152183' xEnd='880.2807' yEnd='718.7478' height='304.8' thickness='20.32' pattern='hatchUp'>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall27' level='level2' wallAtEnd='wall28' xStart='-90.599556' yStart='718.7478' xEnd='-90.599556' yEnd='1145.4678' height='487.68' thickness='16.764' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall28' level='level2' wallAtStart='wall27' wallAtEnd='wall29' xStart='-90.599556' yStart='1145.4678' xEnd='339.13495' yEnd='1145.4678' height='487.68' thickness='16.764' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall29' level='level2' wallAtStart='wall28' xStart='339.13495' yStart='1145.4678' xEnd='339.13492' yEnd='718.7478' height='487.68' thickness='16.764' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall30' level='level3' xStart='138.24231' yStart='124.37146' xEnd='138.24231' yEnd='-5.152183' height='304.8' thickness='7.5' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall31' level='level5' wallAtStart='wall34' wallAtEnd='wall32' xStart='-90.599556' yStart='-5.152183' xEnd='880.28076' yEnd='-5.152183' height='30.48' thickness='7.5' pattern='hatchUp'/>
+  <wall id='wall32' level='level5' wallAtStart='wall31' wallAtEnd='wall33' xStart='880.28076' yStart='-5.152183' xEnd='880.2807' yEnd='718.7478' height='30.48' thickness='7.5' pattern='hatchUp'/>
+  <wall id='wall33' level='level5' wallAtStart='wall32' wallAtEnd='wall34' xStart='880.2807' yStart='718.7478' xEnd='-90.599556' yEnd='718.74774' height='30.48' thickness='7.5' pattern='hatchUp'/>
+  <wall id='wall34' level='level5' wallAtStart='wall33' wallAtEnd='wall31' xStart='-90.599556' yStart='718.74774' xEnd='-90.599556' yEnd='-5.152183' height='30.48' thickness='7.5' pattern='hatchUp'/>
+  <wall id='wall35' level='level4' wallAtStart='wall57' wallAtEnd='wall36' xStart='132.92046' yStart='437.94104' xEnd='24.970459' yEnd='437.94104' height='250.0' thickness='7.5' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall36' level='level4' wallAtStart='wall35' xStart='24.970459' yStart='437.94104' xEnd='24.970459' yEnd='281.73105' height='250.0' thickness='7.5' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall37' level='level1' wallAtStart='wall40' wallAtEnd='wall38' xStart='-90.599525' yStart='718.74774' xEnd='-90.59954' yEnd='1145.467' height='152.4' thickness='20.32' pattern='hatchUp'/>
+  <wall id='wall38' level='level1' wallAtStart='wall37' wallAtEnd='wall39' xStart='-90.59954' yStart='1145.467' xEnd='339.13495' yEnd='1145.4678' height='152.4' thickness='20.32' pattern='hatchUp'/>
+  <wall id='wall39' level='level1' wallAtStart='wall38' wallAtEnd='wall40' xStart='339.13495' yStart='1145.4678' xEnd='339.13492' yEnd='718.74774' height='152.4' thickness='20.32' pattern='hatchUp'/>
+  <wall id='wall40' level='level1' wallAtStart='wall39' wallAtEnd='wall37' xStart='339.13492' yStart='718.74774' xEnd='-90.599525' yEnd='718.74774' height='250.0' thickness='7.5' pattern='hatchUp'/>
+  <wall id='wall41' level='level1' xStart='-90.599525' yStart='927.61847' xEnd='339.13492' yEnd='927.61847' height='121.92' thickness='7.5' pattern='hatchUp'/>
+  <wall id='wall42' level='level3' wallAtStart='wall49' wallAtEnd='wall43' xStart='132.92047' yStart='124.37146' xEnd='132.92047' yEnd='262.80145' height='152.4' thickness='16.764' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall43' level='level3' wallAtStart='wall42' xStart='132.92047' yStart='262.80145' xEnd='132.92047' yEnd='438.06146' height='152.4' heightAtEnd='30.48' thickness='16.764' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall44' level='level0' xStart='132.92047' yStart='312.61646' xEnd='302.7602' yEnd='312.61646' height='289.56' thickness='15.24' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall45' level='level3' xStart='-61.08841' yStart='-11.542755' xEnd='-61.088417' yEnd='124.37146' height='250.0' thickness='11.43' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall46' level='level0' xStart='-61.08841' yStart='-11.542755' xEnd='-61.088417' yEnd='124.37146' height='250.0' thickness='11.43' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall47' level='level3' wallAtStart='wall51' wallAtEnd='wall16' xStart='138.24231' yStart='-5.152183' xEnd='880.28076' yEnd='-5.152183' height='304.8' thickness='16.764' pattern='hatchUp'>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall48' level='level3' wallAtEnd='wall49' xStart='-90.599525' yStart='124.37146' xEnd='-61.08841' yEnd='124.37146' height='304.8' thickness='16.764' pattern='hatchUp'/>
+  <wall id='wall49' level='level3' wallAtStart='wall48' wallAtEnd='wall42' xStart='-61.08841' yStart='124.37146' xEnd='132.92047' yEnd='124.37146' height='304.8' thickness='16.764' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall50' level='level3' wallAtStart='wall18' wallAtEnd='wall51' xStart='-90.599556' yStart='-5.152183' xEnd='-61.08841' yEnd='-5.152183' height='304.8' thickness='16.764' pattern='hatchUp'/>
+  <wall id='wall51' level='level3' wallAtStart='wall50' wallAtEnd='wall47' xStart='-61.08841' yStart='-5.152183' xEnd='138.24231' yEnd='-5.152183' height='304.8' thickness='16.764' pattern='hatchUp'>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall52' level='level4' wallAtStart='wall12' wallAtEnd='wall53' xStart='-90.599556' yStart='-5.152183' xEnd='-61.08841' yEnd='-5.152183' height='236.22' thickness='12.7' pattern='hatchUp'>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall53' level='level4' wallAtStart='wall52' xStart='-61.08841' yStart='-5.152183' xEnd='84.63287' yEnd='-5.152183' height='236.22' thickness='12.7' pattern='hatchUp'>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall54' level='level4' wallAtEnd='wall55' xStart='-90.599525' yStart='124.37146' xEnd='-61.08841' yEnd='124.37146' height='250.0' thickness='7.5' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall55' level='level4' wallAtStart='wall54' wallAtEnd='wall56' xStart='-61.08841' yStart='124.37146' xEnd='132.92047' yEnd='124.37146' height='250.0' thickness='7.5' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall56' level='level4' wallAtStart='wall55' wallAtEnd='wall57' xStart='132.92047' yStart='124.37146' xEnd='132.92047' yEnd='342.8278' height='250.0' thickness='7.5' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall57' level='level4' wallAtStart='wall56' wallAtEnd='wall35' xStart='132.92047' yStart='342.8278' xEnd='132.92046' yEnd='437.94104' height='250.0' thickness='7.5' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall58' level='level4' wallAtEnd='wall59' xStart='-61.08841' yStart='-11.542755' xEnd='-61.08841' yEnd='-5.152183' height='250.0' thickness='11.43' pattern='hatchUp'/>
+  <wall id='wall59' level='level4' wallAtStart='wall58' xStart='-61.08841' yStart='-5.152183' xEnd='-61.088417' yEnd='124.37146' height='250.0' thickness='11.43' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall60' level='level4' wallAtStart='wall11' wallAtEnd='wall61' xStart='650.4886' yStart='341.81723' xEnd='650.4886' yEnd='391.3547' height='236.22' thickness='12.7' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall61' level='level4' wallAtStart='wall60' wallAtEnd='wall66' xStart='650.4886' yStart='391.3547' xEnd='650.4886' yEnd='449.37106' height='236.22' thickness='12.7' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall62' level='level4' wallAtEnd='wall63' xStart='880.28076' yStart='342.82785' xEnd='880.28076' yEnd='391.3547' height='236.22' thickness='12.7' pattern='hatchUp'>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall63' level='level4' wallAtStart='wall62' wallAtEnd='wall6' xStart='880.28076' yStart='391.3547' xEnd='880.28076' yEnd='718.7478' height='236.22' thickness='12.7' pattern='hatchUp'>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall64' level='level4' wallAtStart='wall8' wallAtEnd='wall65' xStart='339.13495' yStart='718.7478' xEnd='307.02075' yEnd='718.7478' height='236.22' thickness='12.7' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall65' level='level4' wallAtStart='wall64' wallAtEnd='wall15' xStart='307.02075' yStart='718.7478' xEnd='280.24048' yEnd='718.7478' height='236.22' thickness='12.7' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall66' level='level4' wallAtStart='wall61' wallAtEnd='wall67' xStart='650.4886' yStart='449.37106' xEnd='503.53467' yEnd='449.37106' height='236.22' thickness='11.43' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall67' level='level4' wallAtStart='wall66' wallAtEnd='wall7' xStart='503.53467' yStart='449.37106' xEnd='307.02075' yEnd='449.37106' height='236.22' thickness='11.43' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall68' level='level0' wallAtStart='wall78' wallAtEnd='wall26' xStart='302.7602' yStart='-5.152183' xEnd='880.28076' yEnd='-5.152183' height='304.8' thickness='20.32' pattern='hatchUp'>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall69' level='level0' wallAtStart='wall25' wallAtEnd='wall70' xStart='-90.599556' yStart='718.74774' xEnd='-90.599556' yEnd='124.37146' height='304.8' thickness='20.32' pattern='hatchUp'>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall70' level='level0' wallAtStart='wall69' wallAtEnd='wall77' xStart='-90.599556' yStart='124.37146' xEnd='-90.599556' yEnd='-5.152183' height='304.8' thickness='20.32' pattern='hatchUp'>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall71' level='level0' wallAtEnd='wall72' xStart='-90.599525' yStart='124.37146' xEnd='-61.08841' yEnd='124.37146' height='304.8' thickness='16.764' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall72' level='level0' wallAtStart='wall71' wallAtEnd='wall73' xStart='-61.08841' yStart='124.37146' xEnd='132.92047' yEnd='124.37146' height='304.8' thickness='16.764' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall73' level='level0' wallAtStart='wall72' wallAtEnd='wall74' xStart='132.92047' yStart='124.37146' xEnd='132.92047' yEnd='312.61646' height='304.8' thickness='16.764' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall74' level='level0' wallAtStart='wall73' xStart='132.92047' yStart='312.61646' xEnd='132.92047' yEnd='438.06146' height='304.8' thickness='16.764' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall75' level='level0' wallAtEnd='wall76' xStart='302.7602' yStart='429.61346' xEnd='302.7602' yEnd='312.61646' height='289.56' thickness='15.24' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall76' level='level0' wallAtStart='wall75' xStart='302.7602' yStart='312.61646' xEnd='302.76016' yEnd='-5.152183' height='289.56' thickness='15.24' pattern='hatchUp'>
+    <baseboard attribute='leftSideBaseboard' thickness='1.0' height='7.0'/>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall77' level='level0' wallAtStart='wall70' wallAtEnd='wall78' xStart='-90.599556' yStart='-5.152183' xEnd='-61.08841' yEnd='-5.152183' height='304.8' thickness='20.32' pattern='hatchUp'>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <wall id='wall78' level='level0' wallAtStart='wall77' wallAtEnd='wall68' xStart='-61.08841' yStart='-5.152183' xEnd='302.7602' yEnd='-5.152183' height='304.8' thickness='20.32' pattern='hatchUp'>
+    <baseboard attribute='rightSideBaseboard' thickness='1.0' height='7.0'/>
+  </wall>
+  <room level='level4' name='North Bedroom' areaVisible='true'>
+    <point x='559.7488' y='1.3368549'/>
+    <point x='874.7088' y='1.3368549'/>
+    <point x='873.9308' y='336.47784'/>
+    <point x='559.6128' y='335.46722'/>
+  </room>
+  <room level='level3' areaVisible='true'>
+    <point x='876.5305' y='-1.4021912'/>
+    <point x='876.5305' y='714.998'/>
+    <point x='-86.84955' y='714.99786'/>
+    <point x='-86.84958' y='434.4674'/>
+    <point x='136.67044' y='434.46735'/>
+    <point x='136.67047' y='120.62146'/>
+    <point x='136.67047' y='120.62146'/>
+    <point x='136.67047' y='3.2298126'/>
+  </room>
+  <room level='level4' name='Office' areaVisible='true'>
+    <point x='-84.24956' y='1.1978168'/>
+    <point x='-84.24953' y='120.62146'/>
+    <point x='136.67047' y='120.62146'/>
+    <point x='136.67046' y='336.47778'/>
+    <point x='409.1899' y='336.4778'/>
+    <point x='409.1899' y='335.46722'/>
+    <point x='437.64383' y='335.46722'/>
+    <point x='437.64383' y='342.3475'/>
+    <point x='529.7507' y='342.3475'/>
+    <point x='529.75073' y='335.46722'/>
+    <point x='546.91284' y='335.46722'/>
+    <point x='546.91284' y='1.1978168'/>
+  </room>
+  <room level='level4' areaVisible='true'>
+    <point x='873.9308' y='395.1047'/>
+    <point x='873.9308' y='431.59106'/>
+    <point x='763.62476' y='431.59103'/>
+    <point x='656.83856' y='431.59103'/>
+    <point x='656.83856' y='395.1047'/>
+  </room>
+  <room level='level4' areaVisible='true'>
+    <point x='763.62476' y='349.17783'/>
+    <point x='873.9308' y='349.17786'/>
+    <point x='873.9308' y='387.6047'/>
+    <point x='656.83856' y='387.6047'/>
+    <point x='656.83856' y='349.17783'/>
+  </room>
+  <room level='level4' areaVisible='true' ceilingVisible='false'>
+    <point x='-67.1744' y='718.7225'/>
+    <point x='-67.1744' y='725.0978'/>
+    <point x='-86.849556' y='725.0978'/>
+    <point x='-86.849556' y='1141.7178'/>
+    <point x='335.38495' y='1141.7178'/>
+    <point x='335.38492' y='725.0978'/>
+    <point x='10.5855665' y='725.0978'/>
+    <point x='10.5855665' y='718.7225'/>
+  </room>
+  <room level='level3' areaVisible='true'>
+    <point x='90.50244' y='727.12976'/>
+    <point x='90.50244' y='819.8398'/>
+    <point x='-82.21756' y='819.8398'/>
+    <point x='-82.21756' y='727.12976'/>
+  </room>
+  <room level='level4' name='Wizard&apos;s eye' areaVisible='true'>
+    <point x='-84.24953' y='430.7173'/>
+    <point x='-84.24953' y='712.3978'/>
+    <point x='-67.17443' y='712.3978'/>
+    <point x='-67.17443' y='718.7725'/>
+    <point x='10.585594' y='718.7725'/>
+    <point x='10.585596' y='712.3978'/>
+    <point x='300.67075' y='712.3978'/>
+    <point x='300.67075' y='443.65607'/>
+    <point x='388.47455' y='443.65607'/>
+    <point x='388.47455' y='449.39606'/>
+    <point x='480.71454' y='449.39606'/>
+    <point x='480.71454' y='443.65607'/>
+    <point x='497.18466' y='443.65607'/>
+    <point x='497.18466' y='430.71725'/>
+    <point x='509.88467' y='430.71725'/>
+    <point x='509.88467' y='443.65607'/>
+    <point x='522.7859' y='443.65607'/>
+    <point x='522.7859' y='449.39606'/>
+    <point x='615.02594' y='449.39606'/>
+    <point x='615.02594' y='443.65607'/>
+    <point x='644.1386' y='443.65607'/>
+    <point x='644.1386' y='349.17783'/>
+    <point x='640.29944' y='349.17783'/>
+    <point x='640.29944' y='342.29752'/>
+    <point x='563.54364' y='342.29752'/>
+    <point x='563.54364' y='349.17783'/>
+    <point x='529.7507' y='349.17783'/>
+    <point x='529.7507' y='342.29752'/>
+    <point x='437.64383' y='342.29752'/>
+    <point x='437.64383' y='349.17783'/>
+    <point x='136.67046' y='349.1778'/>
+    <point x='49.012817' y='349.1778'/>
+    <point x='49.012814' y='430.7173'/>
+  </room>
+  <room level='level4' areaVisible='true'>
+    <point x='388.47455' y='449.34607'/>
+    <point x='388.47455' y='455.08606'/>
+    <point x='313.37076' y='455.08606'/>
+    <point x='313.37076' y='712.3978'/>
+    <point x='497.18466' y='712.3978'/>
+    <point x='497.18466' y='455.08606'/>
+    <point x='480.71454' y='455.08606'/>
+    <point x='480.71454' y='449.34607'/>
+  </room>
+  <room level='level4' name='Lynnes Study' areaVisible='true'>
+    <point x='656.83856' y='444.29105'/>
+    <point x='656.83856' y='455.08606'/>
+    <point x='615.02594' y='455.08606'/>
+    <point x='615.02594' y='449.34607'/>
+    <point x='522.7859' y='449.34607'/>
+    <point x='522.7859' y='455.08606'/>
+    <point x='509.88467' y='455.08606'/>
+    <point x='509.88467' y='712.3978'/>
+    <point x='873.9308' y='712.3978'/>
+    <point x='873.9308' y='444.29108'/>
+    <point x='763.62476' y='444.29105'/>
+  </room>
+  <room level='level2' areaVisible='true'>
+    <point x='-82.21756' y='727.12976'/>
+    <point x='330.75293' y='727.12976'/>
+    <point x='330.75296' y='1137.0858'/>
+    <point x='-82.21756' y='1137.0858'/>
+  </room>
+  <room level='level5' areaVisible='true'>
+    <point x='876.53076' y='-1.402183'/>
+    <point x='876.5307' y='714.9978'/>
+    <point x='-86.849556' y='714.99774'/>
+    <point x='-86.849556' y='-1.402183'/>
+  </room>
+  <room level='level1' areaVisible='true'>
+    <point x='-86.849525' y='727.12976'/>
+    <point x='335.38492' y='727.12976'/>
+    <point x='335.38495' y='1141.7179'/>
+    <point x='-86.84954' y='1141.7179'/>
+  </room>
+  <room level='level0' areaVisible='true'>
+    <point x='871.89874' y='3.2298164'/>
+    <point x='871.8987' y='710.3657'/>
+    <point x='-82.21756' y='710.3656'/>
+    <point x='-82.21756' y='132.75346'/>
+    <point x='124.53847' y='132.75346'/>
+    <point x='124.53847' y='438.06146'/>
+    <point x='141.30247' y='438.06146'/>
+    <point x='141.30247' y='115.989456'/>
+    <point x='-82.21756' y='115.989456'/>
+    <point x='-82.21756' y='3.2298164'/>
+  </room>
+  <room level='level3' areaVisible='true'>
+    <point x='-55.373413' y='3.2298126'/>
+    <point x='-55.373413' y='115.989456'/>
+    <point x='134.49231' y='115.989456'/>
+    <point x='134.49231' y='99.150154'/>
+    <point x='138.2673' y='99.150154'/>
+    <point x='138.2673' y='10.995224'/>
+    <point x='134.49231' y='10.995224'/>
+    <point x='134.49231' y='3.2298126'/>
+  </room>
+  <dimensionLine level='level4' xStart='314.2093' yStart='710.5073' xEnd='498.35928' yEnd='710.5073' offset='-173.84546'/>
+  <dimensionLine level='level4' xStart='334.6095' yStart='350.39893' xEnd='334.6095' yEnd='441.83893' offset='93.13147'/>
+  <dimensionLine level='level4' xStart='137.70294' yStart='421.35623' xEnd='260.89294' yEnd='421.35623' offset='0.8869629'/>
+  <dimensionLine level='level0' xStart='310.38016' yStart='5.007817' xEnd='870.4502' yEnd='5.007817' offset='-93.98864'/>
+  <dimensionLine level='level0' xStart='870.1207' yStart='708.5878' xEnd='870.1208' yEnd='5.0078125' offset='116.72359'/>
+  <dimensionLine level='level0' xStart='141.30247' yStart='304.99646' xEnd='294.97247' yEnd='304.99646' offset='-15.268127'/>
+  <dimensionLine level='level0' xStart='-82.21755' yStart='115.989456' xEnd='-82.21755' yEnd='4.2294617' offset='-188.44418'/>
+  <dimensionLine level='level3' xStart='-55.37341' yStart='3.229817' xEnd='135.12659' yEnd='3.229817' offset='-57.244633'/>
+  <dimensionLine level='level3' xStart='-55.373417' yStart='115.989456' xEnd='-55.37341' yEnd='2.9594574' offset='-127.23224'/>
+  <dimensionLine level='level3' xStart='15.5972595' yStart='39.368183' xEnd='15.5972595' yEnd='3.8081856' offset='-283.14703'/>
+</home>

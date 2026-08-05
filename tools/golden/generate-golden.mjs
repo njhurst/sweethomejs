@@ -21,7 +21,7 @@
 // Regenerates the golden plan PNG from the Java SVG reference.
 import { readFileSync, writeFileSync } from "node:fs";
 import { Resvg } from "@resvg/resvg-js";
-const svg = readFileSync("test/fixtures/ls_2819/references/ls_2819.svg", "utf8");
+const svg = readFileSync("test/fixtures/dream_house/references/dream_house.svg", "utf8");
 const png = new Resvg(svg, {}).render().asPng();
-writeFileSync("test/fixtures/ls_2819/references/ls_2819-golden.png", png);
+writeFileSync("test/fixtures/dream_house/references/dream_house-golden.png", png);
 console.log("golden PNG:", png.length, "bytes");

@@ -99,7 +99,7 @@ function assertRoomParity(dumpPath: string): void {
 
 describe("Room parity (task 2.3)", () => {
   it("matches Java area/points/clockwise/singular for the 2019 user home rooms", () => {
-    assertRoomParity("test/fixtures/ls_2819/home.dump.json");
+    assertRoomParity("test/fixtures/dream_house/home.dump.json");
   });
 
   it("matches Java for the generated rooms fixture", () => {

@@ -19,9 +19,9 @@
  */
 
 /**
- * Golden plan image tests (task 5.7): renders the ls_2819 plan with our
+ * Golden plan image tests (task 5.7): renders the dream_house plan with our
  * pipeline and compares the rasterized output against the Java-rendered
- * golden PNG (test/fixtures/ls_2819/references/ls_2819-golden.png).
+ * golden PNG (test/fixtures/dream_house/references/dream_house-golden.png).
  *
  * Text and furniture top-view icons render differently (system fonts vs
  * canvas; placeholders vs pre-rendered 3D icons), so the comparison uses a
@@ -108,16 +108,16 @@ function diffRatio(a: Buffer, b: Buffer): { ratio: number; width: number; height
 }
 
 describe("Golden plan image (task 5.7)", () => {
-  it("renders the ls_2819 plan close to the Java golden PNG", async () => {
+  it("renders the dream_house plan close to the Java golden PNG", async () => {
     const recorder = new HomeFileRecorder();
-    const { home } = await recorder.readHomeFromZip(fixtureBytes("examples/ls_2819.sh3d"));
+    const { home } = await recorder.readHomeFromZip(fixtureBytes("test/fixtures/dream_house.sh3d"));
 
     // Render with our pipeline at the golden scale
     const svg = renderHomeToSvg(home, 0.5);
     const ours = new Resvg(svg, {}).render().pixels;
 
     // Decode the golden PNG (Java-rendered reference)
-    const goldenPng = PNG.sync.read(Buffer.from(fixtureBytes("test/fixtures/ls_2819/references/ls_2819-golden.png")));
+    const goldenPng = PNG.sync.read(Buffer.from(fixtureBytes("test/fixtures/dream_house/references/dream_house-golden.png")));
     const golden = goldenPng.data;
 
     const { ratio, width, height } = diffRatio(ours, golden);
@@ -131,7 +131,7 @@ describe("Golden plan image (task 5.7)", () => {
 
   it("wall geometry is vector-exact against the Java SVG", async () => {
     const recorder = new HomeFileRecorder();
-    const { home } = await recorder.readHomeFromZip(fixtureBytes("examples/ls_2819.sh3d"));
+    const { home } = await recorder.readHomeFromZip(fixtureBytes("test/fixtures/dream_house.sh3d"));
     const svg = renderHomeToSvg(home, 0.5);
 
     // Every wall of the home must appear as a closed path in our SVG

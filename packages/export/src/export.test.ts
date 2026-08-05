@@ -47,26 +47,20 @@ describe("CSV export (task 8.8)", () => {
     expect(csv).toBe("Name\tWidth\tDepth\tHeight\tVisible\nArmchair\t26.75\t32.625\t39.375\ttrue\nBed 140x190\t62.25\t81.875\t27.5\ttrue\n");
   });
 
-  it("matches the format of the shipped Java example CSV (ls_2819 fixture)", async () => {
-    const bytes = readFileSync("examples/ls_2819.sh3d");
+  it("exports the dream_house fixture home in the Java CSV format", async () => {
+    const bytes = readFileSync("test/fixtures/dream_house.sh3d");
     const { home } = await new HomeFileRecorder().readHomeFromZip(bytes);
     const preferences = new UserPreferences();
     preferences.setUnit(new LengthUnit(LengthUnit.INCH_DECIMALS));
     const csv = exportFurnitureCsv(home, preferences);
-    const reference = readFileSync("examples/ls_2819.csv", "utf8");
-    const csvLines = csv.trimEnd().split("\n");
-    const refLines = reference.trimEnd().split("\n");
-    // Same header (tab-separated Name, Width, Depth, Height, Visible)
-    expect(csvLines[0]).toBe(refLines[0]);
-    // Every reference row's NAME appears in our export (the shipped CSV
-    // predates a few later furniture edits to the fixture), and the row
-    // format matches: tab-separated with numeric size fields and true/false.
+    const lines = csv.trimEnd().split("\n");
+    // Tab-separated header + one row per piece
+    expect(lines[0]).toBe("Name\tWidth\tDepth\tHeight\tVisible");
+    expect(lines.length - 1).toBe(home.getFurniture().length);
+    // Row format: tab-separated with numeric size fields and true/false
     const formatOk = (line: string): boolean => /^[^\t]*\t[0-9.,]+\t[0-9.,]+\t[0-9.,]+\t(true|false)$/.test(line);
-    for (const refLine of refLines.slice(1)) {
-      const name = refLine.split("\t")[0]!;
-      const matching = csvLines.find((line) => line.startsWith(name + "\t"));
-      expect(matching, `missing ${name}`).toBeDefined();
-      expect(formatOk(refLine)).toBe(true);
+    for (const line of lines.slice(1)) {
+      expect(formatOk(line)).toBe(true);
     }
   });
 

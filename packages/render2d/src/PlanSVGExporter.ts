@@ -21,7 +21,7 @@
 /**
  * PlanSVGExporter (task 5.8): exports a home's plan as a standalone SVG
  * document through the PlanPainter pipeline, mirroring PlanComponent's SVG
- * export (the Java reference is test/fixtures/ls_2819/references/ls_2819.svg).
+ * export (the Java reference is test/fixtures/dream_house/references/dream_house.svg).
  */
 import type { Home, UserPreferences } from "@sweethomejs/core";
 import { SVGPainter } from "./SVGPainter.js";

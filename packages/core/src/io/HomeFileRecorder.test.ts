@@ -20,7 +20,7 @@ function fixtureBytes(rel: string): Uint8Array {
 describe("HomeFileRecorder readHomeFromZip", () => {
   it("prefers the Home.xml entry and resolves content against the same zip", async () => {
     const recorder = new HomeFileRecorder();
-    const { home, source } = await recorder.readHomeFromZip(fixtureBytes("examples/ls_2819.sh3d"));
+    const { home, source } = await recorder.readHomeFromZip(fixtureBytes("test/fixtures/dream_house.sh3d"));
     expect(source).toBe("xml");
     expect(home.getFurniture().length).toBe(152);
     expect(home.getWalls().length).toBe(79);
@@ -83,7 +83,7 @@ describe("HomeFileRecorder writeHome", () => {
 
   it("writes a valid zip with Home.xml + ContentDigests + content entries", async () => {
     const recorder = new HomeFileRecorder();
-    const original = await recorder.readHomeFromZip(fixtureBytes("examples/ls_2819.sh3d"));
+    const original = await recorder.readHomeFromZip(fixtureBytes("test/fixtures/dream_house.sh3d"));
     const written = await recorder.writeHome(original.home);
     const container = Sh3dContainer.open(written);
     expect(container.hasEntry("Home.xml")).toBe(true);

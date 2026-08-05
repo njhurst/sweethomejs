@@ -20,8 +20,8 @@ function readHomeEntry(fixturePath: string): Uint8Array {
 }
 
 describe("JavaSerializationReader spike (task 1.9)", () => {
-  it("reads the 2019 user home (ls_2819.sh3d)", () => {
-    const bytes = readHomeEntry("examples/ls_2819.sh3d");
+  it("reads the 2019 user home (dream_house.sh3d)", () => {
+    const bytes = readHomeEntry("test/fixtures/dream_house.sh3d");
     const { classes } = new JavaSerializationReader(bytes).walk();
     const names = classes.map((c) => c.name);
 

@@ -20,8 +20,8 @@
 
 /**
  * SVG export tests (task 5.8): the plan exports as a well-formed standalone
- * SVG via PlanSVGExporter, and the ls_2819 export is structurally comparable
- * to the Java reference (test/fixtures/ls_2819/references/ls_2819.svg).
+ * SVG via PlanSVGExporter, and the dream_house export is structurally comparable
+ * to the Java reference (test/fixtures/dream_house/references/dream_house.svg).
  */
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -40,7 +40,7 @@ function fixtureBytes(rel: string): Uint8Array {
 describe("PlanSVGExporter (task 5.8)", () => {
   it("exports a well-formed standalone SVG with a viewBox", async () => {
     const recorder = new HomeFileRecorder();
-    const { home } = await recorder.readHomeFromZip(fixtureBytes("examples/ls_2819.sh3d"));
+    const { home } = await recorder.readHomeFromZip(fixtureBytes("test/fixtures/dream_house.sh3d"));
     const result = new PlanSVGExporter().export(home, new UserPreferences());
 
     expect(result.svg.startsWith("<?xml version='1.0'?>")).toBe(true);
@@ -55,7 +55,7 @@ describe("PlanSVGExporter (task 5.8)", () => {
 
   it("every wall of the home appears as a fill and an outline path", async () => {
     const recorder = new HomeFileRecorder();
-    const { home } = await recorder.readHomeFromZip(fixtureBytes("examples/ls_2819.sh3d"));
+    const { home } = await recorder.readHomeFromZip(fixtureBytes("test/fixtures/dream_house.sh3d"));
     home.setSelectedLevel(null);
     const result = new PlanSVGExporter().export(home, new UserPreferences());
 
@@ -67,7 +67,7 @@ describe("PlanSVGExporter (task 5.8)", () => {
 
   it("homePlanBounds covers all walls and furniture", async () => {
     const recorder = new HomeFileRecorder();
-    const { home } = await recorder.readHomeFromZip(fixtureBytes("examples/ls_2819.sh3d"));
+    const { home } = await recorder.readHomeFromZip(fixtureBytes("test/fixtures/dream_house.sh3d"));
     const bounds = homePlanBounds(home);
     for (const wall of home.getWalls()) {
       for (const p of wall.getPoints()) {
@@ -78,13 +78,13 @@ describe("PlanSVGExporter (task 5.8)", () => {
     expect(bounds.maxX - bounds.minX).toBeGreaterThan(500);
   });
 
-  it("the ls_2819 export is structurally comparable to the Java reference SVG", async () => {
+  it("the dream_house export is structurally comparable to the Java reference SVG", async () => {
     const recorder = new HomeFileRecorder();
-    const { home } = await recorder.readHomeFromZip(fixtureBytes("examples/ls_2819.sh3d"));
+    const { home } = await recorder.readHomeFromZip(fixtureBytes("test/fixtures/dream_house.sh3d"));
     home.setSelectedLevel(null);
     const result = new PlanSVGExporter().export(home, new UserPreferences());
 
-    const javaSvg = new TextDecoder().decode(fixtureBytes("test/fixtures/ls_2819/references/ls_2819.svg"));
+    const javaSvg = new TextDecoder().decode(fixtureBytes("test/fixtures/dream_house/references/dream_house.svg"));
 
     // Both documents describe the same home: wall count and furniture count
     // are reflected in the element counts. The Java SVG embeds one <g> group
@@ -98,7 +98,7 @@ describe("PlanSVGExporter (task 5.8)", () => {
 
   it("exports without grid when requested", async () => {
     const recorder = new HomeFileRecorder();
-    const { home } = await recorder.readHomeFromZip(fixtureBytes("examples/ls_2819.sh3d"));
+    const { home } = await recorder.readHomeFromZip(fixtureBytes("test/fixtures/dream_house.sh3d"));
     const exporter = new PlanSVGExporter();
     const withGrid = exporter.export(home, new UserPreferences()).svg;
     const withoutGrid = exporter.export(home, new UserPreferences(), { includeGrid: false }).svg;

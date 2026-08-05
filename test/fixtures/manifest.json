@@ -2,8 +2,8 @@
   "version": 1,
   "captured_by": "tools/java-harness (DumpHome), Sweet Home 3D 7.5 io code on JDK 17",
   "fixtures": {
-    "ls_2819": {
-      "source": "examples/ls_2819.sh3d",
+    "dream_house": {
+      "source": "test/fixtures/dream_house.sh3d",
       "origin": "User-provided example: a real home exported from Sweet Home 3D (2019, version 6000; inch units). 152 furniture, 79 walls, 15 rooms, 6 levels, 10 dimension lines.",
       "artifacts": {
         "home.dump.json": "Recursive field dump of the Home object graph (parity oracle). $class/$ref markers; UUID-shaped ids normalized to <prefix>-<ordinal>; content entries referenced by zip entry name.",
@@ -11,8 +11,8 @@
         "ContentDigests": "Repair manifest entry, extracted verbatim.",
         "entries.txt": "Zip entry listing (name + size).",
         "content/": "All non-home zip entries (models, textures) extracted verbatim.",
-        "references/ls_2819.svg": "Plan SVG export from the Java app (FreeHEP PlanComponent$SVGSupport).",
-        "references/ls_2819.csv": "Furniture list CSV export from the Java app."
+        "references/dream_house.svg": "Plan SVG export from the Java app (FreeHEP PlanComponent$SVGSupport).",
+        "references/dream_house.csv": "Furniture list CSV export from the Java app."
       }
     },
     "generated": {

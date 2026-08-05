@@ -19,7 +19,7 @@ function fixtureBytes(rel: string): Uint8Array {
 
 describe("ContentDigestManager (task 3.5)", () => {
   it("computes SHA-1 matching the Java writer for every content entry", async () => {
-    const container = Sh3dContainer.open(fixtureBytes("examples/ls_2819.sh3d"));
+    const container = Sh3dContainer.open(fixtureBytes("test/fixtures/dream_house.sh3d"));
     const manifest = new TextDecoder().decode(await container.getEntry("ContentDigests"));
     const expected = parseContentDigests(manifest);
     expect(expected.size).toBeGreaterThan(100);

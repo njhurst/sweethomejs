@@ -201,7 +201,7 @@ function assertWallParity(dumpPath: string): void {
 
 describe("Wall geometry parity (task 2.3)", () => {
   it("matches Java getPoints() for the 2019 user home (24 walls, connected)", () => {
-    assertWallParity("test/fixtures/ls_2819/home.dump.json");
+    assertWallParity("test/fixtures/dream_house/home.dump.json");
   });
 
   it("matches Java getPoints() for the generated walls fixture (arc + baseboards)", () => {

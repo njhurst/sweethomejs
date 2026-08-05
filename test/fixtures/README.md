@@ -3,7 +3,7 @@
 Golden `.sh3d` files + reference outputs (Java field-dumps, plan/3D/photo PNGs,
 `Home.xml` bytes, PDF/SVG exports) captured from the real Java app.
 
-- `examples/ls_2819.sh3d` (repo root `examples/`) is the first committed fixture
+- `test/fixtures/dream_house.sh3d` (repo root `examples/`) is the first committed fixture
   (a real home with walls, rooms, furniture, cameras). Task 1.5 wires it into
   the corpus and captures its reference dumps/renders.
 - Task 1.6 builds feature-covering fixtures (walls, rooms, furniture, levels,
