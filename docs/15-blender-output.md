@@ -3,7 +3,7 @@
 > Status: **design** (task 11.1) · Owner: `pi-5j02be` · Scope: `packages/export`,
 > `packages/render3d` (read-only), `packages/ui` (menu/dialog), CI
 > Oracle: Java `OBJWriter.java` + `HomePane.OBJExporter` (upstream 7.5),
-> `examples/ls_2819.obj` / `ls_2819.obj.blend`
+> `examples/dream_house.obj` / `dream_house.obj.blend`
 
 ## 1. Goal and interpretation
 
@@ -19,7 +19,7 @@ natively** (File ▸ Import or drag & drop). The bar we want to clear:
    steps beyond the import itself.
 2. **Right units and axis** — the home must appear at the same physical size,
    standing on the floor (Y-up, meters in glTF; Sweet Home 3D is internally
-   **centimeters**, plan X/Y, elevation Z — verified: `ls_2819.sh3d` uses
+   **centimeters**, plan X/Y, elevation Z — verified: `dream_house.sh3d` uses
    `wallHeight='236.22'` cm).
 3. **Structure preserved** — walls/rooms/furniture as separately addressable
    objects with sensible names; materials and textures intact (embedded where
@@ -42,11 +42,11 @@ extruded curves, rooms as floor plans) — that is the Blender add-on route
     groups; `usemtl` per appearance; per-object textures copied next to the
     MTL as PNG/JPG.
   - **Y-up coordinates, centimeter units** — ground at `y=0`, wall tops at
-    `y≈236`. Confirmed in `examples/ls_2819.obj` (`v 84.63287 589.38
-    -11.502183` is a wall on an upper level; `mtllib ls_2819.mtl`).
+    `y≈236`. Confirmed in `examples/dream_house.obj` (`v 84.63287 589.38
+    -11.502183` is a wall on an upper level; `mtllib dream_house.mtl`).
   - "Export all vs selection" confirm dialog (mirrors `confirmExportAllToOBJ`).
   - `writeNodeInZIPFile` bundles OBJ+MTL+textures into a zip.
-- `examples/ls_2819.obj.blend` (66 MB) is a **Blender 2.79** file
+- `examples/dream_house.obj.blend` (66 MB) is a **Blender 2.79** file
   (`BLENDER-v279REND` header) — i.e. the historical workflow was
   "export OBJ from the desktop app, import into Blender, save". It shows both
   that OBJ→Blender is the established path and that the `.blend` format churns
@@ -223,7 +223,7 @@ exact rule for parity).
 ### 4.8 Worker placement and memory
 
 - `GLTFExporter.parse` is synchronous and can take seconds / hundreds of MB on
-  the 500-furniture fixtures (`ls_2819.obj` alone is 230k vertices). Run the
+  the 500-furniture fixtures (`dream_house.obj` alone is 230k vertices). Run the
   export in a worker (per [14](14-worker-topology.md) topology: codec-style
   worker) with the result transferred back as an `ArrayBuffer`; the UI shows
   progress. Fallback to main-thread when workers are unavailable.
@@ -239,7 +239,7 @@ exact rule for parity).
   (reuse the `formatFloat` policy from [05-file-format.md](05-file-format.md)).
 - Same export-scene assembly as glTF (shared naming sanitizer, same
   model-preload step), writing **cm/Y-up as Java does** so
-  `ls_2819.obj`-equivalent output is reproducible. Output zipped
+  `dream_house.obj`-equivalent output is reproducible. Output zipped
   (OBJ+MTL+textures) like Java's `writeNodeInZIPFile`.
 - This is the format to compare against the Java oracle (§8) and the
   documented fallback for workflows that must byte-match the desktop app.
@@ -374,6 +374,16 @@ Implementation notes (verified against r185):
 3. **Medium term**: Tier-3 WebGPU SSGI pipeline behind a capability probe.
 4. **Photo**: adopt `three-gpu-pathtracer` when task 8.4 lands.
 
+**Blender is optional.** Tiers 1 and 3 are implemented entirely in this
+codebase — every module above (PMREM, RoomEnvironment, GroundedSkybox,
+LightProbeGenerator, GTAO/SSR passes, three/webgpu + TSL) ships inside the
+already-vendored three 0.185.1, and `three-gpu-pathtracer` is a plain npm
+dependency. Blender appears only in the Tier-2 bake path, and even that bake
+can eventually run in-browser (`three-gpu-pathtracer` already path-traces
+lightmaps into UV space). An in-browser bonus the baked path cannot offer:
+**dynamic lighting** — the sun follows the compass date/time and lamps toggle
+in real time, because the GI is computed live rather than baked.
+
 Honest framing: browser real-time GI (Tiers 1/3) is **good architectural
 preview** — viz-final quality is the **baked** Tier-2 path. Both are cheap to
 reach because they consume the same scene intermediate.
@@ -386,7 +396,7 @@ reach because they consume the same scene intermediate.
 | Round-trip | export → `GLTFLoader` import → vertex/normal/bounds compare vs source scene (tolerance) | unit |
 | Validator | `gltf-validator` on every exported GLB (npm dev dep) | CI |
 | Java parity (OBJ) | TS OBJ output vs `tools/java-harness` dump of Java `OBJWriter` on the same fixture: group names, vertex counts, bounds, MTL lines | CI |
-| Golden | `examples/ls_2819.sh3d` → GLB; commit hash + size + node-count snapshot; regenerate per [10.2](TODO.md) workflow | CI |
+| Golden | `examples/dream_house.sh3d` → GLB; commit hash + size + node-count snapshot; regenerate per [10.2](TODO.md) workflow | CI |
 | Blender smoke (optional) | CI job: install headless Blender, `blender -b -P import_and_dump.py scene.glb`, assert imported object/mesh counts | CI (separate, can be allowed to fail on infra) |
 | Perf | export 500-furniture home < budget (e.g. 15 s incl. model load) | CI |
 
@@ -411,7 +421,7 @@ deliberate spec compliance, not a diff).
 - [ ] Shared render upgrade: IBL env + GTAO + MeshPhysicalMaterial in the
       scene intermediate (Tier-1, §7.1) — benefits 3D view and photo renderer
 - [ ] Tests: unit structure, GLB round-trip, gltf-validator CI gate, Java
-      OBJ parity, golden snapshot for `ls_2819.sh3d`
+      OBJ parity, golden snapshot for `dream_house.sh3d`
 - [ ] Docs: this doc's status flip to implemented; `KNOWN_DIFFS.md` entries;
       docs/README.md index
 - [ ] Stretch spikes (11.7) evaluated with a written verdict
@@ -422,7 +432,7 @@ deliberate spec compliance, not a diff).
    import quality in Blender 3.6+ vs 4.x; else bake instances to real meshes
    behind an option.
 2. `maxTextureSize` default (512/1024/2048) — measure GLB size on
-   `ls_2819.sh3d` (has ~50 JPG/PNG textures).
+   `dream_house.sh3d` (has ~50 JPG/PNG textures).
 3. Levels: export only visible levels (Java's `isAllLevelsSelection` behavior)
    or all levels grouped by level name — pick v1 default after a quick user
    check.
