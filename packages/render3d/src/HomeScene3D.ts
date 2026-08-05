@@ -43,6 +43,8 @@ export interface HomeScene3DOptions {
   modelManager?: ModelManager;
   /** Add lights (default true). */
   addLights?: boolean;
+  /** Add a PointLight per furniture light source (Design style; default false). */
+  addLightSources?: boolean;
   /** Add the ground plane (default true). */
   addGround?: boolean;
   /** Use the instanced placeholder path for model-less furniture (default true). */
@@ -72,6 +74,7 @@ export class HomeScene3D extends Object3DBase<Home> {
     this.intermediate = buildSceneIntermediate(options.home, options.preferences, {
       addGround: options.addGround ?? true,
       addLights: options.addLights ?? true,
+      addLightSources: options.addLightSources ?? false,
       instancedFurniture: options.instancedFurniture ?? true,
       materialCache: this.materialCache,
       textureCache: this.textureCache,

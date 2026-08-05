@@ -24,7 +24,15 @@
  * the model item and subscribes to its property changes.
  */
 import * as THREE from "three";
-import type { Home, UserPreferences, Room, HomePieceOfFurniture, DimensionLine, Label, Polyline } from "@sweethomejs/core";
+import type {
+  Home,
+  UserPreferences,
+  Room,
+  HomePieceOfFurniture,
+  DimensionLine,
+  Label,
+  Polyline,
+} from "@sweethomejs/core";
 import { Object3DBase } from "../Object3DBase.js";
 import { MaterialCache, TextureCache, applyHomeTextureAttributes } from "../AttributeCaches.js";
 import { ModelManager, type LoadedModel } from "../ModelManager.js";
@@ -52,7 +60,14 @@ export class RoomObject3D extends Object3DBase<Room> {
   private readonly textureCache: TextureCache;
   private mesh: THREE.Mesh | null = null;
 
-  constructor(room: Room, home: Home, preferences: UserPreferences, materialCache: MaterialCache, textureCache: TextureCache, context: unknown = null) {
+  constructor(
+    room: Room,
+    home: Home,
+    preferences: UserPreferences,
+    materialCache: MaterialCache,
+    textureCache: TextureCache,
+    context: unknown = null,
+  ) {
     super(room, home, preferences, context);
     this.materialCache = materialCache;
     this.textureCache = textureCache;
@@ -79,29 +94,37 @@ export class RoomObject3D extends Object3DBase<Room> {
       return;
     }
     const z = groundElevation(room);
+    const floorShininess = room.getFloorShininess();
     const geometry = buildPolygonGeometry(points, z);
     const floorTexture = room.getFloorTexture();
     let material: THREE.Material;
     if (floorTexture !== null) {
       const texture = this.textureCache.getTexture(floorTexture.getImage(), () => this.update());
       if (texture !== null) {
-        const standardMaterial = this.materialCache.getMaterial({
-          diffuseColor: 0xffffff,
-          ambientColor: 0x000000,
-          shininess: 0,
-          opacity: 1,
-          doubleSided: true,
-          polygonOffset: 2,
-        }).clone();
+        const standardMaterial = this.materialCache
+          .getMaterial({
+            diffuseColor: 0xffffff,
+            ambientColor: 0x000000,
+            shininess: floorShininess,
+            opacity: 1,
+            doubleSided: true,
+            polygonOffset: 2,
+          })
+          .clone();
         standardMaterial.map = texture;
         standardMaterial.needsUpdate = true;
         material = standardMaterial;
-        applyHomeTextureAttributes(texture, floorTexture, pointsBoundsWidth(points), pointsBoundsHeight(points));
+        applyHomeTextureAttributes(
+          texture,
+          floorTexture,
+          pointsBoundsWidth(points),
+          pointsBoundsHeight(points),
+        );
       } else {
         material = this.materialCache.getMaterial({
           diffuseColor: room.getFloorColor() ?? 0xffffff,
           ambientColor: 0x000000,
-          shininess: 0,
+          shininess: floorShininess,
           opacity: 1,
           doubleSided: true,
           polygonOffset: 2,
@@ -111,7 +134,7 @@ export class RoomObject3D extends Object3DBase<Room> {
       material = this.materialCache.getMaterial({
         diffuseColor: room.getFloorColor() ?? 0xffffff,
         ambientColor: 0x000000,
-        shininess: 0,
+        shininess: floorShininess,
         opacity: 1,
         doubleSided: true,
         // Keep the floor's fragments clearly in front of the ground in the
@@ -163,7 +186,14 @@ export class FurnitureObject3D extends Object3DBase<HomePieceOfFurniture> {
   private modelGroup: THREE.Group | null = null;
   private loadedModel: LoadedModel | null = null;
 
-  constructor(piece: HomePieceOfFurniture, home: Home, preferences: UserPreferences, materialCache: MaterialCache, modelManager: ModelManager | null = null, context: unknown = null) {
+  constructor(
+    piece: HomePieceOfFurniture,
+    home: Home,
+    preferences: UserPreferences,
+    materialCache: MaterialCache,
+    modelManager: ModelManager | null = null,
+    context: unknown = null,
+  ) {
     super(piece, home, preferences, context);
     this.materialCache = materialCache;
     this.modelManager = modelManager ?? new ModelManager();
@@ -210,7 +240,7 @@ export class FurnitureObject3D extends Object3DBase<HomePieceOfFurniture> {
     const material = this.materialCache.getMaterial({
       diffuseColor: piece.getColor() ?? 0x8f8f8f,
       ambientColor: 0x000000,
-      shininess: 0,
+      shininess: piece.getShininess() ?? 0,
       opacity: 1,
       doubleSided: false,
     });
@@ -227,6 +257,7 @@ export class FurnitureObject3D extends Object3DBase<HomePieceOfFurniture> {
     this.loadedModel = model;
     this.modelGroup = new THREE.Group();
     this.modelManager.applyPieceTransform(model, this.item, this.modelGroup);
+    this.applyPieceMaterials();
     const piece = this.item;
     const elevation = piece.getElevation() + groundElevation(piece);
     // Small lift so the model's bottom doesn't z-fight the floor
@@ -234,6 +265,67 @@ export class FurnitureObject3D extends Object3DBase<HomePieceOfFurniture> {
     this.modelGroup.rotation.y = piece.getAngle();
     this.root.clear();
     this.root.add(this.modelGroup);
+  }
+
+  /**
+   * Overrides the loaded model's materials with the piece's modelMaterials
+   * (matched by material name) or its single color, mirroring Java's
+   * HomePieceOfFurniture3D: modelMaterials win per-name; otherwise a piece
+   * color tints every material. Textures on the model are kept.
+   */
+  private applyPieceMaterials(): void {
+    const piece = this.item;
+    const modelMaterials = piece.getModelMaterials();
+    const color = piece.getColor();
+    if (modelMaterials === null && color === null) {
+      return;
+    }
+    this.modelGroup?.traverse((child) => {
+      if (!(child as THREE.Mesh).isMesh) {
+        return;
+      }
+      const mesh = child as THREE.Mesh;
+      const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+      for (const material of materials) {
+        const standard = material as THREE.MeshStandardMaterial;
+        if (standard.color === undefined || standard.roughness === undefined) {
+          continue;
+        }
+        const modelMaterial =
+          modelMaterials !== null
+            ? modelMaterials.find((m) => m.getName() === material.name)
+            : undefined;
+        const useAlpha = (value: number): boolean => value >>> 0 > 0xffffff;
+        const materialColor =
+          modelMaterial !== undefined
+            ? modelMaterial.getColor()
+            : modelMaterials === null
+              ? color
+              : null;
+        const shininess =
+          modelMaterial !== undefined
+            ? (modelMaterial.getShininess() ?? 0)
+            : modelMaterials === null
+              ? (piece.getShininess() ?? 0)
+              : 0;
+        if (materialColor !== null && materialColor !== undefined) {
+          const alpha = useAlpha(materialColor) ? ((materialColor >>> 24) & 0xff) / 255 : 1;
+          standard.color.setHex(materialColor & 0xffffff);
+          if (alpha < 1) {
+            // A translucent piece color wins over the model's own opacity;
+            // otherwise keep MTL-driven transparency (e.g. glass models).
+            standard.opacity = alpha;
+            standard.transparent = true;
+          }
+          standard.needsUpdate = true;
+        }
+        if (shininess > 0) {
+          // Mirror MaterialCache's shininess→roughness approximation
+          standard.roughness = Math.max(0, 1 - shininess / 128);
+          standard.needsUpdate = true;
+        }
+      }
+    });
   }
 
   /** The loaded model group (null when the placeholder is shown). */
@@ -260,7 +352,13 @@ export class DimensionLineObject3D extends Object3DBase<DimensionLine> {
   private readonly materialCache: MaterialCache;
   private lines: THREE.Line | null = null;
 
-  constructor(line: DimensionLine, home: Home, preferences: UserPreferences, materialCache: MaterialCache, context: unknown = null) {
+  constructor(
+    line: DimensionLine,
+    home: Home,
+    preferences: UserPreferences,
+    materialCache: MaterialCache,
+    context: unknown = null,
+  ) {
     super(line, home, preferences, context);
     this.materialCache = materialCache;
     this.addModelListener(line, () => this.update());
@@ -283,10 +381,7 @@ export class DimensionLineObject3D extends Object3DBase<DimensionLine> {
     }
     const z = line.getElevationStart() + groundElevation(line);
     const geometry = new THREE.BufferGeometry();
-    const positions = [
-      line.getXStart(), z, line.getYStart(),
-      line.getXEnd(), z, line.getYEnd(),
-    ];
+    const positions = [line.getXStart(), z, line.getYStart(), line.getXEnd(), z, line.getYEnd()];
     geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
     const material = new THREE.LineBasicMaterial({
       color: (line.getColor() ?? 0x000000) & 0xffffff,
@@ -308,7 +403,12 @@ export class PolylineObject3D extends Object3DBase<Polyline> {
   private readonly root = new THREE.Group();
   private lines: THREE.Line | null = null;
 
-  constructor(polyline: Polyline, home: Home, preferences: UserPreferences, context: unknown = null) {
+  constructor(
+    polyline: Polyline,
+    home: Home,
+    preferences: UserPreferences,
+    context: unknown = null,
+  ) {
     super(polyline, home, preferences, context);
     this.addModelListener(polyline, () => this.update());
     this.update();
@@ -398,7 +498,13 @@ export class GroundObject3D extends Object3DBase<Home> {
   private mesh: THREE.Mesh | null = null;
   private grid: THREE.LineSegments | null = null;
 
-  constructor(home: Home, preferences: UserPreferences, materialCache: MaterialCache, textureCache: TextureCache, context: unknown = null) {
+  constructor(
+    home: Home,
+    preferences: UserPreferences,
+    materialCache: MaterialCache,
+    textureCache: TextureCache,
+    context: unknown = null,
+  ) {
     super(home, home, preferences, context);
     this.materialCache = materialCache;
     this.textureCache = textureCache;
@@ -446,7 +552,9 @@ export class GroundObject3D extends Object3DBase<Home> {
       this.grid = null;
     }
     const environment = this.home.getEnvironment();
-    if (!((environment as unknown as { isGroundVisible?(): boolean }).isGroundVisible?.() ?? true)) {
+    if (!(
+      (environment as unknown as { isGroundVisible?(): boolean }).isGroundVisible?.() ?? true
+    )) {
       return;
     }
     const bounds = this.homeBounds();
@@ -465,7 +573,15 @@ export class GroundObject3D extends Object3DBase<Home> {
     if (groundTexture !== null) {
       const texture = this.textureCache.getTexture(groundTexture.getImage(), () => this.update());
       if (texture !== null) {
-        const standardMaterial = this.materialCache.getMaterial({ diffuseColor: 0xffffff, ambientColor: 0x000000, shininess: 0, opacity: 1, doubleSided: false }).clone();
+        const standardMaterial = this.materialCache
+          .getMaterial({
+            diffuseColor: 0xffffff,
+            ambientColor: 0x000000,
+            shininess: 0,
+            opacity: 1,
+            doubleSided: false,
+          })
+          .clone();
         standardMaterial.map = texture;
         standardMaterial.needsUpdate = true;
         material = standardMaterial;
@@ -473,10 +589,24 @@ export class GroundObject3D extends Object3DBase<Home> {
         texture.wrapT = THREE.RepeatWrapping;
         texture.repeat.set(size / groundTexture.getScale(), size / groundTexture.getScale());
       } else {
-        material = this.materialCache.getMaterial({ diffuseColor: environment.getGroundColor(), ambientColor: 0x000000, shininess: 0, opacity: 1, doubleSided: false, polygonOffset: -2 });
+        material = this.materialCache.getMaterial({
+          diffuseColor: environment.getGroundColor(),
+          ambientColor: 0x000000,
+          shininess: 0,
+          opacity: 1,
+          doubleSided: false,
+          polygonOffset: -2,
+        });
       }
     } else {
-      material = this.materialCache.getMaterial({ diffuseColor: environment.getGroundColor(), ambientColor: 0x000000, shininess: 0, opacity: 1, doubleSided: false, polygonOffset: -2 });
+      material = this.materialCache.getMaterial({
+        diffuseColor: environment.getGroundColor(),
+        ambientColor: 0x000000,
+        shininess: 0,
+        opacity: 1,
+        doubleSided: false,
+        polygonOffset: -2,
+      });
     }
     this.mesh = new THREE.Mesh(geometry, material);
     // Java puts the ground slightly BELOW the floor level (HomeComponent3D
@@ -493,7 +623,11 @@ export class GroundObject3D extends Object3DBase<Home> {
   }
 
   /** Line grid every 100 cm within (slightly beyond) the home bounds. */
-  private buildGrid(bounds: { minX: number; minY: number; maxX: number; maxY: number }, extentX: number, extentY: number): THREE.LineSegments | null {
+  private buildGrid(
+    bounds: { minX: number; minY: number; maxX: number; maxY: number },
+    extentX: number,
+    extentY: number,
+  ): THREE.LineSegments | null {
     const step = 100;
     const pad = Math.min(400, Math.max(extentX, extentY) * 0.1);
     const x0 = Math.floor((bounds.minX - pad) / step) * step;
@@ -512,7 +646,11 @@ export class GroundObject3D extends Object3DBase<Home> {
     }
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute("position", new THREE.Float32BufferAttribute(points, 3));
-    const material = new THREE.LineBasicMaterial({ color: 0x808080, transparent: true, opacity: 0.35 });
+    const material = new THREE.LineBasicMaterial({
+      color: 0x808080,
+      transparent: true,
+      opacity: 0.35,
+    });
     return new THREE.LineSegments(geometry, material);
   }
 

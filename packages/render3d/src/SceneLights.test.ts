@@ -25,27 +25,159 @@
  */
 import { describe, expect, it } from "vitest";
 import * as THREE from "three";
-import { Home, HomePieceOfFurniture, UserPreferences } from "@sweethomejs/core";
+import { Home, HomeLight, HomePieceOfFurniture } from "@sweethomejs/core";
 import { SceneLights } from "./SceneLights.js";
 import { SelectionBoxes3D, SELECTION_BOX_COLOR } from "./SelectionBoxes3D.js";
 
 function makePiece(x: number, y: number): HomePieceOfFurniture {
   const piece = new HomePieceOfFurniture("p", {
-    getName: () => "Sofa", getDescription: () => null, getInformation: () => null, getLicense: () => null,
-    getDepth: () => 50, getHeight: () => 30, getWidth: () => 100, getElevation: () => 0, getDropOnTopElevation: () => 1,
-    isMovable: () => true, isDoorOrWindow: () => false, getIcon: () => null, getPlanIcon: () => null, getModel: () => null,
-    getModelFlags: () => 0, getModelSize: () => null, getModelRotation: () => [[1, 0, 0], [0, 1, 0], [0, 0, 1]],
-    getStaircaseCutOutShape: () => null, getCreator: () => null, isBackFaceShown: () => false, getColor: () => null,
-    isResizable: () => true, isDeformable: () => true, isWidthDepthDeformable: () => true, isTexturable: () => true,
-    isHorizontallyRotatable: () => true, getPrice: () => null, getValueAddedTaxPercentage: () => null, getCurrency: () => null,
-    getProperty: () => null, getPropertyNames: () => [], getContentProperty: () => null, isContentProperty: () => false, getLevel: () => null,
+    getName: () => "Sofa",
+    getDescription: () => null,
+    getInformation: () => null,
+    getLicense: () => null,
+    getDepth: () => 50,
+    getHeight: () => 30,
+    getWidth: () => 100,
+    getElevation: () => 0,
+    getDropOnTopElevation: () => 1,
+    isMovable: () => true,
+    isDoorOrWindow: () => false,
+    getIcon: () => null,
+    getPlanIcon: () => null,
+    getModel: () => null,
+    getModelFlags: () => 0,
+    getModelSize: () => null,
+    getModelRotation: () => [
+      [1, 0, 0],
+      [0, 1, 0],
+      [0, 0, 1],
+    ],
+    getStaircaseCutOutShape: () => null,
+    getCreator: () => null,
+    isBackFaceShown: () => false,
+    getColor: () => null,
+    isResizable: () => true,
+    isDeformable: () => true,
+    isWidthDepthDeformable: () => true,
+    isTexturable: () => true,
+    isHorizontallyRotatable: () => true,
+    getPrice: () => null,
+    getValueAddedTaxPercentage: () => null,
+    getCurrency: () => null,
+    getProperty: () => null,
+    getPropertyNames: () => [],
+    getContentProperty: () => null,
+    isContentProperty: () => false,
+    getLevel: () => null,
   } as never);
   piece.setX(x);
   piece.setY(y);
   return piece;
 }
 
+/** A plain Light-shaped getter object for HomeLight (prototype methods are lost on spread). */
+function makeLight(
+  id: string,
+  lightSource: { x: number; y: number; z: number; color: number } | null,
+  power = 0.5,
+): HomeLight {
+  return new HomeLight(id, {
+    getName: () => "Lamp",
+    getDescription: () => null,
+    getInformation: () => null,
+    getLicense: () => null,
+    getDepth: () => 20,
+    getHeight: () => 30,
+    getWidth: () => 20,
+    getElevation: () => 0,
+    getDropOnTopElevation: () => 1,
+    isMovable: () => true,
+    isDoorOrWindow: () => false,
+    getIcon: () => null,
+    getPlanIcon: () => null,
+    getModel: () => null,
+    getModelFlags: () => 0,
+    getModelSize: () => null,
+    getModelRotation: () => [
+      [1, 0, 0],
+      [0, 1, 0],
+      [0, 0, 1],
+    ],
+    getStaircaseCutOutShape: () => null,
+    getCreator: () => null,
+    isBackFaceShown: () => false,
+    getColor: () => 0x2a2a2a,
+    isResizable: () => true,
+    isDeformable: () => true,
+    isWidthDepthDeformable: () => true,
+    isTexturable: () => true,
+    isHorizontallyRotatable: () => true,
+    getPrice: () => null,
+    getValueAddedTaxPercentage: () => null,
+    getCurrency: () => null,
+    getProperty: () => null,
+    getPropertyNames: () => [],
+    getContentProperty: () => null,
+    isContentProperty: () => false,
+    getLevel: () => null,
+    getPower: () => power,
+    getLightSources: () =>
+      lightSource === null
+        ? []
+        : [
+            {
+              getX: () => lightSource.x,
+              getY: () => lightSource.y,
+              getZ: () => lightSource.z,
+              getColor: () => lightSource.color,
+            },
+          ],
+    getLightSourceMaterialNames: () => [],
+  } as never);
+}
+
 describe("SceneLights (task 6.4)", () => {
+  it("adds a PointLight per furniture light source (Design style)", () => {
+    const home = new Home();
+    const light = makeLight("l1", { x: 10, y: 20, z: 30, color: 0xfff0c8 }, 0.5);
+    light.setX(200);
+    light.setY(100);
+    light.setElevation(150);
+    light.setAngle(Math.PI / 2);
+    home.addPieceOfFurniture(light);
+
+    const lights = new SceneLights({ home, addLightSources: true });
+    const points = lights.getLights().filter((o) => o instanceof THREE.PointLight);
+    expect(points.length).toBe(1);
+    const point = points[0] as THREE.PointLight;
+    // Offset (10, 20) rotated by +90°: (x,y) -> (-y, x) = (-20, 10)
+    expect(point.position.x).toBeCloseTo(200 - 20, 4);
+    expect(point.position.y).toBeCloseTo(150 + 30, 4);
+    expect(point.position.z).toBeCloseTo(100 + 10, 4);
+    expect(point.color.getHex()).toBe(0xfff0c8);
+    expect(point.intensity).toBeCloseTo(0.5 * 2000, 6);
+    lights.destroy();
+  });
+
+  it("ignores light sources unless addLightSources is set (Technical parity)", () => {
+    const home = new Home();
+    const light = makeLight("l1", { x: 0, y: 0, z: 0, color: 0xffffff });
+    home.addPieceOfFurniture(light);
+    const lights = new SceneLights({ home });
+    expect(lights.getLights().filter((o) => o instanceof THREE.PointLight).length).toBe(0);
+    lights.destroy();
+  });
+
+  it("rebuilds furniture lights when pieces are added", () => {
+    const home = new Home();
+    const lights = new SceneLights({ home, addLightSources: true });
+    expect(lights.getLights().filter((o) => o instanceof THREE.PointLight).length).toBe(0);
+    const light = makeLight("l1", { x: 0, y: 0, z: 10, color: 0xffffff });
+    home.addPieceOfFurniture(light);
+    expect(lights.getLights().filter((o) => o instanceof THREE.PointLight).length).toBe(1);
+    lights.destroy();
+  });
+
   it("creates a rig with ambient, directional, sun and ceiling lights", () => {
     const home = new Home();
     const lights = new SceneLights({ home });

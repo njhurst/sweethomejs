@@ -22,6 +22,12 @@
         "dumps/<name>/home.dump.json": "Field dumps captured by DumpHome for each generated fixture.",
         "dumps/<name>/Home.xml": "XML entry for each fixture."
       }
+    },
+    "design_showcase": {
+      "source": "test/fixtures/generated/design-showcase.sh3d",
+      "builder": "tools/build-design-showcase.mjs (run via vite-node)",
+      "origin": "Design-style 3D fixture (tasks 11.8/11.11): a two-room house exercising the 'nicer surfaces + GI' render path — rooms with floorColor + floorShininess (glossy wood w/ procedural texture, glossy tile), walls with colors, furniture with modelMaterials shininess (glossy wood / glass / polished metal OBJ models) + color-only pieces, and 3 HomeLight pieces with warm/cool light sources.",
+      "artifacts": {}
     }
   }
 }

@@ -32,13 +32,22 @@ import { MaterialCache, TextureCache } from "./AttributeCaches.js";
 import { ModelManager } from "./ModelManager.js";
 import { SceneLights } from "./SceneLights.js";
 import { WallObject3D } from "./builders/WallObject3D.js";
-import { RoomObject3D, FurnitureObject3D, DimensionLineObject3D, PolylineObject3D, LabelObject3D, GroundObject3D } from "./builders/objectBuilders.js";
+import {
+  RoomObject3D,
+  FurnitureObject3D,
+  DimensionLineObject3D,
+  PolylineObject3D,
+  LabelObject3D,
+  GroundObject3D,
+} from "./builders/objectBuilders.js";
 import { InstancedFurniture } from "./InstancedFurniture.js";
 import type { Object3DBase } from "./Object3DBase.js";
 
 export interface SceneIntermediateOptions {
   addGround?: boolean;
   addLights?: boolean;
+  /** Add a PointLight per furniture light source (Design style; default false). */
+  addLightSources?: boolean;
   /** Use a single InstancedMesh for model-less furniture (default true). */
   instancedFurniture?: boolean;
   materialCache?: MaterialCache;
@@ -137,7 +146,7 @@ export function buildSceneIntermediate(
   // Lights
   let lights: SceneLights | null = null;
   if (options.addLights ?? true) {
-    lights = new SceneLights({ home });
+    lights = new SceneLights({ home, addLightSources: options.addLightSources ?? false });
     for (const light of lights.getLights()) {
       group.add(light);
     }
@@ -199,5 +208,16 @@ export function buildSceneIntermediate(
     textureCache.clear();
   };
 
-  return { ground: groundBuilder, group, lights, builders, instancedGroup, materialCache, textureCache, modelManager, rebuildStaticItems, dispose };
+  return {
+    ground: groundBuilder,
+    group,
+    lights,
+    builders,
+    instancedGroup,
+    materialCache,
+    textureCache,
+    modelManager,
+    rebuildStaticItems,
+    dispose,
+  };
 }

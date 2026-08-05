@@ -28,11 +28,33 @@
 import * as THREE from "three";
 import type { Home } from "@sweethomejs/core";
 import { colorToThree } from "./AttributeCaches.js";
+import { groundElevation } from "./builders/Elevations.js";
+
+/** The LightSource surface used by furniture light points (structural). */
+type LightSourceLike = {
+  getX(): number;
+  getY(): number;
+  getZ(): number;
+  getColor(): number;
+};
+
+/**
+ * Scales furniture light-source power (0..1) to PointLight intensity (cd)
+ * for three's physical lighting. Tuned so a power-0.5 lamp pools ~250 lux at
+ * 2 m with ACES tone mapping; see KNOWN_DIFFS for the Java comparison.
+ */
+const LIGHT_SOURCE_INTENSITY_SCALE = 2000;
 
 export interface SceneLightsOptions {
   home: Home;
   /** Enable shadow-casting on the sun light (default false). */
   shadows?: boolean;
+  /**
+   * Add a PointLight per furniture light source (HomeLight pieces),
+   * positioned in the piece's frame and scaled by its power (default false —
+   * off keeps the current/Technical look and golden renders).
+   */
+  addLightSources?: boolean;
 }
 
 export class SceneLights {
@@ -41,10 +63,12 @@ export class SceneLights {
   private readonly sunLight: THREE.DirectionalLight;
   private readonly ceilingLight: THREE.DirectionalLight;
   private readonly ambientLight: THREE.AmbientLight;
+  private readonly addLightSources: boolean;
   private readonly disposables: Array<() => void> = [];
 
   constructor(options: SceneLightsOptions) {
     this.home = options.home;
+    this.addLightSources = options.addLightSources ?? false;
     this.ambientLight = new THREE.AmbientLight(0x333333);
 
     // Fixed directional rig with default intensities (Java createLights)
@@ -75,6 +99,14 @@ export class SceneLights {
     }
     this.lights.push(this.sunLight, this.ceilingLight, this.ambientLight);
 
+    if (this.addLightSources) {
+      this.updateLightSources();
+      // Rebuild furniture lights when pieces are added/removed
+      const furnitureListener = { collectionChanged: () => this.updateLightSources() };
+      this.home.addFurnitureListener(furnitureListener);
+      this.disposables.push(() => this.home.removeFurnitureListener(furnitureListener));
+    }
+
     this.update();
     const listener = (): void => this.update();
     this.home.getEnvironment().addPropertyChangeListener((evt) => {
@@ -87,6 +119,43 @@ export class SceneLights {
       propertyChange: () => this.updateSunDirection(),
     });
     this.home.getCompass().addPropertyChangeListener(listener);
+  }
+
+  /**
+   * Replaces the furniture light-source PointLights. LightSource (x,y,z)
+   * offsets are in the piece's frame: rotated by the piece's plan angle and
+   * raised by its elevation. Intensity scales with the piece's power.
+   */
+  private updateLightSources(): void {
+    for (const light of this.lights) {
+      if (light.userData.furnitureLight === true) {
+        this.lights.splice(this.lights.indexOf(light), 1);
+        light.removeFromParent();
+      }
+    }
+    for (const piece of this.home.getFurniture()) {
+      const lightSources =
+        (piece as { getLightSources?: () => LightSourceLike[] }).getLightSources?.() ?? [];
+      for (const lightSource of lightSources) {
+        const angle = piece.getAngle();
+        const cos = Math.cos(angle);
+        const sin = Math.sin(angle);
+        const x = lightSource.getX();
+        const y = lightSource.getY();
+        const light = new THREE.PointLight(
+          colorToThree(lightSource.getColor()),
+          ((piece as { getPower?: () => number }).getPower?.() ?? 0.5) *
+            LIGHT_SOURCE_INTENSITY_SCALE,
+        );
+        light.position.set(
+          piece.getX() + x * cos - y * sin,
+          piece.getElevation() + groundElevation(piece) + lightSource.getZ(),
+          piece.getY() + x * sin + y * cos,
+        );
+        light.userData.furnitureLight = true;
+        this.lights.push(light);
+      }
+    }
   }
 
   /** The light objects to add to the scene. */

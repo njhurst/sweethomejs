@@ -165,7 +165,7 @@
 [ ] 11.5  OBJWriter TS port (docs/08 §5): selection/all export, ground, MTL + sidecar textures — Java OBJWriter parity
 [ ] 11.6  Export tests: GLB parse + round-trip via GLTFLoader, gltf-validator CI gate, optional headless-Blender smoke test
 [ ] 11.7  Stretch: minimal .blend writer spike OR Blender add-on that imports .sh3d directly
-[ ] 11.8  Render upgrade Tier 1 (docs/15 §7.1): IBL env (RoomEnvironment/GroundedSkybox) + GTAO + MeshPhysicalMaterial in shared scene intermediate
+[.] 11.8  Render upgrade Tier 1 (docs/15 §7.1): IBL env (RoomEnvironment/GroundedSkybox) + GTAO + MeshPhysicalMaterial in shared scene intermediate
 [ ] 11.9  Blender bake round-trip (docs/15 §7.2): GLB import path (gltf loader) + lightmap→emissive mapping + "import rendered scene" preview mode
 [ ] 11.10  Render upgrade Tier 3 (docs/15 §7.3): WebGPU/TSL SSGI pipeline behind navigator.gpu probe, WebGL2 fallback; evaluate three-gpu-pathtracer for task 8.4
 [ ] 11.11  3D view styles (docs/15 §7.5): Technical (default, parity) + Design (PBR+IBL+LightProbe+GTAO) with quality knobs, style menu + UserPreferences persistence, golden tests per style
