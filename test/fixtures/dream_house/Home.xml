@@ -1,5 +1,5 @@
 <?xml version='1.0'?>
-<home version='6000' name='ls_2819.sh3d' camera='observerCamera' selectedLevel='level3' wallHeight='236.22' basePlanLocked='true' furnitureSortedProperty='NAME'>
+<home version='6000' name='dream_house.sh3d' camera='observerCamera' selectedLevel='level3' wallHeight='236.22' basePlanLocked='true' furnitureSortedProperty='NAME'>
   <property name='com.eteks.sweethome3d.SweetHome3D.CatalogPaneDividerLocation' value='1311'/>
   <property name='com.eteks.sweethome3d.SweetHome3D.ColumnWidths' value='15,15,15,15,15'/>
   <property name='com.eteks.sweethome3d.SweetHome3D.ExpandedGroups' value=''/>
