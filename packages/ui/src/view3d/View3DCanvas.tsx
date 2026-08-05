@@ -165,6 +165,23 @@ export function View3DCanvas(props: View3DCanvasProps): React.JSX.Element {
       const height = container.clientHeight || 1;
       renderer!.setSize(width, height, false);
       view3DCamera.setAspect(width / height);
+      // Adaptive near/far: a wide near:far ratio destroys depth precision at
+      // distance (near=0.1/far=20000 resolves only ~10 cm at 4 m), which is
+      // what made coincident surfaces (floors, model bases) z-fight 'further
+      // out'. Keep near ~2% and far ~3x the camera-to-target distance so the
+      // depth buffer resolves well under a centimeter everywhere.
+      const bounds = computeHome3DBounds(props.home);
+      const cx = (bounds.minX + bounds.maxX) / 2;
+      const cy = (bounds.minY + bounds.maxY) / 2;
+      const cz = (bounds.minZ + bounds.maxZ) / 2;
+      const dist = Math.max(500, Math.hypot(camera.position.x - cx, camera.position.z - cy, camera.position.y - cz));
+      const far = Math.max(1500, dist * 3);
+      const near = Math.max(10, dist * 0.02);
+      if (Math.abs(camera.far - far) > far * 0.1 || Math.abs(camera.near - near) > near * 0.1) {
+        camera.near = near;
+        camera.far = far;
+        camera.updateProjectionMatrix();
+      }
       view3DCamera.update();
       renderer!.render(scene.getRoot() as THREE.Scene, camera);
       frameId = requestAnimationFrame(render);
@@ -182,6 +199,7 @@ export function View3DCanvas(props: View3DCanvasProps): React.JSX.Element {
     orbit.dblClickRef = () => frameHome();
 
     props.onReady?.(scene);
+
 
     return () => {
       cancelAnimationFrame(frameId);

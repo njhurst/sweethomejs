@@ -91,6 +91,7 @@ export class RoomObject3D extends Object3DBase<Room> {
           shininess: 0,
           opacity: 1,
           doubleSided: true,
+          polygonOffset: 2,
         }).clone();
         standardMaterial.map = texture;
         standardMaterial.needsUpdate = true;
@@ -103,6 +104,7 @@ export class RoomObject3D extends Object3DBase<Room> {
           shininess: 0,
           opacity: 1,
           doubleSided: true,
+          polygonOffset: 2,
         });
       }
     } else {
@@ -112,6 +114,10 @@ export class RoomObject3D extends Object3DBase<Room> {
         shininess: 0,
         opacity: 1,
         doubleSided: true,
+        // Keep the floor's fragments clearly in front of the ground in the
+        // depth test (z-fighting at distance otherwise shows the floor's
+        // triangulation as visible borders).
+        polygonOffset: 2,
       });
     }
     this.mesh = new THREE.Mesh(geometry, material);
@@ -209,7 +215,10 @@ export class FurnitureObject3D extends Object3DBase<HomePieceOfFurniture> {
       doubleSided: false,
     });
     this.mesh = new THREE.Mesh(geometry, material);
-    this.mesh.position.set(piece.getX(), elevation + height / 2, piece.getY());
+    // A tiny lift keeps the piece clear of the floor in the depth test
+    // (model bottoms at the floor elevation otherwise z-fight the floor).
+    const LIFT = 1;
+    this.mesh.position.set(piece.getX(), elevation + height / 2 + LIFT, piece.getY());
     this.mesh.rotation.y = piece.getAngle();
     this.root.add(this.mesh);
   }
@@ -220,7 +229,8 @@ export class FurnitureObject3D extends Object3DBase<HomePieceOfFurniture> {
     this.modelManager.applyPieceTransform(model, this.item, this.modelGroup);
     const piece = this.item;
     const elevation = piece.getElevation() + groundElevation(piece);
-    this.modelGroup.position.set(piece.getX(), elevation + piece.getHeight() / 2, piece.getY());
+    // Small lift so the model's bottom doesn't z-fight the floor
+    this.modelGroup.position.set(piece.getX(), elevation + piece.getHeight() / 2 + 1, piece.getY());
     this.modelGroup.rotation.y = piece.getAngle();
     this.root.clear();
     this.root.add(this.modelGroup);
@@ -463,10 +473,10 @@ export class GroundObject3D extends Object3DBase<Home> {
         texture.wrapT = THREE.RepeatWrapping;
         texture.repeat.set(size / groundTexture.getScale(), size / groundTexture.getScale());
       } else {
-        material = this.materialCache.getMaterial({ diffuseColor: environment.getGroundColor(), ambientColor: 0x000000, shininess: 0, opacity: 1, doubleSided: false });
+        material = this.materialCache.getMaterial({ diffuseColor: environment.getGroundColor(), ambientColor: 0x000000, shininess: 0, opacity: 1, doubleSided: false, polygonOffset: -2 });
       }
     } else {
-      material = this.materialCache.getMaterial({ diffuseColor: environment.getGroundColor(), ambientColor: 0x000000, shininess: 0, opacity: 1, doubleSided: false });
+      material = this.materialCache.getMaterial({ diffuseColor: environment.getGroundColor(), ambientColor: 0x000000, shininess: 0, opacity: 1, doubleSided: false, polygonOffset: -2 });
     }
     this.mesh = new THREE.Mesh(geometry, material);
     // Java puts the ground slightly BELOW the floor level (HomeComponent3D

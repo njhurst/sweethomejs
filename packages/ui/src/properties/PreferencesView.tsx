@@ -48,6 +48,9 @@ export function PreferencesView(props: PreferencesViewProps): React.JSX.Element 
   const [gridVisible, setGridVisible] = useState(preferences.isGridVisible());
   const [rulersVisible, setRulersVisible] = useState(preferences.isRulersVisible());
   const [magnetismEnabled, setMagnetismEnabled] = useState(preferences.isMagnetismEnabled());
+  const [furnitureViewedFromTop, setFurnitureViewedFromTop] = useState(preferences.isFurnitureViewedFromTop());
+  const [wallThickness, setWallThickness] = useState(String(preferences.getNewWallThickness()));
+  const [wallHeight, setWallHeight] = useState(String(preferences.getNewWallHeight()));
   const [example, setExample] = useState("");
 
   const currentUnit = new LengthUnit(unit);
@@ -77,6 +80,39 @@ export function PreferencesView(props: PreferencesViewProps): React.JSX.Element 
       <div className="sh-preferences-example" data-testid="preferences-example">
         2&apos; 8&quot; = {formatLengthValue(parseLengthValue("2' 8\"", currentUnit) ?? 0, currentUnit)}
       </div>
+      <label className="sh-property-field">
+        <input type="checkbox" checked={furnitureViewedFromTop} onChange={(event) => {
+          preferences.setFurnitureViewedFromTop(event.target.checked);
+          setFurnitureViewedFromTop(event.target.checked);
+        }} />
+        <span className="sh-property-label">Furniture viewed from top in plan</span>
+      </label>
+      <label className="sh-property-field">
+        <span className="sh-property-label">New wall thickness</span>
+        <input
+          className="sh-property-input"
+          type="text"
+          value={wallThickness}
+          onChange={(event) => setWallThickness(event.target.value)}
+          onBlur={() => {
+            const value = parseLengthValue(wallThickness, currentUnit);
+            if (value !== null) preferences.setNewWallThickness(value);
+          }}
+        />
+      </label>
+      <label className="sh-property-field">
+        <span className="sh-property-label">New wall height</span>
+        <input
+          className="sh-property-input"
+          type="text"
+          value={wallHeight}
+          onChange={(event) => setWallHeight(event.target.value)}
+          onBlur={() => {
+            const value = parseLengthValue(wallHeight, currentUnit);
+            if (value !== null) preferences.setNewWallHeight(value);
+          }}
+        />
+      </label>
       <label className="sh-property-field">
         <input type="checkbox" checked={gridVisible} onChange={(event) => {
           preferences.setGridVisible(event.target.checked);

@@ -108,9 +108,9 @@ describe("FurnitureObject3D (task 6.2)", () => {
     const builder = new FurnitureObject3D(piece, home, new UserPreferences(), new MaterialCache());
     const mesh = builder.getRoot().children[0] as THREE.Mesh;
     expect(mesh).toBeDefined();
-    // Center of the box at (200, 20 + 15, -150)
+    // Center of the box at (200, 20 + 15 + 1 (z-fight lift), -150)
     expect(mesh.position.x).toBeCloseTo(200, 4);
-    expect(mesh.position.y).toBeCloseTo(35, 4);
+    expect(mesh.position.y).toBeCloseTo(36, 4);
     expect(mesh.position.z).toBeCloseTo(150, 4);
     builder.destroy();
   });

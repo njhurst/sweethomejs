@@ -40,10 +40,12 @@ export interface MaterialKey {
   opacity: number;
   /** Back-face rendering (rooms with holes, wall cutouts). */
   doubleSided: boolean;
+  /** Depth-buffer offset (z-fighting separation); positive pulls toward the camera. */
+  polygonOffset?: number;
 }
 
 function materialKeyString(key: MaterialKey): string {
-  return `${key.diffuseColor ?? "d"}|${key.ambientColor ?? "a"}|${key.shininess}|${key.opacity}|${key.doubleSided}`;
+  return `${key.diffuseColor ?? "d"}|${key.ambientColor ?? "a"}|${key.shininess}|${key.opacity}|${key.doubleSided}|${key.polygonOffset ?? 0}`;
 }
 
 /** Converts a 0xRRGGBB/0xAARRGGBB color to a THREE.Color. */
@@ -71,6 +73,9 @@ export class MaterialCache {
         transparent: alpha < 1 || key.opacity < 1,
         opacity: Math.min(alpha, key.opacity),
         side: key.doubleSided ? THREE.DoubleSide : THREE.FrontSide,
+        polygonOffset: key.polygonOffset !== undefined,
+        polygonOffsetFactor: key.polygonOffset ?? 0,
+        polygonOffsetUnits: key.polygonOffset ?? 0,
       });
       this.materials.set(id, material);
     }
